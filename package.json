@@ -44,7 +44,7 @@
     "date-fns": "^4.1.0",
     "i18next": "^23",
     "leaflet": "^1.9.4",
-    "lucide-react": "^0.460",
+    "lucide-react": "^1.16",
     "monaco-sql-languages": "^1.0.0",
     "pev2": "^1.21.0",
     "proj4": "^2.20.8",
