@@ -160,7 +160,8 @@ export function PgStatStatementsTab(props: PgStatStatementsTabProps): JSX.Elemen
     textAlign: "right",
   };
 
-  return (    <div
+  return (
+    <div
       data-testid="pg-stat-statements-tab"
       style={{
         display: "flex",
@@ -200,10 +201,11 @@ export function PgStatStatementsTab(props: PgStatStatementsTabProps): JSX.Elemen
             value={String(topN)}
             onChange={(e) => setTopN(Number.parseInt(e.target.value, 10))}
           >
-            {TOP_N_OPTIONS.map((n) => (              <option key={n} value={String(n)}>
+            {TOP_N_OPTIONS.map((n) => (
+              <option key={n} value={String(n)}>
                 {n}
               </option>
-))}
+            ))}
           </select>
         </label>
 
@@ -214,10 +216,11 @@ export function PgStatStatementsTab(props: PgStatStatementsTabProps): JSX.Elemen
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as StatementsSortColumn)}
           >
-            {SORT_OPTIONS.map((opt) => (              <option key={opt.value} value={opt.value}>
+            {SORT_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>
-))}
+            ))}
           </select>
         </label>
 
@@ -252,19 +255,22 @@ export function PgStatStatementsTab(props: PgStatStatementsTabProps): JSX.Elemen
         </button>
       </div>
 
-      {status.kind === "loading" ? (        <div style={{ padding: 8, fontSize: 12, color: "var(--ink-3)" }}>Loading…</div>
-) : null}
+      {status.kind === "loading" ? (
+        <div style={{ padding: 8, fontSize: 12, color: "var(--ink-3)" }}>Loading…</div>
+      ) : null}
 
-      {status.kind === "error" ? (        <div
+      {status.kind === "error" ? (
+        <div
           data-testid="pgss-error"
           role="alert"
           style={{ padding: 8, fontSize: 12, color: "var(--danger, #c0392b)" }}
         >
           {status.message}
         </div>
-) : null}
+      ) : null}
 
-      {status.kind === "ok" ? (        <table
+      {status.kind === "ok" ? (
+        <table
           style={{
             width: "100%",
             borderCollapse: "collapse",
@@ -277,7 +283,8 @@ export function PgStatStatementsTab(props: PgStatStatementsTabProps): JSX.Elemen
                 const sortable = SORTABLE_COLUMNS.has(col as StatementsSortColumn);
                 const isActive = sortable && col === sortBy;
                 const indicator = isActive ? (sortDir === "asc" ? " ↑" : " ↓") : "";
-                return (                  <th
+                return (
+                  <th
                     key={col}
                     style={{
                       ...headerCellStyle,
@@ -292,17 +299,19 @@ export function PgStatStatementsTab(props: PgStatStatementsTabProps): JSX.Elemen
                     {col}
                     {indicator}
                   </th>
-);
+                );
               })}
             </tr>
           </thead>
           <tbody>
-            {status.result.rows.map((row, rIdx) => (              <tr key={rIdx}>
+            {status.result.rows.map((row, rIdx) => (
+              <tr key={rIdx}>
                 {COLUMN_ORDER.map((col, cIdx) => {
                   const value = row[cIdx] ?? null;
                   if (col === "query") {
                     const text = value ?? "";
-                    return (                      <td key={col} style={cellStyle}>
+                    return (
+                      <td key={col} style={cellStyle}>
                         <details>
                           <summary
                             style={{
@@ -325,22 +334,25 @@ export function PgStatStatementsTab(props: PgStatStatementsTabProps): JSX.Elemen
                           </pre>
                         </details>
                       </td>
-);
+                    );
                   }
                   if (col === "total_exec_time" || col === "mean_exec_time") {
-                    return (                      <td key={col} style={numericCellStyle}>
+                    return (
+                      <td key={col} style={numericCellStyle}>
                         {formatMs(value)}
                       </td>
-);
+                    );
                   }
-                  return (                    <td key={col} style={numericCellStyle}>
+                  return (
+                    <td key={col} style={numericCellStyle}>
                       {value ?? ""}
                     </td>
-);
+                  );
                 })}
               </tr>
-))}
-            {status.result.rows.length === 0 ? (              <tr>
+            ))}
+            {status.result.rows.length === 0 ? (
+              <tr>
                 <td
                   colSpan={COLUMN_ORDER.length}
                   style={{ ...cellStyle, color: "var(--ink-3)", textAlign: "center" }}
@@ -348,10 +360,10 @@ export function PgStatStatementsTab(props: PgStatStatementsTabProps): JSX.Elemen
                   No statements recorded.
                 </td>
               </tr>
-) : null}
+            ) : null}
           </tbody>
         </table>
-) : null}
+      ) : null}
 
       <RadixDialog.Root
         open={resetOpen}
@@ -402,5 +414,5 @@ export function PgStatStatementsTab(props: PgStatStatementsTabProps): JSX.Elemen
         </RadixDialog.Portal>
       </RadixDialog.Root>
     </div>
-);
+  );
 }

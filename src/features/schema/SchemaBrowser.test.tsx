@@ -62,7 +62,8 @@ import { useSchema } from "./store";
 const initial = useSchema.getState();
 
 function reset() {
-  useSchema.setState(    {
+  useSchema.setState(
+    {
       ...initial,
       connection: { status: "idle" },
       cache: new Map(),
@@ -70,14 +71,15 @@ function reset() {
       filter: "",
     },
     true,
-);
+  );
 }
 
 function renderUI() {
-  return render(    <I18nextProvider i18n={i18n}>
+  return render(
+    <I18nextProvider i18n={i18n}>
       <SchemaBrowser />
     </I18nextProvider>,
-);
+  );
 }
 
 beforeEach(reset);

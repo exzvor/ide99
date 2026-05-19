@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * RollbackDialog wires `.down.sql` preview + the prod typed-confirm gate.
  *
@@ -113,7 +113,8 @@ export function RollbackDialog(props: Props): JSX.Element {
 
   const noDownTooltip = !hasDown ? t("migrations.rollback.noDownFile") : undefined;
 
-  return (    <>
+  return (
+    <>
       <Dialog
         open={open && !confirmOpen}
         onOpenChange={(o) => {
@@ -140,22 +141,25 @@ export function RollbackDialog(props: Props): JSX.Element {
         }
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {!hasDown ? (            <div
+          {!hasDown ? (
+            <div
               data-testid="rollback-dialog-no-down"
               role="alert"
               style={{ color: "var(--warn, #d49b1c)", fontSize: 13 }}
             >
               ⚠ {t("migrations.rollback.noDownFile")}
             </div>
-) : null}
-          {previewError ? (            <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
+          ) : null}
+          {previewError ? (
+            <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
               {t("migrations.rollback.previewError", { error: previewError })}
             </div>
-) : null}
-          {rollbackError ? (            <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
+          ) : null}
+          {rollbackError ? (
+            <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
               {rollbackError}
             </div>
-) : null}
+          ) : null}
           <div style={{ height: 280, border: "1px solid var(--hairline)", borderRadius: 4 }}>
             <Editor
               height="280px"
@@ -253,5 +257,5 @@ export function RollbackDialog(props: Props): JSX.Element {
         </RadixDialog.Portal>
       </RadixDialog.Root>
     </>
-);
+  );
 }

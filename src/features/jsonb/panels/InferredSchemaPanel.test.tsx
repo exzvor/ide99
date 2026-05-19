@@ -218,8 +218,9 @@ describe("S17 picker-mode props", () => {
 
   it("with onPathSelect, rows render as <button aria-pressed>", () => {
     setReadyWithNode("name");
-    render(      <InferredSchemaPanel connId="c1" fqn={mockFqn} variant="browser" onPathSelect={() => {}} />,
-);
+    render(
+      <InferredSchemaPanel connId="c1" fqn={mockFqn} variant="browser" onPathSelect={() => {}} />,
+    );
     const pickerButtons = document.querySelectorAll("button[aria-pressed]");
     expect(pickerButtons.length).toBeGreaterThan(0);
   });
@@ -228,13 +229,14 @@ describe("S17 picker-mode props", () => {
     setReadyWithNode("name");
     const onPathSelect = vi.fn();
     const { default: userEvent } = await import("@testing-library/user-event");
-    render(      <InferredSchemaPanel
+    render(
+      <InferredSchemaPanel
         connId="c1"
         fqn={mockFqn}
         variant="browser"
         onPathSelect={onPathSelect}
       />,
-);
+    );
     const btn = document.querySelector("button[aria-pressed]") as HTMLButtonElement;
     expect(btn).not.toBeNull();
     await userEvent.click(btn);
@@ -243,14 +245,15 @@ describe("S17 picker-mode props", () => {
 
   it("with selectedPath matching node.path, that row has aria-pressed=true", () => {
     setReadyWithNode("name");
-    render(      <InferredSchemaPanel
+    render(
+      <InferredSchemaPanel
         connId="c1"
         fqn={mockFqn}
         variant="browser"
         onPathSelect={() => {}}
         selectedPath={[{ key: "name" }]}
       />,
-);
+    );
     const pressedButtons = document.querySelectorAll("button[aria-pressed='true']");
     expect(pressedButtons.length).toBe(1);
   });

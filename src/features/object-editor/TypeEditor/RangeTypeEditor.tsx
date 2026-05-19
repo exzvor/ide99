@@ -50,10 +50,11 @@ export function RangeTypeEditor({ tab }: RangeTypeEditorProps): JSX.Element {
     }
     void (async () => {
       try {
-        const def = await schemaGetCustomTypeDefinition(          tab.connectionId,
+        const def = await schemaGetCustomTypeDefinition(
+          tab.connectionId,
           tab.target.schema,
           tab.target.name ?? "",
-);
+        );
         if (cancelled) return;
         const union = fromDefinition(def);
         if (union.kind !== "range") {
@@ -77,11 +78,12 @@ export function RangeTypeEditor({ tab }: RangeTypeEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: RangeTypeForm) => RangeTypeForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: RangeTypeForm) => RangeTypeForm): void => {
       updateForm(tab.id, (s) => (s.kind === "range_type" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "range_type" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -100,16 +102,18 @@ export function RangeTypeEditor({ tab }: RangeTypeEditorProps): JSX.Element {
   const touched = useTouched(stableFormState?.form, stableFormState?.initial);
 
   if (loadError) {
-    return (      <div data-testid="range-type-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="range-type-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="range-type-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="range-type-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -161,7 +165,8 @@ export function RangeTypeEditor({ tab }: RangeTypeEditorProps): JSX.Element {
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="range-type-editor"
       style={{
         display: "grid",
@@ -185,7 +190,8 @@ export function RangeTypeEditor({ tab }: RangeTypeEditorProps): JSX.Element {
             ? t("object_editor.type.range_title_new")
             : t("object_editor.type.range_title_edit")}
         </h2>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="range-dirty-badge"
             style={{
               fontSize: 11,
@@ -196,7 +202,7 @@ export function RangeTypeEditor({ tab }: RangeTypeEditorProps): JSX.Element {
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <HelpLink topic="range_type" />
       </div>
@@ -344,5 +350,5 @@ export function RangeTypeEditor({ tab }: RangeTypeEditorProps): JSX.Element {
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

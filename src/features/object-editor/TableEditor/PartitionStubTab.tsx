@@ -11,11 +11,14 @@ export interface PartitionStubTabProps {
 
 export function PartitionStubTab({ form }: PartitionStubTabProps): JSX.Element {
   const { t } = useTranslation();
-  return (    <div data-testid="partition-stub-tab" style={{ padding: 12 }}>
-      {form.partition === null ? (        <div data-testid="partition-none" style={{ fontSize: 13, marginBottom: 12 }}>
+  return (
+    <div data-testid="partition-stub-tab" style={{ padding: 12 }}>
+      {form.partition === null ? (
+        <div data-testid="partition-none" style={{ fontSize: 13, marginBottom: 12 }}>
           {t("object_editor.table.partition_none")}
         </div>
-) : (        <dl
+      ) : (
+        <dl
           data-testid="partition-info"
           style={{
             margin: 0,
@@ -32,7 +35,7 @@ export function PartitionStubTab({ form }: PartitionStubTabProps): JSX.Element {
           <dt style={{ fontWeight: 600 }}>{t("object_editor.table.partition_key")}</dt>
           <dd style={{ margin: 0 }}>{form.partition.key}</dd>
         </dl>
-)}
+      )}
       <div
         // biome-ignore lint/a11y/useSemanticElements: passive banner; not a form <output>.
         role="status"
@@ -48,5 +51,5 @@ export function PartitionStubTab({ form }: PartitionStubTabProps): JSX.Element {
         {t("object_editor.stub.partition_advanced")}
       </div>
     </div>
-);
+  );
 }

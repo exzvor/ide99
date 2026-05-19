@@ -87,11 +87,12 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
       try {
         // For triggers, `parentTable` carries the table the trigger lives on.
         const tableName = tab.target.parentTable ?? "";
-        const def = await schemaGetTriggerDefinition(          tab.connectionId,
+        const def = await schemaGetTriggerDefinition(
+          tab.connectionId,
           tab.target.schema,
           tableName,
           tab.target.name ?? "",
-);
+        );
         if (cancelled) return;
         let form: TriggerForm;
         try {
@@ -128,11 +129,12 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: TriggerForm) => TriggerForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: TriggerForm) => TriggerForm): void => {
       updateForm(tab.id, (s) => (s.kind === "trigger" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "trigger" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -147,16 +149,18 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
   const touched = useTouched(stableFormState?.form, stableFormState?.initial);
 
   if (loadError) {
-    return (      <div data-testid="trigger-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="trigger-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="trigger-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="trigger-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -206,7 +210,8 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
 
   const updateColumnsText = form.updateColumns.join(", ");
 
-  return (    <div
+  return (
+    <div
       data-testid="trigger-editor"
       style={{
         display: "grid",
@@ -247,7 +252,8 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
             onChange={(e) => onChange((f) => ({ ...f, name: e.target.value }))}
           />
         </div>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="trigger-dirty-badge"
             aria-label={t("object_editor.common.dirty")}
             style={{
@@ -260,7 +266,7 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <div style={{ paddingBottom: 4 }}>
           <HelpLink topic="trigger" />
@@ -313,7 +319,8 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
           >
             {(["before", "after", "instead_of"] as const).map((tm) => {
               const checked = form.timing === tm;
-              return (                <label
+              return (
+                <label
                   key={tm}
                   style={{
                     display: "inline-flex",
@@ -344,10 +351,11 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
                   />
                   {t(`object_editor.trigger.timing_${tm}`)}
                 </label>
-);
+              );
             })}
           </div>
-          {form.timing === "instead_of" ? (            <div
+          {form.timing === "instead_of" ? (
+            <div
               // biome-ignore lint/a11y/useSemanticElements: passive banner.
               role="status"
               data-testid="trigger-instead-of-warning"
@@ -362,14 +370,15 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
             >
               {t("object_editor.trigger.instead_of_warning")}
             </div>
-) : null}
+          ) : null}
         </section>
 
         {/* Events */}
         <section data-testid="trigger-section-events" style={{ display: "grid", gap: 8 }}>
           <h4 style={{ margin: 0, fontSize: 13 }}>{t("object_editor.trigger.events_section")}</h4>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
-            {(["insert", "update", "delete", "truncate"] as const).map((ev) => (              <label key={ev} className="q-checkbox" data-testid={`trigger-event-${ev}-label`}>
+            {(["insert", "update", "delete", "truncate"] as const).map((ev) => (
+              <label key={ev} className="q-checkbox" data-testid={`trigger-event-${ev}-label`}>
                 <input
                   data-testid={`trigger-event-${ev}`}
                   type="checkbox"
@@ -383,7 +392,7 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
                 />
                 {t(`object_editor.trigger.event_${ev}`)}
               </label>
-))}
+            ))}
           </div>
           <div className="q-field">
             <label htmlFor={`trigger-update-columns-${tab.id}`}>
@@ -419,7 +428,8 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
           >
             {(["row", "statement"] as const).map((fe) => {
               const checked = form.forEach === fe;
-              return (                <label
+              return (
+                <label
                   key={fe}
                   style={{
                     display: "inline-flex",
@@ -450,7 +460,7 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
                   />
                   {t(`object_editor.trigger.for_each_${fe}`)}
                 </label>
-);
+              );
             })}
           </div>
         </section>
@@ -524,7 +534,7 @@ export function TriggerEditor({ tab }: TriggerEditorProps): JSX.Element {
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }
 
 export { FunctionPicker } from "./FunctionPicker";

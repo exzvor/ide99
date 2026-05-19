@@ -83,10 +83,11 @@ describe("vibepg slot — InsightsPanel mount", () => {
       await Promise.resolve();
     });
 
-    expect(openSpy).toHaveBeenCalledWith(      "https://vibepg.ai/upgrade",
+    expect(openSpy).toHaveBeenCalledWith(
+      "https://vibepg.ai/upgrade",
       "_blank",
       "noopener,noreferrer",
-);
+    );
     openSpy.mockRestore();
   });
 
@@ -122,7 +123,8 @@ describe("vibepg slot — ApplyDialog mount", () => {
 
   it("mounts the review button in the dialog body", () => {
     setSubscription(false);
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -131,7 +133,7 @@ describe("vibepg slot — ApplyDialog mount", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     expect(screen.getByTestId("apply-dialog-vibepg-slot")).toBeInTheDocument();
     expect(screen.getByTestId("vibepg-migration_review")).toBeInTheDocument();
   });
@@ -139,7 +141,8 @@ describe("vibepg slot — ApplyDialog mount", () => {
   it("clicking with subscription opens the result-dialog stub", async () => {
     setSubscription(true);
     const user = userEvent.setup();
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -148,7 +151,7 @@ describe("vibepg slot — ApplyDialog mount", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     await user.click(screen.getByTestId("vibepg-migration_review"));
     await waitFor(() => {
       expect(screen.getByTestId("vibepg-result-stub")).toBeInTheDocument();

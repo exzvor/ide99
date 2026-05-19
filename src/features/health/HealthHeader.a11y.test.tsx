@@ -19,9 +19,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, opts?: Record<string, unknown>) => {
       if (opts && typeof opts === "object") {
-        return Object.entries(opts).reduce<string>(          (acc, [k, v]) => acc.replace(`{{${k}}}`, String(v)),
+        return Object.entries(opts).reduce<string>(
+          (acc, [k, v]) => acc.replace(`{{${k}}}`, String(v)),
           key,
-);
+        );
       }
       return key;
     },
@@ -50,24 +51,26 @@ afterEach(() => {
 
 describe("HealthHeader accessibility", () => {
   it("has 0 axe violations on initial render", async () => {
-    const { container } = render(      <HealthHeader
+    const { container } = render(
+      <HealthHeader
         connId="c1"
         lastRefreshAt={Date.now() - 5000}
         refreshIntervalMs={10000}
         refreshInProgress={false}
       />,
-);
+    );
     await expectNoAxeViolations(container);
   });
 
   it("has 0 axe violations during a refresh-in-progress state", async () => {
-    const { container } = render(      <HealthHeader
+    const { container } = render(
+      <HealthHeader
         connId="c1"
         lastRefreshAt={Date.now()}
         refreshIntervalMs={null}
         refreshInProgress={true}
       />,
-);
+    );
     await expectNoAxeViolations(container);
   });
 });

@@ -104,12 +104,13 @@ describe("HealthPane × actions integration smoke", () => {
     // self-contained.
     const { ActionPreviewModal } = await import("./actions/ActionPreviewModal");
     const { ActionProgressModal } = await import("./actions/ActionProgressModal");
-    render(      <>
+    render(
+      <>
         <HealthPane connId="c1" />
         <ActionPreviewModal />
         <ActionProgressModal />
       </>,
-);
+    );
 
     // Wait for the first-mount refreshAll to populate the bloat card.
     const button = await screen.findByTestId("health-action-vacuum-public.users");

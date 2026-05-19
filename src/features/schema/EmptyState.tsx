@@ -29,7 +29,8 @@ export function EmptyState({
   const { t } = useTranslation();
 
   if (kind === "error") {
-    return (      <div
+    return (
+      <div
         style={{
           height: "100%",
           display: "flex",
@@ -60,7 +61,8 @@ export function EmptyState({
           {message}
         </p>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
-          {primaryAction ? (            <button
+          {primaryAction ? (
+            <button
               type="button"
               onClick={primaryAction.onClick}
               className="btn btn-sm btn-primary"
@@ -68,17 +70,19 @@ export function EmptyState({
             >
               {primaryAction.label}
             </button>
-) : null}
-          {onRetry ? (            <button type="button" onClick={onRetry} className="btn btn-sm">
+          ) : null}
+          {onRetry ? (
+            <button type="button" onClick={onRetry} className="btn btn-sm">
               {t("schema.retry")}
             </button>
-) : null}
+          ) : null}
         </div>
       </div>
-);
+    );
   }
 
-  return (    <div
+  return (
+    <div
       style={{
         height: "100%",
         display: "flex",
@@ -120,5 +124,5 @@ export function EmptyState({
         {t("schema.empty.body")}
       </p>
     </div>
-);
+  );
 }

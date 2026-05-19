@@ -38,12 +38,13 @@ export function UnrepresentableBar({ slug }: UnrepresentableBarProps) {
   const reasonKey = REASON_I18N_KEY[slug];
   const reason = reasonKey ? t(reasonKey) : slug;
 
-  return (    <div
+  return (
+    <div
       className="unrepresentable-bar"
       // biome-ignore lint/a11y/useSemanticElements: passive informational banner with text + ⚠ glyph + interpolated reason; <output> doesn't accept this content cleanly.
       role="status"
     >
       ⚠ {t("filter.unrepresentableHint", { reason })}
     </div>
-);
+  );
 }

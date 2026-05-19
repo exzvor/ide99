@@ -70,7 +70,8 @@ export async function exportSvg(svg: SVGSVGElement, filename = "erd.svg"): Promi
   }
 }
 
-export async function exportPng(  svg: SVGSVGElement,
+export async function exportPng(
+  svg: SVGSVGElement,
   filename = "erd.png",
   scale = 2,
 ): Promise<void> {

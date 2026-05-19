@@ -53,7 +53,8 @@ export function IndexFormPanel({ form, onChange, inline }: IndexFormPanelProps):
     onChange((f) => ({ ...f, columns: f.columns.filter((_, i) => i !== idx) }));
   };
 
-  return (    <div
+  return (
+    <div
       data-testid={`index-form-panel-${form.id}`}
       style={{
         display: "flex",
@@ -98,7 +99,8 @@ export function IndexFormPanel({ form, onChange, inline }: IndexFormPanelProps):
         >
           {METHODS.map((m) => {
             const checked = form.method === m;
-            return (              <label
+            return (
+              <label
                 key={m}
                 style={{
                   display: "inline-flex",
@@ -131,12 +133,13 @@ export function IndexFormPanel({ form, onChange, inline }: IndexFormPanelProps):
                 />
                 {m}
               </label>
-);
+            );
           })}
         </div>
       </div>
 
-      {form.method === "hnsw" && (        <div
+      {form.method === "hnsw" && (
+        <div
           data-testid="index-with-hnsw"
           style={{ display: "flex", gap: 12, alignItems: "flex-end" }}
         >
@@ -174,8 +177,9 @@ export function IndexFormPanel({ form, onChange, inline }: IndexFormPanelProps):
             />
           </div>
         </div>
-)}
-      {form.method === "ivfflat" && (        <div data-testid="index-with-ivfflat" style={{ display: "flex", gap: 12 }}>
+      )}
+      {form.method === "ivfflat" && (
+        <div data-testid="index-with-ivfflat" style={{ display: "flex", gap: 12 }}>
           <div className="q-field" style={{ width: 100 }}>
             <label htmlFor={`index-ivfflat-lists-${form.id}`}>lists</label>
             <input
@@ -191,7 +195,7 @@ export function IndexFormPanel({ form, onChange, inline }: IndexFormPanelProps):
             />
           </div>
         </div>
-)}
+      )}
 
       <label className="q-checkbox" data-testid="index-unique-label">
         <input
@@ -208,7 +212,8 @@ export function IndexFormPanel({ form, onChange, inline }: IndexFormPanelProps):
           {t("object_editor.indexes.column_expr")}
         </div>
         <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 6 }}>
-          {form.columns.map((col, i) => (            <li
+          {form.columns.map((col, i) => (
+            <li
               key={`${form.id}-col-${i}`}
               data-testid={`index-col-row-${i}`}
               style={{ display: "flex", gap: 6, alignItems: "center" }}
@@ -276,7 +281,7 @@ export function IndexFormPanel({ form, onChange, inline }: IndexFormPanelProps):
                 ×
               </button>
             </li>
-))}
+          ))}
         </ul>
         <button
           type="button"
@@ -310,5 +315,5 @@ export function IndexFormPanel({ form, onChange, inline }: IndexFormPanelProps):
         />
       </div>
     </div>
-);
+  );
 }

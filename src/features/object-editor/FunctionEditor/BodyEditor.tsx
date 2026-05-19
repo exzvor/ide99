@@ -55,8 +55,10 @@ export function BodyEditor({
   const showOtherWarning =
     language === "other" && (languageOther === undefined || languageOther.trim() !== "plpgsql");
 
-  return (    <div data-testid="fn-body-editor" style={{ display: "grid", gap: 6 }}>
-      {showOtherWarning ? (        <div
+  return (
+    <div data-testid="fn-body-editor" style={{ display: "grid", gap: 6 }}>
+      {showOtherWarning ? (
+        <div
           // biome-ignore lint/a11y/useSemanticElements: passive banner.
           role="status"
           data-testid="fn-body-language-warning"
@@ -71,7 +73,7 @@ export function BodyEditor({
         >
           {t("object_editor.function.language_other_warning")}
         </div>
-) : null}
+      ) : null}
       <textarea
         data-testid="fn-body-textarea"
         data-language={language === "other" ? "plaintext" : language}
@@ -89,5 +91,5 @@ export function BodyEditor({
         }}
       />
     </div>
-);
+  );
 }

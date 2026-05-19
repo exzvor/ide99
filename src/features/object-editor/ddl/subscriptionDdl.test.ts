@@ -15,12 +15,13 @@ const baseForm = (overrides: Partial<SubscriptionForm> = {}): SubscriptionForm =
 
 describe("generateSubscriptionDdl", () => {
   it("create with all options + slot/sync_commit emits CREATE SUBSCRIPTION + warning", () => {
-    const r = generateSubscriptionDdl(      null,
+    const r = generateSubscriptionDdl(
+      null,
       baseForm({
         slotName: "my_slot",
         synchronousCommit: "on",
       }),
-);
+    );
     expect(r.sql).toContain("CREATE SUBSCRIPTION sub1");
     expect(r.sql).toContain("CONNECTION 'host=primary dbname=src user=replica password=secret'");
     expect(r.sql).toContain("PUBLICATION pub1");

@@ -80,11 +80,12 @@ export function RoleEditor({ tab }: RoleEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: RoleForm) => RoleForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: RoleForm) => RoleForm): void => {
       updateForm(tab.id, (s) => (s.kind === "role" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "role" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -98,16 +99,18 @@ export function RoleEditor({ tab }: RoleEditorProps): JSX.Element {
     : false;
 
   if (loadError) {
-    return (      <div data-testid="role-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="role-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="role-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="role-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -152,7 +155,8 @@ export function RoleEditor({ tab }: RoleEditorProps): JSX.Element {
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="role-editor"
       style={{
         display: "grid",
@@ -176,10 +180,11 @@ export function RoleEditor({ tab }: RoleEditorProps): JSX.Element {
             ? t("object_editor.role.title_new")
             : t("object_editor.role.title_edit")}
         </h2>
-        {dirty ? (          <span data-testid="role-dirty-badge" style={{ fontSize: 11 }}>
+        {dirty ? (
+          <span data-testid="role-dirty-badge" style={{ fontSize: 11 }}>
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <HelpLink topic="role" />
       </div>
@@ -241,5 +246,5 @@ export function RoleEditor({ tab }: RoleEditorProps): JSX.Element {
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

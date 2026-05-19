@@ -204,7 +204,8 @@ export function MapViewTab({ tab }: MapViewTabProps): JSX.Element {
     };
   }, [active, draftPoints]);
 
-  return (    <div
+  return (
+    <div
       data-testid="map-view-tab"
       style={{ display: "flex", flexDirection: "column", height: "100%" }}
     >
@@ -244,5 +245,5 @@ export function MapViewTab({ tab }: MapViewTabProps): JSX.Element {
       </div>
       <div ref={containerRef} style={{ flex: 1, minHeight: 0 }} data-testid="map-view-leaflet" />
     </div>
-);
+  );
 }

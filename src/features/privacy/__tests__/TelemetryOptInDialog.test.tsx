@@ -110,7 +110,8 @@ describe("TelemetryOptInDialog", () => {
     render(<TelemetryOptInDialog />);
     await user.click(await screen.findByTestId("opt-in-accept"));
     await waitFor(() => {
-      expect(invokeMock).toHaveBeenCalledWith(        "settings_set",
+      expect(invokeMock).toHaveBeenCalledWith(
+        "settings_set",
         expect.objectContaining({
           settings: expect.objectContaining({
             telemetryEnabled: true,
@@ -118,7 +119,7 @@ describe("TelemetryOptInDialog", () => {
             privacyChoiceMade: true,
           }) as Partial<AppSettings>,
         }),
-);
+      );
     });
   });
 
@@ -128,7 +129,8 @@ describe("TelemetryOptInDialog", () => {
     render(<TelemetryOptInDialog />);
     await user.click(await screen.findByTestId("opt-in-decline"));
     await waitFor(() => {
-      expect(invokeMock).toHaveBeenCalledWith(        "settings_set",
+      expect(invokeMock).toHaveBeenCalledWith(
+        "settings_set",
         expect.objectContaining({
           settings: expect.objectContaining({
             telemetryEnabled: false,
@@ -136,7 +138,7 @@ describe("TelemetryOptInDialog", () => {
             privacyChoiceMade: true,
           }) as Partial<AppSettings>,
         }),
-);
+      );
     });
   });
 
@@ -147,7 +149,7 @@ describe("TelemetryOptInDialog", () => {
     await user.click(await screen.findByTestId("opt-in-what"));
     await waitFor(() =>
       expect(invokeMock).toHaveBeenCalledWith("telemetry_known_events", undefined),
-);
+    );
     await screen.findByTestId("event-app_launched");
     expect(screen.getByTestId("event-feature_used")).toBeInTheDocument();
   });

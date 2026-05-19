@@ -42,7 +42,8 @@ export function ConfirmDestructiveModal({
     if (open) setTyped("");
   }, [open, target]);
 
-  return (    <Dialog.Root open={open} onOpenChange={(o) => (o ? null : onCancel())}>
+  return (
+    <Dialog.Root open={open} onOpenChange={(o) => (o ? null : onCancel())}>
       <Dialog.Portal>
         <Dialog.Overlay className="confirm-overlay" />
         <Dialog.Content className="confirm-content" aria-describedby="confirm-desc">
@@ -86,5 +87,5 @@ export function ConfirmDestructiveModal({
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-);
+  );
 }

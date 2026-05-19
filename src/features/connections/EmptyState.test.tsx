@@ -29,7 +29,8 @@ beforeEach(() => {
   errorMock.mockReset();
   successMock.mockReset();
   parseConnectionUriMock.mockReset();
-  useConnections.setState(    {
+  useConnections.setState(
+    {
       ...initialState,
       connections: [],
       selectedId: null,
@@ -38,7 +39,7 @@ beforeEach(() => {
       error: null,
     },
     true,
-);
+  );
 });
 
 afterEach(() => {

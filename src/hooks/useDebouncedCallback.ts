@@ -7,7 +7,8 @@ import { useCallback, useEffect, useRef } from "react";
  * stale-closure bugs in callbacks that capture state are avoided. Used by
  * S20 bidirectional panels to debounce parse-on-edit at 200 ms.
  */
-export function useDebouncedCallback<F extends (...args: unknown[]) => unknown>(  fn: F,
+export function useDebouncedCallback<F extends (...args: unknown[]) => unknown>(
+  fn: F,
   delay: number,
 ): (...args: Parameters<F>) => void {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -15,15 +16,17 @@ export function useDebouncedCallback<F extends (...args: unknown[]) => unknown>(
   useEffect(() => {
     fnRef.current = fn;
   }, [fn]);
-  useEffect(    () => () => {
+  useEffect(
+    () => () => {
       if (timer.current) clearTimeout(timer.current);
     },
     [],
-);
-  return useCallback(    (...args: Parameters<F>) => {
+  );
+  return useCallback(
+    (...args: Parameters<F>) => {
       if (timer.current) clearTimeout(timer.current);
       timer.current = setTimeout(() => fnRef.current(...args), delay);
     },
     [delay],
-);
+  );
 }

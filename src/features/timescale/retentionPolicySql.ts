@@ -14,7 +14,8 @@ export function buildRetentionPolicySql(form: RetentionPolicyForm): string {
   if (form.mode === "drop") {
     return `SELECT remove_retention_policy('${escSql(form.qualifiedTable)}');`;
   }
-  return (    `SELECT add_retention_policy('${escSql(form.qualifiedTable)}', ` +
+  return (
+    `SELECT add_retention_policy('${escSql(form.qualifiedTable)}', ` +
     `INTERVAL '${escSql(form.dropAfter)}');`
-);
+  );
 }

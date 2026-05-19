@@ -57,10 +57,12 @@ function makeLaid(nodes: LaidErdNode[], edges: LaidErdEdge[]): LaidErd {
 
 describe("Canvas", () => {
   test("renders one card per node and one path per edge", () => {
-    const laid = makeLaid(      [makeNode("public.a"), makeNode("public.b", 300)],
+    const laid = makeLaid(
+      [makeNode("public.a"), makeNode("public.b", 300)],
       [makeEdge("fk1:public.a->public.b", "public.a", "public.b")],
-);
-    const { container } = render(      <Canvas
+    );
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={() => {}}
@@ -68,14 +70,15 @@ describe("Canvas", () => {
         panY={0}
         zoom={1}
       />,
-);
+    );
     expect(container.querySelectorAll("[data-testid='erd-table-card']")).toHaveLength(2);
     expect(container.querySelectorAll("[data-testid='erd-fk-edge']")).toHaveLength(1);
   });
 
   test("regression: aria-label flows through i18n", () => {
     const laid = makeLaid([], []);
-    const { container } = render(      <Canvas
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={() => {}}
@@ -83,7 +86,7 @@ describe("Canvas", () => {
         panY={0}
         zoom={1}
       />,
-);
+    );
     const svg = container.querySelector("[data-testid='erd-canvas']");
     // Under the passthrough i18n mock the key itself is the value.
     expect(svg?.getAttribute("aria-label")).toContain("erd.canvas.aria_label");
@@ -95,7 +98,8 @@ describe("Canvas", () => {
     // the laid graph, which made `e.clientX - rect.left` (CSS) and
     // `translate(panX panY)` (SVG) drift relative to each other.
     const laid = makeLaid([makeNode("public.a")], []);
-    const { container } = render(      <Canvas
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={() => {}}
@@ -103,7 +107,7 @@ describe("Canvas", () => {
         panY={0}
         zoom={1}
       />,
-);
+    );
     const svg = container.querySelector("[data-testid='erd-canvas']");
     expect(svg?.getAttribute("viewBox")).toBeNull();
     expect(svg?.getAttribute("width")).toBe("100%");
@@ -112,7 +116,8 @@ describe("Canvas", () => {
 
   test("inner group transform reflects panX, panY, zoom", () => {
     const laid = makeLaid([makeNode("public.a")], []);
-    const { container } = render(      <Canvas
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={() => {}}
@@ -120,14 +125,15 @@ describe("Canvas", () => {
         panY={-30}
         zoom={1.5}
       />,
-);
+    );
     const inner = container.querySelector("[data-testid='erd-canvas-inner']");
     expect(inner?.getAttribute("transform")).toBe("translate(50 -30) scale(1.5)");
   });
 
   test("empty laid renders an SVG with marker defs but no node/edge children", () => {
     const laid = makeLaid([], []);
-    const { container } = render(      <Canvas
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={() => {}}
@@ -135,7 +141,7 @@ describe("Canvas", () => {
         panY={0}
         zoom={1}
       />,
-);
+    );
     expect(container.querySelector("[data-testid='erd-canvas']")).not.toBeNull();
     expect(container.querySelector("#erd-arrow")).not.toBeNull();
     expect(container.querySelectorAll("[data-testid='erd-table-card']")).toHaveLength(0);
@@ -148,7 +154,8 @@ describe("Canvas", () => {
     const onMouseMove = vi.fn();
     const onMouseUp = vi.fn();
     const laid = makeLaid([makeNode("public.a")], []);
-    const { container } = render(      <Canvas
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={() => {}}
@@ -160,7 +167,7 @@ describe("Canvas", () => {
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
       />,
-);
+    );
     const svg = container.querySelector("[data-testid='erd-canvas']");
     if (!svg) throw new Error("missing svg");
     fireEvent.wheel(svg);
@@ -176,7 +183,8 @@ describe("Canvas", () => {
   test("calls onNodeFocus when a card receives focus", () => {
     const onNodeFocus = vi.fn();
     const laid = makeLaid([makeNode("public.a")], []);
-    const { container } = render(      <Canvas
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={onNodeFocus}
@@ -184,7 +192,7 @@ describe("Canvas", () => {
         panY={0}
         zoom={1}
       />,
-);
+    );
     const card = container.querySelector("[data-testid='erd-table-card']");
     if (!card) throw new Error("missing card");
     fireEvent.focus(card);
@@ -192,10 +200,12 @@ describe("Canvas", () => {
   });
 
   test("highlighted node and edge get accent stroke", () => {
-    const laid = makeLaid(      [makeNode("public.a"), makeNode("public.b", 300)],
+    const laid = makeLaid(
+      [makeNode("public.a"), makeNode("public.b", 300)],
       [makeEdge("fk1:public.a->public.b", "public.a", "public.b")],
-);
-    const { container } = render(      <Canvas
+    );
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: "public.a", edgeId: "fk1:public.a->public.b" }}
         onNodeFocus={() => {}}
@@ -203,9 +213,10 @@ describe("Canvas", () => {
         panY={0}
         zoom={1}
       />,
-);
-    const cardA = container.querySelector(      "[data-testid='erd-table-card'][data-table-id='public.a'] rect",
-);
+    );
+    const cardA = container.querySelector(
+      "[data-testid='erd-table-card'][data-table-id='public.a'] rect",
+    );
     expect(cardA?.getAttribute("stroke")).toBe("var(--accent)");
     const edgePath = container.querySelector("[data-testid='erd-fk-edge'] path");
     expect(edgePath?.getAttribute("stroke")).toBe("var(--accent)");

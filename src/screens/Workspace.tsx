@@ -10,7 +10,7 @@ import { ConnectionDetails } from "../features/connections/ConnectionDetails";
 import { ConnectionList } from "../features/connections/ConnectionList";
 import { useConnections } from "../features/connections/store";
 import { BidirectionalSqlPanel } from "../features/easy-mode/BidirectionalSqlPanel";
-// Easy mode + restart-tour temporarily disabled — 
+// Easy mode + restart-tour temporarily disabled —
 // import { EasyToggle } from "../features/easy-mode/EasyToggle";
 import { BatchConfirmModal } from "../features/editor/BatchConfirmModal";
 import { EditorPane } from "../features/editor/EditorPane";
@@ -19,7 +19,7 @@ import { useEditor } from "../features/editor/store";
 import { ActionPreviewModal } from "../features/health/actions/ActionPreviewModal";
 import { ActionProgressModal } from "../features/health/actions/ActionProgressModal";
 import { JsonbEditorModal } from "../features/jsonb/JsonbEditorModal";
-// Onboarding-tour entry point temporarily disabled — 
+// Onboarding-tour entry point temporarily disabled —
 // import { startOnboardingTour } from "../features/onboarding-tour";
 import { Spg99StatusBarWidget, Spg99TemplatePickerDialog } from "../features/paid-modules";
 import { ConnectionBanner } from "../features/schema/ConnectionBanner";
@@ -168,7 +168,8 @@ export default function Workspace(): JSX.Element {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  return (    <div className="app-frame">
+  return (
+    <div className="app-frame">
       <Titlebar
         name={activeConnName ?? "ide99"}
         context={activeDb ?? undefined}
@@ -302,7 +303,8 @@ export default function Workspace(): JSX.Element {
           }}
         >
           <ConnectionBanner />
-          {isConnected ? (            <>
+          {isConnected ? (
+            <>
               <EditorTabs />
               <div style={{ flex: 1, minHeight: 0 }} id="editor-pane-host">
                 <EditorPane />
@@ -313,10 +315,11 @@ export default function Workspace(): JSX.Element {
                   (Easy mode layout). */}
               <BidirectionalSqlPanel />
             </>
-) : (            <div className="q-scroll" style={{ flex: 1, overflow: "auto", minHeight: 0 }}>
+          ) : (
+            <div className="q-scroll" style={{ flex: 1, overflow: "auto", minHeight: 0 }}>
               <ConnectionDetails />
             </div>
-)}
+          )}
         </main>
 
         {/* Right inspector */}
@@ -372,7 +375,8 @@ export default function Workspace(): JSX.Element {
        * destructive runs. The N=1 destructive path still goes through the
        * legacy ConfirmDestructiveModal (mounted in App.tsx) — see
        * preflightBatch for the dispatch. */}
-      {safetyModal.kind === "batchConfirm" && (        <BatchConfirmModal
+      {safetyModal.kind === "batchConfirm" && (
+        <BatchConfirmModal
           open
           total={safetyModal.total}
           environment={safetyModal.environment}
@@ -381,7 +385,7 @@ export default function Workspace(): JSX.Element {
           onConfirm={safetyModal.onConfirm}
           onCancel={safetyModal.onCancel}
         />
-)}
+      )}
     </div>
-);
+  );
 }

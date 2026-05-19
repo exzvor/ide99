@@ -14,19 +14,21 @@ describe("MissingIndexesCard", () => {
   });
 
   it("empty rows → centered no-issues message", () => {
-    render(      <MissingIndexesCard
+    render(
+      <MissingIndexesCard
         connId="c1"
         state={{
           status: "ready",
           card: { id: "missing_indexes", data: { rows: [] } },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("health-card-missing_indexes-empty")).toBeTruthy();
   });
 
   it("ready: warn tone when any rows present", () => {
-    render(      <MissingIndexesCard
+    render(
+      <MissingIndexesCard
         connId="c1"
         state={{
           status: "ready",
@@ -40,9 +42,10 @@ describe("MissingIndexesCard", () => {
           },
         }}
       />,
-);
+    );
     expect(screen.getAllByTestId("missing-index-row")).toHaveLength(1);
-    expect(screen.getByTestId("health-card-missing_indexes-status").getAttribute("data-tone")).toBe(      "warn",
-);
+    expect(screen.getByTestId("health-card-missing_indexes-status").getAttribute("data-tone")).toBe(
+      "warn",
+    );
   });
 });

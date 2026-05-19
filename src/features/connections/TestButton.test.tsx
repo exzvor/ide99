@@ -53,8 +53,9 @@ describe("TestButton", () => {
 
     expect(testConnectionMock).toHaveBeenCalledWith(inputFixture);
     expect(await screen.findByTestId("test-success-badge")).toBeInTheDocument();
-    expect(onResult).toHaveBeenCalledWith(      expect.objectContaining({ ok: true, serverVersion: "PostgreSQL 17.2" }),
-);
+    expect(onResult).toHaveBeenCalledWith(
+      expect.objectContaining({ ok: true, serverVersion: "PostgreSQL 17.2" }),
+    );
   });
 
   it("input variant: failure path shows a failure badge and calls onResult", async () => {

@@ -57,7 +57,7 @@ describe("runExplain capture hook", () => {
         .getState()
         .tabs.map((t) =>
           t.id === tab.id && t.kind === "editor" ? { ...t, content: "SELECT 1" } : t,
-),
+        ),
     });
     await useEditor.getState().runExplain(tab.id, "explain");
   }

@@ -20,7 +20,8 @@ const disconnectMock = vi.fn();
 
 beforeEach(() => {
   disconnectMock.mockReset();
-  useSchema.setState(    {
+  useSchema.setState(
+    {
       ...initialSchemaState,
       connection: { status: "idle" },
       cache: new Map(),
@@ -29,8 +30,9 @@ beforeEach(() => {
       disconnect: disconnectMock,
     },
     true,
-);
-  useConnections.setState(    {
+  );
+  useConnections.setState(
+    {
       ...initialConnectionsState,
       connections: [],
       selectedId: null,
@@ -39,7 +41,7 @@ beforeEach(() => {
       error: null,
     },
     true,
-);
+  );
 });
 
 describe("ConnectionBanner", () => {

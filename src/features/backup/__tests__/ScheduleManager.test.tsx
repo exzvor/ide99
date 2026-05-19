@@ -38,9 +38,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, vars?: Record<string, unknown>) => {
       if (!vars) return key;
-      return Object.entries(vars).reduce<string>(        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
+      return Object.entries(vars).reduce<string>(
+        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
         key,
-);
+      );
     },
   }),
 }));

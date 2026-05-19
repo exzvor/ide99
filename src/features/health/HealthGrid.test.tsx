@@ -4,10 +4,11 @@ import { HealthGrid } from "./HealthGrid";
 
 describe("HealthGrid", () => {
   it("renders the auto-fit grid container with children", () => {
-    render(      <HealthGrid>
+    render(
+      <HealthGrid>
         <div data-testid="grid-child">a</div>
       </HealthGrid>,
-);
+    );
     const grid = screen.getByTestId("health-grid");
     expect(grid).toBeTruthy();
     expect(screen.getByTestId("grid-child")).toBeTruthy();

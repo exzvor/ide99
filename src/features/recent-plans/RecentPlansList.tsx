@@ -29,17 +29,20 @@ export function RecentPlansList(): JSX.Element {
   });
 
   if (rows.length === 0 && !loading) {
-    return (      <div data-testid="recent-plans-list-empty" style={{ padding: 20, opacity: 0.6 }}>
+    return (
+      <div data-testid="recent-plans-list-empty" style={{ padding: 20, opacity: 0.6 }}>
         {filterQuery ? t("recent_plans.empty_filtered") : t("recent_plans.empty")}
       </div>
-);
+    );
   }
 
-  return (    <div ref={parentRef} style={{ flex: 1, overflowY: "auto" }} data-testid="recent-plans-list">
+  return (
+    <div ref={parentRef} style={{ flex: 1, overflowY: "auto" }} data-testid="recent-plans-list">
       <div style={{ height: virtualizer.getTotalSize(), position: "relative" }}>
         {virtualizer.getVirtualItems().map((vrow) => {
           const row = rows[vrow.index];
-          return (            <div
+          return (
+            <div
               key={row.id}
               style={{
                 position: "absolute",
@@ -53,10 +56,11 @@ export function RecentPlansList(): JSX.Element {
             >
               <RecentPlansRow row={row} />
             </div>
-);
+          );
         })}
       </div>
-      {rows.length < total && (        <div style={{ padding: 8, textAlign: "center" }}>
+      {rows.length < total && (
+        <div style={{ padding: 8, textAlign: "center" }}>
           <button
             type="button"
             className="btn btn-sm"
@@ -65,7 +69,7 @@ export function RecentPlansList(): JSX.Element {
             {t("recent_plans.load_more")}
           </button>
         </div>
-)}
+      )}
     </div>
-);
+  );
 }

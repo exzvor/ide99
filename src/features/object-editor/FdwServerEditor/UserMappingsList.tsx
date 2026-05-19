@@ -17,7 +17,8 @@ export interface UserMappingsListProps {
 
 export function UserMappingsList({ mappings, onChange }: UserMappingsListProps): JSX.Element {
   const { t } = useTranslation();
-  return (    <fieldset
+  return (
+    <fieldset
       data-testid="fdw-mappings-fieldset"
       style={{
         border: "1px solid var(--border-strong-q)",
@@ -31,7 +32,8 @@ export function UserMappingsList({ mappings, onChange }: UserMappingsListProps):
       <legend style={{ fontSize: 11.5, fontWeight: 500, color: "var(--ink-3)", padding: "0 6px" }}>
         {t("object_editor.fdw_server.user_mappings_section")}
       </legend>
-      {mappings.map((m, i) => (        <div
+      {mappings.map((m, i) => (
+        <div
           key={m.id}
           data-testid={`fdw-mapping-${i}`}
           style={{
@@ -53,8 +55,9 @@ export function UserMappingsList({ mappings, onChange }: UserMappingsListProps):
               value={m.roleName}
               data-testid={`fdw-mapping-${i}-role`}
               onChange={(e) =>
-                onChange(                  mappings.map((it) => (it.id === m.id ? { ...it, roleName: e.target.value } : it)),
-)
+                onChange(
+                  mappings.map((it) => (it.id === m.id ? { ...it, roleName: e.target.value } : it)),
+                )
               }
             />
           </div>
@@ -77,7 +80,7 @@ export function UserMappingsList({ mappings, onChange }: UserMappingsListProps):
             Remove mapping
           </button>
         </div>
-))}
+      ))}
       <button
         type="button"
         className="btn"
@@ -88,5 +91,5 @@ export function UserMappingsList({ mappings, onChange }: UserMappingsListProps):
         + {t("object_editor.fdw_server.add_mapping")}
       </button>
     </fieldset>
-);
+  );
 }

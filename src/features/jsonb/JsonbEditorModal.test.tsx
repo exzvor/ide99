@@ -34,10 +34,11 @@ vi.mock("./panels/InferredSchemaPanel", () => ({
   InferredSchemaPanel: ({
     connId,
     fqn,
-  }: { connId: string; fqn: { schema: string; table: string; column: string } }) => (    <div data-testid="inference-panel-mock">
+  }: { connId: string; fqn: { schema: string; table: string; column: string } }) => (
+    <div data-testid="inference-panel-mock">
       panel:{connId}:{fqn.schema}.{fqn.table}.{fqn.column}
     </div>
-),
+  ),
 }));
 
 beforeAll(() => {
@@ -321,33 +322,37 @@ describe("JsonbEditorModal — inferred schema panel", () => {
     expect(screen.getByTestId("inference-panel-mock")).toBeInTheDocument();
     // Persistence stores 'false' — next open will be collapsed unless the
     // user explicitly toggles to keep the panel visible.
-    expect(      window.localStorage.getItem("ide99.jsonb.inference.modal.expanded.c1.public.events.data"),
-).toBe("false");
+    expect(
+      window.localStorage.getItem("ide99.jsonb.inference.modal.expanded.c1.public.events.data"),
+    ).toBe("false");
   });
 
   it("after first open, second open is collapsed by default", () => {
     // Simulate: first open already happened (lsKey was written to "false").
-    window.localStorage.setItem(      "ide99.jsonb.inference.modal.expanded.c1.public.events.data",
+    window.localStorage.setItem(
+      "ide99.jsonb.inference.modal.expanded.c1.public.events.data",
       "false",
-);
+    );
     seedOpenWithEditor();
     render(<JsonbEditorModal />);
     expect(screen.queryByTestId("inference-panel-mock")).not.toBeInTheDocument();
   });
 
   it("reads localStorage on second open and respects collapse choice", () => {
-    window.localStorage.setItem(      "ide99.jsonb.inference.modal.expanded.c1.public.events.data",
+    window.localStorage.setItem(
+      "ide99.jsonb.inference.modal.expanded.c1.public.events.data",
       "false",
-);
+    );
     seedOpenWithEditor();
     render(<JsonbEditorModal />);
     expect(screen.queryByTestId("inference-panel-mock")).not.toBeInTheDocument();
   });
 
   it("toggle button expands and collapses", async () => {
-    window.localStorage.setItem(      "ide99.jsonb.inference.modal.expanded.c1.public.events.data",
+    window.localStorage.setItem(
+      "ide99.jsonb.inference.modal.expanded.c1.public.events.data",
       "false",
-);
+    );
     seedOpenWithEditor();
     const { default: userEvent } = await import("@testing-library/user-event");
     render(<JsonbEditorModal />);

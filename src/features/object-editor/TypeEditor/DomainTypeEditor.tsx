@@ -60,10 +60,11 @@ export function DomainTypeEditor({ tab }: DomainTypeEditorProps): JSX.Element {
     }
     void (async () => {
       try {
-        const def = await schemaGetCustomTypeDefinition(          tab.connectionId,
+        const def = await schemaGetCustomTypeDefinition(
+          tab.connectionId,
           tab.target.schema,
           tab.target.name ?? "",
-);
+        );
         if (cancelled) return;
         const union = fromDefinition(def);
         if (union.kind !== "domain") {
@@ -87,11 +88,12 @@ export function DomainTypeEditor({ tab }: DomainTypeEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: DomainTypeForm) => DomainTypeForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: DomainTypeForm) => DomainTypeForm): void => {
       updateForm(tab.id, (s) => (s.kind === "domain_type" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "domain_type" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -110,16 +112,18 @@ export function DomainTypeEditor({ tab }: DomainTypeEditorProps): JSX.Element {
   const touched = useTouched(stableFormState?.form, stableFormState?.initial);
 
   if (loadError) {
-    return (      <div data-testid="domain-type-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="domain-type-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="domain-type-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="domain-type-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -171,7 +175,8 @@ export function DomainTypeEditor({ tab }: DomainTypeEditorProps): JSX.Element {
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="domain-type-editor"
       style={{
         display: "grid",
@@ -195,7 +200,8 @@ export function DomainTypeEditor({ tab }: DomainTypeEditorProps): JSX.Element {
             ? t("object_editor.type.domain_title_new")
             : t("object_editor.type.domain_title_edit")}
         </h2>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="domain-dirty-badge"
             style={{
               fontSize: 11,
@@ -206,7 +212,7 @@ export function DomainTypeEditor({ tab }: DomainTypeEditorProps): JSX.Element {
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <HelpLink topic="domain_type" />
       </div>
@@ -310,7 +316,8 @@ export function DomainTypeEditor({ tab }: DomainTypeEditorProps): JSX.Element {
           >
             {t("object_editor.type.domain_constraints_section")}
           </legend>
-          {form.constraints.map((c, i) => (            <div
+          {form.constraints.map((c, i) => (
+            <div
               key={c.id}
               data-testid={`domain-constraint-${i}`}
               style={{ display: "flex", gap: 8, alignItems: "center" }}
@@ -330,7 +337,7 @@ export function DomainTypeEditor({ tab }: DomainTypeEditorProps): JSX.Element {
                             constraintName: e.target.value === "" ? undefined : e.target.value,
                           }
                         : it,
-),
+                    ),
                   }))
                 }
                 style={{ width: 160 }}
@@ -345,7 +352,7 @@ export function DomainTypeEditor({ tab }: DomainTypeEditorProps): JSX.Element {
                     ...f,
                     constraints: f.constraints.map((it) =>
                       it.id === c.id ? { ...it, checkExpression: e.target.value } : it,
-),
+                    ),
                   }))
                 }
                 style={{ flex: 1 }}
@@ -360,7 +367,7 @@ export function DomainTypeEditor({ tab }: DomainTypeEditorProps): JSX.Element {
                       ...f,
                       constraints: f.constraints.map((it) =>
                         it.id === c.id ? { ...it, notValid: e.target.checked } : it,
-),
+                      ),
                     }))
                   }
                 />
@@ -382,7 +389,7 @@ export function DomainTypeEditor({ tab }: DomainTypeEditorProps): JSX.Element {
                 ×
               </button>
             </div>
-))}
+          ))}
           <button
             type="button"
             data-testid="domain-constraints-add"
@@ -429,5 +436,5 @@ export function DomainTypeEditor({ tab }: DomainTypeEditorProps): JSX.Element {
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

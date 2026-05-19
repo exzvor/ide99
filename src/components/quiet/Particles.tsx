@@ -68,8 +68,9 @@ export function Particles(): JSX.Element {
     };
 
     const seed = () => {
-      const target = Math.round(        Math.min(MAX_PARTICLES, Math.max(MIN_PARTICLES, (width * height) / AREA_PER_PARTICLE)),
-);
+      const target = Math.round(
+        Math.min(MAX_PARTICLES, Math.max(MIN_PARTICLES, (width * height) / AREA_PER_PARTICLE)),
+      );
       particles = [];
       for (let i = 0; i < target; i++) {
         particles.push({
@@ -230,7 +231,8 @@ export function Particles(): JSX.Element {
     };
   }, []);
 
-  return (    <canvas
+  return (
+    <canvas
       ref={canvasRef}
       tabIndex={-1}
       style={{
@@ -242,5 +244,5 @@ export function Particles(): JSX.Element {
         zIndex: 0,
       }}
     />
-);
+  );
 }

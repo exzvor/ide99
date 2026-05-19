@@ -83,7 +83,8 @@ function computeLevels(snap: SessionsSnapshot): Levels {
   return { rows, levelOf, blockersOf, waitersOf, edgeFor, blockedCount: blockersOf.size };
 }
 
-function localizeState(  t: (key: string, options?: { defaultValue: string }) => string,
+function localizeState(
+  t: (key: string, options?: { defaultValue: string }) => string,
   raw: string,
 ): string {
   const slug = raw
@@ -136,7 +137,8 @@ function Card({
     session.durationSeconds !== null && session.durationSeconds >= 0
       ? `${Math.round(session.durationSeconds)} с`
       : null;
-  return (    <div
+  return (
+    <div
       ref={(el) => registerRef(session.pid, el)}
       className={`live-ops-card tone-${t1}${highlighted ? " is-highlighted" : ""}`}
       data-testid={`session-node-${session.pid}`}
@@ -156,7 +158,8 @@ function Card({
           {session.applicationName ? `@${session.applicationName}` : ""}
         </span>
       </div>
-      {session.waitEvent !== null ? (        <div className="card-row wait">
+      {session.waitEvent !== null ? (
+        <div className="card-row wait">
           <span className="wait-icon" aria-hidden="true">
             ⏳
           </span>
@@ -167,19 +170,23 @@ function Card({
             </span>
           </span>
         </div>
-) : null}
-      {isBlocked && blockerEdge ? (        <div className="card-row meta lock-meta">
+      ) : null}
+      {isBlocked && blockerEdge ? (
+        <div className="card-row meta lock-meta">
           <span className="lock-dot" aria-hidden="true" />
-          {blockerEdge.lockType ? (            <span className="mono">Lock/{blockerEdge.lockType}</span>
-) : (            <span className="mono">Lock</span>
-)}
+          {blockerEdge.lockType ? (
+            <span className="mono">Lock/{blockerEdge.lockType}</span>
+          ) : (
+            <span className="mono">Lock</span>
+          )}
           <span className="muted">·</span>
           <span>{t("live_ops.sessions.blocked_by", { pid: blockerEdge.blockerPid })}</span>
         </div>
-) : null}
+      ) : null}
       <div className="card-row query mono">{shortQuery(session.query, 60)}</div>
       <div className="card-row actions">
-        {isBlocked && blockerEdge ? (          <>
+        {isBlocked && blockerEdge ? (
+          <>
             <button
               type="button"
               className="btn-ghost-sm"
@@ -201,7 +208,8 @@ function Card({
               {t("live_ops.sessions.actions.cancel")}
             </button>
           </>
-) : isBlocker ? (          <button
+        ) : isBlocker ? (
+          <button
             type="button"
             className="btn-ghost-sm"
             onClick={(e) => {
@@ -211,10 +219,10 @@ function Card({
           >
             {t("live_ops.sessions.actions.terminate")}
           </button>
-) : null}
+        ) : null}
       </div>
     </div>
-);
+  );
 }
 
 export function SessionsDag({ snapshot, connId, conn }: Props): JSX.Element {
@@ -313,7 +321,8 @@ export function SessionsDag({ snapshot, connId, conn }: Props): JSX.Element {
   }, [snapshot, arrowVersion]);
 
   // Stage size: enough to contain the SVG overlay. We use 100% within scroll container.
-  return (    <div className="live-ops-dag-stage" ref={stageRef}>
+  return (
+    <div className="live-ops-dag-stage" ref={stageRef}>
       <svg
         className="live-ops-arrow-overlay"
         aria-hidden="true"
@@ -334,19 +343,21 @@ export function SessionsDag({ snapshot, connId, conn }: Props): JSX.Element {
             <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" />
           </marker>
         </defs>
-        {arrowSegs.map((seg) => (          <path
+        {arrowSegs.map((seg) => (
+          <path
             key={seg.id}
             d={seg.d}
             className="live-ops-arrow"
             markerEnd="url(#live-ops-arrow-head)"
           />
-))}
+        ))}
       </svg>
       {levels.rows.map((pids, levelIdx) => {
         const labelKey =
           levelIdx === 0 ? "live_ops.sessions.level.blockers" : "live_ops.sessions.level.waiters_n";
         const label = t(labelKey, { n: levelIdx });
-        return (          // biome-ignore lint/suspicious/noArrayIndexKey: levelIdx is the structural identity of the level (L0, L1, ...)
+        return (
+          // biome-ignore lint/suspicious/noArrayIndexKey: levelIdx is the structural identity of the level (L0, L1, ...)
           <section key={`level-${levelIdx}`} className="live-ops-dag-level">
             <header className="level-eyebrow">{label}</header>
             <div className="level-row">
@@ -357,7 +368,8 @@ export function SessionsDag({ snapshot, connId, conn }: Props): JSX.Element {
                 const isBlocked = !!blockers && blockers.size > 0;
                 const isBlocker = (levels.waitersOf.get(pid)?.size ?? 0) > 0;
                 const blockerEdge = levels.edgeFor.get(pid) ?? null;
-                return (                  // biome-ignore lint/a11y/useKeyWithClickEvents: keyboard equivalent is the right-click → S13 modal flow already wired in HealthActions; left-click here is a mouse-only convenience
+                return (
+                  // biome-ignore lint/a11y/useKeyWithClickEvents: keyboard equivalent is the right-click → S13 modal flow already wired in HealthActions; left-click here is a mouse-only convenience
                   <div
                     key={pid}
                     className="card-host"
@@ -376,14 +388,14 @@ export function SessionsDag({ snapshot, connId, conn }: Props): JSX.Element {
                       registerRef={registerRef}
                     />
                   </div>
-);
+                );
               })}
             </div>
           </section>
-);
+        );
       })}
     </div>
-);
+  );
 }
 
 export function computeLevelsForTesting(snap: SessionsSnapshot): Levels {

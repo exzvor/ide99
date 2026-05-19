@@ -38,7 +38,7 @@ describe("isCappedFor", () => {
 });
 
 describe("defaultIntervalFor", () => {
-  // €” Health Screen opens with auto-refresh Off so the user opts in.
+  // Health Screen opens with auto-refresh Off so the user opts in.
   it("prod â†’ null", () => expect(defaultIntervalFor("prod")).toBeNull());
   it("stage â†’ null", () => expect(defaultIntervalFor("stage")).toBeNull());
   it("dev â†’ null", () => expect(defaultIntervalFor("dev")).toBeNull());

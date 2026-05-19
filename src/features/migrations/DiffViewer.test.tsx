@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * DiffViewer renders the unified diff returned by `migrations_diff_snapshots`
  * in a read-only Monaco editor with `language="diff"`. Two version
@@ -35,21 +35,23 @@ vi.mock("react-i18next", () => ({
     t: (key: string, vars?: Record<string, unknown>) => {
       const template = FAKE_DICT[key] ?? key;
       if (!vars) return template;
-      return Object.entries(vars).reduce<string>(        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
+      return Object.entries(vars).reduce<string>(
+        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
         template,
-);
+      );
     },
   }),
 }));
 
 vi.mock("@monaco-editor/react", () => ({
-  Editor: (props: { value?: string; defaultLanguage?: string }) => (    <textarea
+  Editor: (props: { value?: string; defaultLanguage?: string }) => (
+    <textarea
       data-testid="diff-monaco-mock"
       data-language={props.defaultLanguage}
       readOnly
       value={props.value ?? ""}
     />
-),
+  ),
 }));
 
 import { DiffViewer } from "./DiffViewer";
@@ -86,11 +88,12 @@ describe("DiffViewer", () => {
     invokeMock.mockResolvedValue({
       unifiedDiff: "--- 0001\n+++ 0002\n@@ -1 +1,2 @@\n test\n+new\n",
     });
-    render(      <DiffViewer
+    render(
+      <DiffViewer
         connectionId="c1"
         migrations={[migration({ version: "0001" }), migration({ version: "0002" })]}
       />,
-);
+    );
     await user.selectOptions(screen.getByTestId("diff-from-select"), "0001");
     await user.selectOptions(screen.getByTestId("diff-to-select"), "0002");
     await waitFor(() => {
@@ -108,16 +111,18 @@ describe("DiffViewer", () => {
   it("shows 'No changes' placeholder when unifiedDiff is empty string", async () => {
     const user = userEvent.setup();
     invokeMock.mockResolvedValue({ unifiedDiff: "" });
-    render(      <DiffViewer
+    render(
+      <DiffViewer
         connectionId="c1"
         migrations={[migration({ version: "0001" }), migration({ version: "0002" })]}
       />,
-);
+    );
     await user.selectOptions(screen.getByTestId("diff-from-select"), "0001");
     await user.selectOptions(screen.getByTestId("diff-to-select"), "0002");
     await waitFor(() => {
-      expect(screen.getByTestId("diff-no-changes")).toHaveTextContent(        "No changes between snapshots",
-);
+      expect(screen.getByTestId("diff-no-changes")).toHaveTextContent(
+        "No changes between snapshots",
+      );
     });
   });
 });

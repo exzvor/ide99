@@ -245,8 +245,9 @@ describe("analyzeScope — table-driven", () => {
       if (fx.expect.trigger) expect(scope.trigger).toMatchObject(fx.expect.trigger);
       if (fx.expect.prefix !== undefined) expect(scope.prefix).toBe(fx.expect.prefix);
       if (fx.expect.ctes) {
-        expect(scope.ctes.map((c) => ({ name: c.name, columns: c.columns }))).toEqual(          fx.expect.ctes,
-);
+        expect(scope.ctes.map((c) => ({ name: c.name, columns: c.columns }))).toEqual(
+          fx.expect.ctes,
+        );
       }
       if (fx.expect.fromAliases) {
         const got = scope.fromAliases.map((a) => ({

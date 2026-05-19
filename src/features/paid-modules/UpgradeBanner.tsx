@@ -20,7 +20,8 @@ export function UpgradeBanner({
 }): JSX.Element {
   const { t } = useTranslation();
   const labelKey = ctaKey ?? `paid_modules.upgrade.${module}.cta`;
-  return (    <div
+  return (
+    <div
       role="note"
       data-testid={`upgrade-banner-${module}`}
       style={{
@@ -44,5 +45,5 @@ export function UpgradeBanner({
         {t(labelKey)}
       </a>
     </div>
-);
+  );
 }

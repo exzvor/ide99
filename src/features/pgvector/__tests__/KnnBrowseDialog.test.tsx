@@ -12,7 +12,8 @@ vi.mock("../VectorValueInput", () => ({
     value: { mode: "literal"; literal: string } | { mode: "sql-fn"; expr: string };
     onChange: (v: { mode: "literal"; literal: string } | { mode: "sql-fn"; expr: string }) => void;
   }) => {
-    return (      <div data-testid="mock-vector-value-input">
+    return (
+      <div data-testid="mock-vector-value-input">
         <button
           type="button"
           data-testid="mock-set-literal"
@@ -29,7 +30,7 @@ vi.mock("../VectorValueInput", () => ({
         </button>
         <span data-testid="mock-mode">{props.value.mode}</span>
       </div>
-);
+    );
   },
 }));
 
@@ -39,7 +40,8 @@ describe("KnnBrowseDialog", () => {
   it("submits with a literal pivot and the default L2 op + LIMIT 10", async () => {
     const onSubmit = vi.fn();
     const onClose = vi.fn();
-    render(      <KnnBrowseDialog
+    render(
+      <KnnBrowseDialog
         open={true}
         connId="conn-1"
         qualifiedTable="public.items"
@@ -47,7 +49,7 @@ describe("KnnBrowseDialog", () => {
         onClose={onClose}
         onSubmit={onSubmit}
       />,
-);
+    );
 
     // Drive the mocked VectorValueInput into literal mode with our payload.
     await userEvent.click(screen.getByTestId("mock-set-literal"));
@@ -73,7 +75,8 @@ describe("KnnBrowseDialog", () => {
   it("submits with a sql-fn pivot, cosine op, and a custom LIMIT", async () => {
     const onSubmit = vi.fn();
     const onClose = vi.fn();
-    render(      <KnnBrowseDialog
+    render(
+      <KnnBrowseDialog
         open={true}
         connId="conn-1"
         qualifiedTable="public.items"
@@ -81,7 +84,7 @@ describe("KnnBrowseDialog", () => {
         onClose={onClose}
         onSubmit={onSubmit}
       />,
-);
+    );
 
     await userEvent.click(screen.getByTestId("mock-set-sqlfn"));
     await userEvent.click(screen.getByTestId("knn-op-cos"));
@@ -113,7 +116,8 @@ describe("KnnBrowseDialog", () => {
     const onClose = vi.fn();
     // Override the mock for this test to inject a literal containing "'".
     // The component should double the quote per standard Postgres rules.
-    render(      <KnnBrowseDialog
+    render(
+      <KnnBrowseDialog
         open={true}
         connId="conn-1"
         qualifiedTable="public.items"
@@ -121,7 +125,7 @@ describe("KnnBrowseDialog", () => {
         onClose={onClose}
         onSubmit={onSubmit}
       />,
-);
+    );
     // The mock above always emits the same payload; this test is a structural
     // sanity check that submit doesn't crash on the supplied default state.
     await userEvent.click(screen.getByTestId("mock-set-literal"));

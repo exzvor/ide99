@@ -88,7 +88,8 @@ export function NotebookSqlEditor({
 
   const computedHeight = height ?? 132; // ~6 lines @ 22px line-height + padding
 
-  return (    <div
+  return (
+    <div
       data-testid={`notebook-sql-editor-${cellId}`}
       className="q-editor-rules"
       style={
@@ -132,5 +133,5 @@ export function NotebookSqlEditor({
         }}
       />
     </div>
-);
+  );
 }

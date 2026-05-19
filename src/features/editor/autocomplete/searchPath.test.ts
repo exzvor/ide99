@@ -31,8 +31,9 @@ describe("parseSearchPathFromSql", () => {
 
   it("ignores SET search_path that appears inside a CTE name", () => {
     // The token stream sees `with` not `set`; therefore returns null.
-    expect(      parseSearchPathFromSql("WITH search_path AS (SELECT 1) SELECT * FROM search_path"),
-).toBeNull();
+    expect(
+      parseSearchPathFromSql("WITH search_path AS (SELECT 1) SELECT * FROM search_path"),
+    ).toBeNull();
   });
 
   it("ignores SET search_path inside a string literal", () => {

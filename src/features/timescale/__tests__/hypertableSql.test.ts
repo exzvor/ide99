@@ -11,12 +11,13 @@ describe("buildCreateHypertableSql", () => {
       chunkTimeInterval: "7 days",
     };
     const sql = buildCreateHypertableSql(form);
-    expect(sql).toBe(      "SELECT create_hypertable(\n" +
+    expect(sql).toBe(
+      "SELECT create_hypertable(\n" +
         '  \'"public"."metrics"\',\n' +
         "  'ts',\n" +
         "  chunk_time_interval => INTERVAL '7 days'\n" +
         ");",
-);
+    );
   });
 
   it("emits all four advanced fields in the documented order", () => {
@@ -30,7 +31,8 @@ describe("buildCreateHypertableSql", () => {
       createDefaultIndexes: false,
     };
     const sql = buildCreateHypertableSql(form);
-    expect(sql).toBe(      "SELECT create_hypertable(\n" +
+    expect(sql).toBe(
+      "SELECT create_hypertable(\n" +
         '  \'"public"."metrics"\',\n' +
         "  'ts',\n" +
         "  chunk_time_interval => INTERVAL '1 day',\n" +
@@ -39,7 +41,7 @@ describe("buildCreateHypertableSql", () => {
         "  if_not_exists => true,\n" +
         "  create_default_indexes => false\n" +
         ");",
-);
+    );
   });
 
   it("emits migrate_data => false (false is a valid value, only undefined is skipped)", () => {
@@ -50,13 +52,14 @@ describe("buildCreateHypertableSql", () => {
       migrateData: false,
     };
     const sql = buildCreateHypertableSql(form);
-    expect(sql).toBe(      "SELECT create_hypertable(\n" +
+    expect(sql).toBe(
+      "SELECT create_hypertable(\n" +
         '  \'"public"."metrics"\',\n' +
         "  'ts',\n" +
         "  chunk_time_interval => INTERVAL '7 days',\n" +
         "  migrate_data => false\n" +
         ");",
-);
+    );
   });
 
   it("escapes single quotes in qualifiedTable via the SQL doubling rule", () => {
@@ -66,11 +69,12 @@ describe("buildCreateHypertableSql", () => {
       chunkTimeInterval: "7 days",
     };
     const sql = buildCreateHypertableSql(form);
-    expect(sql).toBe(      "SELECT create_hypertable(\n" +
+    expect(sql).toBe(
+      "SELECT create_hypertable(\n" +
         "  '\"public\".\"Bob''s table\"',\n" +
         "  'ts',\n" +
         "  chunk_time_interval => INTERVAL '7 days'\n" +
         ");",
-);
+    );
   });
 });

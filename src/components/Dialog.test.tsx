@@ -9,7 +9,8 @@ function Harness({
   ...overrides
 }: { initialOpen?: boolean } & Partial<React.ComponentProps<typeof Dialog>>) {
   const [open, setOpen] = useState(initialOpen);
-  return (    <Dialog
+  return (
+    <Dialog
       open={open}
       onOpenChange={setOpen}
       title="Add new connection"
@@ -23,7 +24,7 @@ function Harness({
     >
       <p>body content</p>
     </Dialog>
-);
+  );
 }
 
 describe("Dialog", () => {
@@ -43,20 +44,22 @@ describe("Dialog", () => {
 
   it("invokes onOpenChange(false) when Esc is pressed by default", async () => {
     const onOpenChange = vi.fn();
-    render(      <Dialog open onOpenChange={onOpenChange} title="t">
+    render(
+      <Dialog open onOpenChange={onOpenChange} title="t">
         <p>x</p>
       </Dialog>,
-);
+    );
     await userEvent.keyboard("{Escape}");
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
   it("does not close on Escape when closeOnEscape is false", async () => {
     const onOpenChange = vi.fn();
-    render(      <Dialog open onOpenChange={onOpenChange} title="t" closeOnEscape={false}>
+    render(
+      <Dialog open onOpenChange={onOpenChange} title="t" closeOnEscape={false}>
         <p>x</p>
       </Dialog>,
-);
+    );
     await userEvent.keyboard("{Escape}");
     expect(onOpenChange).not.toHaveBeenCalled();
   });

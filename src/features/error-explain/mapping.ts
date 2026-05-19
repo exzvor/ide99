@@ -935,8 +935,10 @@ export const ERROR_CLASS_ENTRIES: ErrorClassEntry[] = [
 
 // ---------- Indices for O(1) lookup ----------
 
-export const ERROR_BY_CODE: ReadonlyMap<string, ErrorEntry> = new Map(  ERROR_ENTRIES.map((e) => [e.code, e]),
+export const ERROR_BY_CODE: ReadonlyMap<string, ErrorEntry> = new Map(
+  ERROR_ENTRIES.map((e) => [e.code, e]),
 );
 
-export const ERROR_CLASS_BY_PREFIX: ReadonlyMap<string, ErrorClassEntry> = new Map(  ERROR_CLASS_ENTRIES.map((e) => [e.classCode, e]),
+export const ERROR_CLASS_BY_PREFIX: ReadonlyMap<string, ErrorClassEntry> = new Map(
+  ERROR_CLASS_ENTRIES.map((e) => [e.classCode, e]),
 );

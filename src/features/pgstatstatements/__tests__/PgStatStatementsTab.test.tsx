@@ -182,8 +182,9 @@ describe("PgStatStatementsTab", () => {
     URL.revokeObjectURL = revokeObjectURL as typeof URL.revokeObjectURL;
 
     const realCreateElement = document.createElement.bind(document);
-    const createElementSpy = vi.spyOn(document, "createElement").mockImplementation(((      tag: string,
-) => {
+    const createElementSpy = vi.spyOn(document, "createElement").mockImplementation(((
+      tag: string,
+    ) => {
       const el = realCreateElement(tag);
       if (tag === "a") {
         Object.defineProperty(el, "click", { value: clickSpy, writable: true });

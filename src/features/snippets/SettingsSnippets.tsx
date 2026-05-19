@@ -19,11 +19,12 @@ import { useSnippets } from "./store";
 
 function formatBackendError(err: unknown): string {
   if (err instanceof Error) return err.message;
-  if (    err &&
+  if (
+    err &&
     typeof err === "object" &&
     "message" in err &&
     typeof (err as { message: unknown }).message === "string"
-) {
+  ) {
     return (err as { message: string }).message;
   }
   return String(err);
@@ -67,7 +68,8 @@ export function SettingsSnippets() {
     }
   };
 
-  return (    <section className="settings-snippets">
+  return (
+    <section className="settings-snippets">
       <header>
         <h2>{t("settings.snippets.title")}</h2>
         <div className="toolbar">
@@ -86,18 +88,22 @@ export function SettingsSnippets() {
       <details>
         <summary>{t("settings.snippets.builtins", { count: BUILTIN_SNIPPETS.length })}</summary>
         <ul className="snippet-list snippet-list-builtin">
-          {BUILTIN_SNIPPETS.map((s) => (            <li key={s.id}>
+          {BUILTIN_SNIPPETS.map((s) => (
+            <li key={s.id}>
               <span className="label">{s.label}</span>
               <span className="prefix">{s.prefixes.join(", ")}</span>
             </li>
-))}
+          ))}
         </ul>
       </details>
 
       <h3>{t("settings.snippets.mySnippets", { count: userSnippets.length })}</h3>
-      {userSnippets.length === 0 ? (        <p className="empty">{t("settings.snippets.empty")}</p>
-) : (        <ul className="snippet-list">
-          {userSnippets.map((s) => (            <li key={s.id}>
+      {userSnippets.length === 0 ? (
+        <p className="empty">{t("settings.snippets.empty")}</p>
+      ) : (
+        <ul className="snippet-list">
+          {userSnippets.map((s) => (
+            <li key={s.id}>
               <span className="label">{s.label}</span>
               <span className="prefix">{s.prefix}</span>
               <button type="button" onClick={() => setEditing(s)}>
@@ -107,9 +113,9 @@ export function SettingsSnippets() {
                 {t("common.delete")}
               </button>
             </li>
-))}
+          ))}
         </ul>
-)}
+      )}
 
       <SnippetEditor
         open={creating || editing !== null}
@@ -120,5 +126,5 @@ export function SettingsSnippets() {
         }}
       />
     </section>
-);
+  );
 }

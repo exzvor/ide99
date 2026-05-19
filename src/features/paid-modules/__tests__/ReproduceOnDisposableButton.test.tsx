@@ -61,17 +61,19 @@ describe("ReproduceOnDisposableButton", () => {
       await Promise.resolve();
     });
 
-    expect(openSpy).toHaveBeenCalledWith(      "https://spg99.ru/instant-db",
+    expect(openSpy).toHaveBeenCalledWith(
+      "https://spg99.ru/instant-db",
       "_blank",
       "noopener,noreferrer",
-);
+    );
     expect(invokeMock).toHaveBeenCalledWith("telemetry_send_event", {
       name: "feature_used",
       props: { feature_id: "paid_modules.spg99.reproduce.upgrade_click" },
     });
     // No template-picker dispatch when not subscribed.
-    const dispatched = dispatchSpy.mock.calls.find(      ([e]) => e instanceof CustomEvent && e.type === "ide99:spg99:open-template-picker",
-);
+    const dispatched = dispatchSpy.mock.calls.find(
+      ([e]) => e instanceof CustomEvent && e.type === "ide99:spg99:open-template-picker",
+    );
     expect(dispatched).toBeUndefined();
     openSpy.mockRestore();
   });
@@ -88,9 +90,10 @@ describe("ReproduceOnDisposableButton", () => {
     expect(openSpy).not.toHaveBeenCalled();
     const evt = dispatchSpy.mock.calls
       .map(([e]) => e)
-      .find(        (e): e is CustomEvent<TemplatePickerOpenDetail> =>
+      .find(
+        (e): e is CustomEvent<TemplatePickerOpenDetail> =>
           e instanceof CustomEvent && e.type === "ide99:spg99:open-template-picker",
-);
+      );
     expect(evt).toBeDefined();
     expect(evt?.detail.preset).toBe("project");
     expect(evt?.detail.source).toContain("health.slow_query:");

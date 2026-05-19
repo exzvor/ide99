@@ -55,15 +55,17 @@ describe("Spg99StatusBarWidget", () => {
 
   it("renders nothing when not subscribed even if an activeInstantDb is passed", () => {
     setSubscription(false);
-    const { container } = render(      <Spg99StatusBarWidget activeInstantDb={{ template: "pgvector", expiresInMinutes: 12 }} />,
-);
+    const { container } = render(
+      <Spg99StatusBarWidget activeInstantDb={{ template: "pgvector", expiresInMinutes: 12 }} />,
+    );
     expect(container).toBeEmptyDOMElement();
   });
 
   it("renders the badge when subscribed and active Instant DB is provided", () => {
     setSubscription(true);
-    render(      <Spg99StatusBarWidget activeInstantDb={{ template: "pgvector", expiresInMinutes: 12 }} />,
-);
+    render(
+      <Spg99StatusBarWidget activeInstantDb={{ template: "pgvector", expiresInMinutes: 12 }} />,
+    );
     const badge = screen.getByTestId("spg99-status-bar");
     expect(badge).toBeInTheDocument();
     expect(badge.textContent).toMatch(/pgvector/);

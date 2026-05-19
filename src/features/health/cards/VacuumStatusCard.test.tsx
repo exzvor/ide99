@@ -14,19 +14,21 @@ describe("VacuumStatusCard", () => {
   });
 
   it("empty rows → no-issues message", () => {
-    render(      <VacuumStatusCard
+    render(
+      <VacuumStatusCard
         connId="c1"
         state={{
           status: "ready",
           card: { id: "vacuum_status", data: { rows: [] } },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("health-card-vacuum_status-empty")).toBeTruthy();
   });
 
   it("ready: warn when any > 7d, danger when any > 30d", () => {
-    const { rerender } = render(      <VacuumStatusCard
+    const { rerender } = render(
+      <VacuumStatusCard
         connId="c1"
         state={{
           status: "ready",
@@ -46,10 +48,12 @@ describe("VacuumStatusCard", () => {
           },
         }}
       />,
-);
-    expect(screen.getByTestId("health-card-vacuum_status-status").getAttribute("data-tone")).toBe(      "warn",
-);
-    rerender(      <VacuumStatusCard
+    );
+    expect(screen.getByTestId("health-card-vacuum_status-status").getAttribute("data-tone")).toBe(
+      "warn",
+    );
+    rerender(
+      <VacuumStatusCard
         connId="c1"
         state={{
           status: "ready",
@@ -69,13 +73,15 @@ describe("VacuumStatusCard", () => {
           },
         }}
       />,
-);
-    expect(screen.getByTestId("health-card-vacuum_status-status").getAttribute("data-tone")).toBe(      "danger",
-);
+    );
+    expect(screen.getByTestId("health-card-vacuum_status-status").getAttribute("data-tone")).toBe(
+      "danger",
+    );
   });
 
   it("renders 'never' row for daysSince=null", () => {
-    render(      <VacuumStatusCard
+    render(
+      <VacuumStatusCard
         connId="c1"
         state={{
           status: "ready",
@@ -95,7 +101,7 @@ describe("VacuumStatusCard", () => {
           },
         }}
       />,
-);
+    );
     const row = screen.getByTestId("vacuum-row");
     expect(row.textContent).toMatch(/never/i);
   });

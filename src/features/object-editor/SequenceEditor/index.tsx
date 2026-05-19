@@ -66,10 +66,11 @@ export function SequenceEditor({ tab }: SequenceEditorProps): JSX.Element {
     }
     void (async () => {
       try {
-        const def = await schemaGetSequenceDefinition(          tab.connectionId,
+        const def = await schemaGetSequenceDefinition(
+          tab.connectionId,
           tab.target.schema,
           tab.target.name ?? "",
-);
+        );
         if (cancelled) return;
         const form: SequenceForm = {
           schema: def.schema,
@@ -100,11 +101,12 @@ export function SequenceEditor({ tab }: SequenceEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: SequenceForm) => SequenceForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: SequenceForm) => SequenceForm): void => {
       updateForm(tab.id, (s) => (s.kind === "sequence" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "sequence" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -119,16 +121,18 @@ export function SequenceEditor({ tab }: SequenceEditorProps): JSX.Element {
   const touched = useTouched(stableFormState?.form, stableFormState?.initial);
 
   if (loadError) {
-    return (      <div data-testid="sequence-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="sequence-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="sequence-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="sequence-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -170,7 +174,8 @@ export function SequenceEditor({ tab }: SequenceEditorProps): JSX.Element {
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="sequence-editor"
       style={{
         display: "grid",
@@ -209,7 +214,8 @@ export function SequenceEditor({ tab }: SequenceEditorProps): JSX.Element {
             onChange={(e) => onChange((f) => ({ ...f, name: e.target.value }))}
           />
         </div>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="sequence-dirty-badge"
             style={{
               fontSize: 11,
@@ -221,7 +227,7 @@ export function SequenceEditor({ tab }: SequenceEditorProps): JSX.Element {
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <div style={{ paddingBottom: 4 }}>
           <HelpLink topic="sequence" />
@@ -430,5 +436,5 @@ export function SequenceEditor({ tab }: SequenceEditorProps): JSX.Element {
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

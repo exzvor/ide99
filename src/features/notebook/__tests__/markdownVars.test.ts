@@ -35,9 +35,10 @@ describe("substituteVariables", () => {
 
   it("supports multiple references in a single string", () => {
     const cells = [sqlCell("a", ["users", "orders"], [["100", "250"]])];
-    const result = substituteVariables(      "Users={{ cell_0.result.users }}, Orders={{ cell_0.result.orders }}",
+    const result = substituteVariables(
+      "Users={{ cell_0.result.users }}, Orders={{ cell_0.result.orders }}",
       cells,
-);
+    );
     expect(result).toBe("Users=100, Orders=250");
   });
 
@@ -53,14 +54,16 @@ describe("substituteVariables", () => {
 
   it("leaves unresolved column references untouched", () => {
     const cells = [sqlCell("a", ["total"], [["42"]])];
-    expect(substituteVariables("X={{ cell_0.result.missing }}", cells)).toBe(      "X={{ cell_0.result.missing }}",
-);
+    expect(substituteVariables("X={{ cell_0.result.missing }}", cells)).toBe(
+      "X={{ cell_0.result.missing }}",
+    );
   });
 
   it("ignores out-of-range cell indices", () => {
     const cells = [sqlCell("a", ["total"], [["42"]])];
-    expect(substituteVariables("X={{ cell_5.result.total }}", cells)).toBe(      "X={{ cell_5.result.total }}",
-);
+    expect(substituteVariables("X={{ cell_5.result.total }}", cells)).toBe(
+      "X={{ cell_5.result.total }}",
+    );
   });
 
   it("html mode escapes the resolved value to prevent injection", () => {
@@ -79,8 +82,9 @@ describe("substituteVariables", () => {
   it("renders null cells as the empty string (not the literal 'null')", () => {
     const cells = [sqlCell("a", ["nullable"], [[null]])];
     // We intentionally treat null as unresolved → variable stays.
-    expect(substituteVariables("X={{ cell_0.result.nullable }}", cells)).toBe(      "X={{ cell_0.result.nullable }}",
-);
+    expect(substituteVariables("X={{ cell_0.result.nullable }}", cells)).toBe(
+      "X={{ cell_0.result.nullable }}",
+    );
   });
 
   it("works on empty source", () => {

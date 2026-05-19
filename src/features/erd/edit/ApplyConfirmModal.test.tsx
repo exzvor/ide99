@@ -16,10 +16,11 @@ function H(props: Partial<React.ComponentProps<typeof ApplyConfirmModal>> = {}) 
     onConfirm: vi.fn(),
     onCancel: vi.fn(),
   };
-  return render(    <I18nextProvider i18n={i18n}>
+  return render(
+    <I18nextProvider i18n={i18n}>
       <ApplyConfirmModal {...defaults} {...props} />
     </I18nextProvider>,
-);
+  );
 }
 
 describe("ApplyConfirmModal", () => {

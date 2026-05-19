@@ -18,13 +18,14 @@ describe("SridConversionBanner", () => {
   });
 
   it("renders banner with SRID and prompt text", () => {
-    render(      <SridConversionBanner
+    render(
+      <SridConversionBanner
         connId="conn-1"
         geometryColumn="geom"
         originalSql="SELECT geom FROM places"
         unknownSrid={32636}
       />,
-);
+    );
     const banner = screen.getByTestId("srid-conversion-banner");
     expect(banner.textContent).toMatch(/SRID/i);
     expect(banner.textContent).toContain("32636");
@@ -32,13 +33,14 @@ describe("SridConversionBanner", () => {
   });
 
   it("clicking the button calls openEditorTab with helper SQL", () => {
-    render(      <SridConversionBanner
+    render(
+      <SridConversionBanner
         connId="conn-1"
         geometryColumn="geom"
         originalSql="SELECT geom FROM places"
         unknownSrid={32636}
       />,
-);
+    );
     const button = screen.getByTestId("srid-banner-generate");
     fireEvent.click(button);
     expect(openEditorTab).toHaveBeenCalledTimes(1);
@@ -54,13 +56,14 @@ describe("SridConversionBanner", () => {
   });
 
   it("button is disabled when connId is null", () => {
-    render(      <SridConversionBanner
+    render(
+      <SridConversionBanner
         connId={null}
         geometryColumn="geom"
         originalSql="SELECT geom FROM places"
         unknownSrid={32636}
       />,
-);
+    );
     const button = screen.getByTestId("srid-banner-generate") as HTMLButtonElement;
     expect(button.disabled).toBe(true);
     fireEvent.click(button);

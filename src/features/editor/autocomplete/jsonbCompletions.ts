@@ -24,7 +24,8 @@ export interface JsonbCompletion {
  * `arraywildcard` for lookup since the analyzer collapses array
  * elements to `[*]`.
  */
-export function buildJsonbCompletions(  schema: InferredSchema,
+export function buildJsonbCompletions(
+  schema: InferredSchema,
   inputPath: CompletionPath,
   partial: string,
 ): JsonbCompletion[] {
@@ -68,7 +69,8 @@ function normalize(seg: CompletionPathSeg): { key: string } | "arraywildcard" {
   return "arraywildcard";
 }
 
-function pathPrefixMatches(  prefix: Array<{ key: string } | "arraywildcard">,
+function pathPrefixMatches(
+  prefix: Array<{ key: string } | "arraywildcard">,
   target: Array<{ key: string } | "arraywildcard">,
 ): boolean {
   if (prefix.length > target.length) return false;
@@ -76,12 +78,13 @@ function pathPrefixMatches(  prefix: Array<{ key: string } | "arraywildcard">,
     const a = prefix[i];
     const b = target[i];
     if (a === "arraywildcard" && b === "arraywildcard") continue;
-    if (      typeof a === "object" &&
+    if (
+      typeof a === "object" &&
       typeof b === "object" &&
       "key" in a &&
       "key" in b &&
       a.key === b.key
-) {
+    ) {
       continue;
     }
     return false;

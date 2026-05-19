@@ -29,7 +29,8 @@ export function SridConversionBanner(props: SridConversionBannerProps): JSX.Elem
     useEditor.getState().openEditorTab(connId, { prefillSql: sql });
   };
 
-  return (    <div
+  return (
+    <div
       data-testid="srid-conversion-banner"
       role="status"
       style={{
@@ -68,5 +69,5 @@ export function SridConversionBanner(props: SridConversionBannerProps): JSX.Elem
         Generate query
       </button>
     </div>
-);
+  );
 }

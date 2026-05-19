@@ -154,7 +154,8 @@ interface ResolvedCol {
   tableId: string;
   column: WorkingColumn;
 }
-function resolveColumn(  tables: Map<string, WorkingTable>,
+function resolveColumn(
+  tables: Map<string, WorkingTable>,
   ref: ColumnRef,
 ): WorkingColumn | undefined {
   const tid = resolveTableId(ref.table);
@@ -165,7 +166,8 @@ function resolveColumn(  tables: Map<string, WorkingTable>,
   }
   return t.columns.find((c) => c.id === ref.column);
 }
-function resolveColumnRef(  tables: Map<string, WorkingTable>,
+function resolveColumnRef(
+  tables: Map<string, WorkingTable>,
   ref: ColumnRef,
 ): ResolvedCol | undefined {
   const c = resolveColumn(tables, ref);

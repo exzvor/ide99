@@ -35,11 +35,12 @@ describe("CoachMark", () => {
   });
 
   it("two marks with different ids render independently", () => {
-    render(      <>
+    render(
+      <>
         <CoachMark id="a" title="A" body="aa" dismissLabel="Got it" />
         <CoachMark id="b" title="B" body="bb" dismissLabel="Got it" />
       </>,
-);
+    );
     expect(screen.getByTestId("coach-mark-a")).toBeInTheDocument();
     expect(screen.getByTestId("coach-mark-b")).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("coach-mark-a-dismiss"));

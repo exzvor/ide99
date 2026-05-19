@@ -5,11 +5,12 @@ import { TableView, isTabularValue } from "./TableView";
 
 describe("isTabularValue", () => {
   it("true for uniform array of objects with ≤12 keys", () => {
-    expect(      isTabularValue([
+    expect(
+      isTabularValue([
         { a: 1, b: 2 },
         { a: 2, b: 3 },
       ]),
-).toBe(true);
+    ).toBe(true);
   });
 
   it("false for >12 unique keys", () => {

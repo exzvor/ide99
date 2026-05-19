@@ -153,7 +153,8 @@ export function DdlPreviewPanel({
     })();
   }, 200);
 
-  const handleChange = useCallback(    (value: string | undefined) => {
+  const handleChange = useCallback(
+    (value: string | undefined) => {
       if (suppressNextChange.current) {
         suppressNextChange.current = false;
         return;
@@ -161,9 +162,10 @@ export function DdlPreviewPanel({
       onContentChanged((value ?? "") as unknown);
     },
     [onContentChanged],
-);
+  );
 
-  return (    <div
+  return (
+    <div
       data-testid="ddl-preview-panel"
       style={{
         display: "flex",
@@ -176,23 +178,27 @@ export function DdlPreviewPanel({
     >
       <header style={{ display: "flex", alignItems: "center", padding: "6px 10px", gap: 12 }}>
         <strong>{t("erd.edit.preview.title")}</strong>
-        {!isEmpty && (          <span data-testid="ddl-preview-count">
+        {!isEmpty && (
+          <span data-testid="ddl-preview-count">
             {t("erd.edit.preview.statement_count", { n: ddl.statements.length })}
           </span>
-)}
-        {warnings.length > 0 && (          <span data-testid="ddl-preview-warnings" style={{ color: "var(--warn, #d49b1c)" }}>
+        )}
+        {warnings.length > 0 && (
+          <span data-testid="ddl-preview-warnings" style={{ color: "var(--warn, #d49b1c)" }}>
             {t("erd.edit.preview.warning_count", { n: warnings.length })}
           </span>
-)}
-        {astWarnings.length > 0 && (          <span data-testid="ddl-preview-ast-warnings" style={{ color: "var(--warn, #d49b1c)" }}>
+        )}
+        {astWarnings.length > 0 && (
+          <span data-testid="ddl-preview-ast-warnings" style={{ color: "var(--warn, #d49b1c)" }}>
             {t("parser.ddl.warningTitle", {
               defaultValue: "Some statements not yet representable in ERD",
             })}{" "}
             ({astWarnings.length})
           </span>
-)}
+        )}
       </header>
-      {astParseError && (        <div
+      {astParseError && (
+        <div
           data-testid="ddl-preview-parse-error"
           role="alert"
           style={{
@@ -204,8 +210,9 @@ export function DdlPreviewPanel({
           {t("parser.ddl.error", { defaultValue: "Parse error" })}: line {astParseError.line}:
           {astParseError.column} — {astParseError.message}
         </div>
-)}
-      {errors.length > 0 && (        <div
+      )}
+      {errors.length > 0 && (
+        <div
           data-testid="ddl-preview-errors"
           role="alert"
           style={{
@@ -219,12 +226,14 @@ export function DdlPreviewPanel({
             data-testid="ddl-preview-errors-list"
             style={{ margin: 0, paddingLeft: 18, listStyle: "disc" }}
           >
-            {errors.map((issue, idx) => (              <li key={`${issue.kind}-${issue.opId}-${idx}`}>{formatIssue(t, issue)}</li>
-))}
+            {errors.map((issue, idx) => (
+              <li key={`${issue.kind}-${issue.opId}-${idx}`}>{formatIssue(t, issue)}</li>
+            ))}
           </ul>
         </div>
-)}
-      {applyError && (        <div
+      )}
+      {applyError && (
+        <div
           data-testid="ddl-preview-error"
           role="alert"
           style={{
@@ -236,13 +245,15 @@ export function DdlPreviewPanel({
           <strong>{t("erd.edit.preview.error.title")}</strong>
           <div>
             [{applyError.pgErrorCode}] {applyError.pgMessage}
-            {applyError.failingStatementIndex !== null && (              <span> · stmt #{applyError.failingStatementIndex + 1}</span>
-)}
+            {applyError.failingStatementIndex !== null && (
+              <span> · stmt #{applyError.failingStatementIndex + 1}</span>
+            )}
           </div>
           {applyError.pgHint && <div style={{ opacity: 0.85 }}>{applyError.pgHint}</div>}
         </div>
-)}
-      {astWarnings.length > 0 && (        <ul
+      )}
+      {astWarnings.length > 0 && (
+        <ul
           data-testid="ddl-preview-ast-warnings-list"
           style={{
             margin: 0,
@@ -251,14 +262,19 @@ export function DdlPreviewPanel({
             color: "var(--warn, #d49b1c)",
           }}
         >
-          {astWarnings.map((w, idx) => (            // biome-ignore lint/suspicious/noArrayIndexKey: warnings are append-only and never re-ordered; index is stable per render.
-            <li key={`ast-warn-${idx}`}>
-              ⚠ {w.message}
-              {w.sqlSnippet ? <span style={{ opacity: 0.7 }}> — {w.sqlSnippet}</span> : null}
-            </li>
-))}
+          {astWarnings.map(
+            (
+              w,
+              idx, // biome-ignore lint/suspicious/noArrayIndexKey: warnings are append-only and never re-ordered; index is stable per render.
+            ) => (
+              <li key={`ast-warn-${idx}`}>
+                ⚠ {w.message}
+                {w.sqlSnippet ? <span style={{ opacity: 0.7 }}> — {w.sqlSnippet}</span> : null}
+              </li>
+            ),
+          )}
         </ul>
-)}
+      )}
       <div data-testid="ddl-preview-monaco-host" style={{ height: 240 }}>
         <Editor
           height="240px"
@@ -284,5 +300,5 @@ export function DdlPreviewPanel({
         {isEmpty ? t("erd.edit.preview.empty") : ddl.sql}
       </span>
     </div>
-);
+  );
 }

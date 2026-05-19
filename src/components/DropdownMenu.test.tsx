@@ -5,17 +5,19 @@ import { DropdownMenu } from "./DropdownMenu";
 
 describe("DropdownMenu", () => {
   it("renders the trigger element", () => {
-    render(      <DropdownMenu
+    render(
+      <DropdownMenu
         trigger={<button type="button">Open menu</button>}
         items={[{ label: "Edit", onSelect: () => {} }]}
       />,
-);
+    );
     expect(screen.getByRole("button", { name: "Open menu" })).toBeInTheDocument();
   });
 
   it("opens on click and shows items as menuitems", async () => {
     const user = userEvent.setup();
-    render(      <DropdownMenu
+    render(
+      <DropdownMenu
         trigger={<button type="button">Open menu</button>}
         items={[
           { label: "Edit", onSelect: () => {} },
@@ -23,7 +25,7 @@ describe("DropdownMenu", () => {
           { label: "Delete", onSelect: () => {}, destructive: true },
         ]}
       />,
-);
+    );
 
     await user.click(screen.getByRole("button", { name: "Open menu" }));
 
@@ -36,11 +38,12 @@ describe("DropdownMenu", () => {
   it("invokes onSelect when an item is clicked", async () => {
     const onSelect = vi.fn();
     const user = userEvent.setup();
-    render(      <DropdownMenu
+    render(
+      <DropdownMenu
         trigger={<button type="button">Open menu</button>}
         items={[{ label: "Edit", onSelect }]}
       />,
-);
+    );
 
     await user.click(screen.getByRole("button", { name: "Open menu" }));
     const editItem = await screen.findByRole("menuitem", { name: "Edit" });
@@ -52,11 +55,12 @@ describe("DropdownMenu", () => {
   it("does not invoke onSelect when an item is disabled", async () => {
     const onSelect = vi.fn();
     const user = userEvent.setup();
-    render(      <DropdownMenu
+    render(
+      <DropdownMenu
         trigger={<button type="button">Open menu</button>}
         items={[{ label: "Edit", onSelect, disabled: true }]}
       />,
-);
+    );
 
     await user.click(screen.getByRole("button", { name: "Open menu" }));
     const editItem = await screen.findByRole("menuitem", { name: "Edit" });

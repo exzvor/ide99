@@ -68,7 +68,8 @@ export function SqlCell({ cell, index, notebook, connectionId, onChange }: Props
 
   const noConn = connectionId === null;
 
-  return (    <div
+  return (
+    <div
       data-testid={`sql-cell-${cell.id}`}
       style={{ display: "flex", flexDirection: "column", gap: 8 }}
     >
@@ -125,7 +126,8 @@ export function SqlCell({ cell, index, notebook, connectionId, onChange }: Props
           />
           <span>{t("notebook.cte.share_label")}</span>
         </label>
-        {cell.shareAsCte ? (          <input
+        {cell.shareAsCte ? (
+          <input
             type="text"
             data-testid={`sql-cell-${cell.id}-cte-name`}
             aria-label={t("notebook.cte.name_label")}
@@ -141,7 +143,7 @@ export function SqlCell({ cell, index, notebook, connectionId, onChange }: Props
               minWidth: 100,
             }}
           />
-) : null}
+        ) : null}
       </div>
       <NotebookSqlEditor
         cellId={cell.id}
@@ -149,7 +151,8 @@ export function SqlCell({ cell, index, notebook, connectionId, onChange }: Props
         onChange={(source) => onChange({ ...cell, source })}
         onRun={handleRun}
       />
-      {runState.status === "error" ? (        <div
+      {runState.status === "error" ? (
+        <div
           data-testid={`sql-cell-${cell.id}-error`}
           role="alert"
           style={{
@@ -165,8 +168,8 @@ export function SqlCell({ cell, index, notebook, connectionId, onChange }: Props
         >
           {runState.message}
         </div>
-) : null}
+      ) : null}
       {cell.result ? <ResultCell result={cell.result} cellId={cell.id} /> : null}
     </div>
-);
+  );
 }

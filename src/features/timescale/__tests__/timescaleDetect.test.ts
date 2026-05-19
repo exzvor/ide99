@@ -10,12 +10,13 @@ describe("detectTimeColumns", () => {
   });
 
   it("ignores non-time columns (text, uuid, jsonb, …)", () => {
-    expect(      detectTimeColumns([
+    expect(
+      detectTimeColumns([
         { name: "id", typeName: "uuid" },
         { name: "name", typeName: "text" },
         { name: "payload", typeName: "jsonb" },
       ]),
-).toEqual([]);
+    ).toEqual([]);
   });
 
   it("returns every supported time-typed column preserving input order", () => {

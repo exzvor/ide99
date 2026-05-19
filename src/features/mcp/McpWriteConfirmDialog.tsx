@@ -49,7 +49,7 @@ export function McpWriteConfirmDialog(): JSX.Element | null {
           // Auto-approve under sticky grant.
           void mcpWriteConfirmResponse(ev.requestId, true).catch((err) =>
             toast.error(formatBackendError(err)),
-);
+          );
           return;
         }
         // Drop expired sticky entries lazily.
@@ -104,7 +104,8 @@ export function McpWriteConfirmDialog(): JSX.Element | null {
       ? t("settings.mcp.writeConfirm.kindMigration")
       : t("settings.mcp.writeConfirm.kindQuery");
 
-  return (    <Dialog
+  return (
+    <Dialog
       open
       onOpenChange={(open) => {
         if (!open) void reject();
@@ -139,5 +140,5 @@ export function McpWriteConfirmDialog(): JSX.Element | null {
         </label>
       </div>
     </Dialog>
-);
+  );
 }

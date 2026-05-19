@@ -1,5 +1,5 @@
 /**
- * â€” 
+ * â€”
  * â€” (additions).
  *
  * ApplyDialog drives the Apply flow with three modes:
@@ -102,7 +102,7 @@ interface Props {
   environment: Environment;
   migrations: Migration[];
   /**
-   * €” initial mode for the radio set. Lets the toolbar's three
+   * initial mode for the radio set. Lets the toolbar's three
    * buttons (Apply Single / Range / All pending) open the dialog already
    * pointed at the user's intent instead of always defaulting to All
    * pending. Default `"allPending"` preserves the prior behavior for
@@ -128,7 +128,8 @@ function isContiguousPendingRange(migrations: Migration[], from: string, to: str
     .every((m) => m.status === "pending" && m.parseError === null);
 }
 
-function selectedScope(  mode: ModeKind,
+function selectedScope(
+  mode: ModeKind,
   migrations: Migration[],
   single: string,
   rangeFrom: string,
@@ -136,7 +137,7 @@ function selectedScope(  mode: ModeKind,
 ): string[] {
   if (mode === "single") {
     if (!single) return [];
-    // €” never let a parse-error row land in scope.
+    // never let a parse-error row land in scope.
     const m = migrations.find((x) => x.version === single);
     if (!m || m.parseError !== null) return [];
     return [single];
@@ -171,14 +172,15 @@ export function ApplyDialog(props: Props): JSX.Element {
     onApplied,
   } = props;
 
-  // €” exclude rows that discovery flagged with a parse_error
+  // exclude rows that discovery flagged with a parse_error
   // ("duplicate version" / "orphan rollback file" / "file missing"); those
   // are surfaced in the timeline as warnings but must NOT be selectable for
   // apply, because backend `select_targets` now rejects them with
   // `HasParseError` and the dropdown would offer broken options otherwise.
-  const pending = useMemo(    () => migrations.filter((m) => m.status === "pending" && m.parseError === null),
+  const pending = useMemo(
+    () => migrations.filter((m) => m.status === "pending" && m.parseError === null),
     [migrations],
-);
+  );
 
   const [mode, setMode] = useState<ModeKind>(initialMode);
   const [single, setSingle] = useState<string>("");
@@ -209,7 +211,7 @@ export function ApplyDialog(props: Props): JSX.Element {
   const [dryRunInProgress, setDryRunInProgress] = useState<boolean>(false);
   const [dryRunPhase, setDryRunPhase] = useState<DryRunPhase | null>(null);
   const [dryRunReport, setDryRunReport] = useState<DryRunReport | null>(null);
-  // €” snapshot of the scope (sorted version list) at the time
+  // snapshot of the scope (sorted version list) at the time
   // dry-run resolved. If the user changes mode/single/rangeFrom/rangeTo
   // after a successful dry-run, the report is invalidated so they can't
   // press "Apply for real" against a different set of migrations.
@@ -221,9 +223,10 @@ export function ApplyDialog(props: Props): JSX.Element {
   const monacoRef = useRef<Monaco | null>(null);
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
-  const scope = useMemo(    () => selectedScope(mode, migrations, single, rangeFrom, rangeTo),
+  const scope = useMemo(
+    () => selectedScope(mode, migrations, single, rangeFrom, rangeTo),
     [mode, migrations, single, rangeFrom, rangeTo],
-);
+  );
 
   const rangeIncomplete = mode === "range" && (!rangeFrom || !rangeTo);
   const rangeInvalid =
@@ -301,7 +304,8 @@ export function ApplyDialog(props: Props): JSX.Element {
     monaco.editor.setModelMarkers(model, "squawk", markers);
   }, [scope, findingsByVersion, ruleDescriptions]);
 
-  const handleDryRunCheckbox = useCallback(    (next: boolean) => {
+  const handleDryRunCheckbox = useCallback(
+    (next: boolean) => {
       setDryRunEnabled(next);
       try {
         localStorage.setItem(dryRunStorageKey(connectionId), String(next));
@@ -310,7 +314,7 @@ export function ApplyDialog(props: Props): JSX.Element {
       }
     },
     [connectionId],
-);
+  );
 
   const buildPayloadMode = useCallback((): ApplyMode => {
     if (mode === "single") return { kind: "single", version: single };
@@ -346,7 +350,7 @@ export function ApplyDialog(props: Props): JSX.Element {
     }
   }, [connectionId, buildPayloadMode, scope, dryRunTarget]);
 
-  // €” invalidate the report when the user changes scope after
+  // invalidate the report when the user changes scope after
   // a dry-run has resolved. Without this, "Apply for real" would run
   // against a different set than the one we just verified.
   useEffect(() => {
@@ -361,7 +365,7 @@ export function ApplyDialog(props: Props): JSX.Element {
     }
   }, [scope, dryRunReport, dryRunScope]);
 
-  // €” when the user closes the dialog while dry-run is mid-flight,
+  // when the user closes the dialog while dry-run is mid-flight,
   // signal the backend so testcontainers can drop the ephemeral container
   // immediately instead of waiting for a 30s+ image pull or full apply.
   const handleClose = useCallback(() => {
@@ -413,7 +417,8 @@ export function ApplyDialog(props: Props): JSX.Element {
 
   const showResultsPanel = dryRunReport !== null;
 
-  return (    <Dialog
+  return (
+    <Dialog
       open={open}
       onOpenChange={(o) => {
         if (!o) handleClose();
@@ -421,7 +426,8 @@ export function ApplyDialog(props: Props): JSX.Element {
       title={t("migrations.apply.title")}
       size="lg"
       footer={
-        showResultsPanel ? (          <>
+        showResultsPanel ? (
+          <>
             <button
               type="button"
               className="btn btn-ghost"
@@ -431,7 +437,8 @@ export function ApplyDialog(props: Props): JSX.Element {
             >
               {t("migrations.dryrun.close")}
             </button>
-            {dryRunReport?.success ? (              <button
+            {dryRunReport?.success ? (
+              <button
                 type="button"
                 data-testid="apply-dialog-dryrun-apply-for-real"
                 className={isProd ? "btn btn-danger" : "btn btn-primary"}
@@ -442,14 +449,15 @@ export function ApplyDialog(props: Props): JSX.Element {
               >
                 {applying ? t("migrations.apply.applying") : t("migrations.dryrun.applyForReal")}
               </button>
-) : null}
+            ) : null}
           </>
-) : (          <>
+        ) : (
+          <>
             <button
               type="button"
               className="btn btn-ghost"
               onClick={handleClose}
-              // €” Cancel stays enabled during dry-run so user
+              // Cancel stays enabled during dry-run so user
               // can abort the backend job (handleClose invokes
               // migrations_dryrun_cancel).
               disabled={applying}
@@ -470,7 +478,7 @@ export function ApplyDialog(props: Props): JSX.Element {
                   : t("migrations.apply.apply", { count })}
             </button>
           </>
-)
+        )
       }
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -542,10 +550,12 @@ export function ApplyDialog(props: Props): JSX.Element {
         {/* â€” SPG99 paid-module slot: dry-run target radio group.
             Visible whenever dry-run is enabled; SPG99 radio is gated by
             subscription inside the picker. */}
-        {dryRunEnabled ? (          <Spg99DryRunTargetPicker value={dryRunTarget} onChange={setDryRunTarget} />
-) : null}
+        {dryRunEnabled ? (
+          <Spg99DryRunTargetPicker value={dryRunTarget} onChange={setDryRunTarget} />
+        ) : null}
 
-        {mode === "single" ? (          <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        {mode === "single" ? (
+          <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
             <span style={{ fontSize: 12, color: "var(--ink-3)" }}>
               {t("migrations.apply.version")}
             </span>
@@ -556,15 +566,17 @@ export function ApplyDialog(props: Props): JSX.Element {
               onChange={(e) => setSingle(e.target.value)}
             >
               <option value="">{t("migrations.apply.selectVersion")}</option>
-              {pending.map((m) => (                <option key={m.version} value={m.version}>
+              {pending.map((m) => (
+                <option key={m.version} value={m.version}>
                   {m.version} â€” {m.name}
                 </option>
-))}
+              ))}
             </select>
           </label>
-) : null}
+        ) : null}
 
-        {mode === "range" ? (          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+        {mode === "range" ? (
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
               <span style={{ fontSize: 12, color: "var(--ink-3)" }}>
                 {t("migrations.apply.from")}
@@ -578,10 +590,11 @@ export function ApplyDialog(props: Props): JSX.Element {
                 <option value="">{t("migrations.apply.selectVersion")}</option>
                 {migrations
                   .filter((m) => m.parseError === null)
-                  .map((m) => (                    <option key={m.version} value={m.version}>
+                  .map((m) => (
+                    <option key={m.version} value={m.version}>
                       {m.version} â€” {m.name}
                     </option>
-))}
+                  ))}
               </select>
             </label>
             <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
@@ -597,24 +610,27 @@ export function ApplyDialog(props: Props): JSX.Element {
                 <option value="">{t("migrations.apply.selectVersion")}</option>
                 {migrations
                   .filter((m) => m.parseError === null)
-                  .map((m) => (                    <option key={m.version} value={m.version}>
+                  .map((m) => (
+                    <option key={m.version} value={m.version}>
                       {m.version} â€” {m.name}
                     </option>
-))}
+                  ))}
               </select>
             </label>
-            {rangeInvalid ? (              <div
+            {rangeInvalid ? (
+              <div
                 data-testid="apply-dialog-range-error"
                 role="alert"
                 style={{ color: "var(--err, #d33)", fontSize: 12, alignSelf: "center" }}
               >
                 {t("migrations.apply.rangeError")}
               </div>
-) : null}
+            ) : null}
           </div>
-) : null}
+        ) : null}
 
-        {mode === "allPending" ? (          <div
+        {mode === "allPending" ? (
+          <div
             data-testid="apply-dialog-pending-count"
             style={{ fontSize: 12, color: "var(--ink-3)" }}
           >
@@ -622,9 +638,10 @@ export function ApplyDialog(props: Props): JSX.Element {
               ? t("migrations.apply.noPending")
               : t("migrations.apply.pendingCount", { count: pending.length })}
           </div>
-) : null}
+        ) : null}
 
-        {isProd && count > 0 ? (          <div
+        {isProd && count > 0 ? (
+          <div
             data-testid="apply-dialog-prod-banner"
             role="alert"
             style={{
@@ -638,25 +655,28 @@ export function ApplyDialog(props: Props): JSX.Element {
           >
             âš  {t("migrations.apply.prodBanner", { count, name: connectionName })}
           </div>
-) : null}
+        ) : null}
 
-        {previewError ? (          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
+        {previewError ? (
+          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
             {t("migrations.apply.previewError", { error: previewError })}
             <div style={{ marginTop: 6 }}>
               <ErrorExplainButton message={previewError} variant="inline" />
             </div>
           </div>
-) : null}
+        ) : null}
 
-        {applyError ? (          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
+        {applyError ? (
+          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
             {applyError}
             <div style={{ marginTop: 6 }}>
               <ErrorExplainButton message={applyError} variant="inline" />
             </div>
           </div>
-) : null}
+        ) : null}
 
-        {dryRunInProgress ? (          <div
+        {dryRunInProgress ? (
+          <div
             data-testid="apply-dialog-dryrun-progress"
             // biome-ignore lint/a11y/useSemanticElements: passive status banner
             role="status"
@@ -671,9 +691,10 @@ export function ApplyDialog(props: Props): JSX.Element {
             {t("migrations.dryrun.running")}
             {dryRunPhase ? ` â€” ${t(`migrations.dryrun.phase.${dryRunPhase}`)}` : ""}
           </div>
-) : null}
+        ) : null}
 
-        {showResultsPanel && dryRunReport ? (          <div
+        {showResultsPanel && dryRunReport ? (
+          <div
             data-testid="apply-dialog-dryrun-results"
             style={{
               border: "1px solid var(--hairline)",
@@ -689,7 +710,7 @@ export function ApplyDialog(props: Props): JSX.Element {
               {dryRunReport.success
                 ? t("migrations.dryrun.succeeded", { ms: dryRunReport.totalMs })
                 : dryRunReport.error
-                  ? // €” When the failure is NOT a per-migration
+                  ? // When the failure is NOT a per-migration
                     // SQL error (DockerUnavailable, ImagePullFailed,
                     // ContainerStartFailed, LedgerSeedFailed, Cancelled,
                     // Internal), there is no migration to "fix" â€” surface
@@ -702,7 +723,8 @@ export function ApplyDialog(props: Props): JSX.Element {
                         dryRunReport.steps.find((s) => s.status === "failed")?.version ?? "â€”",
                     })}
             </div>
-            {dryRunReport.error && !dryRunReport.success ? (              <div
+            {dryRunReport.error && !dryRunReport.success ? (
+              <div
                 data-testid="apply-dialog-dryrun-error-detail"
                 role="alert"
                 style={{
@@ -714,20 +736,22 @@ export function ApplyDialog(props: Props): JSX.Element {
               >
                 {dryRunReport.error.message ?? ""}
               </div>
-) : null}
+            ) : null}
             <div style={{ color: "var(--ink-3)" }}>
               {t("migrations.dryrun.containerStats", {
                 pull: dryRunReport.containerPullMs,
                 start: dryRunReport.containerStartMs,
-                run: Math.max(                  0,
+                run: Math.max(
+                  0,
                   dryRunReport.totalMs -
                     dryRunReport.containerPullMs -
                     dryRunReport.containerStartMs,
-),
+                ),
               })}
             </div>
             <ul style={{ margin: 0, paddingLeft: 16 }}>
-              {dryRunReport.steps.map((s) => (                <li
+              {dryRunReport.steps.map((s) => (
+                <li
                   key={s.version}
                   data-testid={`apply-dialog-dryrun-step-${s.version}`}
                   style={{
@@ -743,18 +767,20 @@ export function ApplyDialog(props: Props): JSX.Element {
                   {s.durationMs}ms
                   {s.error ? ` ${t("migrations.dryrun.errorPrefix")} ${s.error}` : ""}
                 </li>
-))}
+              ))}
             </ul>
-            {dryRunReport.findings.length > 0 ? (              <div style={{ color: "var(--warn, #d49b1c)" }}>
+            {dryRunReport.findings.length > 0 ? (
+              <div style={{ color: "var(--warn, #d49b1c)" }}>
                 {t("migrations.dryrun.findings", { count: dryRunReport.findings.length })}
               </div>
-) : null}
-            {!dryRunReport.success ? (              <div style={{ color: "var(--ink-3)", fontStyle: "italic" }}>
+            ) : null}
+            {!dryRunReport.success ? (
+              <div style={{ color: "var(--ink-3)", fontStyle: "italic" }}>
                 {t("migrations.dryrun.hintFix")}
               </div>
-) : null}
+            ) : null}
           </div>
-) : null}
+        ) : null}
 
         <div style={{ height: 280, border: "1px solid var(--hairline)", borderRadius: 4 }}>
           <Editor
@@ -782,5 +808,5 @@ export function ApplyDialog(props: Props): JSX.Element {
         </div>
       </div>
     </Dialog>
-);
+  );
 }

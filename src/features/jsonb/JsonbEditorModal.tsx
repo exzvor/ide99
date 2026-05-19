@@ -119,7 +119,8 @@ export function JsonbEditorModal(): JSX.Element | null {
   const rowLabel = String(args.rowIdx + 1);
   const dialogTitle = t("jsonb.modal.titleV2", { target, row: rowLabel });
 
-  return (    <>
+  return (
+    <>
       <Dialog
         open={open}
         onOpenChange={(v) => {
@@ -149,7 +150,8 @@ export function JsonbEditorModal(): JSX.Element | null {
               gap: 12,
             }}
           >
-            {!tabularEnabled && !isReadOnly ? (              <span
+            {!tabularEnabled && !isReadOnly ? (
+              <span
                 style={{
                   fontSize: 11,
                   color: "var(--ink-3)",
@@ -159,8 +161,9 @@ export function JsonbEditorModal(): JSX.Element | null {
               >
                 {t("jsonb.mode.tableDisabledTooltip")}
               </span>
-) : null}
-            {connId && rowKey && rowKey.kind !== "readOnly" ? (              <button
+            ) : null}
+            {connId && rowKey && rowKey.kind !== "readOnly" ? (
+              <button
                 type="button"
                 className="btn btn-ghost"
                 style={{ fontSize: 12 }}
@@ -169,7 +172,7 @@ export function JsonbEditorModal(): JSX.Element | null {
               >
                 🔧 {t("jsonb.builder.buildFromCellTitle")}
               </button>
-) : null}
+            ) : null}
             <ModeToggle mode={mode} setMode={setMode} tabularEnabled={tabularEnabled} t={t} />
           </div>
           <div
@@ -183,14 +186,15 @@ export function JsonbEditorModal(): JSX.Element | null {
             }}
           >
             <div style={{ overflow: "auto", padding: "8px 12px", minHeight: 0 }}>
-              {mode === "text" && (                <TextView
+              {mode === "text" && (
+                <TextView
                   value={draft}
                   onChange={setDraft}
                   readOnly={!!isReadOnly}
                   parseError={draftParseError}
                 />
-)}
-              {mode === "tree" && (                // The canonical-key-order note is rendered inside TreeView
+              )}
+              {mode === "tree" && ( // The canonical-key-order note is rendered inside TreeView
                 // itself when `isJsonbType=true`, so the modal does NOT
                 // render its own (would surface as a duplicate banner).
                 <TreeView
@@ -199,13 +203,14 @@ export function JsonbEditorModal(): JSX.Element | null {
                   readOnly={!!isReadOnly}
                   isJsonbType={columnTypeName === "jsonb"}
                 />
-)}
-              {mode === "table" && tabularEnabled && (                <TableView
+              )}
+              {mode === "table" && tabularEnabled && (
+                <TableView
                   value={draftParsed}
                   onChange={(next) => setDraft(JSON.stringify(next))}
                   readOnly={!!isReadOnly}
                 />
-)}
+              )}
             </div>
             <div
               aria-live="polite"
@@ -219,7 +224,8 @@ export function JsonbEditorModal(): JSX.Element | null {
                 minHeight: 0,
               }}
             >
-              {isReadOnly ? (                <div>
+              {isReadOnly ? (
+                <div>
                   <div style={{ color: "var(--ink-3)", marginBottom: 6 }}>
                     {t("jsonb.readonly.banner")}
                   </div>
@@ -237,7 +243,8 @@ export function JsonbEditorModal(): JSX.Element | null {
                     {t("jsonb.readonly.copyTemplate")}
                   </button>
                 </div>
-) : (                <>
+              ) : (
+                <>
                   <div style={{ color: "var(--ink-3)", marginBottom: 4 }}>
                     {t("jsonb.diff.willSaveAs")} —{" "}
                     {!dirty
@@ -248,17 +255,19 @@ export function JsonbEditorModal(): JSX.Element | null {
                   </div>
                   <pre style={{ margin: 0, whiteSpace: "pre-wrap" }}>{previewBody}</pre>
                 </>
-)}
+              )}
             </div>
           </div>
-          {args && rowKey && rowKey.kind !== "readOnly" && columnName && connId ? (            <InferredSchemaPanelSection
+          {args && rowKey && rowKey.kind !== "readOnly" && columnName && connId ? (
+            <InferredSchemaPanelSection
               connId={connId}
               schemaName={rowKey.schema}
               tableName={rowKey.table}
               columnName={columnName}
             />
-) : null}
-          {draftParseError ? (            <div
+          ) : null}
+          {draftParseError ? (
+            <div
               role="alert"
               style={{
                 marginTop: 8,
@@ -269,8 +278,9 @@ export function JsonbEditorModal(): JSX.Element | null {
             >
               {t("jsonb.text.invalidJson", { message: draftParseError })}
             </div>
-) : null}
-          {status.kind === "error" ? (            <div
+          ) : null}
+          {status.kind === "error" ? (
+            <div
               role="alert"
               style={{
                 marginTop: 8,
@@ -281,7 +291,7 @@ export function JsonbEditorModal(): JSX.Element | null {
             >
               {t("jsonb.toast.saveFailed", { message: status.message })}
             </div>
-) : null}
+          ) : null}
           <div
             style={{
               padding: "12px 0 0",
@@ -304,7 +314,8 @@ export function JsonbEditorModal(): JSX.Element | null {
           </div>
         </div>
       </Dialog>
-      {showProdConfirm && fqTableName ? (        <TypingConfirmModal
+      {showProdConfirm && fqTableName ? (
+        <TypingConfirmModal
           title={t("jsonb.prod.confirmTitle")}
           description={t("jsonb.prod.confirmBody", { table: fqTableName })}
           expectedToken={fqTableName}
@@ -318,8 +329,9 @@ export function JsonbEditorModal(): JSX.Element | null {
             void save(token);
           }}
         />
-) : null}
-      {builderOpen && connId && rowKey && rowKey.kind !== "readOnly" ? (        <JsonbQueryBuilderModal
+      ) : null}
+      {builderOpen && connId && rowKey && rowKey.kind !== "readOnly" ? (
+        <JsonbQueryBuilderModal
           open={builderOpen}
           connId={connId}
           fqn={{
@@ -329,9 +341,9 @@ export function JsonbEditorModal(): JSX.Element | null {
           }}
           onClose={() => setBuilderOpen(false)}
         />
-) : null}
+      ) : null}
     </>
-);
+  );
 }
 
 function ModeToggle({
@@ -350,8 +362,10 @@ function ModeToggle({
     { id: "tree", enabled: true },
     { id: "table", enabled: tabularEnabled, tipKey: "jsonb.mode.tableDisabledTooltip" },
   ];
-  return (    <div role="tablist" aria-label={t("jsonb.mode.tablistLabel")} className="jsonb-mode-toggle">
-      {opts.map((o) => (        <button
+  return (
+    <div role="tablist" aria-label={t("jsonb.mode.tablistLabel")} className="jsonb-mode-toggle">
+      {opts.map((o) => (
+        <button
           key={o.id}
           type="button"
           role="tab"
@@ -364,9 +378,9 @@ function ModeToggle({
         >
           {t(`jsonb.mode.${o.id}`)}
         </button>
-))}
+      ))}
     </div>
-);
+  );
 }
 
 interface InferredSchemaPanelSectionProps {
@@ -383,9 +397,10 @@ function InferredSchemaPanelSection({
   columnName,
 }: InferredSchemaPanelSectionProps): JSX.Element {
   const { t } = useTranslation();
-  const lsKey = useMemo(    () => `ide99.jsonb.inference.modal.expanded.${connId}.${schemaName}.${tableName}.${columnName}`,
+  const lsKey = useMemo(
+    () => `ide99.jsonb.inference.modal.expanded.${connId}.${schemaName}.${tableName}.${columnName}`,
     [connId, schemaName, tableName, columnName],
-);
+  );
 
   // fix: persistence semantics are
   // localStorage = "have user expressed an explicit preference?"
@@ -420,7 +435,8 @@ function InferredSchemaPanelSection({
     });
   }, [lsKey]);
 
-  return (    <div className="jsonb-modal-inference" style={{ marginTop: 8 }}>
+  return (
+    <div className="jsonb-modal-inference" style={{ marginTop: 8 }}>
       <button
         type="button"
         onClick={toggle}
@@ -432,7 +448,8 @@ function InferredSchemaPanelSection({
           ? t("jsonb.inference.panel.modalSection.collapse")
           : t("jsonb.inference.panel.modalSection.expand")}
       </button>
-      {expanded && (        <InferredSchemaPanel
+      {expanded && (
+        <InferredSchemaPanel
           connId={connId}
           fqn={{
             schema: schemaName,
@@ -441,7 +458,7 @@ function InferredSchemaPanelSection({
           }}
           variant="modal"
         />
-)}
+      )}
     </div>
-);
+  );
 }

@@ -66,10 +66,11 @@ export function ObjectEditorTab({ tab }: ObjectEditorTabProps): JSX.Element {
       // guard so a malformed tab never blanks the workspace.
       const _exhaustive: never = tab.target.objectKind;
       void _exhaustive;
-      return (        <div data-testid="object-editor-unknown" role="alert" style={{ padding: 16 }}>
+      return (
+        <div data-testid="object-editor-unknown" role="alert" style={{ padding: 16 }}>
           Unknown object kind
         </div>
-);
+      );
     }
   }
 }

@@ -18,7 +18,8 @@ const baseForm = (overrides: Partial<PublicationForm> = {}): PublicationForm => 
 
 describe("generatePublicationDdl", () => {
   it("create with mode=tables and 2 tables, ops insert+update emits FOR TABLE + WITH publish", () => {
-    const r = generatePublicationDdl(      null,
+    const r = generatePublicationDdl(
+      null,
       baseForm({
         tables: [
           { id: "t1", schema: "public", name: "users" },
@@ -29,7 +30,7 @@ describe("generatePublicationDdl", () => {
         publishDelete: false,
         publishTruncate: false,
       }),
-);
+    );
     expect(r.sql).toContain("CREATE PUBLICATION p1");
     expect(r.sql).toContain("FOR TABLE public.users, public.orders");
     expect(r.sql).toContain("WITH (publish = 'insert,update')");
@@ -42,9 +43,10 @@ describe("generatePublicationDdl", () => {
   });
 
   it("create with mode=schemas and 2 schemas emits FOR TABLES IN SCHEMA", () => {
-    const r = generatePublicationDdl(      null,
+    const r = generatePublicationDdl(
+      null,
       baseForm({ mode: "schemas", schemas: ["public", "audit"] }),
-);
+    );
     expect(r.sql).toContain("FOR TABLES IN SCHEMA public, audit");
   });
 
@@ -144,13 +146,15 @@ describe("generatePublicationDdl", () => {
   });
 
   it("create with default ops (all four) and partition root toggled emits WITH", () => {
-    const r = generatePublicationDdl(      null,
+    const r = generatePublicationDdl(
+      null,
       baseForm({
         mode: "all_tables",
         publishViaPartitionRoot: true,
       }),
-);
-    expect(r.sql).toBe(      "CREATE PUBLICATION p1 FOR ALL TABLES WITH (publish_via_partition_root = true);",
-);
+    );
+    expect(r.sql).toBe(
+      "CREATE PUBLICATION p1 FOR ALL TABLES WITH (publish_via_partition_root = true);",
+    );
   });
 });

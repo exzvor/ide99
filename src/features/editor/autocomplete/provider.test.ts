@@ -221,12 +221,13 @@ describe("rankAndBuild — jsonb-path branch", () => {
       requested = true;
     };
 
-    const result = rankAndBuild(      jsonbScope({
+    const result = rankAndBuild(
+      jsonbScope({
         trigger: { kind: "jsonb-path", alias: null, column: "data", path: [], partial: "us" },
       }),
       jsonbSnapshot,
       [],
-);
+    );
     expect(result.suggestions).toEqual([]);
     expect(result.incomplete).toBe(true);
     expect(requested).toBe(true);
@@ -235,12 +236,13 @@ describe("rankAndBuild — jsonb-path branch", () => {
   it("returns no suggestions if column is not jsonb", () => {
     _inferenceState.getCached = () => fakeSchema;
 
-    const result = rankAndBuild(      jsonbScope({
+    const result = rankAndBuild(
+      jsonbScope({
         trigger: { kind: "jsonb-path", alias: null, column: "name", path: [], partial: "" },
       }),
       jsonbSnapshot,
       [],
-);
+    );
     expect(result.suggestions).toEqual([]);
     expect(result.incomplete).toBe(false);
   });

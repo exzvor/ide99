@@ -35,11 +35,12 @@ export function CellList({ notebook, onChange, connectionId }: CellListProps): J
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
 
-  const update = useCallback(    (next: Notebook) => {
+  const update = useCallback(
+    (next: Notebook) => {
       onChange(next);
     },
     [onChange],
-);
+  );
 
   const addCell = (kind: "sql" | "markdown") => {
     const cell: CellT =
@@ -138,7 +139,8 @@ export function CellList({ notebook, onChange, connectionId }: CellListProps): J
     setDropTargetId(null);
   };
 
-  return (    <div
+  return (
+    <div
       data-testid="notebook-cell-list"
       style={{ display: "flex", flexDirection: "column", gap: 10, padding: "8px 16px 24px" }}
     >
@@ -173,15 +175,17 @@ export function CellList({ notebook, onChange, connectionId }: CellListProps): J
         </span>
       </div>
 
-      {notebook.cells.length === 0 ? (        <div
+      {notebook.cells.length === 0 ? (
+        <div
           data-testid="notebook-empty"
           style={{ padding: 24, textAlign: "center", color: "var(--muted, #888)" }}
         >
           {t("notebook.empty")}
         </div>
-) : null}
+      ) : null}
 
-      {notebook.cells.map((cell, idx) => (        <Cell
+      {notebook.cells.map((cell, idx) => (
+        <Cell
           key={cell.id}
           cell={cell}
           index={idx}
@@ -200,12 +204,13 @@ export function CellList({ notebook, onChange, connectionId }: CellListProps): J
           onDrop={onDrop(cell.id)}
           onDragEnd={onDragEnd}
         />
-))}
+      ))}
 
-      {connectionId === null ? (        <span style={{ color: "var(--muted, #888)", fontSize: 12 }}>
+      {connectionId === null ? (
+        <span style={{ color: "var(--muted, #888)", fontSize: 12 }}>
           {t("notebook.no_connection_hint")}
         </span>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

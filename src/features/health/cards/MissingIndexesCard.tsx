@@ -17,19 +17,22 @@ export function MissingIndexesCard({ connId, state }: CardProps): JSX.Element {
 
   const rows = state.card.data.rows;
   if (rows.length === 0) {
-    return (      <CardShell
+    return (
+      <CardShell
         cardId="missing_indexes"
         connId={connId}
         state={{ status: "empty", reason: "no_data" }}
       />
-);
+    );
   }
 
   const top3 = rows.slice(0, 3);
   const tone = "warn" as const;
 
-  const body = (    <ul style={{ margin: 0, padding: 0, listStyle: "none", fontSize: 12 }}>
-      {top3.map((r) => (        <li
+  const body = (
+    <ul style={{ margin: 0, padding: 0, listStyle: "none", fontSize: 12 }}>
+      {top3.map((r) => (
+        <li
           key={`${r.schema}.${r.table}`}
           data-testid="missing-index-row"
           style={{ fontFamily: "var(--font-mono)" }}
@@ -41,16 +44,17 @@ export function MissingIndexesCard({ connId, state }: CardProps): JSX.Element {
             idx: r.indexScan,
           })}
         </li>
-))}
+      ))}
     </ul>
-);
+  );
 
-  return (    <CardShell
+  return (
+    <CardShell
       cardId="missing_indexes"
       connId={connId}
       state={state}
       body={body}
       status={{ tone, tooltip: t(`health.status.${tone}`) }}
     />
-);
+  );
 }

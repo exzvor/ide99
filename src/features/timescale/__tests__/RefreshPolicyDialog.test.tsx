@@ -37,7 +37,8 @@ describe("RefreshPolicyDialog", () => {
     loadRefreshPolicy.mockResolvedValueOnce(null);
     const onClose = vi.fn();
 
-    render(      <RefreshPolicyDialog
+    render(
+      <RefreshPolicyDialog
         open={true}
         connId="conn-1"
         qualifiedView={'"public"."hourly_metrics"'}
@@ -45,11 +46,11 @@ describe("RefreshPolicyDialog", () => {
         view="hourly_metrics"
         onClose={onClose}
       />,
-);
+    );
 
     await waitFor(() =>
       expect(screen.getByTestId("refresh-policy-dialog-apply")).toBeInTheDocument(),
-);
+    );
     expect(screen.queryByTestId("refresh-policy-dialog-drop")).not.toBeInTheDocument();
     // Three IntervalInputs.
     expect(screen.getByTestId("interval-input-start-offset")).toBeInTheDocument();
@@ -60,8 +61,9 @@ describe("RefreshPolicyDialog", () => {
 
     expect(openEditorTab).toHaveBeenCalledTimes(1);
     const [, opts] = openEditorTab.mock.calls[0];
-    expect((opts as { prefillSql: string }).prefillSql).toContain(      "add_continuous_aggregate_policy",
-);
+    expect((opts as { prefillSql: string }).prefillSql).toContain(
+      "add_continuous_aggregate_policy",
+    );
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
@@ -75,7 +77,8 @@ describe("RefreshPolicyDialog", () => {
     });
     const onClose = vi.fn();
 
-    render(      <RefreshPolicyDialog
+    render(
+      <RefreshPolicyDialog
         open={true}
         connId="conn-1"
         qualifiedView={'"public"."hourly_metrics"'}
@@ -83,7 +86,7 @@ describe("RefreshPolicyDialog", () => {
         view="hourly_metrics"
         onClose={onClose}
       />,
-);
+    );
 
     await waitFor(() => expect(screen.getByText(/Policy active/i)).toBeInTheDocument());
     expect(screen.getByText(/Policy active/i).textContent).toContain("3003");
@@ -91,8 +94,9 @@ describe("RefreshPolicyDialog", () => {
     fireEvent.click(screen.getByTestId("refresh-policy-dialog-drop"));
 
     const [, opts] = openEditorTab.mock.calls[0];
-    expect((opts as { prefillSql: string }).prefillSql).toContain(      "remove_continuous_aggregate_policy",
-);
+    expect((opts as { prefillSql: string }).prefillSql).toContain(
+      "remove_continuous_aggregate_policy",
+    );
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 });

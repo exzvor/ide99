@@ -71,7 +71,8 @@ export function Node(props: NodeProps): JSX.Element {
     return t("jsonb.tree.type.object");
   }
 
-  return (    <div
+  return (
+    <div
       role="treeitem"
       aria-expanded={hasChildren ? expanded : undefined}
       aria-level={level + 1}
@@ -93,7 +94,8 @@ export function Node(props: NodeProps): JSX.Element {
     >
       {/* Drag handle (for array members; rendered but inert for objects /
           read-only / root). */}
-      {!readOnly && !isRoot ? (        <button
+      {!readOnly && !isRoot ? (
+        <button
           type="button"
           data-testid="jsonb-tree-drag-handle"
           aria-label="drag handle"
@@ -109,10 +111,11 @@ export function Node(props: NodeProps): JSX.Element {
         >
           ⋮⋮
         </button>
-) : null}
+      ) : null}
 
       {/* Expand/collapse chevron for containers. */}
-      {hasChildren ? (        <button
+      {hasChildren ? (
+        <button
           type="button"
           aria-label={expanded ? "collapse" : "expand"}
           data-testid="jsonb-tree-chevron"
@@ -129,8 +132,9 @@ export function Node(props: NodeProps): JSX.Element {
         >
           {expanded ? "▾" : "▸"}
         </button>
-) : (        <span style={{ width: 16 }} />
-)}
+      ) : (
+        <span style={{ width: 16 }} />
+      )}
 
       {/* Key / index. */}
       <span style={{ color: "var(--ink-2)", fontWeight: 500 }} data-testid="jsonb-tree-key">
@@ -141,7 +145,9 @@ export function Node(props: NodeProps): JSX.Element {
       {!isRoot ? <span style={{ color: "var(--ink-4)" }}>:</span> : null}
 
       {/* Value (leaf editor when active, display otherwise). */}
-      {!isContainer ? (        editing && !readOnly ? (          <LeafEditor
+      {!isContainer ? (
+        editing && !readOnly ? (
+          <LeafEditor
             value={value}
             onCommit={(next) => {
               onMutate(path, next);
@@ -150,7 +156,8 @@ export function Node(props: NodeProps): JSX.Element {
             onCancel={() => setEditing(false)}
             testid="jsonb-tree-leaf-input"
           />
-) : (          <button
+        ) : (
+          <button
             type="button"
             data-testid="jsonb-tree-leaf-value"
             disabled={readOnly}
@@ -167,8 +174,8 @@ export function Node(props: NodeProps): JSX.Element {
           >
             {leafDisplay(value)}
           </button>
-)
-) : null}
+        )
+      ) : null}
 
       {/* Type badge. */}
       <span
@@ -184,8 +191,10 @@ export function Node(props: NodeProps): JSX.Element {
       </span>
 
       {/* Hover/focus actions. */}
-      {!readOnly ? (        <span style={{ marginLeft: "auto", display: "flex", gap: 4, paddingRight: 8 }}>
-          {isContainer ? (            <button
+      {!readOnly ? (
+        <span style={{ marginLeft: "auto", display: "flex", gap: 4, paddingRight: 8 }}>
+          {isContainer ? (
+            <button
               type="button"
               data-testid="jsonb-tree-add-child"
               onClick={() => onAddChild(path, isArray ? "item" : "key")}
@@ -193,8 +202,9 @@ export function Node(props: NodeProps): JSX.Element {
             >
               {isArray ? t("jsonb.tree.addItem") : t("jsonb.tree.addKey")}
             </button>
-) : null}
-          {!isRoot ? (            <button
+          ) : null}
+          {!isRoot ? (
+            <button
               type="button"
               data-testid="jsonb-tree-delete"
               aria-label={t("jsonb.tree.delete")}
@@ -203,11 +213,11 @@ export function Node(props: NodeProps): JSX.Element {
             >
               ×
             </button>
-) : null}
+          ) : null}
         </span>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }
 
 const chipBtn: React.CSSProperties = {

@@ -74,7 +74,8 @@ export function LeafEditor({
   }
 
   if (kind === "null" && !convertedFromNull) {
-    return (      <button
+    return (
+      <button
         type="button"
         data-testid="leaf-set-value"
         onClick={() => setConvertedFromNull(true)}
@@ -89,11 +90,12 @@ export function LeafEditor({
       >
         [set value]
       </button>
-);
+    );
   }
 
   if (kind === "boolean") {
-    return (      <select
+    return (
+      <select
         ref={inputRef as React.RefObject<HTMLSelectElement>}
         data-testid={testid ?? "leaf-input"}
         value={draft}
@@ -105,10 +107,11 @@ export function LeafEditor({
         <option value="true">true</option>
         <option value="false">false</option>
       </select>
-);
+    );
   }
 
-  return (    <span style={{ display: "inline-flex", flexDirection: "column", gap: 2 }}>
+  return (
+    <span style={{ display: "inline-flex", flexDirection: "column", gap: 2 }}>
       <input
         ref={inputRef as React.RefObject<HTMLInputElement>}
         data-testid={testid ?? "leaf-input"}
@@ -127,10 +130,11 @@ export function LeafEditor({
           fontFamily: "var(--font-mono-q, monospace)",
         }}
       />
-      {error ? (        <span style={{ fontSize: 10, color: "var(--accent-strong-danger, #ef4444)" }}>{error}</span>
-) : null}
+      {error ? (
+        <span style={{ fontSize: 10, color: "var(--accent-strong-danger, #ef4444)" }}>{error}</span>
+      ) : null}
     </span>
-);
+  );
 }
 
 /** Display-only formatter for a leaf value. */

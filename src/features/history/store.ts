@@ -88,7 +88,8 @@ export function sanitizeFtsQuery(raw: string): string | null {
   return tokens.map((t) => `"${t}"`).join(" ");
 }
 
-function buildSearchFilter(  filters: HistoryFilters,
+function buildSearchFilter(
+  filters: HistoryFilters,
   offset: number,
   limit: number,
 ): HistorySearchFilter {

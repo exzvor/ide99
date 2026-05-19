@@ -29,7 +29,8 @@ export function Sparkline({ data, height = 24, ariaLabel }: SparklineProps): JSX
     })
     .join(" ");
   const area = `M0,${h} L${pts} L${w},${h} Z`;
-  return (    <svg
+  return (
+    <svg
       viewBox={`0 0 ${w} ${h}`}
       preserveAspectRatio="none"
       role="img"
@@ -40,5 +41,5 @@ export function Sparkline({ data, height = 24, ariaLabel }: SparklineProps): JSX
       <path d={area} fill="currentColor" opacity={0.15} />
       <polyline points={pts} fill="none" stroke="currentColor" strokeWidth={1.5} />
     </svg>
-);
+  );
 }

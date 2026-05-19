@@ -31,7 +31,8 @@ export function DdlPreviewPanel({ result, onApply, onCopy }: Props): JSX.Element
     onCopy?.();
   }, [isEmpty, result.sql, onCopy]);
 
-  return (    <section
+  return (
+    <section
       aria-label="DDL preview"
       data-testid="ddl-preview-panel"
       style={{
@@ -56,14 +57,15 @@ export function DdlPreviewPanel({ result, onApply, onCopy }: Props): JSX.Element
       >
         <strong style={{ fontSize: 13 }}>SQL</strong>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          {copied && (            <output
+          {copied && (
+            <output
               data-testid="ddl-preview-copied"
               aria-live="polite"
               style={{ fontSize: 12, color: "var(--ink-3, #888)" }}
             >
               Copied!
             </output>
-)}
+          )}
           <button
             type="button"
             data-testid="ddl-preview-copy"
@@ -99,7 +101,8 @@ export function DdlPreviewPanel({ result, onApply, onCopy }: Props): JSX.Element
         {isEmpty ? t("object_editor.actions.no_changes") : result.sql}
       </pre>
 
-      {result.warnings.length > 0 && (        <ul
+      {result.warnings.length > 0 && (
+        <ul
           data-testid="ddl-preview-warnings"
           style={{
             margin: 0,
@@ -109,14 +112,16 @@ export function DdlPreviewPanel({ result, onApply, onCopy }: Props): JSX.Element
             fontSize: 12,
           }}
         >
-          {result.warnings.map((w) => (            <li key={`${w.code}:${w.message}`}>
+          {result.warnings.map((w) => (
+            <li key={`${w.code}:${w.message}`}>
               {t(`object_editor.warnings.${w.code}`, { defaultValue: w.message })}
             </li>
-))}
+          ))}
         </ul>
-)}
+      )}
 
-      {result.errors.length > 0 && (        <ul
+      {result.errors.length > 0 && (
+        <ul
           data-testid="ddl-preview-errors"
           style={{
             margin: 0,
@@ -126,12 +131,13 @@ export function DdlPreviewPanel({ result, onApply, onCopy }: Props): JSX.Element
             fontSize: 12,
           }}
         >
-          {result.errors.map((e) => (            <li key={`${e.code}:${e.message}`}>
+          {result.errors.map((e) => (
+            <li key={`${e.code}:${e.message}`}>
               {t(`object_editor.errors.${e.code}`, { defaultValue: e.message })}
             </li>
-))}
+          ))}
         </ul>
-)}
+      )}
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button
@@ -153,5 +159,5 @@ export function DdlPreviewPanel({ result, onApply, onCopy }: Props): JSX.Element
         </button>
       </div>
     </section>
-);
+  );
 }

@@ -25,8 +25,9 @@ export function BloatCard({ connId, state }: CardProps): JSX.Element {
 
   const rows = state.card.data.rows;
   if (rows.length === 0) {
-    return (      <CardShell cardId="bloat" connId={connId} state={{ status: "empty", reason: "no_data" }} />
-);
+    return (
+      <CardShell cardId="bloat" connId={connId} state={{ status: "empty", reason: "no_data" }} />
+    );
   }
 
   const top3 = rows.slice(0, 3);
@@ -34,8 +35,10 @@ export function BloatCard({ connId, state }: CardProps): JSX.Element {
   const maxPct = rows.reduce((acc, r) => Math.max(acc, r.bloatPct), 0);
   const tone = bloatTone(maxPct);
 
-  const body = (    <ul style={{ margin: 0, padding: 0, listStyle: "none", fontSize: 12 }}>
-      {top3.map((r) => (        <li
+  const body = (
+    <ul style={{ margin: 0, padding: 0, listStyle: "none", fontSize: 12 }}>
+      {top3.map((r) => (
+        <li
           key={`${r.schema}.${r.table}`}
           data-testid="bloat-row"
           style={{ fontFamily: "var(--font-mono)" }}
@@ -69,20 +72,22 @@ export function BloatCard({ connId, state }: CardProps): JSX.Element {
             />
           </span>
         </li>
-))}
-      {more > 0 ? (        <li style={{ opacity: 0.65 }} data-testid="bloat-more">
+      ))}
+      {more > 0 ? (
+        <li style={{ opacity: 0.65 }} data-testid="bloat-more">
           {t("health.card.bloat.more", { count: more })}
         </li>
-) : null}
+      ) : null}
     </ul>
-);
+  );
 
-  return (    <CardShell
+  return (
+    <CardShell
       cardId="bloat"
       connId={connId}
       state={state}
       body={body}
       status={{ tone, tooltip: t(`health.status.${tone}`) }}
     />
-);
+  );
 }

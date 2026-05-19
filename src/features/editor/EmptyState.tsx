@@ -10,7 +10,8 @@ import { modKey } from "../../lib/platform";
  */
 export function EmptyState(): JSX.Element {
   const { t } = useTranslation();
-  return (    <div
+  return (
+    <div
       style={{
         height: "100%",
         width: "100%",
@@ -38,5 +39,5 @@ export function EmptyState(): JSX.Element {
         {t("editor.empty.body", { cmd: modKey() })}
       </p>
     </div>
-);
+  );
 }

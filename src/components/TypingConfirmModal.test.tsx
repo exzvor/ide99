@@ -65,10 +65,11 @@ describe("TypingConfirmModal", () => {
   });
 
   it("renders dangerSqlPreview when provided", () => {
-    render(      <TypingConfirmModal
+    render(
+      <TypingConfirmModal
         {...baseProps({ dangerSqlPreview: "UPDATE public.events SET data = $1 WHERE id = 1" })}
       />,
-);
+    );
     expect(screen.getByText(/UPDATE public.events SET data/)).toBeInTheDocument();
   });
 

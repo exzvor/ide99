@@ -21,9 +21,10 @@ vi.mock("../../editor/store", async () => {
   const closeTab = vi.fn().mockResolvedValue(true);
   return {
     ...actual,
-    useEditor: Object.assign(      (selector: (s: { closeTab: typeof closeTab }) => unknown) => selector({ closeTab }),
+    useEditor: Object.assign(
+      (selector: (s: { closeTab: typeof closeTab }) => unknown) => selector({ closeTab }),
       { getState: () => ({ closeTab }) },
-),
+    ),
   };
 });
 
@@ -78,10 +79,11 @@ describe("FunctionEditor", () => {
 
   it("mounts in edit mode and populates the form from invoke", async () => {
     mockedGet.mockResolvedValue(SAMPLE_FN);
-    render(      <FunctionEditor
+    render(
+      <FunctionEditor
         tab={createTab({ mode: "edit", name: "add", parentTable: "integer, integer" })}
       />,
-);
+    );
     await waitFor(() => expect(screen.getByTestId("function-editor")).toBeInTheDocument());
     expect(mockedGet).toHaveBeenCalledWith("conn-1", "public", "add", "integer, integer");
     expect((screen.getByTestId("fn-name") as HTMLInputElement).value).toBe("add");
@@ -194,10 +196,11 @@ describe("FunctionEditor", () => {
 
   it("dirty close-guard: changing a field flips the dirty badge", async () => {
     mockedGet.mockResolvedValue(SAMPLE_FN);
-    render(      <FunctionEditor
+    render(
+      <FunctionEditor
         tab={createTab({ mode: "edit", name: "add", parentTable: "integer, integer" })}
       />,
-);
+    );
     await waitFor(() => expect(screen.getByTestId("function-editor")).toBeInTheDocument());
     expect(screen.queryByTestId("fn-dirty-badge")).toBeNull();
     fireEvent.change(screen.getByTestId("fn-name"), { target: { value: "add2" } });

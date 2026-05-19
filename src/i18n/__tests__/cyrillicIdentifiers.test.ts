@@ -161,8 +161,9 @@ describe("Cyrillic identifiers — formatter", () => {
   });
 
   it("formatSql preserves Cyrillic + Latin identifier mix", () => {
-    const out = formatSql(      'SELECT u.id, "Заказы"."Дата" FROM users u JOIN "Заказы" ON u.id = "Заказы".user_id',
-);
+    const out = formatSql(
+      'SELECT u.id, "Заказы"."Дата" FROM users u JOIN "Заказы" ON u.id = "Заказы".user_id',
+    );
     expect(out).not.toBeNull();
     if (out !== null) {
       expect(out).toContain('"Заказы"');
@@ -203,7 +204,7 @@ describe("Cyrillic identifiers — sort + filter", () => {
     const needle = "поль";
     const matches = tables.filter((t) =>
       t.toLocaleLowerCase("ru").includes(needle.toLocaleLowerCase("ru")),
-);
+    );
     expect(matches).toEqual(["Пользователи"]);
   });
 
@@ -212,7 +213,7 @@ describe("Cyrillic identifiers — sort + filter", () => {
     const prefix = "за";
     const matched = candidates.filter((c) =>
       c.toLocaleLowerCase("ru").startsWith(prefix.toLocaleLowerCase("ru")),
-);
+    );
     // "Заказы", "Запросы", "Закладки" all start with "за". Use locale-aware
     // collation (ru) for the post-filter sort so the order matches what users
     // see in the SchemaTree. Russian collation orders by character position,

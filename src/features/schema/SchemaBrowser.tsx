@@ -111,12 +111,13 @@ export function SchemaBrowser(): JSX.Element {
       .map((c) => ({ name: c.name, typeName: c.dataType ?? "" }));
   }, [cache, selectedTable]);
   const detected = useMemo(() => detectVectorColumns(tableColumns), [tableColumns]);
-  const textCols = useMemo(    () =>
+  const textCols = useMemo(
+    () =>
       tableColumns
         .filter((c) => /^(text|varchar|char|citext|tsvector)/i.test(c.typeName))
         .map((c) => c.name),
     [tableColumns],
-);
+  );
   const [pgvectorAvailable, setPgvectorAvailable] = useState<boolean>(false);
   useEffect(() => {
     if (connection.status !== "connected") return;
@@ -161,9 +162,10 @@ export function SchemaBrowser(): JSX.Element {
   }, [connection]);
   const tsRecord = useTimescale((s) => {
     if (!selectedTable || connection.status !== "connected") return null;
-    return (      s.hypertables.get(connection.connId)?.get(`${selectedTable.schema}/${selectedTable.table}`) ??
+    return (
+      s.hypertables.get(connection.connId)?.get(`${selectedTable.schema}/${selectedTable.table}`) ??
       null
-);
+    );
   });
 
   // S29 — pg_partman extension probe + bulk-load parents registry.
@@ -184,9 +186,10 @@ export function SchemaBrowser(): JSX.Element {
   }, [connection]);
   const partmanInfo = usePgPartman((s) => {
     if (!selectedTable || connection.status !== "connected") return null;
-    return (      s.parents.get(connection.connId)?.get(`${selectedTable.schema}/${selectedTable.table}`) ??
+    return (
+      s.parents.get(connection.connId)?.get(`${selectedTable.schema}/${selectedTable.table}`) ??
       null
-);
+    );
   });
 
   // S29 — pg_repack extension probe.
@@ -242,7 +245,8 @@ export function SchemaBrowser(): JSX.Element {
     };
   }, [newDropdownOpen, typeSubmenuOpen]);
 
-  const openNewObjectEditor = (    objectKind:
+  const openNewObjectEditor = (
+    objectKind:
       | "table"
       | "view"
       | "matview"
@@ -259,7 +263,7 @@ export function SchemaBrowser(): JSX.Element {
       | "composite_type"
       | "domain_type"
       | "range_type",
-): void => {
+  ): void => {
     if (connection.status !== "connected") return;
     const schema = inferSchemaForNew(selectedNode);
     setTypeSubmenuOpen(false);
@@ -311,7 +315,8 @@ export function SchemaBrowser(): JSX.Element {
       case "idle":
         return <EmptyState kind="idle" />;
       case "connecting":
-        return (          <div
+        return (
+          <div
             style={{
               height: "100%",
               display: "flex",
@@ -332,7 +337,7 @@ export function SchemaBrowser(): JSX.Element {
             />
             <p style={{ fontSize: 12.5, color: "var(--ink-3)" }}>{t("schema.connecting")}</p>
           </div>
-);
+        );
       case "error": {
         const localized = connection.error
           ? localizeConnectionError(new ConnectionError(connection.error), t)
@@ -341,7 +346,8 @@ export function SchemaBrowser(): JSX.Element {
         // password we don't have, retry would just loop. Surface a direct
         // "Open Edit" affordance and skip the Retry button.
         const isPasswordMissing = connection.error?.kind === "passwordMissing";
-        return (          <EmptyState
+        return (
+          <EmptyState
             kind="error"
             message={localized}
             onRetry={isPasswordMissing ? undefined : () => void connect(connection.connId)}
@@ -354,10 +360,11 @@ export function SchemaBrowser(): JSX.Element {
                 : undefined
             }
           />
-);
+        );
       }
       case "connected":
-        return (          <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
+        return (
+          <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
             <div
               style={{
                 display: "flex",
@@ -417,7 +424,8 @@ export function SchemaBrowser(): JSX.Element {
               >
                 <GitBranch size={13} aria-hidden="true" />
               </button>
-              {pgssAvailable ? (                <button
+              {pgssAvailable ? (
+                <button
                   type="button"
                   aria-label={t("schema.browser.open_pgss")}
                   title={t("schema.browser.pgss_title")}
@@ -431,7 +439,7 @@ export function SchemaBrowser(): JSX.Element {
                 >
                   <Activity size={13} aria-hidden="true" />
                 </button>
-) : null}
+              ) : null}
               {/* — "+ New" object-editor dropdown. */}
               <div ref={newDropdownRef} style={{ position: "relative" }}>
                 <button
@@ -447,7 +455,8 @@ export function SchemaBrowser(): JSX.Element {
                 >
                   <Plus size={13} aria-hidden="true" />
                 </button>
-                {newDropdownOpen && !typeSubmenuOpen ? (                  <div
+                {newDropdownOpen && !typeSubmenuOpen ? (
+                  <div
                     role="menu"
                     aria-label={t("object_editor.toolbar.new_dropdown")}
                     data-testid="schema-new-dropdown"
@@ -580,8 +589,9 @@ export function SchemaBrowser(): JSX.Element {
                       {t("object_editor.toolbar.new_type")} ▸
                     </button>
                   </div>
-) : null}
-                {newDropdownOpen && typeSubmenuOpen ? (                  <div
+                ) : null}
+                {newDropdownOpen && typeSubmenuOpen ? (
+                  <div
                     role="menu"
                     aria-label={t("object_editor.toolbar.new_type")}
                     data-testid="schema-new-type-submenu"
@@ -641,7 +651,7 @@ export function SchemaBrowser(): JSX.Element {
                       {t("object_editor.toolbar.new_range_type")}
                     </button>
                   </div>
-) : null}
+                ) : null}
               </div>
             </div>
             <div style={{ flex: 1, overflow: "hidden", minHeight: 0 }}>
@@ -650,7 +660,8 @@ export function SchemaBrowser(): JSX.Element {
                 onOpenSuggester={(fqn) => setSuggesterFqn(fqn)}
               />
             </div>
-            {pgvectorAvailable && selectedTable !== null && detected.vectorColumns.length > 0 ? (              <div style={{ borderTop: "1px solid var(--hairline)", padding: 8 }}>
+            {pgvectorAvailable && selectedTable !== null && detected.vectorColumns.length > 0 ? (
+              <div style={{ borderTop: "1px solid var(--hairline)", padding: 8 }}>
                 <PgvectorTablePanel
                   connId={connId}
                   qualifiedTable={`"${selectedTable.schema}"."${selectedTable.table}"`}
@@ -660,8 +671,9 @@ export function SchemaBrowser(): JSX.Element {
                   rowCount={0}
                 />
               </div>
-) : null}
-            {postgisAvailable && selectedTable !== null && detectedGeom.length > 0 ? (              <div style={{ borderTop: "1px solid var(--hairline)", padding: 8 }}>
+            ) : null}
+            {postgisAvailable && selectedTable !== null && detectedGeom.length > 0 ? (
+              <div style={{ borderTop: "1px solid var(--hairline)", padding: 8 }}>
                 <PostgisTablePanel
                   connId={connId}
                   qualifiedTable={`"${selectedTable.schema}"."${selectedTable.table}"`}
@@ -670,8 +682,9 @@ export function SchemaBrowser(): JSX.Element {
                   rowCount={0}
                 />
               </div>
-) : null}
-            {timescaleAvailable && selectedTable !== null ? (              <div style={{ borderTop: "1px solid var(--hairline)", padding: 8 }}>
+            ) : null}
+            {timescaleAvailable && selectedTable !== null ? (
+              <div style={{ borderTop: "1px solid var(--hairline)", padding: 8 }}>
                 <TimescaleTablePanel
                   connId={connId}
                   schema={selectedTable.schema}
@@ -682,8 +695,9 @@ export function SchemaBrowser(): JSX.Element {
                   columns={tableColumns}
                 />
               </div>
-) : null}
-            {pgPartmanAvailable && selectedTable !== null ? (              <div style={{ borderTop: "1px solid var(--hairline)", padding: 8 }}>
+            ) : null}
+            {pgPartmanAvailable && selectedTable !== null ? (
+              <div style={{ borderTop: "1px solid var(--hairline)", padding: 8 }}>
                 <PgPartmanTablePanel
                   connId={connId}
                   schema={selectedTable.schema}
@@ -694,8 +708,9 @@ export function SchemaBrowser(): JSX.Element {
                   columns={tableColumns}
                 />
               </div>
-) : null}
-            {pgRepackAvailable && selectedTable !== null && connection.status === "connected" ? (              <div style={{ borderTop: "1px solid var(--hairline)", padding: 8 }}>
+            ) : null}
+            {pgRepackAvailable && selectedTable !== null && connection.status === "connected" ? (
+              <div style={{ borderTop: "1px solid var(--hairline)", padding: 8 }}>
                 <PgRepackTablePanel
                   connId={connId}
                   database={connection.database}
@@ -703,13 +718,14 @@ export function SchemaBrowser(): JSX.Element {
                   table={selectedTable.table}
                 />
               </div>
-) : null}
+            ) : null}
           </div>
-);
+        );
     }
   };
 
-  return (    <section
+  return (
+    <section
       ref={containerRef}
       aria-label={t("schema.browser_aria")}
       data-testid="schema-browser"
@@ -735,5 +751,5 @@ export function SchemaBrowser(): JSX.Element {
         onClose={() => setSuggesterFqn(null)}
       />
     </section>
-);
+  );
 }

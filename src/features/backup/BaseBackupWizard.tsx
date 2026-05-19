@@ -65,7 +65,8 @@ export function BaseBackupWizard({ connectionId }: { connectionId: string }): JS
     };
   }, [subscribeJob, clearJob]);
 
-  const opts = useMemo<BaseBackupOptions>(    () => ({
+  const opts = useMemo<BaseBackupOptions>(
+    () => ({
       connectionId,
       outputDir,
       compression,
@@ -73,7 +74,7 @@ export function BaseBackupWizard({ connectionId }: { connectionId: string }): JS
         incrementalEnabled && incrementalManifest.trim() ? incrementalManifest : null,
     }),
     [connectionId, outputDir, compression, incrementalEnabled, incrementalManifest],
-);
+  );
 
   useEffect(() => {
     if (!outputDir.trim()) {
@@ -143,12 +144,14 @@ export function BaseBackupWizard({ connectionId }: { connectionId: string }): JS
   const isRunning = job?.status === "running";
   const canRun = !isRunning && outputDir.trim().length > 0 && !incrementalMissing;
 
-  return (    <form
+  return (
+    <form
       data-testid="basebackup-wizard"
       onSubmit={(e) => e.preventDefault()}
       style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 720 }}
     >
-      {connection ? (        <header
+      {connection ? (
+        <header
           style={{
             padding: 8,
             border: "1px solid var(--hairline)",
@@ -162,7 +165,7 @@ export function BaseBackupWizard({ connectionId }: { connectionId: string }): JS
             {connection.host}:{connection.port}
           </div>
         </header>
-) : null}
+      ) : null}
 
       <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         <span>{t("backup.basebackup.output_dir")}</span>
@@ -226,7 +229,8 @@ export function BaseBackupWizard({ connectionId }: { connectionId: string }): JS
           />
           <span>{t("backup.basebackup.incremental_enable")}</span>
         </label>
-        {incrementalEnabled ? (          <div style={{ display: "flex", gap: 8 }}>
+        {incrementalEnabled ? (
+          <div style={{ display: "flex", gap: 8 }}>
             <input
               type="text"
               value={incrementalManifest}
@@ -247,11 +251,12 @@ export function BaseBackupWizard({ connectionId }: { connectionId: string }): JS
               {t("backup.field.browse")}
             </button>
           </div>
-) : null}
-        {incrementalMissing ? (          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
+        ) : null}
+        {incrementalMissing ? (
+          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
             {t("backup.basebackup.manifest_required")}
           </div>
-) : null}
+        ) : null}
       </fieldset>
 
       <section
@@ -264,11 +269,13 @@ export function BaseBackupWizard({ connectionId }: { connectionId: string }): JS
         }}
       >
         <h3 style={{ margin: 0, fontSize: 12, fontWeight: 600 }}>{t("backup.preview.title")}</h3>
-        {previewError ? (          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12, marginTop: 6 }}>
+        {previewError ? (
+          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12, marginTop: 6 }}>
             {previewError}
           </div>
-) : null}
-        {previewArgs ? (          <code
+        ) : null}
+        {previewArgs ? (
+          <code
             style={{
               display: "block",
               marginTop: 6,
@@ -281,10 +288,11 @@ export function BaseBackupWizard({ connectionId }: { connectionId: string }): JS
           >
             pg_basebackup {previewArgs.join(" ")}
           </code>
-) : (          <div style={{ marginTop: 6, fontSize: 12, color: "var(--ink-3)" }}>
+        ) : (
+          <div style={{ marginTop: 6, fontSize: 12, color: "var(--ink-3)" }}>
             {t("backup.preview.hint")}
           </div>
-)}
+        )}
       </section>
 
       <ProgressCard job={job} onCancel={() => void cancelJob(jobIdRef.current)} />
@@ -301,5 +309,5 @@ export function BaseBackupWizard({ connectionId }: { connectionId: string }): JS
         </button>
       </div>
     </form>
-);
+  );
 }

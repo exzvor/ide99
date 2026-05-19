@@ -35,7 +35,7 @@ export function ConstraintsTab({ form, onChange }: ConstraintsTabProps): JSX.Ele
       ...f,
       constraints: f.constraints.map((c) =>
         c.id === id ? ({ ...c, ...partial } as ConstraintForm) : c,
-),
+      ),
     }));
   };
   const removeCon = (id: string): void => {
@@ -57,9 +57,11 @@ export function ConstraintsTab({ form, onChange }: ConstraintsTabProps): JSX.Ele
     }));
   };
 
-  return (    <div data-testid="constraints-tab" style={{ padding: 12 }}>
+  return (
+    <div data-testid="constraints-tab" style={{ padding: 12 }}>
       <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-        {form.constraints.map((c) => (          <li
+        {form.constraints.map((c) => (
+          <li
             key={c.id}
             data-testid={`constraint-row-${c.id}`}
             data-kind={c.kind}
@@ -87,7 +89,8 @@ export function ConstraintsTab({ form, onChange }: ConstraintsTabProps): JSX.Ele
                 ×
               </button>
             </div>
-            {(c.kind === "unique" || c.kind === "fk" || c.kind === "check") && (              <label style={{ display: "block", fontSize: 12 }}>
+            {(c.kind === "unique" || c.kind === "fk" || c.kind === "check") && (
+              <label style={{ display: "block", fontSize: 12 }}>
                 {t("object_editor.constraints.constraint_name")}
                 <input
                   data-testid={`constraint-name-${c.id}`}
@@ -99,8 +102,9 @@ export function ConstraintsTab({ form, onChange }: ConstraintsTabProps): JSX.Ele
                   style={{ width: "100%" }}
                 />
               </label>
-)}
-            {(c.kind === "pk" || c.kind === "unique" || c.kind === "fk") && (              <label style={{ display: "block", fontSize: 12, marginTop: 4 }}>
+            )}
+            {(c.kind === "pk" || c.kind === "unique" || c.kind === "fk") && (
+              <label style={{ display: "block", fontSize: 12, marginTop: 4 }}>
                 {t("object_editor.constraints.columns")}
                 <input
                   data-testid={`constraint-columns-${c.id}`}
@@ -110,8 +114,9 @@ export function ConstraintsTab({ form, onChange }: ConstraintsTabProps): JSX.Ele
                   style={{ width: "100%" }}
                 />
               </label>
-)}
-            {c.kind === "fk" && (              <>
+            )}
+            {c.kind === "fk" && (
+              <>
                 <label style={{ display: "block", fontSize: 12, marginTop: 4 }}>
                   {t("object_editor.constraints.ref_schema")}
                   <input
@@ -143,8 +148,9 @@ export function ConstraintsTab({ form, onChange }: ConstraintsTabProps): JSX.Ele
                   />
                 </label>
               </>
-)}
-            {c.kind === "check" && (              <label style={{ display: "block", fontSize: 12, marginTop: 4 }}>
+            )}
+            {c.kind === "check" && (
+              <label style={{ display: "block", fontSize: 12, marginTop: 4 }}>
                 {t("object_editor.constraints.expression")}
                 <input
                   data-testid={`constraint-expr-${c.id}`}
@@ -154,9 +160,9 @@ export function ConstraintsTab({ form, onChange }: ConstraintsTabProps): JSX.Ele
                   style={{ width: "100%" }}
                 />
               </label>
-)}
+            )}
           </li>
-))}
+        ))}
       </ul>
       {/* `.btn-icon` was a 28×28 square — text labels never fit and the four
           buttons stacked. `.btn` has the right text padding and the row reads
@@ -196,5 +202,5 @@ export function ConstraintsTab({ form, onChange }: ConstraintsTabProps): JSX.Ele
         </button>
       </div>
     </div>
-);
+  );
 }

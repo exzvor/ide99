@@ -9,8 +9,9 @@ interface MeshProps {
  * Tinted with brand-cyan, indigo, and pink; drifts on a 38–54s cycle.
  */
 export function Mesh({ variant = "subtle" }: MeshProps): JSX.Element {
-  return (    <div className={`q-mesh ${variant}`} aria-hidden="true">
+  return (
+    <div className={`q-mesh ${variant}`} aria-hidden="true">
       <i />
     </div>
-);
+  );
 }

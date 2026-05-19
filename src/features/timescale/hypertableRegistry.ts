@@ -54,9 +54,10 @@ export async function loadHypertables(connId: string): Promise<HypertableMap> {
     if (!warned) {
       warned = true;
       // Swallow permission/extension errors so the SchemaTree keeps working.
-      console.warn(        "[timescale] loadHypertables failed; treating connection as having no hypertables.",
+      console.warn(
+        "[timescale] loadHypertables failed; treating connection as having no hypertables.",
         err,
-);
+      );
     }
     useTimescale.getState().setHypertables(connId, map);
     return map;

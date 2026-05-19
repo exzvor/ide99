@@ -5,9 +5,10 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 const { translation } = vi.hoisted(() => {
   const t = (key: string, opts?: Record<string, unknown>) => {
     if (opts && typeof opts === "object") {
-      return Object.entries(opts).reduce<string>(        (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
+      return Object.entries(opts).reduce<string>(
+        (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
         key,
-);
+      );
     }
     return key;
   };
@@ -72,7 +73,8 @@ beforeEach(() => {
   schemaListIndexesMock.mockReset();
   schemaListForeignKeysMock.mockReset();
   schemaListViewsMock.mockReset();
-  useSchema.setState(    {
+  useSchema.setState(
+    {
       ...initialState,
       connection: {
         status: "connected",
@@ -85,7 +87,7 @@ beforeEach(() => {
       filter: "",
     },
     true,
-);
+  );
 });
 
 describe("ObjectDetails", () => {

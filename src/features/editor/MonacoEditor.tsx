@@ -351,11 +351,12 @@ export function MonacoEditor({ tabId }: MonacoEditorProps): JSX.Element {
     });
 
     // Cmd/Ctrl + Shift + Enter → Run all (every statement in the tab).
-    mountedEditor.addCommand(      monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter,
+    mountedEditor.addCommand(
+      monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Enter,
       () => {
         void useEditor.getState().runQuery(tabId, { kind: "all" });
       },
-);
+    );
 
     // (): Cmd/Ctrl+E runs EXPLAIN, Cmd/Ctrl+Shift+E runs
     // EXPLAIN ANALYZE on the active editor tab. Bound here as Monaco commands
@@ -365,11 +366,12 @@ export function MonacoEditor({ tabId }: MonacoEditorProps): JSX.Element {
     mountedEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyE, () => {
       void useEditor.getState().runExplain(tabId, "explain");
     });
-    mountedEditor.addCommand(      monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyE,
+    mountedEditor.addCommand(
+      monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyE,
       () => {
         void useEditor.getState().runExplain(tabId, "analyze");
       },
-);
+    );
   };
 
   const onChange = (value: string | undefined) => {
@@ -382,7 +384,8 @@ export function MonacoEditor({ tabId }: MonacoEditorProps): JSX.Element {
     return () => setActiveMonacoEditor(null);
   }, []);
 
-  return (    <div
+  return (
+    <div
       className="q-editor-rules"
       style={{ height: "100%", width: "100%", backgroundColor: "transparent" }}
       data-testid="monaco-editor"
@@ -428,5 +431,5 @@ export function MonacoEditor({ tabId }: MonacoEditorProps): JSX.Element {
         }}
       />
     </div>
-);
+  );
 }

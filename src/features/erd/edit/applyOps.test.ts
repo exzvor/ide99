@@ -80,9 +80,10 @@ describe("applyOps", () => {
   });
 
   it("renameColumn on existing column preserves originalName", () => {
-    const op = makeRenameColumnOp(      { table: { schema: "public", name: "users" }, column: "email" },
+    const op = makeRenameColumnOp(
+      { table: { schema: "public", name: "users" }, column: "email" },
       "email_address",
-);
+    );
     const out = applyOps(baseUsers, [op]);
     const col = out.tables[0].columns.find((c) => c.id === "email")!;
     expect(col.name).toBe("email_address");
@@ -90,10 +91,11 @@ describe("applyOps", () => {
   });
 
   it("retypeColumn updates dataType + tracks original", () => {
-    const op = makeRetypeColumnOp(      { table: { schema: "public", name: "users" }, column: "email" },
+    const op = makeRetypeColumnOp(
+      { table: { schema: "public", name: "users" }, column: "email" },
       "VARCHAR(320)",
       false,
-);
+    );
     const out = applyOps(baseUsers, [op]);
     const col = out.tables[0].columns.find((c) => c.id === "email")!;
     expect(col.dataType).toBe("VARCHAR(320)");
@@ -103,13 +105,15 @@ describe("applyOps", () => {
   });
 
   it("rename → retype on same column resolves cleanly", () => {
-    const r = makeRenameColumnOp(      { table: { schema: "public", name: "users" }, column: "email" },
+    const r = makeRenameColumnOp(
+      { table: { schema: "public", name: "users" }, column: "email" },
       "email_address",
-);
-    const t = makeRetypeColumnOp(      { table: { schema: "public", name: "users" }, column: "email" },
+    );
+    const t = makeRetypeColumnOp(
+      { table: { schema: "public", name: "users" }, column: "email" },
       "TEXT",
       false,
-);
+    );
     const out = applyOps(baseUsers, [r, t]);
     const col = out.tables[0].columns.find((c) => c.id === "email")!;
     expect(col.name).toBe("email_address");
@@ -147,10 +151,11 @@ describe("applyOps", () => {
       foreignKeys: [],
       fetchedInMs: 0,
     };
-    const op = makeAddFkOp(      [{ table: { schema: "public", name: "orders" }, column: "user_id" }],
+    const op = makeAddFkOp(
+      [{ table: { schema: "public", name: "orders" }, column: "user_id" }],
       [{ table: { schema: "public", name: "users" }, column: "id" }],
       "orders_user_id_fkey",
-);
+    );
     const out = applyOps(ordersBase, [op]);
     expect(out.fks).toHaveLength(1);
     expect(out.fks[0].name).toBe("orders_user_id_fkey");
@@ -170,10 +175,11 @@ describe("applyOps", () => {
     const t2 = makeAddTableOp("public", "payments");
     const c1 = makeAddColumnOp({ _new: t2.id }, "order_id", "BIGINT", false, false);
     const seedT1 = t1.seedColumns[0];
-    const fk = makeAddFkOp(      [{ table: { _new: t2.id }, _newCol: c1.id }],
+    const fk = makeAddFkOp(
+      [{ table: { _new: t2.id }, _newCol: c1.id }],
       [{ table: { _new: t1.id }, _newCol: seedT1.opId }],
       "payments_order_id_fkey",
-);
+    );
     const out = applyOps(baseEmpty, [t1, t2, c1, fk] as Op[]);
     expect(out.tables.map((t) => t.name).sort()).toEqual(["orders", "payments"]);
     expect(out.fks).toHaveLength(1);

@@ -173,11 +173,12 @@
 
 .ide99-jsonb-inference-skeleton-row {
   height: 10px;
-  background: linear-gradient(    90deg,
+  background: linear-gradient(
+    90deg,
     var(--bg-sunken) 0%,
     rgba(15, 17, 21, 0.06) 50%,
     var(--bg-sunken) 100%
-);
+  );
   background-size: 200% 100%;
   border-radius: 3px;
   animation: ide99-jsonb-shimmer 1.4s ease-in-out infinite;

@@ -35,15 +35,17 @@ export function generateMatviewDdl(initial: MatviewForm | null, current: Matview
   // Body unchanged. Handle rename + withData toggle separately.
   const chunks: string[] = [];
   if (nameChanged) {
-    chunks.push(      `ALTER MATERIALIZED VIEW ${qualifiedName(initial.schema, initial.name)} RENAME TO ${quoteIdent(current.name)};`,
-);
+    chunks.push(
+      `ALTER MATERIALIZED VIEW ${qualifiedName(initial.schema, initial.name)} RENAME TO ${quoteIdent(current.name)};`,
+    );
   }
   if (withDataChanged) {
     const ref = qualifiedName(current.schema, current.name);
-    chunks.push(      current.withData
+    chunks.push(
+      current.withData
         ? `REFRESH MATERIALIZED VIEW ${ref};`
         : `REFRESH MATERIALIZED VIEW ${ref} WITH NO DATA;`,
-);
+    );
   }
   return { sql: chunks.join("\n"), warnings, errors: [] };
 }

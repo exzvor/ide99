@@ -11,7 +11,8 @@ function RhfHarness({
   errorOverride?: string;
 }) {
   const methods = useForm<{ name: string }>({ defaultValues });
-  return (    <FormProvider {...methods}>
+  return (
+    <FormProvider {...methods}>
       <form>
         <Field
           label="Name"
@@ -22,15 +23,16 @@ function RhfHarness({
         />
       </form>
     </FormProvider>
-);
+  );
 }
 
 describe("Field", () => {
   it("renders label, required marker, and input wired via htmlFor (plain mode)", () => {
-    render(      <Field label="Host" htmlFor="host-input" required>
+    render(
+      <Field label="Host" htmlFor="host-input" required>
         <input id="host-input" type="text" />
       </Field>,
-);
+    );
     const input = screen.getByLabelText(/Host/);
     expect(input).toBeInTheDocument();
     // The asterisk is decorative (aria-hidden), but it's present in the DOM.
@@ -38,10 +40,11 @@ describe("Field", () => {
   });
 
   it("renders an error message with role=alert when error prop is set", () => {
-    render(      <Field label="Host" htmlFor="host-input" error="Required">
+    render(
+      <Field label="Host" htmlFor="host-input" error="Required">
         <input id="host-input" type="text" />
       </Field>,
-);
+    );
     const alert = screen.getByRole("alert");
     expect(alert).toHaveTextContent("Required");
   });
@@ -63,10 +66,11 @@ describe("Field", () => {
   });
 
   it("renders hint text when no error is present", () => {
-    render(      <Field label="Host" htmlFor="host-input" hint="example: localhost">
+    render(
+      <Field label="Host" htmlFor="host-input" hint="example: localhost">
         <input id="host-input" type="text" />
       </Field>,
-);
+    );
     expect(screen.getByText("example: localhost")).toBeInTheDocument();
   });
 });

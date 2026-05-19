@@ -50,10 +50,11 @@ export function FilterDropdown(props: FilterDropdownProps) {
   const { t } = useTranslation();
   const allowed = operatorsFor(props.dataType);
   const [op, setOp] = useState<FilterOp>(props.current?.op ?? "eq");
-  const [value, setValue] = useState<string>(    props.current?.value === null || props.current?.value === undefined
+  const [value, setValue] = useState<string>(
+    props.current?.value === null || props.current?.value === undefined
       ? ""
       : String(props.current.value),
-);
+  );
   const valueless = op === "isNull" || op === "isNotNull";
 
   function apply() {
@@ -71,7 +72,8 @@ export function FilterDropdown(props: FilterDropdownProps) {
     props.onClose();
   }
 
-  return (    <div
+  return (
+    <div
       className="filter-dropdown"
       // biome-ignore lint/a11y/useSemanticElements: native <dialog> would force showModal/show/close lifecycle + inert handling we don't need for this lightweight popover (closes on outside click).
       role="dialog"
@@ -82,17 +84,19 @@ export function FilterDropdown(props: FilterDropdownProps) {
         onChange={(e) => setOp(e.target.value as FilterOp)}
         aria-label={t("filter.operator", { defaultValue: "Operator" })}
       >
-        {ALL_OPS.filter((o) => allowed.includes(o.value)).map((o) => (          <option key={o.value} value={o.value}>
+        {ALL_OPS.filter((o) => allowed.includes(o.value)).map((o) => (
+          <option key={o.value} value={o.value}>
             {o.label}
           </option>
-))}
+        ))}
       </select>
-      {!valueless && (        <input
+      {!valueless && (
+        <input
           value={value}
           onChange={(e) => setValue(e.target.value)}
           aria-label={t("filter.value", { defaultValue: "Value" })}
         />
-)}
+      )}
       <div className="filter-dropdown-actions">
         <button type="button" onClick={clear}>
           {t("filter.clear", { defaultValue: "Clear" })}
@@ -102,7 +106,7 @@ export function FilterDropdown(props: FilterDropdownProps) {
         </button>
       </div>
     </div>
-);
+  );
 }
 
 function parseValue(raw: string, dataType: string | undefined): unknown {

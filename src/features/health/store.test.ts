@@ -146,7 +146,7 @@ describe("ensureConn", () => {
   it("creates a per-conn slice with env-default interval on first call", () => {
     useConnections.setState({ connections: [fakeConn("c1", "prod")] });
     const slice = useHealth.getState().ensureConn("c1");
-    // €” Health opens with auto-refresh Off until the user opts in.
+    // Health opens with auto-refresh Off until the user opts in.
     expect(slice.refreshIntervalMs).toBeNull();
     expect(slice.cards.size).toBe(0);
     expect(useHealth.getState().byConn.has("c1")).toBe(true);
@@ -217,15 +217,19 @@ describe("refreshAll mixed states", () => {
     vi.mocked(healthCacheHit).mockResolvedValue(ok(okCache));
     vi.mocked(healthActiveConnections).mockResolvedValue(ok(okActive));
     // 3 unavailable
-    vi.mocked(healthSlowQueries).mockResolvedValue(      err({ kind: "unavailable", extension: "pg_stat_statements", installSql: "CREATE â€¦;" }),
-);
-    vi.mocked(healthMissingIndexes).mockResolvedValue(      err({ kind: "unavailable", extension: "x", installSql: "CREATE EXTENSION x;" }),
-);
-    vi.mocked(healthUnusedIndexes).mockResolvedValue(      err({ kind: "unavailable", extension: "y", installSql: "CREATE EXTENSION y;" }),
-);
+    vi.mocked(healthSlowQueries).mockResolvedValue(
+      err({ kind: "unavailable", extension: "pg_stat_statements", installSql: "CREATE â€¦;" }),
+    );
+    vi.mocked(healthMissingIndexes).mockResolvedValue(
+      err({ kind: "unavailable", extension: "x", installSql: "CREATE EXTENSION x;" }),
+    );
+    vi.mocked(healthUnusedIndexes).mockResolvedValue(
+      err({ kind: "unavailable", extension: "y", installSql: "CREATE EXTENSION y;" }),
+    );
     // 1 forbidden
-    vi.mocked(healthReplicationLag).mockResolvedValue(      err({ kind: "forbidden", requiredRole: "pg_monitor" }),
-);
+    vi.mocked(healthReplicationLag).mockResolvedValue(
+      err({ kind: "forbidden", requiredRole: "pg_monitor" }),
+    );
     // 1 queryFailed
     vi.mocked(healthVacuumStatus).mockResolvedValue(err({ kind: "queryFailed", message: "boom" }));
     // 1 empty-translation (long_running rows=[])

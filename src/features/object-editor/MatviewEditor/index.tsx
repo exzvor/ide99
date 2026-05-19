@@ -50,10 +50,11 @@ export function MatviewEditor({ tab }: MatviewEditorProps): JSX.Element {
     }
     void (async () => {
       try {
-        const def = await schemaGetMatviewDefinition(          tab.connectionId,
+        const def = await schemaGetMatviewDefinition(
+          tab.connectionId,
           tab.target.schema,
           tab.target.name ?? "",
-);
+        );
         if (cancelled) return;
         const form: MatviewForm = {
           schema: def.schema,
@@ -78,11 +79,12 @@ export function MatviewEditor({ tab }: MatviewEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: MatviewForm) => MatviewForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: MatviewForm) => MatviewForm): void => {
       updateForm(tab.id, (s) => (s.kind === "matview" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "matview" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -97,16 +99,18 @@ export function MatviewEditor({ tab }: MatviewEditorProps): JSX.Element {
   const touched = useTouched(stableFormState?.form, stableFormState?.initial);
 
   if (loadError) {
-    return (      <div data-testid="matview-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="matview-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="matview-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="matview-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -152,7 +156,8 @@ export function MatviewEditor({ tab }: MatviewEditorProps): JSX.Element {
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="matview-editor"
       style={{
         display: "grid",
@@ -204,7 +209,8 @@ export function MatviewEditor({ tab }: MatviewEditorProps): JSX.Element {
           />
           {t("object_editor.matview.with_data")}
         </label>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="matview-dirty-badge"
             style={{
               fontSize: 11,
@@ -216,14 +222,15 @@ export function MatviewEditor({ tab }: MatviewEditorProps): JSX.Element {
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <div style={{ paddingBottom: 4 }}>
           <HelpLink topic="matview" />
         </div>
       </div>
       <div style={{ overflow: "auto", padding: 12, display: "flex", flexDirection: "column" }}>
-        {recreateWarning ? (          <div
+        {recreateWarning ? (
+          <div
             // biome-ignore lint/a11y/useSemanticElements: passive banner; not a form <output>.
             role="status"
             data-testid="matview-recreate-warning"
@@ -238,7 +245,7 @@ export function MatviewEditor({ tab }: MatviewEditorProps): JSX.Element {
           >
             {t("object_editor.stub.matview_recreate_warning")}
           </div>
-) : null}
+        ) : null}
         <label
           style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}
           htmlFor={`matview-body-${tab.id}`}
@@ -282,5 +289,5 @@ export function MatviewEditor({ tab }: MatviewEditorProps): JSX.Element {
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * Zustand store for the Migrations panel. Holds the list of discovered
  * migrations + their statuses, the per-connection selected directory,
@@ -80,27 +80,29 @@ describe("migrations store", () => {
   it("isContiguousRange returns true for adjacent pending versions", () => {
     useMigrationsStore
       .getState()
-      .setMigrations(        [
+      .setMigrations(
+        [
           migration({ version: "0001", status: "applied" }),
           migration({ version: "0002", status: "pending" }),
           migration({ version: "0003", status: "pending" }),
           migration({ version: "0004", status: "pending" }),
         ],
         false,
-);
+      );
     expect(useMigrationsStore.getState().isContiguousRange("0002", "0004")).toBe(true);
   });
 
   it("isContiguousRange returns false for non-adjacent versions (applied in middle)", () => {
     useMigrationsStore
       .getState()
-      .setMigrations(        [
+      .setMigrations(
+        [
           migration({ version: "0001", status: "pending" }),
           migration({ version: "0002", status: "applied" }),
           migration({ version: "0003", status: "pending" }),
         ],
         false,
-);
+      );
     expect(useMigrationsStore.getState().isContiguousRange("0001", "0003")).toBe(false);
   });
 
@@ -115,14 +117,15 @@ describe("migrations store", () => {
   it("countByStatus returns counts of pending/applied/dirty", () => {
     useMigrationsStore
       .getState()
-      .setMigrations(        [
+      .setMigrations(
+        [
           migration({ version: "0001", status: "applied" }),
           migration({ version: "0002", status: "applied" }),
           migration({ version: "0003", status: "pending" }),
           migration({ version: "0004", status: "dirty" }),
         ],
         false,
-);
+      );
     const counts = useMigrationsStore.getState().countByStatus();
     expect(counts.applied).toBe(2);
     expect(counts.pending).toBe(1);

@@ -32,7 +32,8 @@ export function PlanDiffToolbar({
     }
   }
 
-  return (    <div
+  return (
+    <div
       className="q-runbar"
       data-testid="plan-diff-toolbar"
       style={{ display: "flex", gap: 8, alignItems: "center" }}
@@ -68,5 +69,5 @@ export function PlanDiffToolbar({
         </button>
       </div>
     </div>
-);
+  );
 }

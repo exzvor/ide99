@@ -27,7 +27,8 @@ describe("DbSizeCard", () => {
   });
 
   it("ready with full 7-day data renders pretty + growth + sparkline", () => {
-    render(      <DbSizeCard
+    render(
+      <DbSizeCard
         connId="c1"
         state={{
           status: "ready",
@@ -43,14 +44,15 @@ describe("DbSizeCard", () => {
           },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("db-size-pretty").textContent).toBe("100 MB");
     expect(screen.getByTestId("db-size-growth").textContent).toMatch(/MB.*7d/);
     expect(screen.getByTestId("sparkline")).toBeTruthy();
   });
 
   it("shows growth_collecting when sparkline has fewer than 7 points", () => {
-    render(      <DbSizeCard
+    render(
+      <DbSizeCard
         connId="c1"
         state={{
           status: "ready",
@@ -66,12 +68,13 @@ describe("DbSizeCard", () => {
           },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("db-size-growth").textContent).toMatch(/Collecting trend/);
   });
 
   it("ok status when |growth_pct| < 5", () => {
-    render(      <DbSizeCard
+    render(
+      <DbSizeCard
         connId="c1"
         state={{
           status: "ready",
@@ -87,12 +90,13 @@ describe("DbSizeCard", () => {
           },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("health-card-db_size-status").getAttribute("data-tone")).toBe("ok");
   });
 
   it("danger status when growth_pct > 20", () => {
-    render(      <DbSizeCard
+    render(
+      <DbSizeCard
         connId="c1"
         state={{
           status: "ready",
@@ -108,8 +112,9 @@ describe("DbSizeCard", () => {
           },
         }}
       />,
-);
-    expect(screen.getByTestId("health-card-db_size-status").getAttribute("data-tone")).toBe(      "danger",
-);
+    );
+    expect(screen.getByTestId("health-card-db_size-status").getAttribute("data-tone")).toBe(
+      "danger",
+    );
   });
 });

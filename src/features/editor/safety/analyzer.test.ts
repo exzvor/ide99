@@ -159,8 +159,9 @@ describe("analyzeForEasyAdvisory — cross-join", () => {
   });
   it("does not flag commas inside subqueries", () => {
     // Comma is depth>0, not a top-level FROM separator.
-    const got = analyzeForEasyAdvisory(      "SELECT (SELECT COUNT(*) FROM events e WHERE e.user_id = u.id) FROM users u WHERE u.id = 1",
-);
+    const got = analyzeForEasyAdvisory(
+      "SELECT (SELECT COUNT(*) FROM events e WHERE e.user_id = u.id) FROM users u WHERE u.id = 1",
+    );
     expect(got).toBeNull();
   });
 });

@@ -8,12 +8,13 @@ import { rowsToCsv } from "../csvExport";
 
 describe("rowsToCsv", () => {
   it("serialises a basic 3-column / 2-row matrix without quoting", () => {
-    const csv = rowsToCsv(      ["a", "b", "c"],
+    const csv = rowsToCsv(
+      ["a", "b", "c"],
       [
         ["1", "2", "3"],
         ["4", "5", "6"],
       ],
-);
+    );
     expect(csv).toBe("a,b,c\n1,2,3\n4,5,6");
   });
 
@@ -33,23 +34,25 @@ describe("rowsToCsv", () => {
   });
 
   it("renders null as an empty unquoted cell", () => {
-    const csv = rowsToCsv(      ["a", "b"],
+    const csv = rowsToCsv(
+      ["a", "b"],
       [
         [null, "v"],
         ["w", null],
       ],
-);
+    );
     expect(csv).toBe("a,b\n,v\nw,");
   });
 
   it("passes Unicode characters through unchanged", () => {
-    const csv = rowsToCsv(      ["lang", "greeting"],
+    const csv = rowsToCsv(
+      ["lang", "greeting"],
       [
         ["ru", "Привет, мир"],
         ["jp", "こんにちは"],
         ["emoji", "🚀"],
       ],
-);
+    );
     // The Russian greeting contains a comma and must be quoted.
     expect(csv).toBe('lang,greeting\nru,"Привет, мир"\njp,こんにちは\nemoji,🚀');
   });

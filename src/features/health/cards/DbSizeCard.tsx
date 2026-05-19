@@ -65,18 +65,21 @@ export function DbSizeCard({ connId, state }: CardProps): JSX.Element {
   const growthColor =
     tone === "ok" ? "var(--accent)" : tone === "warn" ? "var(--warning-500)" : "var(--danger-q)";
 
-  const body = (    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+  const body = (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <div style={{ fontSize: 22, fontWeight: 600 }} data-testid="db-size-pretty">
         {data.pretty}
       </div>
-      {growthLabel ? (        <div style={{ fontSize: 12, color: growthColor }} data-testid="db-size-growth">
+      {growthLabel ? (
+        <div style={{ fontSize: 12, color: growthColor }} data-testid="db-size-growth">
           {growthLabel}
         </div>
-) : null}
-      {points.length >= 1 ? (        <Sparkline data={points} ariaLabel={t("health.card.db_size.title")} />
-) : null}
+      ) : null}
+      {points.length >= 1 ? (
+        <Sparkline data={points} ariaLabel={t("health.card.db_size.title")} />
+      ) : null}
     </div>
-);
+  );
 
   return <CardShell cardId="db_size" connId={connId} state={state} body={body} status={status} />;
 }

@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * RollbackDialog renders a read-only Monaco preview of `.down.sql`.
  * For non-prod connections the user can hit Rollback directly. For prod
@@ -42,16 +42,18 @@ vi.mock("react-i18next", () => ({
     t: (key: string, vars?: Record<string, unknown>) => {
       const template = FAKE_DICT[key] ?? key;
       if (!vars) return template;
-      return Object.entries(vars).reduce<string>(        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
+      return Object.entries(vars).reduce<string>(
+        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
         template,
-);
+      );
     },
   }),
 }));
 
 vi.mock("@monaco-editor/react", () => ({
-  Editor: (props: { value?: string }) => (    <textarea data-testid="rollback-monaco-mock" readOnly value={props.value ?? ""} />
-),
+  Editor: (props: { value?: string }) => (
+    <textarea data-testid="rollback-monaco-mock" readOnly value={props.value ?? ""} />
+  ),
 }));
 
 import { RollbackDialog } from "./RollbackDialog";
@@ -93,7 +95,8 @@ afterEach(() => {
 
 describe("RollbackDialog", () => {
   it("non-prod: shows .down.sql in read-only Monaco; Rollback button enabled", async () => {
-    render(      <RollbackDialog
+    render(
+      <RollbackDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -102,7 +105,7 @@ describe("RollbackDialog", () => {
         onClose={() => {}}
         onRolledBack={() => {}}
       />,
-);
+    );
     await waitFor(() => {
       const ta = screen.getByTestId("rollback-monaco-mock") as HTMLTextAreaElement;
       expect(ta.value).toContain("DROP TABLE for 0007");
@@ -112,7 +115,8 @@ describe("RollbackDialog", () => {
 
   it("prod: TypingConfirmModal blocks Rollback until connection name typed", async () => {
     const user = userEvent.setup();
-    render(      <RollbackDialog
+    render(
+      <RollbackDialog
         open
         connectionId="c1"
         connectionName="payments"
@@ -121,7 +125,7 @@ describe("RollbackDialog", () => {
         onClose={() => {}}
         onRolledBack={() => {}}
       />,
-);
+    );
     await user.click(screen.getByTestId("rollback-dialog-confirm"));
     // Typing modal appears; disabled confirm.
     const typingInput = await screen.findByLabelText(/Type connection name/i);
@@ -132,7 +136,8 @@ describe("RollbackDialog", () => {
   });
 
   it("missing .down.sql: Rollback disabled with tooltip 'no rollback file'", () => {
-    render(      <RollbackDialog
+    render(
+      <RollbackDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -141,7 +146,7 @@ describe("RollbackDialog", () => {
         onClose={() => {}}
         onRolledBack={() => {}}
       />,
-);
+    );
     const button = screen.getByTestId("rollback-dialog-confirm");
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("title", "No rollback file (.down.sql missing)");
@@ -150,7 +155,8 @@ describe("RollbackDialog", () => {
   it("on confirm: invokes migrations_rollback Tauri command with version", async () => {
     const user = userEvent.setup();
     const onRolledBack = vi.fn();
-    render(      <RollbackDialog
+    render(
+      <RollbackDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -159,7 +165,7 @@ describe("RollbackDialog", () => {
         onClose={() => {}}
         onRolledBack={onRolledBack}
       />,
-);
+    );
     await waitFor(() => {
       expect(screen.getByTestId("rollback-dialog-confirm")).not.toBeDisabled();
     });

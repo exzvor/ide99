@@ -19,10 +19,11 @@ beforeAll(async () => {
 });
 
 function H(topic: Parameters<typeof HelpLink>[0]["topic"] = "table") {
-  return render(    <I18nextProvider i18n={i18n}>
+  return render(
+    <I18nextProvider i18n={i18n}>
       <HelpLink topic={topic} />
     </I18nextProvider>,
-);
+  );
 }
 
 describe("HelpLink", () => {
@@ -48,7 +49,7 @@ describe("HelpLink", () => {
     fireEvent.click(screen.getByTestId("help-link"));
     await waitFor(() =>
       expect(spy).toHaveBeenCalledWith(HELP_URLS.table, "_blank", "noopener,noreferrer"),
-);
+    );
     spy.mockRestore();
   });
 

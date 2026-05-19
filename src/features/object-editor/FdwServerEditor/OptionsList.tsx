@@ -27,7 +27,8 @@ export function OptionsList({
   testidPrefix = "fdw-options",
 }: OptionsListProps): JSX.Element {
   const rowPrefix = testidPrefix.endsWith("s") ? testidPrefix.slice(0, -1) : testidPrefix;
-  return (    <fieldset
+  return (
+    <fieldset
       data-testid={`${testidPrefix}-fieldset`}
       style={{
         border: "1px solid var(--border-strong-q)",
@@ -41,7 +42,8 @@ export function OptionsList({
       <legend style={{ fontSize: 11.5, fontWeight: 500, color: "var(--ink-3)", padding: "0 6px" }}>
         {labelText}
       </legend>
-      {options.map((o, i) => (        <div
+      {options.map((o, i) => (
+        <div
           key={o.id}
           data-testid={`${rowPrefix}-${i}`}
           style={{ display: "flex", gap: 8, alignItems: "center" }}
@@ -62,8 +64,9 @@ export function OptionsList({
             className="q-input mono"
             data-testid={`${rowPrefix}-${i}-value`}
             onChange={(e) =>
-              onChange(                options.map((it) => (it.id === o.id ? { ...it, value: e.target.value } : it)),
-)
+              onChange(
+                options.map((it) => (it.id === o.id ? { ...it, value: e.target.value } : it)),
+              )
             }
             style={{ flex: 1 }}
           />
@@ -78,7 +81,7 @@ export function OptionsList({
             ×
           </button>
         </div>
-))}
+      ))}
       <button
         type="button"
         className="btn"
@@ -89,5 +92,5 @@ export function OptionsList({
         + {addLabel}
       </button>
     </fieldset>
-);
+  );
 }

@@ -20,9 +20,10 @@ vi.mock("../../editor/store", async () => {
   const closeTab = vi.fn().mockResolvedValue(true);
   return {
     ...actual,
-    useEditor: Object.assign(      (selector: (s: { closeTab: typeof closeTab }) => unknown) => selector({ closeTab }),
+    useEditor: Object.assign(
+      (selector: (s: { closeTab: typeof closeTab }) => unknown) => selector({ closeTab }),
       { getState: () => ({ closeTab }) },
-),
+    ),
   };
 });
 
@@ -89,7 +90,8 @@ describe("MatviewEditor", () => {
 
   it("renders HelpLink with topic=matview", () => {
     render(<MatviewEditor tab={createTab()} />);
-    expect(screen.getByTestId("object-editor-help-link").getAttribute("data-topic")).toBe(      "matview",
-);
+    expect(screen.getByTestId("object-editor-help-link").getAttribute("data-topic")).toBe(
+      "matview",
+    );
   });
 });

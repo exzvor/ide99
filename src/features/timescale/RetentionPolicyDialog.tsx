@@ -70,7 +70,8 @@ export function RetentionPolicyDialog(props: RetentionPolicyDialogProps): JSX.El
     onClose();
   };
 
-  return (    <RadixDialog.Root
+  return (
+    <RadixDialog.Root
       open={open}
       onOpenChange={(o) => {
         if (!o) onClose();
@@ -90,9 +91,12 @@ export function RetentionPolicyDialog(props: RetentionPolicyDialogProps): JSX.El
             Drop chunks older than the configured threshold automatically.
           </RadixDialog.Description>
 
-          {loading ? (            <p style={{ fontSize: 12, color: "var(--ink-3)" }}>Loading current policy…</p>
-) : (            <>
-              {existing ? (                <p
+          {loading ? (
+            <p style={{ fontSize: 12, color: "var(--ink-3)" }}>Loading current policy…</p>
+          ) : (
+            <>
+              {existing ? (
+                <p
                   style={{
                     fontSize: 12,
                     color: "var(--ink-2)",
@@ -103,7 +107,7 @@ export function RetentionPolicyDialog(props: RetentionPolicyDialogProps): JSX.El
                 >
                   {`Policy active: drop chunks older than ${existing.dropAfter}. Job ID ${existing.jobId}.`}
                 </p>
-) : null}
+              ) : null}
 
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 <div style={fieldLabel}>
@@ -116,7 +120,8 @@ export function RetentionPolicyDialog(props: RetentionPolicyDialogProps): JSX.El
                 <button type="button" className="btn btn-ghost" onClick={onClose}>
                   Cancel
                 </button>
-                {existing ? (                  <button
+                {existing ? (
+                  <button
                     type="button"
                     className="btn btn-danger"
                     data-testid="retention-policy-dialog-drop"
@@ -124,7 +129,7 @@ export function RetentionPolicyDialog(props: RetentionPolicyDialogProps): JSX.El
                   >
                     Drop policy
                   </button>
-) : null}
+                ) : null}
                 <button
                   type="button"
                   className="btn btn-primary"
@@ -135,9 +140,9 @@ export function RetentionPolicyDialog(props: RetentionPolicyDialogProps): JSX.El
                 </button>
               </div>
             </>
-)}
+          )}
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
-);
+  );
 }

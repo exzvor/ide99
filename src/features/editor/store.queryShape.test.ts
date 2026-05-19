@@ -74,13 +74,14 @@ describe("setFilter", () => {
   });
 
   it("removes the filter when called with null", () => {
-    seedShape(      flatShape({
+    seedShape(
+      flatShape({
         filters: [
           { column: "id", op: "eq", value: 5 },
           { column: "name", op: "like", value: "A%" },
         ],
       }),
-);
+    );
     useEditor.getState().setFilter(TAB, "id", null);
     const filters = useEditor.getState().queryShapes.get(TAB)?.filters ?? [];
     expect(filters).toHaveLength(1);
@@ -106,13 +107,14 @@ describe("setFilter", () => {
 
 describe("clearFilters", () => {
   it("removes all filters from the tab's shape", () => {
-    seedShape(      flatShape({
+    seedShape(
+      flatShape({
         filters: [
           { column: "id", op: "eq", value: 5 },
           { column: "name", op: "like", value: "A%" },
         ],
       }),
-);
+    );
     useEditor.getState().clearFilters(TAB);
     expect(useEditor.getState().queryShapes.get(TAB)?.filters).toHaveLength(0);
   });

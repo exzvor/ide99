@@ -81,7 +81,8 @@ function pointsAttr(coords: Coord[], project: (c: Coord) => [number, number]): s
 
 export function GeometryCellSvg({ geom }: GeometryCellSvgProps): JSX.Element {
   if (geom.type === "Unsupported") {
-    return (      <svg
+    return (
+      <svg
         data-testid="geom-cell-svg"
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         width={VIEW_W}
@@ -101,12 +102,13 @@ export function GeometryCellSvg({ geom }: GeometryCellSvgProps): JSX.Element {
           ?
         </text>
       </svg>
-);
+    );
   }
 
   const all = collectAllCoords(geom);
   if (all.length === 0) {
-    return (      <svg
+    return (
+      <svg
         data-testid="geom-cell-svg"
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         width={VIEW_W}
@@ -114,7 +116,7 @@ export function GeometryCellSvg({ geom }: GeometryCellSvgProps): JSX.Element {
         role="img"
         aria-label="empty geometry"
       />
-);
+    );
   }
 
   const project = makeProjector(all);
@@ -123,7 +125,8 @@ export function GeometryCellSvg({ geom }: GeometryCellSvgProps): JSX.Element {
   switch (geom.type) {
     case "Point": {
       const [sx, sy] = project(geom.coords);
-      shapes.push(        <circle
+      shapes.push(
+        <circle
           key="p"
           cx={sx}
           cy={sy}
@@ -132,13 +135,14 @@ export function GeometryCellSvg({ geom }: GeometryCellSvgProps): JSX.Element {
           stroke={STROKE}
           strokeWidth={1}
         />,
-);
+      );
       break;
     }
     case "MultiPoint": {
       geom.coords.forEach((c, i) => {
         const [sx, sy] = project(c);
-        shapes.push(          <circle
+        shapes.push(
+          <circle
             key={`p${i}`}
             cx={sx}
             cy={sy}
@@ -147,63 +151,68 @@ export function GeometryCellSvg({ geom }: GeometryCellSvgProps): JSX.Element {
             stroke={STROKE}
             strokeWidth={1}
           />,
-);
+        );
       });
       break;
     }
     case "LineString": {
-      shapes.push(        <polyline
+      shapes.push(
+        <polyline
           key="ls"
           points={pointsAttr(geom.coords, project)}
           fill="none"
           stroke={STROKE}
           strokeWidth={1}
         />,
-);
+      );
       break;
     }
     case "MultiLineString": {
       geom.coords.forEach((line, i) => {
-        shapes.push(          <polyline
+        shapes.push(
+          <polyline
             key={`ls${i}`}
             points={pointsAttr(line, project)}
             fill="none"
             stroke={STROKE}
             strokeWidth={1}
           />,
-);
+        );
       });
       break;
     }
     case "Polygon": {
       const outer = geom.coords[0] ?? [];
-      shapes.push(        <polygon
+      shapes.push(
+        <polygon
           key="po"
           points={pointsAttr(outer, project)}
           fill={FILL}
           stroke={STROKE}
           strokeWidth={1}
         />,
-);
+      );
       break;
     }
     case "MultiPolygon": {
       geom.coords.forEach((poly, i) => {
         const outer = poly[0] ?? [];
-        shapes.push(          <polygon
+        shapes.push(
+          <polygon
             key={`po${i}`}
             points={pointsAttr(outer, project)}
             fill={FILL}
             stroke={STROKE}
             strokeWidth={1}
           />,
-);
+        );
       });
       break;
     }
   }
 
-  return (    <svg
+  return (
+    <svg
       data-testid="geom-cell-svg"
       viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
       width={VIEW_W}
@@ -213,5 +222,5 @@ export function GeometryCellSvg({ geom }: GeometryCellSvgProps): JSX.Element {
     >
       {shapes}
     </svg>
-);
+  );
 }

@@ -33,9 +33,11 @@ export function IndexesTab({ form, onChange }: IndexesTabProps): JSX.Element {
     }));
   };
 
-  return (    <div data-testid="indexes-tab" style={{ padding: 12 }}>
+  return (
+    <div data-testid="indexes-tab" style={{ padding: 12 }}>
       <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-        {form.indexes.map((idx) => (          <li key={idx.id} style={{ marginBottom: 8 }}>
+        {form.indexes.map((idx) => (
+          <li key={idx.id} style={{ marginBottom: 8 }}>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <button
                 type="button"
@@ -49,7 +51,7 @@ export function IndexesTab({ form, onChange }: IndexesTabProps): JSX.Element {
             </div>
             <IndexFormPanel form={idx} onChange={(mut) => updateIdx(idx.id, mut)} inline />
           </li>
-))}
+        ))}
       </ul>
       <button
         type="button"
@@ -61,5 +63,5 @@ export function IndexesTab({ form, onChange }: IndexesTabProps): JSX.Element {
         + {t("object_editor.indexes.add_index")}
       </button>
     </div>
-);
+  );
 }

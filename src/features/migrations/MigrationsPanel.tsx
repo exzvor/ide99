@@ -1,5 +1,5 @@
 /**
- * â€” 
+ * â€”
  *
  * Top-level container for the Migrations tab. Composition:
  *
@@ -45,7 +45,7 @@ interface Props {
 type ListResult = {
   migrations: Migration[];
   trackingTableMissing: boolean;
-  // €” backend now returns the persisted dir + toggles so the
+  // backend now returns the persisted dir + toggles so the
   // panel can hydrate its zustand store on mount (which previously just
   // showed "Not set" after restart even though SQLite had the dir).
   migrationsDir: string | null;
@@ -82,11 +82,12 @@ export function MigrationsPanel(props: Props): JSX.Element {
 
   const [listError, setListError] = useState<string | null>(null);
   const [applyOpen, setApplyOpen] = useState<boolean>(false);
-  // €” track which toolbar button opened the dialog so the
+  // track which toolbar button opened the dialog so the
   // initial radio matches the user's intent ("Apply Single" should not
   // open in "All pending" mode and re-execute every pending migration).
-  const [applyInitialMode, setApplyInitialMode] = useState<"single" | "range" | "allPending">(    "allPending",
-);
+  const [applyInitialMode, setApplyInitialMode] = useState<"single" | "range" | "allPending">(
+    "allPending",
+  );
   const [rollbackOpen, setRollbackOpen] = useState<boolean>(false);
   const [diffOpen, setDiffOpen] = useState<boolean>(false);
   const [progress, setProgress] = useState<ProgressPayload | null>(null);
@@ -105,7 +106,7 @@ export function MigrationsPanel(props: Props): JSX.Element {
         connId: connectionId,
       })) as ListResult;
       setMigrations(res.migrations, res.trackingTableMissing);
-      // €” hydrate persisted dir + toggles from backend so the
+      // hydrate persisted dir + toggles from backend so the
       // header reflects SQLite state instead of the zustand defaults.
       if (res.migrationsDir !== null) {
         setStoreDir(res.migrationsDir);
@@ -161,7 +162,8 @@ export function MigrationsPanel(props: Props): JSX.Element {
     if (migrations.length === 0) return;
     let cancelled = false;
     const targets = migrations.slice();
-    void Promise.all(      targets.map(async (m) => {
+    void Promise.all(
+      targets.map(async (m) => {
         try {
           const res = (await invoke("lint_file", { path: m.upPath })) as {
             findings: SquawkFinding[];
@@ -173,7 +175,7 @@ export function MigrationsPanel(props: Props): JSX.Element {
           // appear for that migration.
         }
       }),
-);
+    );
     return () => {
       cancelled = true;
     };
@@ -230,11 +232,13 @@ export function MigrationsPanel(props: Props): JSX.Element {
     };
   }, [connectionId, fetchList]);
 
-  const selectedMigration = useMemo(    () => migrations.find((m) => m.version === selectedVersion) ?? null,
+  const selectedMigration = useMemo(
+    () => migrations.find((m) => m.version === selectedVersion) ?? null,
     [migrations, selectedVersion],
-);
+  );
 
-  const handleDirChanged = useCallback(    (dir: string | null) => {
+  const handleDirChanged = useCallback(
+    (dir: string | null) => {
       if (dir === null) {
         clearStoreDir();
       } else {
@@ -243,9 +247,10 @@ export function MigrationsPanel(props: Props): JSX.Element {
       void fetchList();
     },
     [clearStoreDir, setStoreDir, fetchList],
-);
+  );
 
-  const handleToggleTracking = useCallback(    async (next: boolean) => {
+  const handleToggleTracking = useCallback(
+    async (next: boolean) => {
       setOptions(next, snapshotsEnabled);
       try {
         await invoke("migrations_set_options", {
@@ -260,9 +265,10 @@ export function MigrationsPanel(props: Props): JSX.Element {
       }
     },
     [connectionId, snapshotsEnabled, setOptions, t],
-);
+  );
 
-  const handleToggleSnapshots = useCallback(    async (next: boolean) => {
+  const handleToggleSnapshots = useCallback(
+    async (next: boolean) => {
       setOptions(trackingEnabled, next);
       try {
         await invoke("migrations_set_options", {
@@ -276,7 +282,7 @@ export function MigrationsPanel(props: Props): JSX.Element {
       }
     },
     [connectionId, trackingEnabled, setOptions, t],
-);
+  );
 
   const hasPending = migrations.some((m) => m.status === "pending");
   const canRollback =
@@ -294,7 +300,8 @@ export function MigrationsPanel(props: Props): JSX.Element {
       }`
     : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="migrations-panel"
       style={{
         display: "flex",
@@ -305,10 +312,11 @@ export function MigrationsPanel(props: Props): JSX.Element {
         color: "var(--ink-2)",
       }}
     >
-      {lintInstalled === false && !installBannerHidden ? (        <div style={{ padding: "8px 12px 0 12px" }}>
+      {lintInstalled === false && !installBannerHidden ? (
+        <div style={{ padding: "8px 12px 0 12px" }}>
           <EmptyStateInstall onDismiss={() => setInstallBannerHidden(true)} />
         </div>
-) : null}
+      ) : null}
 
       <div
         style={{
@@ -348,7 +356,8 @@ export function MigrationsPanel(props: Props): JSX.Element {
             <span>{t("migrations.panel.snapshots")}</span>
           </label>
         </div>
-        {trackingTableMissing ? (          <div
+        {trackingTableMissing ? (
+          <div
             data-testid="migrations-tracking-missing"
             // biome-ignore lint/a11y/useSemanticElements: passive status banner, not a form <output>
             role="status"
@@ -356,7 +365,7 @@ export function MigrationsPanel(props: Props): JSX.Element {
           >
             {t("migrations.panel.trackingMissing")}
           </div>
-) : null}
+        ) : null}
       </div>
 
       <div
@@ -423,19 +432,21 @@ export function MigrationsPanel(props: Props): JSX.Element {
         >
           {t("migrations.toolbar.diff")}
         </button>
-        {progressText ? (          <span
+        {progressText ? (
+          <span
             data-testid="migrations-progress"
             style={{ fontSize: 12, color: "var(--ink-3)", marginLeft: "auto" }}
           >
             {progressText}
           </span>
-) : null}
+        ) : null}
       </div>
 
-      {listError ? (        <div role="alert" style={{ padding: "6px 12px", fontSize: 12, color: "var(--err, #d33)" }}>
+      {listError ? (
+        <div role="alert" style={{ padding: "6px 12px", fontSize: 12, color: "var(--err, #d33)" }}>
           {listError}
         </div>
-) : null}
+      ) : null}
 
       <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
         <Timeline
@@ -445,7 +456,8 @@ export function MigrationsPanel(props: Props): JSX.Element {
         />
       </div>
 
-      {applyOpen ? (        <ApplyDialog
+      {applyOpen ? (
+        <ApplyDialog
           open={applyOpen}
           connectionId={connectionId}
           connectionName={connName}
@@ -457,9 +469,10 @@ export function MigrationsPanel(props: Props): JSX.Element {
             void fetchList();
           }}
         />
-) : null}
+      ) : null}
 
-      {rollbackOpen && selectedMigration ? (        <RollbackDialog
+      {rollbackOpen && selectedMigration ? (
+        <RollbackDialog
           open={rollbackOpen}
           connectionId={connectionId}
           connectionName={connName}
@@ -470,9 +483,10 @@ export function MigrationsPanel(props: Props): JSX.Element {
             void fetchList();
           }}
         />
-) : null}
+      ) : null}
 
-      {diffOpen ? (        <Dialog
+      {diffOpen ? (
+        <Dialog
           open={diffOpen}
           onOpenChange={(o) => {
             if (!o) setDiffOpen(false);
@@ -484,7 +498,7 @@ export function MigrationsPanel(props: Props): JSX.Element {
             <DiffViewer connectionId={connectionId} migrations={migrations} />
           </div>
         </Dialog>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

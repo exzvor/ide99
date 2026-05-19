@@ -34,14 +34,16 @@ export function ActionPreviewModal(): JSX.Element | null {
     env === "prod" || ((env === "dev" || env === "stage") && phase.conn.confirmDestructive);
   const ok = !requiresType || typed === preview.confirmTarget;
 
-  return (    <Dialog.Root open onOpenChange={(o) => (o ? null : useHealthActions.getState().cancel())}>
+  return (
+    <Dialog.Root open onOpenChange={(o) => (o ? null : useHealthActions.getState().cancel())}>
       <Dialog.Portal>
         <Dialog.Overlay className="confirm-overlay" />
         <Dialog.Content className="confirm-content" data-testid="action-preview-modal">
           <Dialog.Title>{t(`health.actions.title.${phase.target.kind}`)}</Dialog.Title>
           <code className="action-sql-block">{preview.sql}</code>
           <p className="action-impact">{t(preview.impact, preview.impactArgs)}</p>
-          {requiresType && (            <>
+          {requiresType && (
+            <>
               <Dialog.Description>
                 {t("health.actions.confirm.body", {
                   target: preview.confirmTarget,
@@ -58,7 +60,7 @@ export function ActionPreviewModal(): JSX.Element | null {
                 autoFocus
               />
             </>
-)}
+          )}
           <div className="confirm-actions">
             <button type="button" onClick={() => useHealthActions.getState().cancel()}>
               {t("common.cancel")}
@@ -75,5 +77,5 @@ export function ActionPreviewModal(): JSX.Element | null {
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-);
+  );
 }

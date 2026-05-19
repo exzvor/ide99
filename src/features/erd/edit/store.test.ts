@@ -102,11 +102,12 @@ describe("edit/store", () => {
       const s = useEditStore.getState();
       s.pushOp(TAB, makeAddTableOp("public", "old"));
       const newOp = makeAddTableOp("public", "fresh");
-      s.replaceOpsFromAst(        TAB,
+      s.replaceOpsFromAst(
+        TAB,
         [newOp],
         [{ message: "skipped CHECK constraint" }],
         "CREATE TABLE fresh ();",
-);
+      );
       expect(s.getOps(TAB)).toEqual([newOp]);
       expect(s.getAstWarnings(TAB)).toHaveLength(1);
     });

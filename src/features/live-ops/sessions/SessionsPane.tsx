@@ -67,12 +67,13 @@ export function SessionsPane({ connId }: Props): JSX.Element | null {
       setChainSummary(t("live_ops.sessions.aria.chain_idle", { count: totalSessions }));
       return;
     }
-    setChainSummary(      t("live_ops.sessions.aria.chain_active", {
+    setChainSummary(
+      t("live_ops.sessions.aria.chain_active", {
         sessions: totalSessions,
         blockerPid: topBlockerPid,
         blocked: topBlockerCount,
       }),
-);
+    );
   }, [sig, ready, blockedCount, topBlockerPid, topBlockerCount, totalSessions, t]);
 
   if (!slice || !conn) return null;
@@ -80,13 +81,14 @@ export function SessionsPane({ connId }: Props): JSX.Element | null {
 
   const sessionsLabel = pluralRu(totalSessions, (s) =>
     t(`live_ops.sessions.summary.sessions_${s}`, { count: totalSessions }),
-);
+  );
   const summary =
     blockedCount > 0
       ? `${sessionsLabel} · ${t("live_ops.sessions.summary.blocked_count", { count: blockedCount })}`
       : sessionsLabel;
 
-  return (    <div className="live-ops-sessions" data-testid="live-ops-sessions">
+  return (
+    <div className="live-ops-sessions" data-testid="live-ops-sessions">
       {/* (a11y, acceptance #4) — screen-reader announcement of
           blocking-chain state. Visually hidden, polite live region; the
           message changes only when the chain shape changes (see effect above)
@@ -118,27 +120,31 @@ export function SessionsPane({ connId }: Props): JSX.Element | null {
             {t("live_ops.sessions.view.list")}
           </button>
         </div>
-        {ready ? (          <span
+        {ready ? (
+          <span
             className={`live-ops-summary-chip${blockedCount > 0 ? " has-blocked" : ""}`}
             data-testid="live-ops-sessions-summary"
           >
             {summary}
           </span>
-) : null}
+        ) : null}
       </div>
 
       <div className="live-ops-sessions-scroll">
         <CardStateRouter
           state={data}
           renderReady={(snap) =>
-            snap.sessions.length === 0 ? (              <div className="live-ops-shimmer">{t("live_ops.sessions.empty_all")}</div>
-) : view === "dag" ? (              <SessionsDag snapshot={snap} connId={connId} conn={conn} />
-) : (              <SessionsList snapshot={snap} connId={connId} />
-)
+            snap.sessions.length === 0 ? (
+              <div className="live-ops-shimmer">{t("live_ops.sessions.empty_all")}</div>
+            ) : view === "dag" ? (
+              <SessionsDag snapshot={snap} connId={connId} conn={conn} />
+            ) : (
+              <SessionsList snapshot={snap} connId={connId} />
+            )
           }
         />
       </div>
       <SessionContextMenu connId={connId} />
     </div>
-);
+  );
 }

@@ -7,11 +7,12 @@ vi.mock("react-i18next", () => ({
       // The test mock just echoes the key — for `unrepresentableHint` we
       // splice the interpolated reason into the rendered text so the bar
       // still has a recognizable signature for assertions.
-      if (        key === "filter.unrepresentableHint" &&
+      if (
+        key === "filter.unrepresentableHint" &&
         opts &&
         typeof opts === "object" &&
         "reason" in opts
-) {
+      ) {
         return `[hint:${String((opts as { reason: unknown }).reason)}]`;
       }
       if (opts && typeof opts === "object" && "defaultValue" in opts) {

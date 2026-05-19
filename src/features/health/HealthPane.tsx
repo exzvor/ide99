@@ -148,10 +148,11 @@ export function HealthPane({ connId }: HealthPaneProps): JSX.Element {
   function renderCard(cardId: CardId): JSX.Element {
     const Component = CARD_COMPONENTS[cardId];
     const state = cards?.get(cardId) ?? DEFAULT_LOADING;
-    return (      <div key={cardId} style={{ width: COLUMN_WIDTH }}>
+    return (
+      <div key={cardId} style={{ width: COLUMN_WIDTH }}>
         <Component connId={connId} state={state} />
       </div>
-);
+    );
   }
 
   // Cards not assigned to a group (defensive — surface them at the end so
@@ -159,7 +160,8 @@ export function HealthPane({ connId }: HealthPaneProps): JSX.Element {
   const groupedIds = new Set(CARD_GROUPS.flatMap((g) => g.cards));
   const ungrouped = ALL_CARDS.filter((id) => !groupedIds.has(id));
 
-  return (    <div
+  return (
+    <div
       data-testid="health-pane"
       style={{
         display: "flex",
@@ -196,7 +198,8 @@ export function HealthPane({ connId }: HealthPaneProps): JSX.Element {
             minWidth: GROUP_MIN_WIDTH,
           }}
         >
-          {CARD_GROUPS.map((group) => (            <section
+          {CARD_GROUPS.map((group) => (
+            <section
               key={group.id}
               data-testid={`health-group-${group.id}`}
               style={{ display: "flex", flexDirection: "column", gap: 12 }}
@@ -222,8 +225,9 @@ export function HealthPane({ connId }: HealthPaneProps): JSX.Element {
                 {group.cards.map(renderCard)}
               </div>
             </section>
-))}
-          {ungrouped.length > 0 ? (            <section
+          ))}
+          {ungrouped.length > 0 ? (
+            <section
               data-testid="health-group-other"
               style={{ display: "flex", flexDirection: "column", gap: 12 }}
             >
@@ -248,9 +252,9 @@ export function HealthPane({ connId }: HealthPaneProps): JSX.Element {
                 {ungrouped.map(renderCard)}
               </div>
             </section>
-) : null}
+          ) : null}
         </div>
       </div>
     </div>
-);
+  );
 }

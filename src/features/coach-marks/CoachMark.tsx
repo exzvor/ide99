@@ -37,7 +37,8 @@ export function CoachMark({ id, title, body, dismissLabel }: CoachMarkProps): JS
 
   if (isSeen) return null;
 
-  return (    <div
+  return (
+    <div
       role="status"
       data-testid={`coach-mark-${id}`}
       style={{
@@ -76,5 +77,5 @@ export function CoachMark({ id, title, body, dismissLabel }: CoachMarkProps): JS
         {dismissLabel}
       </button>
     </div>
-);
+  );
 }

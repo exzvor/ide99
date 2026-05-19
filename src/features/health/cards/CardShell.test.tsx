@@ -25,7 +25,8 @@ describe("CardShell — UI matrix", () => {
   });
 
   it("ready state shows body + ok status badge (info tooltip temporarily disabled)", () => {
-    render(      <CardShell
+    render(
+      <CardShell
         cardId="cache_hit"
         connId="c1"
         state={{
@@ -35,7 +36,7 @@ describe("CardShell — UI matrix", () => {
         body={<div>BODY</div>}
         status={{ tone: "ok" }}
       />,
-);
+    );
     const badge = screen.getByTestId("health-card-cache_hit-status");
     expect(badge.getAttribute("data-tone")).toBe("ok");
     expect(screen.getByTestId("health-card-cache_hit-body").textContent).toBe("BODY");
@@ -44,7 +45,8 @@ describe("CardShell — UI matrix", () => {
   });
 
   it("ready state with warn/danger tones renders AlertCircle (data-tone)", () => {
-    const { rerender } = render(      <CardShell
+    const { rerender } = render(
+      <CardShell
         cardId="bloat"
         connId="c1"
         state={{
@@ -54,9 +56,10 @@ describe("CardShell — UI matrix", () => {
         body={<div>w</div>}
         status={{ tone: "warn" }}
       />,
-);
+    );
     expect(screen.getByTestId("health-card-bloat-status").getAttribute("data-tone")).toBe("warn");
-    rerender(      <CardShell
+    rerender(
+      <CardShell
         cardId="bloat"
         connId="c1"
         state={{
@@ -66,17 +69,18 @@ describe("CardShell — UI matrix", () => {
         body={<div>d</div>}
         status={{ tone: "danger" }}
       />,
-);
+    );
     expect(screen.getByTestId("health-card-bloat-status").getAttribute("data-tone")).toBe("danger");
   });
 
   it("empty state renders translated reason text", () => {
-    render(      <CardShell
+    render(
+      <CardShell
         cardId="long_running"
         connId="c1"
         state={{ status: "empty", reason: "no_data" }}
       />,
-);
+    );
     const empty = screen.getByTestId("health-card-long_running-empty");
     expect(empty.textContent).toMatch(/No issues found/i);
   });
@@ -87,7 +91,8 @@ describe("CardShell — UI matrix", () => {
       configurable: true,
       value: { writeText },
     });
-    render(      <CardShell
+    render(
+      <CardShell
         cardId="slow_queries"
         connId="c1"
         state={{
@@ -96,7 +101,7 @@ describe("CardShell — UI matrix", () => {
           installSql: "CREATE EXTENSION pg_stat_statements;",
         }}
       />,
-);
+    );
     const block = screen.getByTestId("health-card-slow_queries-unavailable");
     expect(block.textContent).toMatch(/pg_stat_statements/);
     fireEvent.click(screen.getByTestId("health-card-slow_queries-copy"));
@@ -110,12 +115,13 @@ describe("CardShell — UI matrix", () => {
       configurable: true,
       value: { writeText },
     });
-    render(      <CardShell
+    render(
+      <CardShell
         cardId="replication_lag"
         connId="c1"
         state={{ status: "forbidden", requiredRole: "pg_monitor" }}
       />,
-);
+    );
     const block = screen.getByTestId("health-card-replication_lag-forbidden");
     expect(block.textContent).toMatch(/pg_monitor/);
     fireEvent.click(screen.getByTestId("health-card-replication_lag-copy"));
@@ -129,8 +135,9 @@ describe("CardShell — UI matrix", () => {
       ...useHealth.getState(),
       refreshOne,
     });
-    render(      <CardShell cardId="bloat" connId="conn-A" state={{ status: "error", message: "oops" }} />,
-);
+    render(
+      <CardShell cardId="bloat" connId="conn-A" state={{ status: "error", message: "oops" }} />,
+    );
     const block = screen.getByTestId("health-card-bloat-error");
     expect(block.textContent).toMatch(/Failed to load/);
     expect(block.textContent).toMatch(/oops/);

@@ -33,11 +33,12 @@ export function AskAgentBlock({ sqlstate, message, sql }: AskAgentBlockProps): J
     }
   };
 
-  return (    <div className="error-explain-ask-agent">
+  return (
+    <div className="error-explain-ask-agent">
       <p>{t("errorExplain.askAgent.headline")}</p>
       <button type="button" onClick={onCopy} data-testid="error-explain-copy-context">
         {copied ? t("errorExplain.askAgent.copied") : t("errorExplain.askAgent.copy")}
       </button>
     </div>
-);
+  );
 }

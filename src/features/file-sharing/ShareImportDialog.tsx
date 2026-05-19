@@ -151,7 +151,8 @@ export function ShareImportPanel(): JSX.Element {
 
   const showActions = preview !== null;
 
-  return (    <section
+  return (
+    <section
       data-testid="share-import-panel"
       style={{
         display: "flex",
@@ -185,7 +186,8 @@ export function ShareImportPanel(): JSX.Element {
         {picking ? t("file_sharing.import.picking") : t("file_sharing.import.pick")}
       </button>
 
-      {error ? (        <div
+      {error ? (
+        <div
           role="alert"
           style={{
             color: "var(--danger-q, #f43f5e)",
@@ -198,8 +200,9 @@ export function ShareImportPanel(): JSX.Element {
         >
           {error}
         </div>
-) : null}
-      {success ? (        <output
+      ) : null}
+      {success ? (
+        <output
           data-testid="share-import-success"
           style={{
             color: "var(--accent-strong, var(--accent))",
@@ -212,9 +215,10 @@ export function ShareImportPanel(): JSX.Element {
         >
           {success}
         </output>
-) : null}
+      ) : null}
 
-      {preview ? (        <section
+      {preview ? (
+        <section
           data-testid="share-import-preview"
           style={{
             border: "1px solid var(--hairline)",
@@ -243,14 +247,16 @@ export function ShareImportPanel(): JSX.Element {
             </code>
           </div>
           <div style={{ fontSize: 12.5, color: "var(--ink)" }}>{preview.summary}</div>
-          {preview.mayCollide ? (            <div style={{ fontSize: 11, color: "var(--warn-q, #f59e0b)" }}>
+          {preview.mayCollide ? (
+            <div style={{ fontSize: 11, color: "var(--warn-q, #f59e0b)" }}>
               {t("file_sharing.import.may_collide")}
             </div>
-) : null}
+          ) : null}
         </section>
-) : null}
+      ) : null}
 
-      {showActions ? (        <div
+      {showActions ? (
+        <div
           style={{
             display: "flex",
             gap: 8,
@@ -272,7 +278,7 @@ export function ShareImportPanel(): JSX.Element {
             {t("file_sharing.import.apply")}
           </button>
         </div>
-) : null}
+      ) : null}
     </section>
-);
+  );
 }

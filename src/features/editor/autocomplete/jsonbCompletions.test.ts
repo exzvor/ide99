@@ -68,10 +68,11 @@ describe("buildJsonbCompletions", () => {
   });
 
   it("numeric arrayIndex normalizes to arraywildcard", () => {
-    const items = buildJsonbCompletions(      fixture,
+    const items = buildJsonbCompletions(
+      fixture,
       [{ key: "items" }, { arrayIndex: 0 }] as CompletionPath,
       "",
-);
+    );
     expect(items.map((i) => i.label)).toEqual(["price"]);
   });
 

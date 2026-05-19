@@ -60,7 +60,8 @@ export function HypertableWizard(props: HypertableWizardProps): JSX.Element | nu
     onClose();
   };
 
-  return (    <RadixDialog.Root
+  return (
+    <RadixDialog.Root
       open={open}
       onOpenChange={(o) => {
         if (!o) onClose();
@@ -89,12 +90,14 @@ export function HypertableWizard(props: HypertableWizardProps): JSX.Element | nu
                 value={timeCol}
                 onChange={(e) => setTimeCol(e.target.value)}
               >
-                {timeCandidates.length === 0 ? (                  <option value="">No timestamp/date columns detected</option>
-) : null}
-                {timeCandidates.map((c) => (                  <option key={c.name} value={c.name}>
+                {timeCandidates.length === 0 ? (
+                  <option value="">No timestamp/date columns detected</option>
+                ) : null}
+                {timeCandidates.map((c) => (
+                  <option key={c.name} value={c.name}>
                     {c.name} ({c.typeName})
                   </option>
-))}
+                ))}
               </select>
             </label>
 
@@ -128,7 +131,8 @@ export function HypertableWizard(props: HypertableWizardProps): JSX.Element | nu
               <span>Advanced</span>
             </button>
 
-            {advancedOpen ? (              <div
+            {advancedOpen ? (
+              <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -146,10 +150,11 @@ export function HypertableWizard(props: HypertableWizardProps): JSX.Element | nu
                     onChange={(e) => setPartitioningCol(e.target.value)}
                   >
                     <option value="">— none —</option>
-                    {columns.map((c) => (                      <option key={c.name} value={c.name}>
+                    {columns.map((c) => (
+                      <option key={c.name} value={c.name}>
                         {c.name} ({c.typeName})
                       </option>
-))}
+                    ))}
                   </select>
                 </label>
                 <label style={{ fontSize: 12, display: "flex", gap: 6 }}>
@@ -180,7 +185,7 @@ export function HypertableWizard(props: HypertableWizardProps): JSX.Element | nu
                   <span>create_default_indexes — auto-add time-column index</span>
                 </label>
               </div>
-) : null}
+            ) : null}
           </div>
 
           <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
@@ -199,5 +204,5 @@ export function HypertableWizard(props: HypertableWizardProps): JSX.Element | nu
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
-);
+  );
 }

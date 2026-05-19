@@ -75,11 +75,11 @@ pub struct RollbackResult {
 pub struct ListResult {
     pub migrations: Vec<Migration>,
     pub tracking_table_missing: bool,
-    /// €” persisted migrations directory for the
+    /// persisted migrations directory for the
     /// connection so the frontend can hydrate its store on first mount
     /// (after app restart). `None` when the user hasn't picked one yet.
     pub migrations_dir: Option<String>,
-    /// €” persisted toggles so the panel checkboxes
+    /// persisted toggles so the panel checkboxes
     /// reflect the actual SQLite state instead of the zustand defaults.
     pub tracking_enabled: bool,
     pub snapshots_enabled: bool,

@@ -40,7 +40,8 @@ export function FkPickerModal({
   };
   const canConfirm = src.length > 0 && tgt.length === src.length && name.trim() !== "";
 
-  return (    <div
+  return (
+    <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="fk-modal-title"
@@ -65,7 +66,8 @@ export function FkPickerModal({
               {t("erd.edit.fk.modal.from")}: {sourceTable.name}
             </h3>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {sourceTable.columns.map((c) => (                <li key={c.id}>
+              {sourceTable.columns.map((c) => (
+                <li key={c.id}>
                   <button
                     type="button"
                     data-testid={`fk-source-${c.id}`}
@@ -84,7 +86,7 @@ export function FkPickerModal({
                     {c.name} <span style={{ opacity: 0.6, fontSize: 11 }}>{c.dataType}</span>
                   </button>
                 </li>
-))}
+              ))}
             </ul>
           </section>
           <section>
@@ -92,7 +94,8 @@ export function FkPickerModal({
               {t("erd.edit.fk.modal.to")}: {targetTable.name}
             </h3>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {targetTable.columns.map((c) => (                <li key={c.id}>
+              {targetTable.columns.map((c) => (
+                <li key={c.id}>
                   <button
                     type="button"
                     data-testid={`fk-target-${c.id}`}
@@ -109,13 +112,14 @@ export function FkPickerModal({
                     }}
                   >
                     {c.name} <span style={{ opacity: 0.6, fontSize: 11 }}>{c.dataType}</span>
-                    {c.isPkOrUnique === false && (                      <span style={{ marginLeft: 6, color: "var(--warn, #d49b1c)", fontSize: 10 }}>
+                    {c.isPkOrUnique === false && (
+                      <span style={{ marginLeft: 6, color: "var(--warn, #d49b1c)", fontSize: 10 }}>
                         {t("erd.edit.fk.modal.not_pk_unique")}
                       </span>
-)}
+                    )}
                   </button>
                 </li>
-))}
+              ))}
             </ul>
           </section>
         </div>
@@ -155,5 +159,5 @@ export function FkPickerModal({
         </div>
       </div>
     </div>
-);
+  );
 }

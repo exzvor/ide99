@@ -19,12 +19,13 @@ vi.mock("@tauri-apps/api/core", () => ({
 const { invoke } = await import("@tauri-apps/api/core");
 
 function renderUI() {
-  return render(    <I18nextProvider i18n={i18n}>
+  return render(
+    <I18nextProvider i18n={i18n}>
       <ToastProvider>
         <ExternalServers />
       </ToastProvider>
     </I18nextProvider>,
-);
+  );
 }
 
 describe("ExternalServers", () => {
@@ -41,8 +42,9 @@ describe("ExternalServers", () => {
     });
     renderUI();
     await waitFor(() => expect(screen.queryByText(/Loading/i)).not.toBeInTheDocument());
-    expect(      screen.getByText(/No external MCP servers configured|Внешних MCP-серверов не настроено/i),
-).toBeInTheDocument();
+    expect(
+      screen.getByText(/No external MCP servers configured|Внешних MCP-серверов не настроено/i),
+    ).toBeInTheDocument();
   });
 
   it("renders rows with status and tool counts", async () => {
@@ -106,7 +108,7 @@ describe("ExternalServers", () => {
     fireEvent.click(screen.getByTestId("mcp-external-disconnect-linear"));
     await waitFor(() =>
       expect(invoke).toHaveBeenCalledWith("mcp_client_disconnect", { name: "linear" }),
-);
+    );
   });
 
   it("calls reload command on Reload click", async () => {

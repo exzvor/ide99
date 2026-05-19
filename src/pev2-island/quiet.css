@@ -573,7 +573,8 @@ svg circle.c-4 {
 .never-executed,
 .bg-hatched {
   --hatched-color: var(--q-bg-sunken);
-  background-image: linear-gradient(    45deg,
+  background-image: linear-gradient(
+    45deg,
     var(--q-bg-sunken) 25%,
     var(--q-bg-elev) 25%,
     var(--q-bg-elev) 50%,
@@ -581,7 +582,7 @@ svg circle.c-4 {
     var(--q-bg-sunken) 75%,
     var(--q-bg-elev) 75%,
     var(--q-bg-elev)
-);
+  );
 }
 
 .more-info[title] {

@@ -121,8 +121,9 @@ export const useSnippets = create<State & Actions>((set, get) => ({
         visibleIn: undefined,
       };
     });
-    const builtinsFiltered = BUILTIN_SNIPPETS.filter(      (b) => !b.prefixes.some((p) => userByPrefix.has(p)),
-);
+    const builtinsFiltered = BUILTIN_SNIPPETS.filter(
+      (b) => !b.prefixes.some((p) => userByPrefix.has(p)),
+    );
     return Object.freeze([...builtinsFiltered, ...userTemplates]);
   },
 }));

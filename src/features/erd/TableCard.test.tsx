@@ -47,11 +47,12 @@ function makeNode(columns: ErdColumn[]): LaidErdNode {
 }
 
 function renderInSvg(content: React.ReactNode) {
-  return render(    <svg>
+  return render(
+    <svg>
       <title>test</title>
       {content}
     </svg>,
-);
+  );
 }
 
 describe("TableCard", () => {
@@ -73,7 +74,7 @@ describe("TableCard", () => {
   test("renders one row per column up to MAX_VISIBLE_COLS, with footer above", () => {
     const cols = Array.from({ length: MAX_VISIBLE_COLS + 5 }, (_, i) =>
       makeColumn(`col_${i}`, i + 1),
-);
+    );
     const node = makeNode(cols);
     const { container } = renderInSvg(<TableCard node={node} highlighted={false} />);
     const rows = container.querySelectorAll("[data-testid='erd-column-row']");

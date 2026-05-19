@@ -50,7 +50,8 @@ describe("ops factories + zod", () => {
   });
 
   it("zod opSchema round-trips an addFk composite op", () => {
-    const op = makeAddFkOp(      [
+    const op = makeAddFkOp(
+      [
         { table: { schema: "public", name: "orders" }, column: "user_id" },
         { table: { schema: "public", name: "orders" }, column: "tenant_id" },
       ],
@@ -59,7 +60,7 @@ describe("ops factories + zod", () => {
         { table: { schema: "public", name: "users" }, column: "tenant_id" },
       ],
       "orders_user_tenant_fkey",
-);
+    );
     const parsed = opSchema.parse(JSON.parse(JSON.stringify(op)));
     expect(parsed).toEqual(op);
   });
@@ -92,9 +93,10 @@ describe("ops factories + zod", () => {
   });
 
   it("zod opSchema round-trips a setColumnNullable op", () => {
-    const op = makeSetColumnNullableOp(      { table: { schema: "public", name: "users" }, column: "email" },
+    const op = makeSetColumnNullableOp(
+      { table: { schema: "public", name: "users" }, column: "email" },
       false,
-);
+    );
     expect(op.kind).toBe("setColumnNullable");
     expect(opSchema.parse(JSON.parse(JSON.stringify(op)))).toEqual(op);
   });
@@ -113,6 +115,6 @@ describe("ops factories + zod", () => {
         table: { schema: "p", name: "u" },
         columns: [],
       }),
-).toThrow();
+    ).toThrow();
   });
 });

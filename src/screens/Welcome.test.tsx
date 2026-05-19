@@ -33,10 +33,11 @@ vi.mock("../components/quiet/Titlebar", () => ({
 }));
 
 vi.mock("../components/quiet/Wordmark", () => ({
-  Wordmark: ({ size }: { size?: string }) => (    <span data-testid={`wordmark-${size ?? "lg"}`} aria-label="ide99">
+  Wordmark: ({ size }: { size?: string }) => (
+    <span data-testid={`wordmark-${size ?? "lg"}`} aria-label="ide99">
       ide99
     </span>
-),
+  ),
 }));
 
 import Welcome from "./Welcome";

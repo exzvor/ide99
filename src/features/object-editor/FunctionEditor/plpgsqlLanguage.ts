@@ -391,9 +391,10 @@ export function registerPlpgsqlLanguage(monaco: MonacoLike): void {
     aliases: ["PL/pgSQL", "plpgsql"],
   });
 
-  monaco.languages.setLanguageConfiguration(    PLPGSQL_LANGUAGE_ID,
+  monaco.languages.setLanguageConfiguration(
+    PLPGSQL_LANGUAGE_ID,
     buildPlpgsqlLanguageConfiguration(monaco.languages.IndentAction),
-);
+  );
 
   monaco.languages.setMonarchTokensProvider(PLPGSQL_LANGUAGE_ID, buildPlpgsqlMonarchLanguage());
 }

@@ -53,8 +53,9 @@ describe("generateFunctionDdl — create mode", () => {
     });
     const result = generateFunctionDdl(null, fn);
     expect(result.errors).toEqual([]);
-    expect(result.sql).toBe(      "CREATE OR REPLACE FUNCTION public.add(\n    x IN integer,\n    y IN integer\n) RETURNS integer AS $function$\nSELECT x + y\n$function$ LANGUAGE sql;",
-);
+    expect(result.sql).toBe(
+      "CREATE OR REPLACE FUNCTION public.add(\n    x IN integer,\n    y IN integer\n) RETURNS integer AS $function$\nSELECT x + y\n$function$ LANGUAGE sql;",
+    );
   });
 
   test("full plpgsql function with default param + IMMUTABLE + SECURITY DEFINER + COST + ROWS (setof) + comment", () => {
@@ -76,8 +77,9 @@ describe("generateFunctionDdl — create mode", () => {
     });
     const result = generateFunctionDdl(null, fn);
     expect(result.errors).toEqual([]);
-    expect(result.sql).toBe(      `CREATE OR REPLACE FUNCTION public.find_users(\n    min_age IN integer,\n    country IN text DEFAULT 'US'\n) RETURNS SETOF users AS $function$\nBEGIN RETURN QUERY SELECT * FROM users WHERE age >= min_age AND country = country; END;\n$function$ LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 50 ROWS 100;\nCOMMENT ON FUNCTION public.find_users(integer, text) IS 'Bob''s user finder';`,
-);
+    expect(result.sql).toBe(
+      `CREATE OR REPLACE FUNCTION public.find_users(\n    min_age IN integer,\n    country IN text DEFAULT 'US'\n) RETURNS SETOF users AS $function$\nBEGIN RETURN QUERY SELECT * FROM users WHERE age >= min_age AND country = country; END;\n$function$ LANGUAGE plpgsql IMMUTABLE SECURITY DEFINER COST 50 ROWS 100;\nCOMMENT ON FUNCTION public.find_users(integer, text) IS 'Bob''s user finder';`,
+    );
   });
 
   test("trigger-returning function", () => {
@@ -91,8 +93,9 @@ describe("generateFunctionDdl — create mode", () => {
     });
     const result = generateFunctionDdl(null, fn);
     expect(result.errors).toEqual([]);
-    expect(result.sql).toBe(      "CREATE OR REPLACE FUNCTION public.audit_trg() RETURNS TRIGGER AS $function$\nBEGIN RETURN NEW; END;\n$function$ LANGUAGE plpgsql;",
-);
+    expect(result.sql).toBe(
+      "CREATE OR REPLACE FUNCTION public.audit_trg() RETURNS TRIGGER AS $function$\nBEGIN RETURN NEW; END;\n$function$ LANGUAGE plpgsql;",
+    );
   });
 
   test('"other" language emits LANGUAGE plpython3u from languageOther (lowercased)', () => {

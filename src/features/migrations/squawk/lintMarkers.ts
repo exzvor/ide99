@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * Pure conversion from Squawk findings into Monaco `IMarkerData[]`. The
  * Monaco severity numeric constants are inlined (8 = Error, 4 = Warning)
@@ -15,7 +15,8 @@ const MARKER_SEVERITY_WARNING = 4;
 const MARKER_SEVERITY_ERROR = 8;
 
 /** Convert Squawk findings to Monaco IMarkerData[]. Pure function — testable in isolation. */
-export function findingsToMonacoMarkers(  findings: SquawkFinding[],
+export function findingsToMonacoMarkers(
+  findings: SquawkFinding[],
   ruleDescriptions: Map<string, string>,
 ): editor.IMarkerData[] {
   return findings.map((f): editor.IMarkerData => {

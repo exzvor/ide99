@@ -527,13 +527,13 @@ export interface EditorState {
    */
   lastExecutedShape: Map<string, QueryShape | null>;
   /**
-   * €” last SELECT parse error per tab so ResultPanel can
+   * last SELECT parse error per tab so ResultPanel can
    * render a human-readable status banner alongside the Monaco squiggle.
    * Cleared on next successful parse or empty buffer.
    */
   selectParseErrors: Map<string, SelectParseError | null>;
   /**
-   * €” bumped every time the live `queryShape.filters`
+   * bumped every time the live `queryShape.filters`
    * for a tab differs from the prior render's filters. RerunBanner uses
    * this version as a `useEffect` dep so dismissing the banner only hides
    * THIS filter change; the next change reveals the banner again.
@@ -606,9 +606,10 @@ export interface EditorActions {
   /** â€” spawn an editor tab pre-filled with an insight's
    * suggested SQL. Resolves the source connection via the source ExplainTab
    * (cached â†’ recentPlansGet, runtime â†’ source EditorTab chain). */
-  openEditorFromInsight(    sourceTabId: string,
+  openEditorFromInsight(
+    sourceTabId: string,
     insight: import("./explain/insights").Insight,
-): Promise<void>;
+  ): Promise<void>;
   /** â€” open or focus the singleton Health tab for the given
    * connection id. Health tabs are session-only (not persisted). */
   openHealthTab(connectionId: string): HealthTab;
@@ -684,7 +685,7 @@ export interface EditorActions {
   /** â€” convenience reader. Returns null when the tab has no shape. */
   getQueryShape(tabId: string): QueryShape | null;
   /**
-   * €” store the most recent SELECT parse error so
+   * store the most recent SELECT parse error so
    * ResultPanel can render a banner. Pass null to clear.
    */
   setSelectParseError(tabId: string, err: SelectParseError | null): void;
@@ -925,7 +926,8 @@ export type PreflightOutcome = "ok" | "cancelled" | "read_only_blocked";
  * identical to the pre-refactor inline form â€” `runQuery.safety.test.ts`
  * is the regression net.
  */
-export async function preflightSafety(  conn: Connection | undefined,
+export async function preflightSafety(
+  conn: Connection | undefined,
   sql: string,
   set: (partial: Partial<EditorState>) => void,
 ): Promise<PreflightOutcome> {
@@ -967,10 +969,11 @@ export async function preflightSafety(  conn: Connection | undefined,
   }
 
   // STEP 4: slow-query warning (only for read-heavy SELECT or write-with-WHERE).
-  if (    conn.slowQueryWarning &&
+  if (
+    conn.slowQueryWarning &&
     analysis.kind === "safe" &&
     /^(select|with|update|delete)\b/i.test(sql.trimStart())
-) {
+  ) {
     let cost: number | null = null;
     try {
       cost = await queryExplainCost(conn.id, sql);
@@ -1015,7 +1018,8 @@ export async function preflightSafety(  conn: Connection | undefined,
  * on selection-change), or the first parsed statement as
  * a fallback for test paths that never wired Monaco.
  */
-function resolveStatements(  content: string,
+function resolveStatements(
+  content: string,
   tabId: string,
   intent: RunIntent,
   get: () => EditorState,
@@ -1718,12 +1722,13 @@ export const useEditor = create<EditorStore>((set, get) => ({
 
   fetchMore: async (tabId) => {
     const cur = get().runStates.get(tabId);
-    if (      !cur ||
+    if (
+      !cur ||
       cur.status !== "streaming" ||
       cur.exhausted ||
       cur.prefetching ||
       cur.cursorId === null
-) {
+    ) {
       return;
     }
     // Set prefetching so concurrent calls bail out.
@@ -1905,12 +1910,13 @@ export const useEditor = create<EditorStore>((set, get) => ({
   setSelectParseError: (tabId, err) => {
     const cur = get().selectParseErrors.get(tabId) ?? null;
     if (cur === err) return;
-    if (      cur &&
+    if (
+      cur &&
       err &&
       cur.message === err.message &&
       cur.line === err.line &&
       cur.column === err.column
-)
+    )
       return;
     const next = new Map(get().selectParseErrors);
     if (err === null) next.delete(tabId);
@@ -2355,8 +2361,9 @@ export const useEditor = create<EditorStore>((set, get) => ({
 
   openPgStatStatementsTab: (connectionId) => {
     const id = `pgss-${connectionId}`;
-    const existing = get().tabs.find(      (t): t is PgStatStatementsTab => t.id === id && t.kind === "pg-stat-statements",
-);
+    const existing = get().tabs.find(
+      (t): t is PgStatStatementsTab => t.id === id && t.kind === "pg-stat-statements",
+    );
     if (existing) {
       get().switchTab(id);
       return existing;
@@ -2374,8 +2381,9 @@ export const useEditor = create<EditorStore>((set, get) => ({
 
   openMigrationsTab: (connectionId) => {
     const id = `migrations-${connectionId}`;
-    const existing = get().tabs.find(      (t): t is MigrationsTab => t.id === id && t.kind === "migrations",
-);
+    const existing = get().tabs.find(
+      (t): t is MigrationsTab => t.id === id && t.kind === "migrations",
+    );
     if (existing) {
       get().switchTab(id);
       return existing;
@@ -2431,8 +2439,9 @@ export const useEditor = create<EditorStore>((set, get) => ({
   openObjectEditor: (params) => {
     const nameOrPlaceholder = params.name ?? "_new";
     const id = `object-editor-${params.connectionId}-${params.objectKind}-${params.schema}-${nameOrPlaceholder}-${params.mode}`;
-    const existing = get().tabs.find(      (t): t is ObjectEditorTab => t.id === id && t.kind === "object-editor",
-);
+    const existing = get().tabs.find(
+      (t): t is ObjectEditorTab => t.id === id && t.kind === "object-editor",
+    );
     if (existing) {
       get().switchTab(id);
       return existing;
@@ -2458,7 +2467,7 @@ export const useEditor = create<EditorStore>((set, get) => ({
   setErdTabSchemas: (tabId, schemas) => {
     const next = get().tabs.map((t) =>
       t.id === tabId && t.kind === "erd" ? { ...t, schemas } : t,
-);
+    );
     set({ tabs: next });
   },
 
@@ -2496,7 +2505,8 @@ export const useEditor = create<EditorStore>((set, get) => ({
  * â€” same convention as PG `NULLS FIRST`. Returns `rows` unchanged when sort
  * is null.
  */
-function applySortIfNeeded(  rows: Array<Array<string | null>>,
+function applySortIfNeeded(
+  rows: Array<Array<string | null>>,
   columns: ColumnMeta[],
   sort: SortState | null,
 ): Array<Array<string | null>> {
@@ -2526,7 +2536,8 @@ export const __testing = {
     contentDebounceTimers.clear();
     for (const t of cursorDebounceTimers.values()) clearTimeout(t);
     cursorDebounceTimers.clear();
-    useEditor.setState(      {
+    useEditor.setState(
+      {
         tabs: [],
         activeTabId: null,
         runStates: new Map(),
@@ -2538,7 +2549,7 @@ export const __testing = {
         hydrated: false,
       },
       false,
-);
+    );
   },
   pendingContentTimers: () => contentDebounceTimers.size,
   pendingCursorTimers: () => cursorDebounceTimers.size,

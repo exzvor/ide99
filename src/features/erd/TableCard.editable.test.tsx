@@ -48,7 +48,8 @@ describe("TableCard editable mode", () => {
     const node = makeNode([
       makeColumn("id", 1, { isPrimaryKey: true, nullable: false, dataType: "bigint" }),
     ]);
-    render(      <svg>
+    render(
+      <svg>
         <title>test</title>
         <TableCard
           node={node}
@@ -58,7 +59,7 @@ describe("TableCard editable mode", () => {
           onRenameTable={() => {}}
         />
       </svg>,
-);
+    );
     fireEvent.click(screen.getByText("users"));
     expect(screen.getByRole("textbox")).toHaveValue("users");
   });
@@ -67,7 +68,8 @@ describe("TableCard editable mode", () => {
     const node = makeNode([
       makeColumn("id", 1, { isPrimaryKey: true, nullable: false, dataType: "bigint" }),
     ]);
-    render(      <svg>
+    render(
+      <svg>
         <title>test</title>
         <TableCard
           node={node}
@@ -77,7 +79,7 @@ describe("TableCard editable mode", () => {
           onAddColumn={() => {}}
         />
       </svg>,
-);
+    );
     expect(screen.getByTestId("table-card-add-column")).toBeInTheDocument();
   });
 
@@ -85,11 +87,12 @@ describe("TableCard editable mode", () => {
     const node = makeNode([
       makeColumn("id", 1, { isPrimaryKey: true, nullable: false, dataType: "bigint" }),
     ]);
-    render(      <svg>
+    render(
+      <svg>
         <title>test</title>
         <TableCard node={node} highlighted={false} onFocus={() => {}} editable isDropTarget />
       </svg>,
-);
+    );
     expect(screen.getByTestId(`erd-card-${node.id}`)).toHaveAttribute("data-state", "drop-target");
   });
 
@@ -98,7 +101,8 @@ describe("TableCard editable mode", () => {
       makeColumn("id", 1, { isPrimaryKey: true, nullable: false, dataType: "bigint" }),
     ]);
     const onAddColumn = vi.fn();
-    render(      <svg>
+    render(
+      <svg>
         <title>test</title>
         <TableCard
           node={node}
@@ -108,7 +112,7 @@ describe("TableCard editable mode", () => {
           onAddColumn={onAddColumn}
         />
       </svg>,
-);
+    );
     fireEvent.click(screen.getByTestId("table-card-add-column"));
     expect(onAddColumn).toHaveBeenCalled();
   });
@@ -118,7 +122,8 @@ describe("TableCard editable mode", () => {
       makeColumn("id", 1, { isPrimaryKey: true, nullable: false, dataType: "bigint" }),
     ]);
     const onStartFkDrag = vi.fn();
-    render(      <svg>
+    render(
+      <svg>
         <title>test</title>
         <TableCard
           node={node}
@@ -128,7 +133,7 @@ describe("TableCard editable mode", () => {
           onStartFkDrag={onStartFkDrag}
         />
       </svg>,
-);
+    );
     fireEvent.mouseDown(screen.getByTestId("table-card-fk-handle"));
     expect(onStartFkDrag).toHaveBeenCalled();
   });

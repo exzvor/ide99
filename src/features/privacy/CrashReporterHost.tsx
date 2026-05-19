@@ -28,7 +28,8 @@ export function CrashReporterHost(): JSX.Element {
 
   const armed = !!settings && settings.privacyChoiceMade && settings.crashReportsEnabled;
 
-  const capture = useCallback(    async (message: string, stack: string) => {
+  const capture = useCallback(
+    async (message: string, stack: string) => {
       if (!armed) return;
       try {
         const built = await buildCrashReport(message, stack, APP_VERSION);
@@ -38,7 +39,7 @@ export function CrashReporterHost(): JSX.Element {
       }
     },
     [armed, buildCrashReport],
-);
+  );
 
   useEffect(() => {
     if (!armed) return;
@@ -77,11 +78,12 @@ export function CrashReporterHost(): JSX.Element {
 
   const onCancel = useCallback(() => setReport(null), []);
 
-  return (    <CrashReportDialog
+  return (
+    <CrashReportDialog
       open={!!report}
       report={report}
       onApprove={() => void onApprove()}
       onCancel={onCancel}
     />
-);
+  );
 }

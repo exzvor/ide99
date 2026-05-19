@@ -12,7 +12,8 @@ export interface RlsStubTabProps {
 
 export function RlsStubTab({ form, onChange }: RlsStubTabProps): JSX.Element {
   const { t } = useTranslation();
-  return (    <div data-testid="rls-stub-tab" style={{ padding: 12 }}>
+  return (
+    <div data-testid="rls-stub-tab" style={{ padding: 12 }}>
       <label style={{ display: "block", fontSize: 13, marginBottom: 12 }}>
         <input
           data-testid="rls-toggle"
@@ -39,5 +40,5 @@ export function RlsStubTab({ form, onChange }: RlsStubTabProps): JSX.Element {
         {t("object_editor.stub.rls_advanced")}
       </div>
     </div>
-);
+  );
 }

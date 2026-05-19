@@ -43,7 +43,8 @@ export function RecentPlansRow({ row }: RecentPlansRowProps): JSX.Element {
   const moreTables = row.involvedTables.length - tablesShown.length;
   const mode = row.mode === "analyze" ? "ANALYZE" : "EXPLAIN";
 
-  return (    <div
+  return (
+    <div
       className={`q-plan-row ${isHighlighted ? "selected" : ""} ${compareMode && !isChecked ? "dim" : ""}`}
       data-testid={`recent-plans-row-${row.id}`}
       style={{ margin: "4px 6px", cursor: compareMode ? "pointer" : "default" }}
@@ -62,7 +63,8 @@ export function RecentPlansRow({ row }: RecentPlansRowProps): JSX.Element {
       tabIndex={compareMode ? 0 : undefined}
     >
       <div className="head">
-        {compareMode ? (          <input
+        {compareMode ? (
+          <input
             type="checkbox"
             checked={isChecked}
             onChange={() => useRecentPlans.getState().toggleCompareSelected(row.id)}
@@ -70,7 +72,8 @@ export function RecentPlansRow({ row }: RecentPlansRowProps): JSX.Element {
             data-testid={`recent-plans-row-checkbox-${row.id}`}
             aria-label={t("recent_plans.compare.toggle")}
           />
-) : (          <button
+        ) : (
+          <button
             type="button"
             aria-label={row.pinned ? t("recent_plans.row.unpin") : t("recent_plans.row.toggle_pin")}
             title={row.pinned ? t("recent_plans.row.unpin") : t("recent_plans.row.toggle_pin")}
@@ -82,7 +85,7 @@ export function RecentPlansRow({ row }: RecentPlansRowProps): JSX.Element {
           >
             {row.pinned ? <Pin size={12} /> : <PinOff size={12} />}
           </button>
-)}
+        )}
         <span className={`q-pill ${row.mode === "analyze" ? "brand" : "info"}`}>{mode}</span>
         <span className="meta">{row.connectionName}</span>
         <div style={{ flex: 1 }} />
@@ -92,18 +95,21 @@ export function RecentPlansRow({ row }: RecentPlansRowProps): JSX.Element {
       </div>
       <div className="sql">{sqlPreview}</div>
       <div className="footer">
-        {tablesShown.map((tName) => (          <span key={tName} className="q-pill info" style={{ fontFamily: "var(--font-mono-q)" }}>
+        {tablesShown.map((tName) => (
+          <span key={tName} className="q-pill info" style={{ fontFamily: "var(--font-mono-q)" }}>
             {tName}
           </span>
-))}
-        {moreTables > 0 ? (          <span className="q-pill" style={{ fontFamily: "var(--font-mono-q)" }}>
+        ))}
+        {moreTables > 0 ? (
+          <span className="q-pill" style={{ fontFamily: "var(--font-mono-q)" }}>
             +{moreTables}
           </span>
-) : null}
+        ) : null}
         <span className="cost">
           cost <b>{cost ?? t("recent_plans.row.no_cost")}</b>
         </span>
-        {!compareMode && (          <>
+        {!compareMode && (
+          <>
             <button
               type="button"
               className="btn btn-sm btn-ghost"
@@ -130,8 +136,8 @@ export function RecentPlansRow({ row }: RecentPlansRowProps): JSX.Element {
               <Trash2 size={12} aria-hidden="true" />
             </button>
           </>
-)}
+        )}
       </div>
     </div>
-);
+  );
 }

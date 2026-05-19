@@ -49,9 +49,10 @@ export async function loadPgPartmanParents(connId: string): Promise<PartmanMap> 
   } catch (err) {
     if (!warned) {
       warned = true;
-      console.warn(        "[pgpartman] loadPgPartmanParents failed; treating connection as having no partman parents.",
+      console.warn(
+        "[pgpartman] loadPgPartmanParents failed; treating connection as having no partman parents.",
         err,
-);
+      );
     }
     usePgPartman.getState().setParents(connId, map);
     return map;

@@ -198,20 +198,22 @@ describe("pathExtract — projection", () => {
   });
 
   it("three segments", () => {
-    const r = req(      { kind: "pathExtract", mode: { kind: "projection" } },
+    const r = req(
+      { kind: "pathExtract", mode: { kind: "projection" } },
       [{ key: "a" }, { key: "b" }, { key: "c" }],
       { kind: "none" },
-);
+    );
     const p = generateLocalPreview(r);
     expect(p).not.toBeNull();
     expect(p?.sql).toContain("#>'{a,b,c}'");
   });
 
   it("array wildcard in path", () => {
-    const r = req(      { kind: "pathExtract", mode: { kind: "projection" } },
+    const r = req(
+      { kind: "pathExtract", mode: { kind: "projection" } },
       [{ key: "tags" }, "arraywildcard"],
       { kind: "none" },
-);
+    );
     const p = generateLocalPreview(r);
     expect(p).not.toBeNull();
     expect(p?.sql).toContain("#>'{tags,*}'");
@@ -224,13 +226,14 @@ describe("pathExtract — projection", () => {
 
 describe("pathExtract — comparison", () => {
   it("single segment with string value", () => {
-    const r = req(      {
+    const r = req(
+      {
         kind: "pathExtract",
         mode: { kind: "comparison", eqValue: { kind: "string", value: "hello" } },
       },
       [{ key: "name" }],
       { kind: "none" },
-);
+    );
     const p = generateLocalPreview(r);
     expect(p).not.toBeNull();
     expect(p?.sql).toContain("#>'{name}' =");
@@ -245,10 +248,11 @@ describe("pathExtract — comparison", () => {
 
 describe("pathPredicate operator", () => {
   it("eq with empty path", () => {
-    const r = req(      { kind: "pathPredicate", comparator: "eq", rhs: { kind: "number", value: "5" } },
+    const r = req(
+      { kind: "pathPredicate", comparator: "eq", rhs: { kind: "number", value: "5" } },
       [],
       { kind: "none" },
-);
+    );
     const p = generateLocalPreview(r);
     expect(p).not.toBeNull();
     expect(p?.sql).toContain("@?");
@@ -266,10 +270,11 @@ describe("pathPredicate operator", () => {
       ["likeRegex", "like_regex"],
     ];
     for (const [cmp, symbol] of cases) {
-      const r = req(        { kind: "pathPredicate", comparator: cmp, rhs: { kind: "number", value: "1" } },
+      const r = req(
+        { kind: "pathPredicate", comparator: cmp, rhs: { kind: "number", value: "1" } },
         [{ key: "x" }],
         { kind: "none" },
-);
+      );
       const p = generateLocalPreview(r);
       expect(p).not.toBeNull();
       expect(p?.sql).toContain(symbol);
@@ -277,14 +282,15 @@ describe("pathPredicate operator", () => {
   });
 
   it("three level path", () => {
-    const r = req(      {
+    const r = req(
+      {
         kind: "pathPredicate",
         comparator: "eq",
         rhs: { kind: "string", value: "weekly" },
       },
       [{ key: "user" }, { key: "prefs" }, { key: "notif" }],
       { kind: "none" },
-);
+    );
     const p = generateLocalPreview(r);
     expect(p).not.toBeNull();
     expect(p?.sql).toContain("@?");
@@ -332,19 +338,21 @@ describe("encodePathArray via pathExtract", () => {
   });
 
   it("multi → {a,b,c}", () => {
-    const r = req(      { kind: "pathExtract", mode: { kind: "projection" } },
+    const r = req(
+      { kind: "pathExtract", mode: { kind: "projection" } },
       [{ key: "a" }, { key: "b" }, { key: "c" }],
       { kind: "none" },
-);
+    );
     const p = generateLocalPreview(r);
     expect(p?.sql).toContain("#>'{a,b,c}'");
   });
 
   it("wildcard → {tags,*}", () => {
-    const r = req(      { kind: "pathExtract", mode: { kind: "projection" } },
+    const r = req(
+      { kind: "pathExtract", mode: { kind: "projection" } },
       [{ key: "tags" }, "arraywildcard"],
       { kind: "none" },
-);
+    );
     const p = generateLocalPreview(r);
     expect(p?.sql).toContain("#>'{tags,*}'");
   });

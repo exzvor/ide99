@@ -37,7 +37,8 @@ export function SettingsModal(): JSX.Element {
     return () => window.removeEventListener("ide99:open-settings", handler);
   }, []);
 
-  return (    <Dialog.Root open={open} onOpenChange={setOpen}>
+  return (
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Portal>
         <Dialog.Overlay className="settings-overlay" />
         <Dialog.Content className="settings-content" aria-describedby={undefined}>
@@ -60,15 +61,15 @@ export function SettingsModal(): JSX.Element {
               <Tabs.Trigger value="modules" className="settings-tab">
                 {t("settings.tabs.modules")}
               </Tabs.Trigger>
-              {/* �� keymap import dialog в коде есть, но не имел entry point. */}
+              {/* keymap import dialog в коде есть, но не имел entry point. */}
               <Tabs.Trigger value="keymap" className="settings-tab">
                 {t("settings.tabs.keymap")}
               </Tabs.Trigger>
-              {/* �� `.ide99` import был только в коде, теперь reachable из Settings. */}
+              {/* `.ide99` import был только в коде, теперь reachable из Settings. */}
               <Tabs.Trigger value="sharing" className="settings-tab">
                 {t("settings.tabs.sharing")}
               </Tabs.Trigger>
-              {/* �� auto-updater UI был implemented but unmounted. */}
+              {/* auto-updater UI был implemented but unmounted. */}
               <Tabs.Trigger value="updates" className="settings-tab">
                 {t("settings.tabs.updates")}
               </Tabs.Trigger>
@@ -103,7 +104,7 @@ export function SettingsModal(): JSX.Element {
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-);
+  );
 }
 
 /** Imperative open helper — used by the gear button + global hotkey. */

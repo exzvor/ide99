@@ -48,7 +48,8 @@ export function ErrorExplainModalHost(): JSX.Element | null {
     message: payload.message,
   });
 
-  return (    <Dialog
+  return (
+    <Dialog
       open
       onOpenChange={(open) => {
         if (!open) setPayload(null);
@@ -74,7 +75,8 @@ export function ErrorExplainModalHost(): JSX.Element | null {
           <pre>{payload.message}</pre>
         </section>
 
-        {result ? (          <>
+        {result ? (
+          <>
             <section className="error-explain-explanation">
               <h4>
                 {result.classFallback
@@ -83,21 +85,24 @@ export function ErrorExplainModalHost(): JSX.Element | null {
               </h4>
               <p>{pickLocale(result.explanation, i18n.language)}</p>
             </section>
-            {result.suggestedFix ? (              <section className="error-explain-fix">
+            {result.suggestedFix ? (
+              <section className="error-explain-fix">
                 <h4>{t("errorExplain.suggestedFix")}</h4>
                 <p>{pickLocale(result.suggestedFix, i18n.language)}</p>
               </section>
-) : null}
-            {result.classFallback ? (              <AskAgentBlock
+            ) : null}
+            {result.classFallback ? (
+              <AskAgentBlock
                 sqlstate={payload.sqlstate}
                 message={payload.message}
                 sql={payload.sql}
               />
-) : null}
+            ) : null}
           </>
-) : (          <AskAgentBlock sqlstate={payload.sqlstate} message={payload.message} sql={payload.sql} />
-)}
+        ) : (
+          <AskAgentBlock sqlstate={payload.sqlstate} message={payload.message} sql={payload.sql} />
+        )}
       </div>
     </Dialog>
-);
+  );
 }

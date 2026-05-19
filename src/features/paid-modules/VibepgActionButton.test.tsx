@@ -62,10 +62,11 @@ describe("VibepgActionButton (S37)", () => {
       await Promise.resolve();
     });
 
-    expect(openSpy).toHaveBeenCalledWith(      "https://vibepg.ai/upgrade",
+    expect(openSpy).toHaveBeenCalledWith(
+      "https://vibepg.ai/upgrade",
       "_blank",
       "noopener,noreferrer",
-);
+    );
     expect(invokeMock).toHaveBeenCalledWith("telemetry_send_event", {
       name: "feature_used",
       props: { feature_id: "paid_modules.vibepg.explain_optimize.upgrade_click" },
@@ -91,8 +92,9 @@ describe("VibepgActionButton (S37)", () => {
   it("renders the full marketing label when variant=full", () => {
     setSubscription(true);
     render(<VibepgActionButton slot="explain_optimize" variant="full" />);
-    expect(screen.getByTestId("vibepg-explain_optimize")).toHaveAccessibleName(      /measure-based optimize|оптимизировать с замерами/i,
-);
+    expect(screen.getByTestId("vibepg-explain_optimize")).toHaveAccessibleName(
+      /measure-based optimize|оптимизировать с замерами/i,
+    );
   });
 
   it("falls back to compact label by default", () => {

@@ -19,8 +19,9 @@ const xml = (body: string): string => `<?xml version="1.0"?><bindings>${body}</b
 
 describe("parseKeymap — dbeaver", () => {
   it("extracts a single binding", () => {
-    const raw = xml(      `<binding commandId="org.jkiss.dbeaver.ui.editors.sql.run.script" triggerSequence="M1+R"/>`,
-);
+    const raw = xml(
+      `<binding commandId="org.jkiss.dbeaver.ui.editors.sql.run.script" triggerSequence="M1+R"/>`,
+    );
     const result = parseKeymap("dbeaver", raw);
     expect(result.format).toBe("dbeaver");
     expect(result.bindings).toEqual([
@@ -30,10 +31,9 @@ describe("parseKeymap — dbeaver", () => {
   });
 
   it("translates M1/M2/M3/M4 to Cmd/Shift/Alt/Ctrl", () => {
-    const raw = xml(      `<binding commandId="cmd.a" triggerSequence="M1+M2+A"/>
+    const raw = xml(`<binding commandId="cmd.a" triggerSequence="M1+M2+A"/>
        <binding commandId="cmd.b" triggerSequence="M3+B"/>
-       <binding commandId="cmd.c" triggerSequence="M4+C"/>`,
-);
+       <binding commandId="cmd.c" triggerSequence="M4+C"/>`);
     const seqs = parseKeymap("dbeaver", raw).bindings.map((b) => b.sequence);
     expect(seqs).toEqual(["Cmd+Shift+A", "Alt+B", "Ctrl+C"]);
   });
@@ -82,17 +82,19 @@ describe("parseKeymap — dbeaver", () => {
   it("captures the contextId in the binding's `when` field", () => {
     // DBeaver context ids look like Eclipse context expressions — pass-through
     // so the user can compare bindings that only differ by context.
-    const raw = xml(      `<binding commandId="cmd.h" triggerSequence="M1+H" contextId="org.jkiss.dbeaver.ui.editors.sql"/>`,
-);
+    const raw = xml(
+      `<binding commandId="cmd.h" triggerSequence="M1+H" contextId="org.jkiss.dbeaver.ui.editors.sql"/>`,
+    );
     const [b] = parseKeymap("dbeaver", raw).bindings;
     expect(b.when).toBe("org.jkiss.dbeaver.ui.editors.sql");
   });
 
   it("handles a long bindings document", () => {
-    const body = Array.from(      { length: 20 },
+    const body = Array.from(
+      { length: 20 },
       (_, i) =>
         `<binding commandId="cmd.${i}" triggerSequence="M1+${String.fromCharCode(65 + (i % 26))}"/>`,
-).join("");
+    ).join("");
     const result = parseKeymap("dbeaver", xml(body));
     expect(result.bindings).toHaveLength(20);
     expect(result.bindings[0].sequence).toBe("Cmd+A");

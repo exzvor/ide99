@@ -134,8 +134,9 @@ describe("R1_seq_scan_large", () => {
       rows: 5_000_000,
     });
     expect(r1?.suggestedSql).toContain("-- Suggested by ide99 (rule R1)");
-    expect(r1?.suggestedSql).toContain(      "CREATE INDEX CONCURRENTLY idx_users_status ON public.users (status);",
-);
+    expect(r1?.suggestedSql).toContain(
+      "CREATE INDEX CONCURRENTLY idx_users_status ON public.users (status);",
+    );
     expect(r1?.nodeLabel).toBe("Seq Scan on public.users");
   });
 
@@ -184,26 +185,30 @@ describe("R1_seq_scan_large", () => {
 
 describe("R1 column extraction (Filter parsing)", () => {
   it("parses simple `<col> = const` form", () => {
-    const r1 = computeInsights(wrap(seqScan({ filter: "status = 'active'" }))).find(      (i) => i.ruleId === "R1_seq_scan_large",
-);
+    const r1 = computeInsights(wrap(seqScan({ filter: "status = 'active'" }))).find(
+      (i) => i.ruleId === "R1_seq_scan_large",
+    );
     expect(r1?.bodyParams.column).toBe("status");
   });
 
   it("parses parenthesised filter `(created_at > now() - interval '1 day')`", () => {
-    const r1 = computeInsights(      wrap(seqScan({ filter: "(created_at > now() - interval '1 day')" })),
-).find((i) => i.ruleId === "R1_seq_scan_large");
+    const r1 = computeInsights(
+      wrap(seqScan({ filter: "(created_at > now() - interval '1 day')" })),
+    ).find((i) => i.ruleId === "R1_seq_scan_large");
     expect(r1?.bodyParams.column).toBe("created_at");
   });
 
   it("parses `<col> >= const` form", () => {
-    const r1 = computeInsights(wrap(seqScan({ filter: "id >= 100" }))).find(      (i) => i.ruleId === "R1_seq_scan_large",
-);
+    const r1 = computeInsights(wrap(seqScan({ filter: "id >= 100" }))).find(
+      (i) => i.ruleId === "R1_seq_scan_large",
+    );
     expect(r1?.bodyParams.column).toBe("id");
   });
 
   it("parses `<col> IS NULL`", () => {
-    const r1 = computeInsights(wrap(seqScan({ filter: "deleted_at IS NULL" }))).find(      (i) => i.ruleId === "R1_seq_scan_large",
-);
+    const r1 = computeInsights(wrap(seqScan({ filter: "deleted_at IS NULL" }))).find(
+      (i) => i.ruleId === "R1_seq_scan_large",
+    );
     expect(r1?.bodyParams.column).toBe("deleted_at");
   });
 
@@ -211,16 +216,18 @@ describe("R1 column extraction (Filter parsing)", () => {
     // Documented behaviour: regex captures the leftmost bare `<word> <op>` pair
     // at the start (after optional parens). A cast-wrapped column does NOT
     // match — emit literal "col" placeholder, both in bodyParams and SQL.
-    const r1 = computeInsights(wrap(seqScan({ filter: "((status)::text = 'a'::text)" }))).find(      (i) => i.ruleId === "R1_seq_scan_large",
-);
+    const r1 = computeInsights(wrap(seqScan({ filter: "((status)::text = 'a'::text)" }))).find(
+      (i) => i.ruleId === "R1_seq_scan_large",
+    );
     expect(r1?.bodyParams.column).toBe("col");
     expect(r1?.suggestedSql).toContain("idx_users_col");
     expect(r1?.suggestedSql).toContain("(col)");
   });
 
   it("falls back to `col` placeholder for completely opaque filters", () => {
-    const r1 = computeInsights(wrap(seqScan({ filter: "(now() - interval '1 day') > 0" }))).find(      (i) => i.ruleId === "R1_seq_scan_large",
-);
+    const r1 = computeInsights(wrap(seqScan({ filter: "(now() - interval '1 day') > 0" }))).find(
+      (i) => i.ruleId === "R1_seq_scan_large",
+    );
     // No leftmost identifier-then-operator match → placeholder.
     expect(r1?.bodyParams.column).toBe("col");
   });
@@ -239,8 +246,9 @@ describe("R2_hash_join_disk", () => {
     expect(r2?.nodePath).toEqual([0]);
     expect(r2?.suggestedSql).toContain("-- Suggested by ide99 (rule R2)");
     expect(r2?.suggestedSql).toContain("SET work_mem = '64MB';");
-    expect(r2?.suggestedSql).toContain(      "-- Or build an index on the join key so planner picks Merge Join.",
-);
+    expect(r2?.suggestedSql).toContain(
+      "-- Or build an index on the join key so planner picks Merge Join.",
+    );
   });
 
   it("formats Disk Usage as kB when below 1024", () => {
@@ -257,8 +265,9 @@ describe("R2_hash_join_disk", () => {
   });
 
   it("does NOT fire when Disk Usage is 0", () => {
-    expect(      computeInsights(wrap(hashJoinWithDisk(0))).filter((i) => i.ruleId === "R2_hash_join_disk"),
-).toHaveLength(0);
+    expect(
+      computeInsights(wrap(hashJoinWithDisk(0))).filter((i) => i.ruleId === "R2_hash_join_disk"),
+    ).toHaveLength(0);
   });
 
   it("does NOT fire when there is no descendant Hash node with Disk Usage", () => {
@@ -277,8 +286,9 @@ describe("R2_hash_join_disk", () => {
 
 describe("R3_nested_loop_hot", () => {
   it("fires on Nested Loop with Actual Loops > 10_000 and uses inner side's relation", () => {
-    const plan = wrap(      nestedLoop({ loops: 50_000, innerRel: "b", innerSchema: "public", innerCond: "x = 5" }),
-);
+    const plan = wrap(
+      nestedLoop({ loops: 50_000, innerRel: "b", innerSchema: "public", innerCond: "x = 5" }),
+    );
     // Bump the outer Nested Loop's Actual Loops directly to make threshold check explicit.
     const planRoot = plan[0] as { Plan: Record<string, unknown> };
     planRoot.Plan["Actual Loops"] = 50_000;
@@ -308,8 +318,9 @@ describe("R3_nested_loop_hot", () => {
         { "Node Type": "Index Scan", "Relation Name": "b", Schema: "public" },
       ],
     };
-    expect(computeInsights(wrap(plan)).filter((i) => i.ruleId === "R3_nested_loop_hot")).toEqual(      [],
-);
+    expect(computeInsights(wrap(plan)).filter((i) => i.ruleId === "R3_nested_loop_hot")).toEqual(
+      [],
+    );
   });
 
   it("uses 'col' placeholder when no Index Cond / Filter / Hash Cond on inner side", () => {

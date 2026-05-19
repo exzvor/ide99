@@ -86,11 +86,12 @@ export function ProcedureEditor({ tab }: ProcedureEditorProps): JSX.Element {
     void (async () => {
       try {
         const procArgs = tab.target.parentTable ?? "";
-        const def = await schemaGetProcedureDefinition(          tab.connectionId,
+        const def = await schemaGetProcedureDefinition(
+          tab.connectionId,
           tab.target.schema,
           tab.target.name ?? "",
           procArgs,
-);
+        );
         if (cancelled) return;
         let form: ProcedureForm;
         try {
@@ -127,11 +128,12 @@ export function ProcedureEditor({ tab }: ProcedureEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: ProcedureForm) => ProcedureForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: ProcedureForm) => ProcedureForm): void => {
       updateForm(tab.id, (s) => (s.kind === "procedure" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "procedure" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -146,16 +148,18 @@ export function ProcedureEditor({ tab }: ProcedureEditorProps): JSX.Element {
   const touched = useTouched(stableFormState?.form, stableFormState?.initial);
 
   if (loadError) {
-    return (      <div data-testid="procedure-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="procedure-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="procedure-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="procedure-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -203,7 +207,8 @@ export function ProcedureEditor({ tab }: ProcedureEditorProps): JSX.Element {
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="procedure-editor"
       style={{
         display: "grid",
@@ -244,7 +249,8 @@ export function ProcedureEditor({ tab }: ProcedureEditorProps): JSX.Element {
             onChange={(e) => onChange((f) => ({ ...f, name: e.target.value }))}
           />
         </div>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="proc-dirty-badge"
             aria-label={t("object_editor.common.dirty")}
             style={{
@@ -257,7 +263,7 @@ export function ProcedureEditor({ tab }: ProcedureEditorProps): JSX.Element {
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <div style={{ paddingBottom: 4 }}>
           <HelpLink topic="procedure" />
@@ -280,14 +286,15 @@ export function ProcedureEditor({ tab }: ProcedureEditorProps): JSX.Element {
               <option value="plpgsql">{t("object_editor.procedure.languages_plpgsql")}</option>
               <option value="other">{t("object_editor.procedure.languages_other")}</option>
             </select>
-            {form.language === "other" ? (              <input
+            {form.language === "other" ? (
+              <input
                 data-testid="proc-language-other"
                 value={form.languageOther ?? ""}
                 placeholder={t("object_editor.procedure.language_other_placeholder")}
                 onChange={(e) => onChange((f) => ({ ...f, languageOther: e.target.value }))}
                 style={{ padding: "4px 6px", fontSize: 12 }}
               />
-) : null}
+            ) : null}
           </label>
         </section>
 
@@ -363,5 +370,5 @@ export function ProcedureEditor({ tab }: ProcedureEditorProps): JSX.Element {
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

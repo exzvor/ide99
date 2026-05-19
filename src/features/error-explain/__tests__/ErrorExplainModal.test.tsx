@@ -14,12 +14,13 @@ import i18n from "../../../i18n";
 import { ErrorExplainModalHost, openErrorExplain } from "../ErrorExplainModal";
 
 function renderHost() {
-  return render(    <I18nextProvider i18n={i18n}>
+  return render(
+    <I18nextProvider i18n={i18n}>
       <ToastProvider>
         <ErrorExplainModalHost />
       </ToastProvider>
     </I18nextProvider>,
-);
+  );
 }
 
 describe("ErrorExplainModalHost", () => {
@@ -56,7 +57,7 @@ describe("ErrorExplainModalHost", () => {
         message: "boom",
         sql: "DROP TABLE x;",
       }),
-);
+    );
     fireEvent.click(screen.getByTestId("error-explain-copy-context"));
     await waitFor(() => expect(writeText).toHaveBeenCalledOnce());
     const arg = writeText.mock.calls[0]?.[0];

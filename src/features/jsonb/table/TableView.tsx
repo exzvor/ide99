@@ -56,7 +56,8 @@ export function TableView({ value, onChange, readOnly }: TableViewProps): JSX.El
     onChange([...rows, {}]);
   }
 
-  return (    <div
+  return (
+    <div
       data-testid="jsonb-table-view"
       style={{
         display: "flex",
@@ -71,7 +72,8 @@ export function TableView({ value, onChange, readOnly }: TableViewProps): JSX.El
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr>
-            {headers.map((h) => (              <th
+            {headers.map((h) => (
+              <th
                 key={h}
                 scope="col"
                 style={{
@@ -87,8 +89,9 @@ export function TableView({ value, onChange, readOnly }: TableViewProps): JSX.El
               >
                 {h}
               </th>
-))}
-            {!readOnly ? (              <th
+            ))}
+            {!readOnly ? (
+              <th
                 scope="col"
                 aria-label="row actions"
                 style={{
@@ -98,11 +101,12 @@ export function TableView({ value, onChange, readOnly }: TableViewProps): JSX.El
                   borderBottom: "1px solid var(--hairline)",
                 }}
               />
-) : null}
+            ) : null}
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, rowIdx) => (            <tr
+          {rows.map((row, rowIdx) => (
+            <tr
               // biome-ignore lint/suspicious/noArrayIndexKey: array index is the canonical identity of an array-of-objects row; we don't have a stable id.
               key={rowIdx}
               style={{ height: 30 }}
@@ -113,7 +117,8 @@ export function TableView({ value, onChange, readOnly }: TableViewProps): JSX.El
                 const isEditing = editing?.rowIdx === rowIdx && editing.key === h;
                 const cellKind = leafKind(cellValue);
                 const isContainer = has && cellKind === "container";
-                return (                  <td
+                return (
+                  <td
                     key={h}
                     data-testid={`jsonb-table-cell-${rowIdx}-${h}`}
                     onClick={() => {
@@ -133,7 +138,8 @@ export function TableView({ value, onChange, readOnly }: TableViewProps): JSX.El
                       verticalAlign: "middle",
                     }}
                   >
-                    {isEditing && !readOnly ? (                      <LeafEditor
+                    {isEditing && !readOnly ? (
+                      <LeafEditor
                         value={has ? cellValue : null}
                         onCommit={(next) => {
                           setCell(rowIdx, h, next);
@@ -142,16 +148,20 @@ export function TableView({ value, onChange, readOnly }: TableViewProps): JSX.El
                         onCancel={() => setEditing(null)}
                         testid="jsonb-table-cell-input"
                       />
-) : !has ? (                      ""
-) : isContainer ? (                      <span style={{ color: "var(--ink-4)" }}>
+                    ) : !has ? (
+                      ""
+                    ) : isContainer ? (
+                      <span style={{ color: "var(--ink-4)" }}>
                         {Array.isArray(cellValue) ? `[${(cellValue as unknown[]).length}]` : "{…}"}
                       </span>
-) : (                      leafDisplay(cellValue)
-)}
+                    ) : (
+                      leafDisplay(cellValue)
+                    )}
                   </td>
-);
+                );
               })}
-              {!readOnly ? (                <td
+              {!readOnly ? (
+                <td
                   style={{
                     padding: "4px 10px",
                     borderBottom: "1px solid var(--hairline)",
@@ -168,19 +178,20 @@ export function TableView({ value, onChange, readOnly }: TableViewProps): JSX.El
                     ×
                   </button>
                 </td>
-) : null}
+              ) : null}
             </tr>
-))}
+          ))}
         </tbody>
       </table>
-      {!readOnly ? (        <div style={{ padding: 8 }}>
+      {!readOnly ? (
+        <div style={{ padding: 8 }}>
           <button type="button" data-testid="jsonb-table-add-row" onClick={addRow} style={chipBtn}>
             {t("jsonb.tree.addItem")}
           </button>
         </div>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }
 
 const chipBtn: React.CSSProperties = {

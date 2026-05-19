@@ -14,7 +14,8 @@
 import { qualifiedName, quoteIdent } from "./helpers";
 import type { DdlResult, SequenceForm } from "./types";
 
-export function generateSequenceDdl(  initial: SequenceForm | null,
+export function generateSequenceDdl(
+  initial: SequenceForm | null,
   current: SequenceForm,
 ): DdlResult {
   if (initial === null) {
@@ -37,8 +38,9 @@ function createSql(s: SequenceForm): string {
   if (s.cache !== 1) parts.push(`CACHE ${s.cache}`);
   if (s.cycle) parts.push("CYCLE");
   if (s.ownedBy !== null) {
-    parts.push(      `OWNED BY ${qualifiedName(s.ownedBy.schema, s.ownedBy.table)}.${quoteIdent(s.ownedBy.column)}`,
-);
+    parts.push(
+      `OWNED BY ${qualifiedName(s.ownedBy.schema, s.ownedBy.table)}.${quoteIdent(s.ownedBy.column)}`,
+    );
   }
   return `${parts.join(" ")};`;
 }
@@ -60,12 +62,14 @@ function diffSql(a: SequenceForm, b: SequenceForm): string {
     chunks.push(`ALTER SEQUENCE ${newRef} INCREMENT ${b.increment};`);
   }
   if (a.minValue !== b.minValue) {
-    chunks.push(      `ALTER SEQUENCE ${newRef} ${b.minValue === null ? "NO MINVALUE" : `MINVALUE ${b.minValue}`};`,
-);
+    chunks.push(
+      `ALTER SEQUENCE ${newRef} ${b.minValue === null ? "NO MINVALUE" : `MINVALUE ${b.minValue}`};`,
+    );
   }
   if (a.maxValue !== b.maxValue) {
-    chunks.push(      `ALTER SEQUENCE ${newRef} ${b.maxValue === null ? "NO MAXVALUE" : `MAXVALUE ${b.maxValue}`};`,
-);
+    chunks.push(
+      `ALTER SEQUENCE ${newRef} ${b.maxValue === null ? "NO MAXVALUE" : `MAXVALUE ${b.maxValue}`};`,
+    );
   }
   if (a.cache !== b.cache) chunks.push(`ALTER SEQUENCE ${newRef} CACHE ${b.cache};`);
   if (a.cycle !== b.cycle) {
@@ -75,8 +79,9 @@ function diffSql(a: SequenceForm, b: SequenceForm): string {
     if (b.ownedBy === null) {
       chunks.push(`ALTER SEQUENCE ${newRef} OWNED BY NONE;`);
     } else {
-      chunks.push(        `ALTER SEQUENCE ${newRef} OWNED BY ${qualifiedName(b.ownedBy.schema, b.ownedBy.table)}.${quoteIdent(b.ownedBy.column)};`,
-);
+      chunks.push(
+        `ALTER SEQUENCE ${newRef} OWNED BY ${qualifiedName(b.ownedBy.schema, b.ownedBy.table)}.${quoteIdent(b.ownedBy.column)};`,
+      );
     }
   }
   return chunks.join("\n");

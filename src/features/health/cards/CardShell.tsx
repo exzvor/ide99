@@ -101,7 +101,8 @@ export function CardShell({ cardId, connId, state, body, status }: CardShellProp
     void useHealth.getState().refreshOne(connId, cardId);
   }
 
-  return (    <div data-testid={`health-card-${cardId}`} style={SHELL_BASE}>
+  return (
+    <div data-testid={`health-card-${cardId}`} style={SHELL_BASE}>
       {/* shimmer keyframes — scoped via plain <style>, idempotent enough for SPA */}
       <style>{`
         @keyframes health-card-shimmer {
@@ -115,7 +116,8 @@ export function CardShell({ cardId, connId, state, body, status }: CardShellProp
       </div>
 
       {/* loading: top-right spinner + 3-line shimmer */}
-      {state.status === "loading" ? (        <>
+      {state.status === "loading" ? (
+        <>
           <div style={BADGE_TOP_RIGHT} aria-hidden="true">
             <RefreshCw
               size={14}
@@ -132,19 +134,22 @@ export function CardShell({ cardId, connId, state, body, status }: CardShellProp
             <div style={{ ...SHIMMER_LINE, width: "40%" }} />
           </div>
         </>
-) : null}
+      ) : null}
 
       {/* ready: body + status badge top-right + info tooltip */}
-      {state.status === "ready" ? (        <>
+      {state.status === "ready" ? (
+        <>
           <div
             style={BADGE_TOP_RIGHT}
             data-testid={`health-card-${cardId}-status`}
             data-tone={status?.tone ?? "ok"}
             title={status?.tooltip}
           >
-            {status?.tone === "ok" ? (              <CheckCircle2 size={16} color={TONE_VAR.ok} aria-hidden="true" />
-) : (              <AlertCircle size={16} color={TONE_VAR[status?.tone ?? "warn"]} aria-hidden="true" />
-)}
+            {status?.tone === "ok" ? (
+              <CheckCircle2 size={16} color={TONE_VAR.ok} aria-hidden="true" />
+            ) : (
+              <AlertCircle size={16} color={TONE_VAR[status?.tone ?? "warn"]} aria-hidden="true" />
+            )}
             {/* Info-icon "what does this mean" — temporarily disabled.
                 Tied to the Easy-mode-style help UX which is currently hidden;
                 bring back together with Easy mode.
@@ -159,19 +164,21 @@ export function CardShell({ cardId, connId, state, body, status }: CardShellProp
           </div>
           <div data-testid={`health-card-${cardId}-body`}>{body}</div>
         </>
-) : null}
+      ) : null}
 
       {/* empty: centered text from health.empty.${reason} */}
-      {state.status === "empty" ? (        <div
+      {state.status === "empty" ? (
+        <div
           style={{ ...CENTER_BLOCK, color: TONE_VAR.ok }}
           data-testid={`health-card-${cardId}-empty`}
         >
           {t(`health.empty.${state.reason}`)}
         </div>
-) : null}
+      ) : null}
 
       {/* unavailable: install SQL + copy */}
-      {state.status === "unavailable" ? (        <div
+      {state.status === "unavailable" ? (
+        <div
           style={{ ...CENTER_BLOCK, color: TONE_VAR.warn }}
           data-testid={`health-card-${cardId}-unavailable`}
         >
@@ -198,13 +205,14 @@ export function CardShell({ cardId, connId, state, body, status }: CardShellProp
             <Copy size={12} aria-hidden="true" /> {t("health.unavailable.copy")}
           </button>
         </div>
-) : null}
+      ) : null}
 
       {/* forbidden: GRANT pg_monitor snippet + copy */}
       {state.status === "forbidden"
         ? (() => {
             const sql = `GRANT ${state.requiredRole} TO current_user;`;
-            return (              <div
+            return (
+              <div
                 style={{ ...CENTER_BLOCK, color: TONE_VAR.warn }}
                 data-testid={`health-card-${cardId}-forbidden`}
               >
@@ -230,12 +238,13 @@ export function CardShell({ cardId, connId, state, body, status }: CardShellProp
                   <Copy size={12} aria-hidden="true" /> {t("health.forbidden.copy")}
                 </button>
               </div>
-);
+            );
           })()
         : null}
 
       {/* error: details + retry */}
-      {state.status === "error" ? (        <div
+      {state.status === "error" ? (
+        <div
           style={{ ...CENTER_BLOCK, color: TONE_VAR.danger }}
           data-testid={`health-card-${cardId}-error`}
         >
@@ -265,7 +274,7 @@ export function CardShell({ cardId, connId, state, body, status }: CardShellProp
             <RotateCw size={12} aria-hidden="true" /> {t("health.error.retry")}
           </button>
         </div>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

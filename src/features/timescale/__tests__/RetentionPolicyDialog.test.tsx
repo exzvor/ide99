@@ -35,7 +35,8 @@ describe("RetentionPolicyDialog", () => {
     loadRetentionPolicy.mockResolvedValueOnce(null);
     const onClose = vi.fn();
 
-    render(      <RetentionPolicyDialog
+    render(
+      <RetentionPolicyDialog
         open={true}
         connId="conn-1"
         qualifiedTable={'"public"."metrics"'}
@@ -43,11 +44,11 @@ describe("RetentionPolicyDialog", () => {
         table="metrics"
         onClose={onClose}
       />,
-);
+    );
 
     await waitFor(() =>
       expect(screen.getByTestId("retention-policy-dialog-apply")).toBeInTheDocument(),
-);
+    );
     expect(screen.queryByTestId("retention-policy-dialog-drop")).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId("retention-policy-dialog-apply"));
@@ -63,7 +64,8 @@ describe("RetentionPolicyDialog", () => {
     loadRetentionPolicy.mockResolvedValueOnce({ jobId: 2002, dropAfter: "30 days" });
     const onClose = vi.fn();
 
-    render(      <RetentionPolicyDialog
+    render(
+      <RetentionPolicyDialog
         open={true}
         connId="conn-1"
         qualifiedTable={'"public"."metrics"'}
@@ -71,7 +73,7 @@ describe("RetentionPolicyDialog", () => {
         table="metrics"
         onClose={onClose}
       />,
-);
+    );
 
     await waitFor(() => expect(screen.getByText(/Policy active/i)).toBeInTheDocument());
     expect(screen.getByText(/Policy active/i).textContent).toContain("30 days");

@@ -402,7 +402,8 @@ function matchJsonbPath(prefix: string): Extract<Trigger, { kind: "jsonb-path" }
   };
 }
 
-function detectTrigger(  prefix: string,
+function detectTrigger(
+  prefix: string,
   tokens: import("./scope").Token[],
 ): { trigger: Trigger; identPrefix: string } {
   // Check jsonb-path FIRST: e.g. `data->>'us` (single-quote partial after JSONB op).
@@ -414,8 +415,9 @@ function detectTrigger(  prefix: string,
 
   // Walk the tail of `tokens` (skipping ws/comments/eof) to detect the trigger context.
   // We're interested in: the last meaningful token and the one before it.
-  const meaningful: import("./scope").Token[] = tokens.filter(    (t) => t.kind !== "ws" && t.kind !== "comment" && t.kind !== "eof",
-);
+  const meaningful: import("./scope").Token[] = tokens.filter(
+    (t) => t.kind !== "ws" && t.kind !== "comment" && t.kind !== "eof",
+  );
   const last = meaningful[meaningful.length - 1];
   const prev = meaningful[meaningful.length - 2];
 
@@ -548,12 +550,14 @@ export function analyzeScope(text: string, cursorOffset?: number): Scope {
               k++;
           }
           const aliasCandidate = tokens[k];
-          if (            aliasCandidate &&
+          if (
+            aliasCandidate &&
             (aliasCandidate.kind === "ident" || aliasCandidate.kind === "qident") &&
-            !(              aliasCandidate.kind === "ident" &&
+            !(
+              aliasCandidate.kind === "ident" &&
               CLAUSE_KEYWORDS.has(aliasCandidate.text.toLowerCase())
-)
-) {
+            )
+          ) {
             parent.expectingAlias.for.alias =
               aliasCandidate.kind === "qident"
                 ? aliasCandidate.text.slice(1, -1)
@@ -635,14 +639,15 @@ export function analyzeScope(text: string, cursorOffset?: number): Scope {
         i++;
         continue;
       }
-      if (        lower === "join" ||
+      if (
+        lower === "join" ||
         lower === "inner" ||
         lower === "left" ||
         lower === "right" ||
         lower === "full" ||
         lower === "cross" ||
         lower === "lateral"
-) {
+      ) {
         top().clause = "join";
         top().expectingAlias = null;
         i++;
@@ -740,13 +745,15 @@ export function analyzeScope(text: string, cursorOffset?: number): Scope {
         let k = i;
         while (k < tokens.length && (tokens[k].kind === "ws" || tokens[k].kind === "comment")) k++;
         const aliasCandidate = tokens[k];
-        if (          aliasCandidate &&
+        if (
+          aliasCandidate &&
           (aliasCandidate.kind === "ident" || aliasCandidate.kind === "qident") &&
           // not a keyword-like noise
-          !(            aliasCandidate.kind === "ident" &&
+          !(
+            aliasCandidate.kind === "ident" &&
             CLAUSE_KEYWORDS.has(aliasCandidate.text.toLowerCase())
-)
-) {
+          )
+        ) {
           alias.alias =
             aliasCandidate.kind === "qident"
               ? aliasCandidate.text.slice(1, -1)
@@ -799,7 +806,8 @@ export function analyzeScope(text: string, cursorOffset?: number): Scope {
  * and return the projected columns of its top-level SELECT, plus the index of
  * the matching close-paren. Used to feed CTEs and inline subqueries.
  */
-function collectProjectedColumns(  tokens: import("./scope").Token[],
+function collectProjectedColumns(
+  tokens: import("./scope").Token[],
   openIdx: number,
 ): { columns: string[]; endIdx: number } {
   const cols: string[] = [];

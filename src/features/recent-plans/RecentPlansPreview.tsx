@@ -142,7 +142,8 @@ interface PreviousRunDeltas {
   modifiedNodes: number;
 }
 
-function computeDeltas(  current: { plan: unknown; durationMs: number; totalCost: number | null },
+function computeDeltas(
+  current: { plan: unknown; durationMs: number; totalCost: number | null },
   previous: { plan: unknown; durationMs: number; totalCost: number | null },
 ): PreviousRunDeltas {
   let added = 0;
@@ -152,11 +153,12 @@ function computeDeltas(  current: { plan: unknown; durationMs: number; totalCost
     const diff = diffPlans(previous.plan, current.plan);
     added = diff.addedRight.length;
     removed = diff.removedLeft.length;
-    modified = diff.matched.filter(      (m) =>
+    modified = diff.matched.filter(
+      (m) =>
         m.nodeTypeChanged ||
         (m.costDelta !== null && m.costDelta !== 0) ||
         (m.rowsDelta !== null && m.rowsDelta !== 0),
-).length;
+    ).length;
   } catch {
     // diff engine is defensive; fall back to zero deltas
   }
@@ -187,7 +189,7 @@ export function RecentPlansPreview(): JSX.Element {
   const rows = useRecentPlans((s) => s.rows);
   const row = useRecentPlans((s) =>
     s.selectedId === null ? null : (s.rows.find((r) => r.id === s.selectedId) ?? null),
-);
+  );
   // Highlight is local to this preview — clicking a hotspot doesn't escape
   // outside the recent-plans tab. Reserved for future inline preview.
   const [, setHighlight] = useState<string | null>(null);
@@ -201,9 +203,10 @@ export function RecentPlansPreview(): JSX.Element {
     }
   }, [row]);
 
-  const insights = useMemo<Insight[]>(    () => (parsedPlan ? computeInsights(parsedPlan) : []),
+  const insights = useMemo<Insight[]>(
+    () => (parsedPlan ? computeInsights(parsedPlan) : []),
     [parsedPlan],
-);
+  );
 
   const idxByPath = useMemo(() => buildInsightIdxMap(parsedPlan), [parsedPlan]);
 
@@ -214,8 +217,9 @@ export function RecentPlansPreview(): JSX.Element {
     if (!row) return null;
     const candidates = rows.filter((r) => r.id !== row.id && r.sql === row.sql);
     if (candidates.length === 0) return null;
-    const sorted = [...candidates].sort(      (a, b) => new Date(b.executedAt).getTime() - new Date(a.executedAt).getTime(),
-);
+    const sorted = [...candidates].sort(
+      (a, b) => new Date(b.executedAt).getTime() - new Date(a.executedAt).getTime(),
+    );
     return sorted[0];
   }, [row, rows]);
 
@@ -230,20 +234,22 @@ export function RecentPlansPreview(): JSX.Element {
 
   const deltas = useMemo<PreviousRunDeltas | null>(() => {
     if (!row || !previousRun || !parsedPlan || !prevParsedPlan) return null;
-    return computeDeltas(      { plan: parsedPlan, durationMs: row.durationMs, totalCost: row.totalCost ?? null },
+    return computeDeltas(
+      { plan: parsedPlan, durationMs: row.durationMs, totalCost: row.totalCost ?? null },
       {
         plan: prevParsedPlan,
         durationMs: previousRun.durationMs,
         totalCost: previousRun.totalCost ?? null,
       },
-);
+    );
   }, [row, previousRun, parsedPlan, prevParsedPlan]);
 
   if (!row || !selectedId) {
-    return (      <div data-testid="recent-plans-preview-placeholder" style={{ padding: 20, opacity: 0.6 }}>
+    return (
+      <div data-testid="recent-plans-preview-placeholder" style={{ padding: 20, opacity: 0.6 }}>
         {t("recent_plans.preview.placeholder")}
       </div>
-);
+    );
   }
 
   const nodes = countNodes(parsedPlan);
@@ -251,7 +257,8 @@ export function RecentPlansPreview(): JSX.Element {
   const slow = row.durationMs >= SLOW_THRESHOLD_MS;
   const top3 = insights.slice(0, 3);
 
-  return (    <div
+  return (
+    <div
       data-testid="recent-plans-preview"
       style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}
     >
@@ -312,14 +319,16 @@ export function RecentPlansPreview(): JSX.Element {
           </div>
         </div>
 
-        {top3.length > 0 ? (          <div className="q-section-card" data-testid="recent-plans-hotspots">
+        {top3.length > 0 ? (
+          <div className="q-section-card" data-testid="recent-plans-hotspots">
             <div className="hd">{t("recent_plans.preview.hotspots.title")}</div>
             <div>
               {top3.map((ins, i) => {
                 const tone = SEVERITY_TONE[ins.severity];
                 const idx = idxByPath.get(ins.nodePath.join("."));
                 const meta = buildHotspotMeta(ins, parsedPlan);
-                return (                  <button
+                return (
+                  <button
                     type="button"
                     key={`${ins.ruleId}-${ins.nodePath.join(".")}`}
                     className={`q-insight ${tone}`}
@@ -334,19 +343,21 @@ export function RecentPlansPreview(): JSX.Element {
                     <div className="body">
                       <span className="ttl">
                         {t(ins.titleKey)}
-                        {idx !== undefined ? (                          <span className={`q-pill ${tone}`}>#{idx}</span>
-) : null}
+                        {idx !== undefined ? (
+                          <span className={`q-pill ${tone}`}>#{idx}</span>
+                        ) : null}
                       </span>
                       {meta ? <span className="meta">{meta}</span> : null}
                     </div>
                   </button>
-);
+                );
               })}
             </div>
           </div>
-) : null}
+        ) : null}
 
-        {previousRun && deltas ? (          <div className="q-section-card" data-testid="recent-plans-comparison">
+        {previousRun && deltas ? (
+          <div className="q-section-card" data-testid="recent-plans-comparison">
             <div className="hd">{t("recent_plans.preview.compare.title")}</div>
             <div
               style={{
@@ -364,7 +375,8 @@ export function RecentPlansPreview(): JSX.Element {
               <span className="mono" style={{ fontVariantNumeric: "tabular-nums" }}>
                 {deltas.costDelta != null &&
                 row.totalCost != null &&
-                previousRun.totalCost != null ? (                  <>
+                previousRun.totalCost != null ? (
+                  <>
                     <b style={{ color: deltaToneColor(deltas.costDelta) }}>
                       {fmtSignedNum(Math.round(deltas.costDelta * 100) / 100)}
                     </b>{" "}
@@ -372,8 +384,9 @@ export function RecentPlansPreview(): JSX.Element {
                       ({previousRun.totalCost.toFixed(2)} → {row.totalCost.toFixed(2)})
                     </span>
                   </>
-) : (                  "—"
-)}
+                ) : (
+                  "—"
+                )}
               </span>
               <span style={{ color: "var(--ink-4)" }}>
                 {t("recent_plans.preview.compare.time_label")}
@@ -390,33 +403,37 @@ export function RecentPlansPreview(): JSX.Element {
                 {t("recent_plans.preview.compare.changes_label")}
               </span>
               <span style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                {deltas.addedNodes > 0 ? (                  <span className="q-pill ok">
+                {deltas.addedNodes > 0 ? (
+                  <span className="q-pill ok">
                     {t("recent_plans.preview.compare.added_count", { count: deltas.addedNodes })}
                   </span>
-) : null}
-                {deltas.removedNodes > 0 ? (                  <span className="q-pill crit">
+                ) : null}
+                {deltas.removedNodes > 0 ? (
+                  <span className="q-pill crit">
                     {t("recent_plans.preview.compare.removed_count", {
                       count: deltas.removedNodes,
                     })}
                   </span>
-) : null}
-                {deltas.modifiedNodes > 0 ? (                  <span className="q-pill warn">
+                ) : null}
+                {deltas.modifiedNodes > 0 ? (
+                  <span className="q-pill warn">
                     {t("recent_plans.preview.compare.modified_count", {
                       count: deltas.modifiedNodes,
                     })}
                   </span>
-) : null}
+                ) : null}
                 {deltas.addedNodes === 0 &&
                 deltas.removedNodes === 0 &&
-                deltas.modifiedNodes === 0 ? (                  <span style={{ fontSize: 11.5, color: "var(--ink-4)" }}>
+                deltas.modifiedNodes === 0 ? (
+                  <span style={{ fontSize: 11.5, color: "var(--ink-4)" }}>
                     {t("recent_plans.preview.compare.identical")}
                   </span>
-) : null}
+                ) : null}
               </span>
             </div>
           </div>
-) : null}
+        ) : null}
       </div>
     </div>
-);
+  );
 }

@@ -44,7 +44,8 @@ export function DropdownMenu({
   side = "bottom",
   align = "start",
 }: DropdownMenuProps) {
-  return (    <RadixDropdown.Root>
+  return (
+    <RadixDropdown.Root>
       <RadixDropdown.Trigger asChild>{trigger}</RadixDropdown.Trigger>
       <RadixDropdown.Portal>
         <RadixDropdown.Content
@@ -55,7 +56,8 @@ export function DropdownMenu({
           collisionPadding={8}
           className="z-[var(--z-dropdown)] min-w-[10rem] rounded-[var(--radius-md)] border border-[var(--gray-200)] bg-[var(--gray-0)] p-[var(--space-1)] shadow-[var(--shadow-md)]"
         >
-          {items.map((item) => (            <RadixDropdown.Item
+          {items.map((item) => (
+            <RadixDropdown.Item
               key={item.label}
               disabled={item.disabled}
               onSelect={(event) => {
@@ -70,9 +72,9 @@ export function DropdownMenu({
             >
               {item.label}
             </RadixDropdown.Item>
-))}
+          ))}
         </RadixDropdown.Content>
       </RadixDropdown.Portal>
     </RadixDropdown.Root>
-);
+  );
 }

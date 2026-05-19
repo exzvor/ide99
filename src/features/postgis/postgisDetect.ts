@@ -9,7 +9,8 @@ export type DetectedGeometryColumn = {
 
 const TYPE_RE = /^(geometry|geography)(\((\w+),\s*(\d+)\))?$/i;
 
-export function detectGeometryColumns(  columns: { name: string; typeName: string }[],
+export function detectGeometryColumns(
+  columns: { name: string; typeName: string }[],
 ): DetectedGeometryColumn[] {
   const out: DetectedGeometryColumn[] = [];
   for (const col of columns) {

@@ -61,10 +61,11 @@ export function TableEditor({ tab }: TableEditorProps): JSX.Element {
     }
     void (async () => {
       try {
-        const def = await schemaGetTableDefinition(          tab.connectionId,
+        const def = await schemaGetTableDefinition(
+          tab.connectionId,
           tab.target.schema,
           tab.target.name ?? "",
-);
+        );
         if (cancelled) return;
         const form = tableFormFromDefinition(def);
         setForm(tab.id, { kind: "table", form, initial: form });
@@ -85,11 +86,12 @@ export function TableEditor({ tab }: TableEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: TableForm) => TableForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: TableForm) => TableForm): void => {
       updateForm(tab.id, (s) => (s.kind === "table" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   // Compute DDL with debounced (deferred) inputs to avoid recompute on every keystroke.
   const stableFormState = formState && formState.kind === "table" ? formState : null;
@@ -105,21 +107,23 @@ export function TableEditor({ tab }: TableEditorProps): JSX.Element {
     : false;
 
   if (loadError) {
-    return (      <div
+    return (
+      <div
         data-testid="table-editor-load-error"
         role="alert"
         style={{ padding: 16, color: "var(--danger, #c0392b)" }}
       >
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
 
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="table-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="table-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -161,10 +165,11 @@ export function TableEditor({ tab }: TableEditorProps): JSX.Element {
         // Re-fetch initial state so subsequent edits diff against the new world.
         if (tab.target.mode === "edit") {
           try {
-            const def = await schemaGetTableDefinition(              tab.connectionId,
+            const def = await schemaGetTableDefinition(
+              tab.connectionId,
               tab.target.schema,
               form.name,
-);
+            );
             const newForm = tableFormFromDefinition(def);
             setForm(tab.id, { kind: "table", form: newForm, initial: newForm });
           } catch {
@@ -189,7 +194,8 @@ export function TableEditor({ tab }: TableEditorProps): JSX.Element {
     { key: "partition", label: t("object_editor.table.tab_partition") },
   ];
 
-  return (    <div
+  return (
+    <div
       data-testid="table-editor"
       style={{
         display: "grid",
@@ -229,7 +235,8 @@ export function TableEditor({ tab }: TableEditorProps): JSX.Element {
             onChange={(e) => onChange((f) => ({ ...f, name: e.target.value }))}
           />
         </div>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="table-dirty-badge"
             aria-label={t("object_editor.common.dirty")}
             style={{
@@ -242,7 +249,7 @@ export function TableEditor({ tab }: TableEditorProps): JSX.Element {
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <div style={{ paddingBottom: 4 }}>
           <HelpLink topic="table" />
@@ -261,7 +268,8 @@ export function TableEditor({ tab }: TableEditorProps): JSX.Element {
           style={{ borderRight: "1px solid var(--hairline)", padding: 8 }}
         >
           <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-            {tabs.map((entry) => (              <li key={entry.key}>
+            {tabs.map((entry) => (
+              <li key={entry.key}>
                 <button
                   type="button"
                   data-testid={`tab-${entry.key}`}
@@ -281,7 +289,7 @@ export function TableEditor({ tab }: TableEditorProps): JSX.Element {
                   {entry.label}
                 </button>
               </li>
-))}
+            ))}
           </ul>
         </nav>
         <div style={{ overflow: "auto", minWidth: 0 }}>
@@ -310,5 +318,5 @@ export function TableEditor({ tab }: TableEditorProps): JSX.Element {
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

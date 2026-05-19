@@ -79,7 +79,8 @@ export function RefreshPolicyDialog(props: RefreshPolicyDialogProps): JSX.Elemen
     onClose();
   };
 
-  return (    <RadixDialog.Root
+  return (
+    <RadixDialog.Root
       open={open}
       onOpenChange={(o) => {
         if (!o) onClose();
@@ -99,9 +100,12 @@ export function RefreshPolicyDialog(props: RefreshPolicyDialogProps): JSX.Elemen
             Schedule incremental refresh for this continuous aggregate.
           </RadixDialog.Description>
 
-          {loading ? (            <p style={{ fontSize: 12, color: "var(--ink-3)" }}>Loading current policy…</p>
-) : (            <>
-              {existing ? (                <p
+          {loading ? (
+            <p style={{ fontSize: 12, color: "var(--ink-3)" }}>Loading current policy…</p>
+          ) : (
+            <>
+              {existing ? (
+                <p
                   style={{
                     fontSize: 12,
                     color: "var(--ink-2)",
@@ -112,7 +116,7 @@ export function RefreshPolicyDialog(props: RefreshPolicyDialogProps): JSX.Elemen
                 >
                   {`Policy active: refresh window [${existing.startOffset}, ${existing.endOffset}] every ${existing.scheduleInterval}. Job ID ${existing.jobId}.`}
                 </p>
-) : null}
+              ) : null}
 
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 <div style={fieldLabel}>
@@ -141,7 +145,8 @@ export function RefreshPolicyDialog(props: RefreshPolicyDialogProps): JSX.Elemen
                 <button type="button" className="btn btn-ghost" onClick={onClose}>
                   Cancel
                 </button>
-                {existing ? (                  <button
+                {existing ? (
+                  <button
                     type="button"
                     className="btn btn-danger"
                     data-testid="refresh-policy-dialog-drop"
@@ -149,7 +154,7 @@ export function RefreshPolicyDialog(props: RefreshPolicyDialogProps): JSX.Elemen
                   >
                     Drop policy
                   </button>
-) : null}
+                ) : null}
                 <button
                   type="button"
                   className="btn btn-primary"
@@ -160,9 +165,9 @@ export function RefreshPolicyDialog(props: RefreshPolicyDialogProps): JSX.Elemen
                 </button>
               </div>
             </>
-)}
+          )}
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
-);
+  );
 }

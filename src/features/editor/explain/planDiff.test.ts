@@ -297,7 +297,8 @@ const SORT_RIGHT = [
 /* ----------------------------- helpers ----------------------------- */
 
 function isEmptyDiff(d: PlanDiff): boolean {
-  return (    d.matched.length === 0 &&
+  return (
+    d.matched.length === 0 &&
     d.addedRight.length === 0 &&
     d.removedLeft.length === 0 &&
     d.summary.totalCostLeft === null &&
@@ -306,7 +307,7 @@ function isEmptyDiff(d: PlanDiff): boolean {
     d.summary.totalTimeRight === null &&
     d.summary.leftNodeCount === 0 &&
     d.summary.rightNodeCount === 0
-);
+  );
 }
 
 /* ----------------------------- tests ------------------------------- */
@@ -352,10 +353,11 @@ describe("diffPlans — PAIR_STALE_VS_FRESH", () => {
       expect(m.costDelta).toBe(0);
     }
     // The Seq Scan on users should report a non-zero rowsDelta
-    const seqScan = mustFind(      d.matched,
+    const seqScan = mustFind(
+      d.matched,
       (m) => m.identityKey === "rel:public.users:users",
       "users seq scan match",
-);
+    );
     expect(seqScan.rowsDelta).not.toBeNull();
     expect(seqScan.rowsDelta).not.toBe(0);
   });

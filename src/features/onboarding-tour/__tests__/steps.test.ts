@@ -31,7 +31,8 @@ describe("TOUR_STEPS", () => {
     expect(step.id).toMatch(SLUG_RE);
   });
 
-  it.each(TOUR_STEPS)(    "step '$id' has both EN and RU body, non-empty and within length budget",
+  it.each(TOUR_STEPS)(
+    "step '$id' has both EN and RU body, non-empty and within length budget",
     (step) => {
       expect(typeof step.body.en).toBe("string");
       expect(typeof step.body.ru).toBe("string");
@@ -40,7 +41,7 @@ describe("TOUR_STEPS", () => {
       expect(step.body.en.length).toBeLessThanOrEqual(MAX_BODY_CHARS);
       expect(step.body.ru.length).toBeLessThanOrEqual(MAX_BODY_CHARS);
     },
-);
+  );
 
   it.each(TOUR_STEPS)("step '$id' has a non-empty target selector", (step) => {
     expect(typeof step.target).toBe("string");

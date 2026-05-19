@@ -48,13 +48,15 @@ export function SlowQueryWarningModal({ open, cost, onCancel, onProceed, advisor
       ? { tableCount: advisory.tableCount }
       : { cost: Math.round(cost) };
 
-  return (    <Dialog.Root open={open} onOpenChange={(o) => (o ? null : onCancel())}>
+  return (
+    <Dialog.Root open={open} onOpenChange={(o) => (o ? null : onCancel())}>
       <Dialog.Portal>
         <Dialog.Overlay className="slow-overlay" />
         <Dialog.Content className="slow-content" aria-describedby="slow-desc">
           <Dialog.Title>{t(titleKey)}</Dialog.Title>
           <Dialog.Description id="slow-desc">{t(bodyKey, bodyOpts)}</Dialog.Description>
-          {!advisory ? (            <label className="slow-dont-ask">
+          {!advisory ? (
+            <label className="slow-dont-ask">
               <input
                 type="checkbox"
                 checked={dontAsk}
@@ -62,7 +64,7 @@ export function SlowQueryWarningModal({ open, cost, onCancel, onProceed, advisor
               />
               {t("safety.slow.dontAsk")}
             </label>
-) : null}
+          ) : null}
           <div className="slow-actions">
             <button type="button" onClick={onCancel}>
               {t("common.cancel")}
@@ -74,5 +76,5 @@ export function SlowQueryWarningModal({ open, cost, onCancel, onProceed, advisor
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-);
+  );
 }

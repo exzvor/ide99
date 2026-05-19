@@ -5,11 +5,12 @@ import { detectGeometryColumns } from "../postgisDetect";
 
 describe("detectGeometryColumns", () => {
   it("returns empty array when no geometry/geography columns", () => {
-    expect(      detectGeometryColumns([
+    expect(
+      detectGeometryColumns([
         { name: "id", typeName: "int4" },
         { name: "label", typeName: "text" },
       ]),
-).toEqual([]);
+    ).toEqual([]);
   });
 
   it("detects a single geometry(Point,4326) column", () => {

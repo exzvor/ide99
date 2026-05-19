@@ -1,4 +1,4 @@
-// €” production-aware Apply confirmation for object editors.
+// production-aware Apply confirmation for object editors.
 //
 // Drop-in replacement for `ApplyConfirmModal` that checks the connection's
 // `environment` and, when it's `"prod"`, renders `TypingConfirmModal` with
@@ -40,7 +40,8 @@ export function ObjectEditorApplyConfirm({
   if (!open) return null;
 
   if (isProd) {
-    return (      <TypingConfirmModal
+    return (
+      <TypingConfirmModal
         title={t("object_editor.actions.prod_confirm_title")}
         description={t("object_editor.actions.prod_confirm_body", {
           conn: connectionName,
@@ -54,15 +55,16 @@ export function ObjectEditorApplyConfirm({
         onCancel={onCancel}
         onConfirm={() => onConfirm()}
       />
-);
+    );
   }
 
-  return (    <ApplyConfirmModal
+  return (
+    <ApplyConfirmModal
       open={open}
       statementCount={statementCount}
       connectionName={connectionName}
       onConfirm={onConfirm}
       onCancel={onCancel}
     />
-);
+  );
 }

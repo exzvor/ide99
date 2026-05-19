@@ -16,9 +16,10 @@ let disposeRegistration: (() => void) | null = null;
  */
 export function registerAutocomplete(monaco: Monaco, hooks: ProviderHooks): IDisposable {
   if (!registered) {
-    const handle = monaco.languages.registerCompletionItemProvider(      LanguageIdEnum.PG,
+    const handle = monaco.languages.registerCompletionItemProvider(
+      LanguageIdEnum.PG,
       buildProvider(hooks),
-);
+    );
     disposeRegistration = () => handle.dispose();
     registered = true;
   }

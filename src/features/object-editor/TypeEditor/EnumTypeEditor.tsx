@@ -58,10 +58,11 @@ export function EnumTypeEditor({ tab }: EnumTypeEditorProps): JSX.Element {
     }
     void (async () => {
       try {
-        const def = await schemaGetCustomTypeDefinition(          tab.connectionId,
+        const def = await schemaGetCustomTypeDefinition(
+          tab.connectionId,
           tab.target.schema,
           tab.target.name ?? "",
-);
+        );
         if (cancelled) return;
         const union = fromDefinition(def);
         if (union.kind !== "enum") {
@@ -85,11 +86,12 @@ export function EnumTypeEditor({ tab }: EnumTypeEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: EnumTypeForm) => EnumTypeForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: EnumTypeForm) => EnumTypeForm): void => {
       updateForm(tab.id, (s) => (s.kind === "enum_type" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "enum_type" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -108,16 +110,18 @@ export function EnumTypeEditor({ tab }: EnumTypeEditorProps): JSX.Element {
   const touched = useTouched(stableFormState?.form, stableFormState?.initial);
 
   if (loadError) {
-    return (      <div data-testid="enum-type-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="enum-type-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="enum-type-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="enum-type-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -166,7 +170,8 @@ export function EnumTypeEditor({ tab }: EnumTypeEditorProps): JSX.Element {
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="enum-type-editor"
       style={{
         display: "grid",
@@ -190,7 +195,8 @@ export function EnumTypeEditor({ tab }: EnumTypeEditorProps): JSX.Element {
             ? t("object_editor.type.enum_title_new")
             : t("object_editor.type.enum_title_edit")}
         </h2>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="enum-dirty-badge"
             style={{
               fontSize: 11,
@@ -201,7 +207,7 @@ export function EnumTypeEditor({ tab }: EnumTypeEditorProps): JSX.Element {
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <HelpLink topic="enum_type" />
       </div>
@@ -246,7 +252,8 @@ export function EnumTypeEditor({ tab }: EnumTypeEditorProps): JSX.Element {
           >
             {t("object_editor.type.enum_values_section")}
           </legend>
-          {form.values.map((v, i) => (            <div
+          {form.values.map((v, i) => (
+            <div
               key={v.id}
               data-testid={`enum-value-${i}`}
               style={{ display: "flex", gap: 8, alignItems: "center" }}
@@ -261,7 +268,7 @@ export function EnumTypeEditor({ tab }: EnumTypeEditorProps): JSX.Element {
                     ...f,
                     values: f.values.map((it) =>
                       it.id === v.id ? { ...it, value: e.target.value } : it,
-),
+                    ),
                   }))
                 }
                 style={{ flex: 1 }}
@@ -279,7 +286,7 @@ export function EnumTypeEditor({ tab }: EnumTypeEditorProps): JSX.Element {
                 ×
               </button>
             </div>
-))}
+          ))}
           <button
             type="button"
             data-testid="enum-values-add"
@@ -314,5 +321,5 @@ export function EnumTypeEditor({ tab }: EnumTypeEditorProps): JSX.Element {
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

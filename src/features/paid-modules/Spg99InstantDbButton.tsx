@@ -48,23 +48,26 @@ export function Spg99InstantDbButton(): JSX.Element {
         password: created.password,
         instantDbId: created.dbId,
       });
-      toast.success(        t("paid_modules.spg99.create_ok", {
+      toast.success(
+        t("paid_modules.spg99.create_ok", {
           defaultValue: "Instant DB ready — review and save",
         }),
-);
+      );
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      toast.error(        t("paid_modules.spg99.create_error", {
+      toast.error(
+        t("paid_modules.spg99.create_error", {
           defaultValue: "Failed to create Instant DB: {{msg}}",
           msg,
         }),
-);
+      );
     } finally {
       setPending(false);
     }
   }, [openCreateForm, pending, t, toast]);
 
-  return (    <button
+  return (
+    <button
       type="button"
       onClick={() => void onClick()}
       disabled={pending}
@@ -110,5 +113,5 @@ export function Spg99InstantDbButton(): JSX.Element {
         {t("paid_modules.spg99.free_beta_badge", { defaultValue: "Free Beta" })}
       </span>
     </button>
-);
+  );
 }

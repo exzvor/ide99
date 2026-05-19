@@ -14,9 +14,10 @@ import { ConnectionError, type ConnectionErrorPayload, QueryError } from "./taur
 
 const tFake = ((key: string, opts?: Record<string, unknown>) => {
   if (!opts) return key;
-  return Object.entries(opts).reduce<string>(    (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
+  return Object.entries(opts).reduce<string>(
+    (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
     key,
-);
+  );
 }) as Parameters<typeof localizeConnectionError>[1];
 
 function makeConnError(payload: ConnectionErrorPayload): ConnectionError {

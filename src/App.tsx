@@ -44,7 +44,7 @@ export default function App(): JSX.Element {
   // We surface it as `data-mode` on document.documentElement so CSS rules
   // can target it without prop-threading.
   const mode = useUiMode((s) => s.mode);
-  // €” vibepg command palette host. Cmd/Ctrl+K opens; the palette
+  // vibepg command palette host. Cmd/Ctrl+K opens; the palette
   // itself shows commands regardless of subscription state and routes
   // unsubscribed clicks to the upgrade page (see `VibepgCommandPalette`).
   const [vibepgPaletteOpen, setVibepgPaletteOpen] = useState(false);
@@ -79,7 +79,7 @@ export default function App(): JSX.Element {
         e.preventDefault();
         openSettings();
       } else if (key === "k") {
-        // €” Cmd/Ctrl+K opens the vibepg command palette. The palette
+        // Cmd/Ctrl+K opens the vibepg command palette. The palette
         // surfaces vibepg commands without requiring an active subscription
         // (clicks route to upgrade flow when not subscribed).
         e.preventDefault();
@@ -90,7 +90,8 @@ export default function App(): JSX.Element {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  return (    <ToastProvider>
+  return (
+    <ToastProvider>
       {/* â€” Radix Tooltip.Provider so any descendant `ConceptTooltip`
           works without per-call wiring. No-op in Standard mode (gated inside
           `ConceptTooltip` itself). */}
@@ -116,20 +117,21 @@ export default function App(): JSX.Element {
             sample DB â†’ tour handoff). Mounted at App level so it shows
             even when there are zero connections (Welcome screen). */}
         <OnboardingWizard />
-        {/* €” vibepg command palette host (Cmd/Ctrl+K). */}
+        {/* vibepg command palette host (Cmd/Ctrl+K). */}
         <VibepgCommandPalette open={vibepgPaletteOpen} onOpenChange={setVibepgPaletteOpen} />
         {/* Phase 5 â€” wedge telemetry sender (ide.opened + heartbeat). */}
         <AdminTelemetryHost />
       </ConceptTooltipProvider>
     </ToastProvider>
-);
+  );
 }
 
 /** â€” renders whichever pre-execute pipeline modal is active. */
 function SafetyModals(): JSX.Element | null {
   const modal = useEditor((s) => s.safetyModal);
   if (modal.kind === "confirm") {
-    return (      <ConfirmDestructiveModal
+    return (
+      <ConfirmDestructiveModal
         open
         action={modal.action}
         target={modal.target}
@@ -137,28 +139,30 @@ function SafetyModals(): JSX.Element | null {
         onConfirm={modal.onConfirm}
         onCancel={modal.onCancel}
       />
-);
+    );
   }
   if (modal.kind === "slow") {
-    return (      <SlowQueryWarningModal
+    return (
+      <SlowQueryWarningModal
         open
         cost={modal.cost}
         onProceed={modal.onProceed}
         onCancel={modal.onCancel}
       />
-);
+    );
   }
   if (modal.kind === "easyAdvisory") {
     // â€” reuses the slow-query modal shell with an alternate body
     // (different translation keys driven by `advisory.kind`).
-    return (      <SlowQueryWarningModal
+    return (
+      <SlowQueryWarningModal
         open
         cost={0}
         advisory={modal.advisory}
         onProceed={() => modal.onProceed()}
         onCancel={modal.onCancel}
       />
-);
+    );
   }
   return null;
 }

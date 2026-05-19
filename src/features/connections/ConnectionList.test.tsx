@@ -7,9 +7,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, opts?: Record<string, unknown>) => {
       if (opts && typeof opts === "object") {
-        return Object.entries(opts).reduce<string>(          (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
+        return Object.entries(opts).reduce<string>(
+          (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
           key,
-);
+        );
       }
       return key;
     },
@@ -67,7 +68,8 @@ beforeEach(() => {
   errorMock.mockReset();
   deleteConnectionMock.mockReset();
   duplicateConnectionMock.mockReset();
-  useConnections.setState(    {
+  useConnections.setState(
+    {
       ...initialState,
       connections: [],
       selectedId: null,
@@ -76,7 +78,7 @@ beforeEach(() => {
       error: null,
     },
     true,
-);
+  );
 });
 
 import { ConnectionList } from "./ConnectionList";
@@ -248,7 +250,7 @@ describe("ConnectionList", () => {
   test("mounts 100 rows in under 200ms", () => {
     const many = Array.from({ length: 100 }, (_, i) =>
       makeConnection({ id: `id-${i}`, name: `conn-${String(i).padStart(3, "0")}` }),
-);
+    );
     useConnections.setState({ connections: many });
 
     const start = performance.now();

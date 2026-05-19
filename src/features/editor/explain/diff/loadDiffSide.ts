@@ -57,7 +57,8 @@ function buildShortLabel(mode: string, executedAt: string, durationMs: number): 
  * - kind:"runtime"  → return as-is. Defensive: parse if `planJson` is
  * a string (it's typed as `unknown`).
  */
-export async function loadDiffSide(  side: PlanDiffSide,
+export async function loadDiffSide(
+  side: PlanDiffSide,
   which: "left" | "right",
 ): Promise<LoadedSide> {
   if (side.kind === "recent") {

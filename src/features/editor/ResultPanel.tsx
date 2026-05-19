@@ -13,7 +13,8 @@ import { type BatchRunState, useEditor } from "./store";
 // Stable empty references for Zustand selectors.
 const EMPTY_FILTERS: ReadonlyArray<{ column: string }> = [];
 
-function filtersEqual(  a: ReadonlyArray<{ column: string }>,
+function filtersEqual(
+  a: ReadonlyArray<{ column: string }>,
   b: ReadonlyArray<{ column: string }>,
 ): boolean {
   if (a.length !== b.length) return false;
@@ -90,13 +91,16 @@ export function ResultPanel({ tabId }: ResultPanelProps): JSX.Element {
     if (batch?.status !== "ready") return null;
     const active = batch.statements[batch.activeIdx];
     if (!active || active.kind !== "rowset" || !active.truncated) return null;
-    return (      <div className="q-batch-truncated-hint" data-testid="result-panel-truncated-hint">
+    return (
+      <div className="q-batch-truncated-hint" data-testid="result-panel-truncated-hint">
         {t("editor.batch.intermediate_truncated")}
       </div>
-);
+    );
   })();
 
-  const region = (children: JSX.Element) => (    // biome-ignore lint/a11y/useSemanticElements: <section> derives an implicit "region" role only with aria-label, but spec mandates explicit role
+  const region = (
+    children: JSX.Element, // biome-ignore lint/a11y/useSemanticElements: <section> derives an implicit "region" role only with aria-label, but spec mandates explicit role
+  ) => (
     <div
       role="region"
       aria-label={t("editor.result.title", { defaultValue: "Query result" })}
@@ -112,10 +116,11 @@ export function ResultPanel({ tabId }: ResultPanelProps): JSX.Element {
       </div>
       {truncationHint}
     </div>
-);
+  );
 
   if (runState.status === "opening") {
-    return region(      <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+    return region(
+      <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
         <div
           style={{
             padding: "10px 14px",
@@ -160,11 +165,12 @@ export function ResultPanel({ tabId }: ResultPanelProps): JSX.Element {
         </div>
         <div style={{ flex: 1 }} />
       </div>,
-);
+    );
   }
 
   if (runState.status === "cancelled") {
-    return region(      <div
+    return region(
+      <div
         style={{
           height: "100%",
           display: "flex",
@@ -183,7 +189,7 @@ export function ResultPanel({ tabId }: ResultPanelProps): JSX.Element {
           {t("editor.result.cancelled_body")}
         </p>
       </div>,
-);
+    );
   }
 
   if (runState.status === "error") {
@@ -198,7 +204,8 @@ export function ResultPanel({ tabId }: ResultPanelProps): JSX.Element {
         : runState.detail
           ? `${localizedHeadline}\n\n${runState.detail}`
           : localizedHeadline;
-    return region(      <div
+    return region(
+      <div
         className="q-scroll"
         style={{
           height: "100%",
@@ -237,7 +244,8 @@ export function ResultPanel({ tabId }: ResultPanelProps): JSX.Element {
             >
               {body}
             </pre>
-            {positionLabel ? (              <div
+            {positionLabel ? (
+              <div
                 style={{
                   fontFamily: "var(--font-mono-q)",
                   fontSize: 11,
@@ -246,8 +254,9 @@ export function ResultPanel({ tabId }: ResultPanelProps): JSX.Element {
               >
                 {positionLabel}
               </div>
-) : null}
-            {runState.code === "postgres_error" && runState.detail ? (              <div style={{ marginTop: 4 }}>
+            ) : null}
+            {runState.code === "postgres_error" && runState.detail ? (
+              <div style={{ marginTop: 4 }}>
                 <ErrorExplainButton
                   sqlstate={runState.sqlstate}
                   message={runState.detail}
@@ -255,21 +264,24 @@ export function ResultPanel({ tabId }: ResultPanelProps): JSX.Element {
                   variant="inline"
                 />
               </div>
-) : null}
+            ) : null}
           </div>
         </div>
       </div>,
-);
+    );
   }
 
   if (runState.status === "streaming") {
     const hasRows = runState.loadedCount > 0;
-    return region(      <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
+    return region(
+      <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
         <S20Banners tabId={tabId} />
-        {hasRows ? (          <div style={{ flex: 1, minHeight: 0 }}>
+        {hasRows ? (
+          <div style={{ flex: 1, minHeight: 0 }}>
             <ResultGrid tabId={tabId} run={runState} />
           </div>
-) : (          <div
+        ) : (
+          <div
             style={{
               flex: 1,
               padding: "12px 14px",
@@ -281,14 +293,15 @@ export function ResultPanel({ tabId }: ResultPanelProps): JSX.Element {
               ? t("editor.result.affected", { n: runState.affectedRows })
               : t("editor.result.empty")}
           </div>
-)}
+        )}
         <ResultFooter run={runState} />
       </div>,
-);
+    );
   }
 
   const idleSubtitle = connectionName ?? t("editor.result.no_connection");
-  return region(    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+  return region(
+    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <div
         style={{
           padding: "10px 14px",
@@ -307,7 +320,7 @@ export function ResultPanel({ tabId }: ResultPanelProps): JSX.Element {
       </div>
       <div style={{ flex: 1 }} />
     </div>,
-);
+  );
 }
 
 interface BatchTabStripProps {
@@ -331,7 +344,8 @@ function BatchTabStrip({ tabId, batch }: BatchTabStripProps): JSX.Element {
         ms: batch.totalDurationMs,
       });
 
-  return (    <div className="q-batch-tabstrip" data-testid="result-panel-tabstrip">
+  return (
+    <div className="q-batch-tabstrip" data-testid="result-panel-tabstrip">
       <div className={`q-batch-status${failed ? " has-failure" : ""}`}>{summary}</div>
       <div className="q-batch-tabs" role="tablist">
         {batch.statements.map((s, i) => {
@@ -353,7 +367,8 @@ function BatchTabStrip({ tabId, batch }: BatchTabStripProps): JSX.Element {
           } else {
             label = t("editor.batch.tab_label_error", { idx: i + 1 });
           }
-          return (            <button
+          return (
+            <button
               // biome-ignore lint/suspicious/noArrayIndexKey: index IS the statement's identity within a single batch result
               key={i}
               type="button"
@@ -365,11 +380,11 @@ function BatchTabStrip({ tabId, batch }: BatchTabStripProps): JSX.Element {
             >
               {label}
             </button>
-);
+          );
         })}
       </div>
     </div>
-);
+  );
 }
 
 function getErrorCode(s: StatementResult | undefined): string {
@@ -392,9 +407,10 @@ function S20Banners({ tabId }: { tabId: string }): JSX.Element | null {
   const runQuery = useEditor((s) => s.runQuery);
   const [dismissed, setDismissed] = useState(false);
 
-  const filtersDiffer = !filtersEqual(    queryShape?.filters ?? EMPTY_FILTERS,
+  const filtersDiffer = !filtersEqual(
+    queryShape?.filters ?? EMPTY_FILTERS,
     lastExecuted?.filters ?? EMPTY_FILTERS,
-);
+  );
 
   // fix: reset dismissal on EACH filter mutation (tracked via
   // `filterChangeVersion`), not only when the diff transitions to false.
@@ -405,22 +421,25 @@ function S20Banners({ tabId }: { tabId: string }): JSX.Element | null {
     setDismissed(false);
   }, [filterChangeVersion, filtersDiffer]);
 
-  return (    <>
-      {queryShape?.unrepresentableTail && (        <UnrepresentableBar slug={queryShape.unrepresentableTail} />
-)}
-      {filtersDiffer && !dismissed && queryShape !== null && (        <RerunBanner
+  return (
+    <>
+      {queryShape?.unrepresentableTail && (
+        <UnrepresentableBar slug={queryShape.unrepresentableTail} />
+      )}
+      {filtersDiffer && !dismissed && queryShape !== null && (
+        <RerunBanner
           onRerun={() => {
             void runQuery(tabId);
           }}
           onDismiss={() => setDismissed(true)}
         />
-)}
+      )}
     </>
-);
+  );
 }
 
 /**
- * €” SELECT parse-error status banner. Rendered regardless of run
+ * SELECT parse-error status banner. Rendered regardless of run
  * state so the user notices even before pressing Run / when the Monaco
  * squiggle is off-screen. Reads `selectParseErrors[tabId]` written by
  * MonacoEditor on each failing parse.
@@ -444,7 +463,8 @@ function S20ParseErrorBanner({ tabId }: { tabId: string }): JSX.Element | null {
     tab && tab.kind === "editor" && tab.dirty === false && tab.content.trim().length > 0;
 
   if (isRestoredCorruption) {
-    return (      <output
+    return (
+      <output
         data-testid="select-parse-error-banner"
         style={{
           padding: "6px 10px",
@@ -482,10 +502,11 @@ function S20ParseErrorBanner({ tabId }: { tabId: string }): JSX.Element | null {
           {t("parser.select.reset", { defaultValue: "Clear and start fresh" })}
         </button>
       </output>
-);
+    );
   }
 
-  return (    <div
+  return (
+    <div
       data-testid="select-parse-error-banner"
       role="alert"
       style={{
@@ -498,5 +519,5 @@ function S20ParseErrorBanner({ tabId }: { tabId: string }): JSX.Element | null {
       {t("parser.select.error", { defaultValue: "Parse error in query" })}: line {err.line}:
       {err.column} â€” {err.message}
     </div>
-);
+  );
 }

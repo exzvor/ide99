@@ -16,23 +16,27 @@ import { type McpActionEvent, mcpActionEventSchema } from "./api";
 function dispatchAction(action: McpActionEvent): void {
   switch (action.kind) {
     case "open-query":
-      window.dispatchEvent(        new CustomEvent("ide99:open-query", {
+      window.dispatchEvent(
+        new CustomEvent("ide99:open-query", {
           detail: { sql: action.sql, connId: action.connId },
         }),
-);
+      );
       break;
     case "run-query":
-      window.dispatchEvent(        new CustomEvent("ide99:open-query", {
+      window.dispatchEvent(
+        new CustomEvent("ide99:open-query", {
           detail: { sql: action.sql, connId: action.connId },
         }),
-);
-      window.dispatchEvent(        new CustomEvent("ide99:run-query", {
+      );
+      window.dispatchEvent(
+        new CustomEvent("ide99:run-query", {
           detail: { sql: action.sql, connId: action.connId },
         }),
-);
+      );
       break;
     case "open-table":
-      window.dispatchEvent(        new CustomEvent("ide99:open-object-editor", {
+      window.dispatchEvent(
+        new CustomEvent("ide99:open-object-editor", {
           detail: {
             connId: action.connId,
             schema: action.schema,
@@ -40,23 +44,25 @@ function dispatchAction(action: McpActionEvent): void {
             kind: "table",
           },
         }),
-);
+      );
       break;
     case "open-explain":
-      window.dispatchEvent(        new CustomEvent("ide99:open-explain", {
+      window.dispatchEvent(
+        new CustomEvent("ide99:open-explain", {
           detail: { connId: action.connId, sql: action.sql },
         }),
-);
+      );
       break;
     case "navigate-tree":
-      window.dispatchEvent(        new CustomEvent("ide99:focus-tree-node", {
+      window.dispatchEvent(
+        new CustomEvent("ide99:focus-tree-node", {
           detail: {
             connId: action.connId,
             schema: action.schema,
             table: action.table,
           },
         }),
-);
+      );
       break;
   }
 }

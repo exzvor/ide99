@@ -2,7 +2,8 @@ import { describe, expect, test } from "vitest";
 import { generateTableDdl } from "./tableDdl";
 import type { ColumnForm, IndexForm, TableForm } from "./types";
 
-const col = (  over: Partial<ColumnForm> & { id: string; name: string; typeText: string },
+const col = (
+  over: Partial<ColumnForm> & { id: string; name: string; typeText: string },
 ): ColumnForm => ({
   nullable: true,
   default: null,
@@ -33,50 +34,55 @@ describe("generateTableDdl — create mode", () => {
   });
 
   test("duplicate column names → error", () => {
-    const result = generateTableDdl(      null,
+    const result = generateTableDdl(
+      null,
       baseTable({
         columns: [
           col({ id: "1", name: "x", typeText: "int" }),
           col({ id: "2", name: "x", typeText: "text" }),
         ],
       }),
-);
+    );
     expect(result.sql).toBe("");
     expect(result.errors.find((e) => e.code === "duplicate_column")).toBeTruthy();
   });
 
   test("PK referencing unknown column → error", () => {
-    const result = generateTableDdl(      null,
+    const result = generateTableDdl(
+      null,
       baseTable({
         columns: [col({ id: "1", name: "id", typeText: "int" })],
         constraints: [{ id: "c1", kind: "pk", columns: ["missing"] }],
       }),
-);
+    );
     expect(result.errors.find((e) => e.code === "pk_unknown_column")).toBeTruthy();
   });
 
   test("empty CHECK expression → error", () => {
-    const result = generateTableDdl(      null,
+    const result = generateTableDdl(
+      null,
       baseTable({
         columns: [col({ id: "1", name: "id", typeText: "int" })],
         constraints: [{ id: "c1", kind: "check", expression: "  " }],
       }),
-);
+    );
     expect(result.errors.find((e) => e.code === "empty_check")).toBeTruthy();
   });
 
   test("minimal table (1 col) → CREATE TABLE", () => {
-    const result = generateTableDdl(      null,
+    const result = generateTableDdl(
+      null,
       baseTable({
         columns: [col({ id: "1", name: "id", typeText: "int", nullable: false })],
       }),
-);
+    );
     expect(result.errors).toEqual([]);
     expect(result.sql).toBe("CREATE TABLE public.items (\n    id INT NOT NULL\n);");
   });
 
   test("full table with PK + FK + UNIQUE + CHECK + comment + generated col", () => {
-    const result = generateTableDdl(      null,
+    const result = generateTableDdl(
+      null,
       baseTable({
         comment: "All the items",
         columns: [
@@ -106,15 +112,16 @@ describe("generateTableDdl — create mode", () => {
           { id: "c4", kind: "check", expression: "char_length(name) > 0" },
         ],
       }),
-);
+    );
     expect(result.errors).toEqual([]);
     expect(result.sql).toContain("CREATE TABLE public.items");
     expect(result.sql).toContain("id BIGINT NOT NULL");
     expect(result.sql).toContain("label TEXT NOT NULL GENERATED ALWAYS AS (upper(name)) STORED");
     expect(result.sql).toContain("PRIMARY KEY (id)");
     expect(result.sql).toContain("UNIQUE (name)");
-    expect(result.sql).toContain(      "FOREIGN KEY (owner_id) REFERENCES public.users (id) ON DELETE CASCADE",
-);
+    expect(result.sql).toContain(
+      "FOREIGN KEY (owner_id) REFERENCES public.users (id) ON DELETE CASCADE",
+    );
     expect(result.sql).toContain("CHECK (char_length(name) > 0)");
     expect(result.sql).toContain("COMMENT ON TABLE public.items IS 'All the items'");
   });
@@ -132,14 +139,15 @@ describe("generateTableDdl — create mode", () => {
       predicate: null,
       withOptions: {},
     };
-    const result = generateTableDdl(      null,
+    const result = generateTableDdl(
+      null,
       baseTable({
         comment: "Bob's items",
         columns: [col({ id: "1", name: "name", typeText: "text" })],
         indexes: [idx],
         rls: { enabled: true, policies: [] },
       }),
-);
+    );
     expect(result.errors).toEqual([]);
     expect(result.sql).toContain("COMMENT ON TABLE public.items IS 'Bob''s items'");
     expect(result.sql).toContain("CREATE INDEX ix_name ON public.items USING btree (name)");

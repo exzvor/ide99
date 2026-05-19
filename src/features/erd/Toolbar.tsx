@@ -144,7 +144,8 @@ export function Toolbar({
     void exportSvg(el);
   };
 
-  return (    <div
+  return (
+    <div
       data-testid="erd-toolbar"
       style={{
         display: "flex",
@@ -175,7 +176,8 @@ export function Toolbar({
               {[
                 { value: ALL_SCHEMAS_VALUE, label: t("erd.toolbar.filter_all") },
                 ...schemaOptions.map((s) => ({ value: s, label: s })),
-              ].map((option) => (                <RadixSelect.Item
+              ].map((option) => (
+                <RadixSelect.Item
                   key={option.value}
                   value={option.value}
                   style={ITEM_STYLE}
@@ -198,7 +200,7 @@ export function Toolbar({
                   </RadixSelect.ItemIndicator>
                   <RadixSelect.ItemText>{option.label}</RadixSelect.ItemText>
                 </RadixSelect.Item>
-))}
+              ))}
             </RadixSelect.Viewport>
           </RadixSelect.Content>
         </RadixSelect.Portal>
@@ -325,5 +327,5 @@ export function Toolbar({
           (fix). */}
       <EditModeToggle tabId={tabId} />
     </div>
-);
+  );
 }

@@ -14,19 +14,21 @@ describe("LongRunningCard", () => {
   });
 
   it("empty rows → centered no-issues message", () => {
-    render(      <LongRunningCard
+    render(
+      <LongRunningCard
         connId="c1"
         state={{
           status: "ready",
           card: { id: "long_running", data: { rows: [] } },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("health-card-long_running-empty")).toBeTruthy();
   });
 
   it("ready: warn tone when any rows; renders rows table", () => {
-    render(      <LongRunningCard
+    render(
+      <LongRunningCard
         connId="c1"
         state={{
           status: "ready",
@@ -46,9 +48,10 @@ describe("LongRunningCard", () => {
           },
         }}
       />,
-);
+    );
     expect(screen.getAllByTestId("long-running-row")).toHaveLength(1);
-    expect(screen.getByTestId("health-card-long_running-status").getAttribute("data-tone")).toBe(      "warn",
-);
+    expect(screen.getByTestId("health-card-long_running-status").getAttribute("data-tone")).toBe(
+      "warn",
+    );
   });
 });

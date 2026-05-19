@@ -40,9 +40,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, vars?: Record<string, unknown>) => {
       if (!vars) return key;
-      return Object.entries(vars).reduce<string>(        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
+      return Object.entries(vars).reduce<string>(
+        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
         key,
-);
+      );
     },
   }),
 }));
@@ -192,8 +193,9 @@ describe("BackupWizard", () => {
       emitProgress({ kind: "done", jobId, success: true, stderrTail: "", exitCode: 0 });
     });
     await waitFor(() => {
-      expect(screen.getByTestId("backup-progress-card")).toHaveTextContent(        /backup\.run\.success|run\.success/,
-);
+      expect(screen.getByTestId("backup-progress-card")).toHaveTextContent(
+        /backup\.run\.success|run\.success/,
+      );
     });
   });
 
@@ -204,8 +206,9 @@ describe("BackupWizard", () => {
     await waitFor(() => screen.getByTestId("bk-browse"));
     await user.click(screen.getByTestId("bk-browse"));
     await waitFor(() => {
-      expect((screen.getByTestId("bk-output-path") as HTMLInputElement).value).toBe(        "/picked/from/dialog.dump",
-);
+      expect((screen.getByTestId("bk-output-path") as HTMLInputElement).value).toBe(
+        "/picked/from/dialog.dump",
+      );
     });
   });
 });

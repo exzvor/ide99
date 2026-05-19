@@ -68,7 +68,8 @@ export function ObjectDetails({ node }: { node: NodeKey | null }): JSX.Element {
   const parsed = parseNode(node);
 
   if (parsed.kind === "placeholder") {
-    return (      <div
+    return (
+      <div
         style={{
           height: "100%",
           display: "flex",
@@ -79,11 +80,12 @@ export function ObjectDetails({ node }: { node: NodeKey | null }): JSX.Element {
       >
         <p style={{ fontSize: 12.5, color: "var(--ink-4)" }}>{t("object_details.no_selection")}</p>
       </div>
-);
+    );
   }
 
   if (connection.status !== "connected") {
-    return (      <div
+    return (
+      <div
         style={{
           height: "100%",
           display: "flex",
@@ -94,27 +96,29 @@ export function ObjectDetails({ node }: { node: NodeKey | null }): JSX.Element {
       >
         <p style={{ fontSize: 12.5, color: "var(--ink-4)" }}>{t("object_details.no_selection")}</p>
       </div>
-);
+    );
   }
 
   if (parsed.kind === "table") {
-    return (      <TableDetails
+    return (
+      <TableDetails
         connId={connection.connId}
         schema={parsed.schema}
         name={parsed.name}
         // Re-mount when node changes so per-section caches reset.
         key={`table:${parsed.schema}/${parsed.name}`}
       />
-);
+    );
   }
 
-  return (    <ViewDetails
+  return (
+    <ViewDetails
       connId={connection.connId}
       schema={parsed.schema}
       name={parsed.name}
       key={`view:${parsed.schema}/${parsed.name}`}
     />
-);
+  );
 }
 
 interface FetchState<T> {
@@ -209,16 +213,18 @@ function TableDetails({
     if (tab === "indexes" && indexes.data === null && !indexes.loading && indexes.error === null) {
       loadIndexes();
     }
-    if (      tab === "foreignKeys" &&
+    if (
+      tab === "foreignKeys" &&
       foreignKeys.data === null &&
       !foreignKeys.loading &&
       foreignKeys.error === null
-) {
+    ) {
       loadForeignKeys();
     }
   }, [tab, indexes, foreignKeys, loadIndexes, loadForeignKeys]);
 
-  return (    <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
       <div role="tablist" aria-label={t("object_details.section.columns")} className="q-subtabbar">
         <TabButton
           active={tab === "columns"}
@@ -247,21 +253,24 @@ function TableDetails({
       </div>
 
       <div className="q-scroll" style={{ flex: 1, overflow: "auto", padding: 18, minHeight: 0 }}>
-        {tab === "columns" ? (          <div role="tabpanel" id="panel-columns" aria-labelledby="tab-columns">
+        {tab === "columns" ? (
+          <div role="tabpanel" id="panel-columns" aria-labelledby="tab-columns">
             <ColumnsPanel state={columns} onRetry={loadColumns} />
           </div>
-) : null}
-        {tab === "indexes" ? (          <div role="tabpanel" id="panel-indexes" aria-labelledby="tab-indexes">
+        ) : null}
+        {tab === "indexes" ? (
+          <div role="tabpanel" id="panel-indexes" aria-labelledby="tab-indexes">
             <IndexesPanel state={indexes} onRetry={loadIndexes} />
           </div>
-) : null}
-        {tab === "foreignKeys" ? (          <div role="tabpanel" id="panel-fks" aria-labelledby="tab-fks">
+        ) : null}
+        {tab === "foreignKeys" ? (
+          <div role="tabpanel" id="panel-fks" aria-labelledby="tab-fks">
             <ForeignKeysPanel state={foreignKeys} onRetry={loadForeignKeys} />
           </div>
-) : null}
+        ) : null}
       </div>
     </div>
-);
+  );
 }
 
 function ViewDetails({
@@ -300,7 +309,8 @@ function ViewDetails({
     load();
   }, [load]);
 
-  return (    <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
       <div
         role="tablist"
         aria-label={t("object_details.section.definition")}
@@ -314,7 +324,8 @@ function ViewDetails({
         <div role="tabpanel" id="panel-definition" aria-labelledby="tab-definition">
           {state.loading ? <LoadingRow /> : null}
           {state.error ? <ErrorRow message={state.error} onRetry={load} /> : null}
-          {state.data ? (            <pre
+          {state.data ? (
+            <pre
               style={{
                 overflow: "auto",
                 background: "var(--bg-sunken)",
@@ -329,11 +340,11 @@ function ViewDetails({
             >
               <code>{state.data.definition}</code>
             </pre>
-) : null}
+          ) : null}
         </div>
       </div>
     </div>
-);
+  );
 }
 
 function TabButton({
@@ -349,7 +360,8 @@ function TabButton({
   id: string;
   children: React.ReactNode;
 }): JSX.Element {
-  return (    <button
+  return (
+    <button
       type="button"
       role="tab"
       id={id}
@@ -361,12 +373,13 @@ function TabButton({
     >
       {children}
     </button>
-);
+  );
 }
 
 function LoadingRow(): JSX.Element {
   const { t } = useTranslation();
-  return (    <div
+  return (
+    <div
       style={{
         display: "flex",
         alignItems: "center",
@@ -378,18 +391,19 @@ function LoadingRow(): JSX.Element {
       <Loader2 size={14} className="q-spin" aria-hidden="true" />
       <span>{t("schema.connecting")}</span>
     </div>
-);
+  );
 }
 
 function ErrorRow({ message, onRetry }: { message: string; onRetry: () => void }): JSX.Element {
   const { t } = useTranslation();
-  return (    <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 12.5 }}>
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 12.5 }}>
       <span style={{ color: "var(--danger-q)" }}>{message}</span>
       <button type="button" onClick={onRetry} className="btn btn-sm">
         {t("schema.refresh")}
       </button>
     </div>
-);
+  );
 }
 
 function ColumnsPanel({
@@ -405,7 +419,8 @@ function ColumnsPanel({
   if (!state.data || state.data.length === 0) {
     return <p style={{ fontSize: 12.5, color: "var(--ink-4)" }}>{t("object_details.empty")}</p>;
   }
-  return (    <table className="q-grid" style={{ width: "100%" }}>
+  return (
+    <table className="q-grid" style={{ width: "100%" }}>
       <thead>
         <tr>
           <th>{t("object_details.column.name")}</th>
@@ -416,17 +431,18 @@ function ColumnsPanel({
         </tr>
       </thead>
       <tbody>
-        {state.data.map((c) => (          <tr key={c.ordinal}>
+        {state.data.map((c) => (
+          <tr key={c.ordinal}>
             <td>{c.name}</td>
             <td>{c.dataType}</td>
             <td>{c.nullable ? "✓" : ""}</td>
             <td>{c.default ?? ""}</td>
             <td className="json">{c.comment ?? ""}</td>
           </tr>
-))}
+        ))}
       </tbody>
     </table>
-);
+  );
 }
 
 function IndexesPanel({
@@ -442,7 +458,8 @@ function IndexesPanel({
   if (!state.data || state.data.length === 0) {
     return <p style={{ fontSize: 12.5, color: "var(--ink-4)" }}>{t("object_details.empty")}</p>;
   }
-  return (    <ul
+  return (
+    <ul
       style={{
         display: "flex",
         flexDirection: "column",
@@ -452,7 +469,8 @@ function IndexesPanel({
         margin: 0,
       }}
     >
-      {state.data.map((idx) => (        <li
+      {state.data.map((idx) => (
+        <li
           key={idx.name}
           style={{
             background: "var(--bg-elev)",
@@ -471,11 +489,13 @@ function IndexesPanel({
             <span className="q-pill" style={{ fontSize: 10, padding: "1px 7px" }}>
               {idx.method}
             </span>
-            {idx.isPrimary ? (              <span className="q-pill ok" style={{ fontSize: 10, padding: "1px 7px" }}>
+            {idx.isPrimary ? (
+              <span className="q-pill ok" style={{ fontSize: 10, padding: "1px 7px" }}>
                 PK
               </span>
-) : null}
-            {idx.isUnique ? (              <span
+            ) : null}
+            {idx.isUnique ? (
+              <span
                 className="q-pill"
                 style={{
                   fontSize: 10,
@@ -486,7 +506,7 @@ function IndexesPanel({
               >
                 UNIQUE
               </span>
-) : null}
+            ) : null}
           </div>
           <pre
             style={{
@@ -502,9 +522,9 @@ function IndexesPanel({
             <code>{idx.definition}</code>
           </pre>
         </li>
-))}
+      ))}
     </ul>
-);
+  );
 }
 
 function ForeignKeysPanel({
@@ -520,7 +540,8 @@ function ForeignKeysPanel({
   if (!state.data || state.data.length === 0) {
     return <p style={{ fontSize: 12.5, color: "var(--ink-4)" }}>{t("object_details.empty")}</p>;
   }
-  return (    <ul
+  return (
+    <ul
       style={{
         display: "flex",
         flexDirection: "column",
@@ -530,7 +551,8 @@ function ForeignKeysPanel({
         margin: 0,
       }}
     >
-      {state.data.map((fk) => (        <li
+      {state.data.map((fk) => (
+        <li
           key={fk.name}
           style={{
             background: "var(--bg-elev)",
@@ -564,7 +586,7 @@ function ForeignKeysPanel({
             <code>{fk.definition}</code>
           </pre>
         </li>
-))}
+      ))}
     </ul>
-);
+  );
 }

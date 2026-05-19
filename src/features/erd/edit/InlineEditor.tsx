@@ -34,7 +34,8 @@ export function InlineEditor({
   }, [value]);
 
   if (!editing) {
-    return (      <span
+    return (
+      <span
         className={className}
         onClick={disabled ? undefined : () => setEditing(true)}
         style={{ cursor: disabled ? "default" : "text" }}
@@ -42,7 +43,7 @@ export function InlineEditor({
       >
         {displayValue}
       </span>
-);
+    );
   }
 
   const tryCommit = (next: string) => {
@@ -57,7 +58,8 @@ export function InlineEditor({
     return true;
   };
 
-  return (    <input
+  return (
+    <input
       ref={inputRef}
       type="text"
       aria-label={ariaLabel}
@@ -84,5 +86,5 @@ export function InlineEditor({
         outline: "none",
       }}
     />
-);
+  );
 }

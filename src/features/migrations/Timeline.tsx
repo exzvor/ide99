@@ -1,5 +1,5 @@
 /**
- * â€” 
+ * â€”
  *
  * Vertical, scrollable list of migrations with status badges and
  * keyboard navigation (ArrowUp / ArrowDown). The component is a pure
@@ -38,7 +38,7 @@ const STATUS_GLYPH: Record<MigrationStatus, string> = {
 };
 
 /**
- * €” backend keeps `status="applied"` for ledger-only rows whose
+ * backend keeps `status="applied"` for ledger-only rows whose
  * `.up.sql` was deleted from disk (the apply succeeded historically), but
  * surfaces the missing file via `parse_error="file missing"`. The user
  * needs to see this distinctly from a normal applied row, otherwise the
@@ -66,7 +66,8 @@ export function Timeline(props: Props): JSX.Element {
     return acc;
   }, [migrations]);
 
-  const handleKeyDown = useCallback(    (e: KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLDivElement>) => {
       if (migrations.length === 0) return;
       if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
       e.preventDefault();
@@ -81,10 +82,11 @@ export function Timeline(props: Props): JSX.Element {
       if (target) onSelect(target.version);
     },
     [migrations, selectedVersion, onSelect],
-);
+  );
 
   if (migrations.length === 0) {
-    return (      <div
+    return (
+      <div
         data-testid="migrations-timeline-empty"
         style={{
           padding: 24,
@@ -95,10 +97,11 @@ export function Timeline(props: Props): JSX.Element {
       >
         {t("migrations.timeline.empty")}
       </div>
-);
+    );
   }
 
-  return (    <div
+  return (
+    <div
       style={{
         display: "flex",
         flexDirection: "column",
@@ -146,14 +149,15 @@ export function Timeline(props: Props): JSX.Element {
           if (m.status === "dirty") {
             tooltips.push(t("migrations.timeline.checksumMismatch"));
           }
-          // €” applied + file_missing: must NOT render as a
+          // applied + file_missing: must NOT render as a
           // normal green applied row.
           const fileMissing = isFileMissing(m.parseError);
           if (fileMissing) {
             tooltips.push(t("migrations.timeline.fileMissing"));
           }
 
-          return (            <div
+          return (
+            <div
               key={m.version}
               data-testid={`migration-row-${m.version}`}
               data-status={m.status}
@@ -205,14 +209,15 @@ export function Timeline(props: Props): JSX.Element {
                 }}
               >
                 {m.name}
-                {m.downPath === null ? (                  <span
+                {m.downPath === null ? (
+                  <span
                     data-testid={`migration-row-${m.version}-no-rollback`}
                     title={t("migrations.timeline.noRollbackFile")}
                     style={{ marginLeft: 6, color: "var(--warn, #d49b1c)", fontSize: 11 }}
                   >
                     ðŸš«
                   </span>
-) : null}
+                ) : null}
               </span>
               <span
                 data-testid={`migration-row-${m.version}-badge`}
@@ -244,7 +249,8 @@ export function Timeline(props: Props): JSX.Element {
                 const rules = [...new Set(findings.map((f) => f.rule))].slice(0, 5);
                 const tooltip =
                   rules.join("\n") + (findings.length > 5 ? `\n+ ${findings.length - 5} more` : "");
-                return (                  <span
+                return (
+                  <span
                     data-testid={`squawk-badge-${m.version}`}
                     title={tooltip}
                     style={{
@@ -258,12 +264,12 @@ export function Timeline(props: Props): JSX.Element {
                   >
                     âš  {findings.length}
                   </span>
-);
+                );
               })()}
             </div>
-);
+          );
         })}
       </div>
     </div>
-);
+  );
 }

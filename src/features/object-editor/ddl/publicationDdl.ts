@@ -7,7 +7,8 @@
 import { quoteIdent } from "./helpers";
 import type { DdlResult, DdlWarning, PublicationForm, QualifiedNameForm } from "./types";
 
-export function generatePublicationDdl(  initial: PublicationForm | null,
+export function generatePublicationDdl(
+  initial: PublicationForm | null,
   current: PublicationForm,
 ): DdlResult {
   if (!initial) return createDdl(current);
@@ -42,8 +43,9 @@ function alterDdl(initial: PublicationForm, current: PublicationForm): DdlResult
   const stmts: string[] = [];
   const warnings: DdlWarning[] = [];
   if (initial.name !== current.name) {
-    stmts.push(      `ALTER PUBLICATION ${quoteIdent(initial.name)} RENAME TO ${quoteIdent(current.name)};`,
-);
+    stmts.push(
+      `ALTER PUBLICATION ${quoteIdent(initial.name)} RENAME TO ${quoteIdent(current.name)};`,
+    );
   }
 
   const name = quoteIdent(current.name);
@@ -68,12 +70,14 @@ function alterDdl(initial: PublicationForm, current: PublicationForm): DdlResult
     const toAdd = current.schemas.filter((s) => !before.has(s));
     const toDrop = initial.schemas.filter((s) => !after.has(s));
     if (toAdd.length > 0) {
-      stmts.push(        `ALTER PUBLICATION ${name} ADD TABLES IN SCHEMA ${toAdd.map(quoteIdent).join(", ")};`,
-);
+      stmts.push(
+        `ALTER PUBLICATION ${name} ADD TABLES IN SCHEMA ${toAdd.map(quoteIdent).join(", ")};`,
+      );
     }
     if (toDrop.length > 0) {
-      stmts.push(        `ALTER PUBLICATION ${name} DROP TABLES IN SCHEMA ${toDrop.map(quoteIdent).join(", ")};`,
-);
+      stmts.push(
+        `ALTER PUBLICATION ${name} DROP TABLES IN SCHEMA ${toDrop.map(quoteIdent).join(", ")};`,
+      );
     }
   }
 
@@ -83,8 +87,9 @@ function alterDdl(initial: PublicationForm, current: PublicationForm): DdlResult
     stmts.push(`ALTER PUBLICATION ${name} SET (publish = '${opsAfter}');`);
   }
   if (initial.publishViaPartitionRoot !== current.publishViaPartitionRoot) {
-    stmts.push(      `ALTER PUBLICATION ${name} SET (publish_via_partition_root = ${current.publishViaPartitionRoot});`,
-);
+    stmts.push(
+      `ALTER PUBLICATION ${name} SET (publish_via_partition_root = ${current.publishViaPartitionRoot});`,
+    );
   }
 
   return { sql: stmts.join("\n"), warnings, errors: [] };

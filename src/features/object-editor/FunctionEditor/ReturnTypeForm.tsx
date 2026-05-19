@@ -24,7 +24,8 @@ export function ReturnTypeForm({
   // is visually hidden but stays focusable for keyboard users.
   const pill = (kind: ReturnKind, label: string): JSX.Element => {
     const checked = returnKind === kind;
-    return (      <label
+    return (
+      <label
         key={kind}
         style={{
           display: "inline-flex",
@@ -62,10 +63,11 @@ export function ReturnTypeForm({
         />
         {label}
       </label>
-);
+    );
   };
 
-  return (    <div data-testid="fn-return-type" style={{ display: "grid", gap: 10 }}>
+  return (
+    <div data-testid="fn-return-type" style={{ display: "grid", gap: 10 }}>
       <div
         role="radiogroup"
         aria-label={t("object_editor.function.return_type_section")}
@@ -76,7 +78,8 @@ export function ReturnTypeForm({
         {pill("void", t("object_editor.function.return_void"))}
         {pill("trigger", t("object_editor.function.return_trigger"))}
       </div>
-      {!typeDisabled ? (        <div className="q-field" style={{ maxWidth: 320 }}>
+      {!typeDisabled ? (
+        <div className="q-field" style={{ maxWidth: 320 }}>
           <label htmlFor="fn-return-type-input">
             {t("object_editor.function.return_type_input")}
           </label>
@@ -88,7 +91,7 @@ export function ReturnTypeForm({
             onChange={(e) => onChange({ returnKind, returnType: e.target.value })}
           />
         </div>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

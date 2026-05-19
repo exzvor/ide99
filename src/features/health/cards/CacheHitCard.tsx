@@ -28,7 +28,8 @@ export function CacheHitCard({ connId, state }: CardProps): JSX.Element {
 
   const clamped = Math.max(0, Math.min(100, ratio));
 
-  const body = (    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+  const body = (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
       <div style={{ fontSize: 22, fontWeight: 600 }} data-testid="cache-hit-pct">
         {ratio.toFixed(2)}%
       </div>
@@ -56,14 +57,15 @@ export function CacheHitCard({ connId, state }: CardProps): JSX.Element {
         />
       </div>
     </div>
-);
+  );
 
-  return (    <CardShell
+  return (
+    <CardShell
       cardId="cache_hit"
       connId={connId}
       state={state}
       body={body}
       status={{ tone, tooltip: t(`health.status.${tone}`) }}
     />
-);
+  );
 }

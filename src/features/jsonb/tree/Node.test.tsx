@@ -41,8 +41,9 @@ describe("Node — ARIA", () => {
   });
 
   it("omits aria-expanded for leaf nodes", () => {
-    render(      <Node {...defaults({ value: 42, hasChildren: false, isRoot: false, keyOrIndex: "n" })} />,
-);
+    render(
+      <Node {...defaults({ value: 42, hasChildren: false, isRoot: false, keyOrIndex: "n" })} />,
+    );
     expect(screen.getByRole("treeitem")).not.toHaveAttribute("aria-expanded");
   });
 });
@@ -50,15 +51,17 @@ describe("Node — ARIA", () => {
 describe("Node — interactions", () => {
   it("clicking chevron calls onToggleExpand with the path", () => {
     const onToggleExpand = vi.fn();
-    render(      <Node {...defaults({ path: ["a"], hasChildren: true, expanded: true, onToggleExpand })} />,
-);
+    render(
+      <Node {...defaults({ path: ["a"], hasChildren: true, expanded: true, onToggleExpand })} />,
+    );
     fireEvent.click(screen.getByTestId("jsonb-tree-chevron"));
     expect(onToggleExpand).toHaveBeenCalledWith(["a"]);
   });
 
   it("clicking leaf value reveals an editor; commit calls onMutate", () => {
     const onMutate = vi.fn();
-    render(      <Node
+    render(
+      <Node
         {...defaults({
           value: "hi",
           hasChildren: false,
@@ -68,7 +71,7 @@ describe("Node — interactions", () => {
           onMutate,
         })}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("jsonb-tree-leaf-value"));
     const input = screen.getByTestId("jsonb-tree-leaf-input") as HTMLInputElement;
     fireEvent.change(input, { target: { value: "bye" } });
@@ -78,7 +81,8 @@ describe("Node — interactions", () => {
 
   it("number input rejects non-numeric and does not call onMutate", () => {
     const onMutate = vi.fn();
-    render(      <Node
+    render(
+      <Node
         {...defaults({
           value: 7,
           hasChildren: false,
@@ -88,7 +92,7 @@ describe("Node — interactions", () => {
           onMutate,
         })}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("jsonb-tree-leaf-value"));
     const input = screen.getByTestId("jsonb-tree-leaf-input") as HTMLInputElement;
     fireEvent.change(input, { target: { value: "" } });
@@ -98,7 +102,8 @@ describe("Node — interactions", () => {
 
   it("boolean leaf renders a select with true/false options", () => {
     const onMutate = vi.fn();
-    render(      <Node
+    render(
+      <Node
         {...defaults({
           value: true,
           hasChildren: false,
@@ -108,7 +113,7 @@ describe("Node — interactions", () => {
           onMutate,
         })}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("jsonb-tree-leaf-value"));
     const select = screen.getByTestId("jsonb-tree-leaf-input") as HTMLSelectElement;
     fireEvent.change(select, { target: { value: "false" } });
@@ -117,7 +122,8 @@ describe("Node — interactions", () => {
   });
 
   it("null leaf shows [set value] button", () => {
-    render(      <Node
+    render(
+      <Node
         {...defaults({
           value: null,
           hasChildren: false,
@@ -126,14 +132,15 @@ describe("Node — interactions", () => {
           path: ["x"],
         })}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("jsonb-tree-leaf-value"));
     expect(screen.getByTestId("leaf-set-value")).toBeInTheDocument();
   });
 
   it("delete button calls onDelete with the path (non-root only)", () => {
     const onDelete = vi.fn();
-    render(      <Node
+    render(
+      <Node
         {...defaults({
           value: 1,
           hasChildren: false,
@@ -143,7 +150,7 @@ describe("Node — interactions", () => {
           onDelete,
         })}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("jsonb-tree-delete"));
     expect(onDelete).toHaveBeenCalledWith(["k"]);
   });
@@ -165,7 +172,8 @@ describe("Node — interactions", () => {
 
 describe("Node — readOnly", () => {
   it("hides delete and add-child buttons when readOnly", () => {
-    render(      <Node
+    render(
+      <Node
         {...defaults({
           readOnly: true,
           value: 1,
@@ -175,13 +183,14 @@ describe("Node — readOnly", () => {
           path: ["k"],
         })}
       />,
-);
+    );
     expect(screen.queryByTestId("jsonb-tree-delete")).toBeNull();
     expect(screen.queryByTestId("jsonb-tree-add-child")).toBeNull();
   });
 
   it("disables the leaf-value button when readOnly", () => {
-    render(      <Node
+    render(
+      <Node
         {...defaults({
           readOnly: true,
           value: "hi",
@@ -191,14 +200,15 @@ describe("Node — readOnly", () => {
           path: ["k"],
         })}
       />,
-);
+    );
     expect(screen.getByTestId("jsonb-tree-leaf-value")).toBeDisabled();
   });
 });
 
 describe("Node — type badge", () => {
   it("shows the array length in the badge", () => {
-    render(      <Node
+    render(
+      <Node
         {...defaults({
           value: [1, 2, 3],
           hasChildren: true,
@@ -208,7 +218,7 @@ describe("Node — type badge", () => {
           path: ["xs"],
         })}
       />,
-);
+    );
     expect(screen.getByTestId("jsonb-tree-type-badge")).toHaveTextContent("3");
   });
 });

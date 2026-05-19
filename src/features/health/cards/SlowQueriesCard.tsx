@@ -33,8 +33,10 @@ export function SlowQueriesCard({ connId, state }: CardProps): JSX.Element {
   const maxMean = rows.reduce((acc, r) => Math.max(acc, r.meanTimeMs), 0);
   const tone = slowTone(maxMean);
 
-  const body = (    <ul style={{ margin: 0, padding: 0, listStyle: "none", fontSize: 12 }}>
-      {top3.map((r) => (        <li key={`${r.query}:${r.calls}`} data-testid="slow-row" style={{ marginBottom: 4 }}>
+  const body = (
+    <ul style={{ margin: 0, padding: 0, listStyle: "none", fontSize: 12 }}>
+      {top3.map((r) => (
+        <li key={`${r.query}:${r.calls}`} data-testid="slow-row" style={{ marginBottom: 4 }}>
           <div
             style={{
               fontFamily: "var(--font-mono)",
@@ -65,16 +67,17 @@ export function SlowQueriesCard({ connId, state }: CardProps): JSX.Element {
             <ReproduceOnDisposableButton query={r.query} />
           </span>
         </li>
-))}
+      ))}
     </ul>
-);
+  );
 
-  return (    <CardShell
+  return (
+    <CardShell
       cardId="slow_queries"
       connId={connId}
       state={state}
       body={body}
       status={{ tone, tooltip: t(`health.status.${tone}`) }}
     />
-);
+  );
 }

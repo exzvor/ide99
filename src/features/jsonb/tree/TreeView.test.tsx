@@ -36,13 +36,14 @@ beforeAll(() => {
 
 describe("TreeView — render", () => {
   it("renders root container with children expanded by default", () => {
-    render(      <TreeView
+    render(
+      <TreeView
         value={{ a: 1, b: { c: 2 } }}
         onChange={() => {}}
         readOnly={false}
         isJsonbType={false}
       />,
-);
+    );
     const items = screen.getAllByRole("treeitem");
     // root + a + b (b's children rendered only when b expanded — collapsed by default)
     expect(items.length).toBeGreaterThanOrEqual(3);
@@ -50,13 +51,14 @@ describe("TreeView — render", () => {
   });
 
   it("clicking chevron on a child container expands it", () => {
-    render(      <TreeView
+    render(
+      <TreeView
         value={{ outer: { inner: 1 } }}
         onChange={() => {}}
         readOnly={false}
         isJsonbType={false}
       />,
-);
+    );
     // Initially `outer` is collapsed → only root + outer rendered.
     expect(screen.queryByText("inner")).toBeNull();
     const chevrons = screen.getAllByTestId("jsonb-tree-chevron");
@@ -67,13 +69,14 @@ describe("TreeView — render", () => {
 
   it("editing a leaf value calls onChange with the immutable next value", () => {
     const onChange = vi.fn();
-    render(      <TreeView
+    render(
+      <TreeView
         value={{ a: 1, b: "hi" }}
         onChange={onChange}
         readOnly={false}
         isJsonbType={false}
       />,
-);
+    );
     const leaves = screen.getAllByTestId("jsonb-tree-leaf-value");
     // First leaf is "a: 1"; click and edit.
     fireEvent.click(leaves[0] as Element);
@@ -97,8 +100,9 @@ describe("TreeView — render", () => {
 
   it("delete on a child removes it from the parent (no confirm in pure component)", () => {
     const onChange = vi.fn();
-    render(      <TreeView value={{ a: 1, b: 2 }} onChange={onChange} readOnly={false} isJsonbType={false} />,
-);
+    render(
+      <TreeView value={{ a: 1, b: 2 }} onChange={onChange} readOnly={false} isJsonbType={false} />,
+    );
     const deletes = screen.getAllByTestId("jsonb-tree-delete");
     fireEvent.click(deletes[0] as Element);
     expect(onChange).toHaveBeenCalledWith({ b: 2 });
@@ -151,8 +155,9 @@ describe("TreeView — virtualization", () => {
   it("uses TanStack Virtual when visible nodes > 200, rendering <300 DOM nodes", () => {
     // 250 array items at root → flatten = root + 250 = 251 nodes.
     const big = Array.from({ length: 250 }, (_, i) => i);
-    const { container } = render(      <TreeView value={big} onChange={() => {}} readOnly={false} isJsonbType={false} />,
-);
+    const { container } = render(
+      <TreeView value={big} onChange={() => {}} readOnly={false} isJsonbType={false} />,
+    );
     // Virtualized rows have a unique testid; with overscan=8 only a small
     // subset should be in the DOM. Assert that the virtualization codepath is
     // active and that the rendered row count is far below the dataset.
@@ -163,8 +168,9 @@ describe("TreeView — virtualization", () => {
 
   it("renders all rows inline when count <= 200", () => {
     const small = Array.from({ length: 5 }, (_, i) => i);
-    const { container } = render(      <TreeView value={small} onChange={() => {}} readOnly={false} isJsonbType={false} />,
-);
+    const { container } = render(
+      <TreeView value={small} onChange={() => {}} readOnly={false} isJsonbType={false} />,
+    );
     const virtualRows = container.querySelectorAll('[data-testid="jsonb-tree-virtual-row"]');
     expect(virtualRows.length).toBe(0);
     // root + 5 children

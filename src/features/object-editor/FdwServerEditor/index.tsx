@@ -80,11 +80,12 @@ export function FdwServerEditor({ tab }: FdwServerEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: FdwServerForm) => FdwServerForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: FdwServerForm) => FdwServerForm): void => {
       updateForm(tab.id, (s) => (s.kind === "fdw_server" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "fdw_server" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -98,16 +99,18 @@ export function FdwServerEditor({ tab }: FdwServerEditorProps): JSX.Element {
     : false;
 
   if (loadError) {
-    return (      <div data-testid="fdw-server-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="fdw-server-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="fdw-server-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="fdw-server-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -156,7 +159,8 @@ export function FdwServerEditor({ tab }: FdwServerEditorProps): JSX.Element {
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="fdw-server-editor"
       style={{
         display: "grid",
@@ -180,7 +184,8 @@ export function FdwServerEditor({ tab }: FdwServerEditorProps): JSX.Element {
             ? t("object_editor.fdw_server.title_new")
             : t("object_editor.fdw_server.title_edit")}
         </h2>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="fdw-dirty-badge"
             style={{
               fontSize: 11,
@@ -191,7 +196,7 @@ export function FdwServerEditor({ tab }: FdwServerEditorProps): JSX.Element {
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <HelpLink topic="fdw_server" />
       </div>
@@ -307,5 +312,5 @@ export function FdwServerEditor({ tab }: FdwServerEditorProps): JSX.Element {
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

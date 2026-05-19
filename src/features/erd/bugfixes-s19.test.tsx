@@ -173,8 +173,8 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-// ── �� toolbar split into two non-overlapping rows ───────────────
-describe("�� toolbar layout", () => {
+// ── toolbar split into two non-overlapping rows ───────────────
+describe("toolbar layout", () => {
   it("EditActionsBar mounts as its own row, separate from the read-mode Toolbar", async () => {
     const user = userEvent.setup();
     render(<ErdPane connId="c1" schemas={undefined} tabId="erd-c1" />);
@@ -199,8 +199,8 @@ describe("�� toolbar layout", () => {
   });
 });
 
-// ── �� add-column row uses dedicated label ──────────────────────
-describe("�� add-column label", () => {
+// ── add-column row uses dedicated label ──────────────────────
+describe("add-column label", () => {
   it("en + ru both expose erd.edit.add_column without a leading +", () => {
     const enLabel = (en as { erd: { edit: { add_column: string } } }).erd.edit.add_column;
     const ruLabel = (ru as { erd: { edit: { add_column: string } } }).erd.edit.add_column;
@@ -223,8 +223,8 @@ describe("�� add-column label", () => {
   });
 });
 
-// ── + �� confirm modals' cancel labels ──────────────
-describe("/ �� confirm modal cancel labels", () => {
+// ── + confirm modals' cancel labels ──────────────
+describe("/ confirm modal cancel labels", () => {
   it("apply-confirm cancel renders erd.edit.cancel, not erd.edit.discard", async () => {
     const user = userEvent.setup();
     render(<ErdPane connId="c1" schemas={undefined} tabId="erd-c1" />);
@@ -250,8 +250,8 @@ describe("/ �� confirm modal cancel labels", () => {
   });
 });
 
-// ── �� validation errors render in DDL preview ──────────────────
-describe("�� validation errors banner", () => {
+// ── validation errors render in DDL preview ──────────────────
+describe("validation errors banner", () => {
   it("duplicate-table error surfaces in DdlPreviewPanel error banner", async () => {
     const user = userEvent.setup();
     render(<ErdPane connId="c1" schemas={undefined} tabId="erd-c1" />);
@@ -267,15 +267,16 @@ describe("�� validation errors banner", () => {
     await waitFor(() => {
       expect(screen.getByTestId("ddl-preview-errors")).toBeInTheDocument();
     });
-    expect(screen.getByTestId("ddl-preview-errors-list")).toHaveTextContent(      /Table users already exists in schema public/i,
-);
+    expect(screen.getByTestId("ddl-preview-errors-list")).toHaveTextContent(
+      /Table users already exists in schema public/i,
+    );
     // Apply must remain disabled while errors are present.
     expect(screen.getByTestId("edit-apply")).toBeDisabled();
   });
 });
 
-// ── �� rename newly-added column routes through op-log ──────────
-describe("�� rename newly-added column", () => {
+// ── rename newly-added column routes through op-log ──────────
+describe("rename newly-added column", () => {
   it("renaming an addColumn op-target updates the op-log + DDL preview", async () => {
     const user = userEvent.setup();
     render(<ErdPane connId="c1" schemas={undefined} tabId="erd-c1" />);
@@ -283,12 +284,13 @@ describe("�� rename newly-added column", () => {
 
     // Add column "col_2" to the existing `users` table programmatically so
     // we don't depend on the +column row's click target wiring.
-    const addCol = makeAddColumnOp(      { schema: "public", name: "users" },
+    const addCol = makeAddColumnOp(
+      { schema: "public", name: "users" },
       "col_2",
       "TEXT",
       true,
       false,
-);
+    );
     act(() => {
       useEditStore.getState().pushOp("erd-c1", addCol);
     });
@@ -315,8 +317,8 @@ describe("�� rename newly-added column", () => {
   });
 });
 
-// ── �� Reset Layout requires confirm ────────────────────────────
-describe("�� Reset Layout confirm", () => {
+// ── Reset Layout requires confirm ────────────────────────────
+describe("Reset Layout confirm", () => {
   it("clicking Reset Layout opens a confirm modal and does NOT reset until OK", async () => {
     const user = userEvent.setup();
     // Pre-load a position so the Reset button is mounted.
@@ -342,8 +344,8 @@ describe("�� Reset Layout confirm", () => {
   });
 });
 
-// ── �� FK handle icon + i18n compliance ─────────────────────────
-describe("�� FK handle icon + picker i18n", () => {
+// ── FK handle icon + i18n compliance ─────────────────────────
+describe("FK handle icon + picker i18n", () => {
   it("FK handle renders link affordance, not the legacy ⇨ glyph", async () => {
     const user = userEvent.setup();
     render(<ErdPane connId="c1" schemas={undefined} tabId="erd-c1" />);
@@ -364,8 +366,8 @@ describe("�� FK handle icon + picker i18n", () => {
   });
 });
 
-// ── �� auto-fit retry path exists ───────────────────────────────
-describe("�� auto-fit retry on large graphs", () => {
+// ── auto-fit retry path exists ───────────────────────────────
+describe("auto-fit retry on large graphs", () => {
   it("erd-canvas mounts with the SVG element accessible for ResizeObserver", () => {
     render(<ErdPane connId="c1" schemas={undefined} tabId="erd-c1" />);
     // The canvas SVG must be addressable so the ResizeObserver hook in

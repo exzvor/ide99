@@ -67,8 +67,9 @@ function buildSnapshot(): IdeBridgeState {
           return null;
       }
     })
-    .filter(      (x): x is { id: string; title: string; connId: string | null; kind: TabKind } => x !== null,
-);
+    .filter(
+      (x): x is { id: string; title: string; connId: string | null; kind: TabKind } => x !== null,
+    );
 
   const healthScreenVisible = activeTab?.kind === "health";
 

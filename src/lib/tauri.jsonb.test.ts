@@ -27,7 +27,7 @@ describe("S15 jsonb wire schemas", () => {
         table: "events",
         columns: [],
       }),
-).toThrow();
+    ).toThrow();
   });
 
   it("parses JsonbDiff with set op", () => {

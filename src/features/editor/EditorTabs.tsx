@@ -97,7 +97,7 @@ export function EditorTabs(): JSX.Element {
     el.focus();
     el.select();
   }, [editingTabId]);
-  // Äî auto-scroll the active tab into view inside the horizontally
+  // auto-scroll the active tab into view inside the horizontally
   // scrollable strip. Without this, opening a Live Ops tab via Cmd+Shift+L
   // appended a new tab off the right edge while the visible window still
   // showed Health, leaving the user unable to see what's now active.
@@ -106,8 +106,9 @@ export function EditorTabs(): JSX.Element {
     if (activeTabId === null) return;
     const root = tabScrollRef.current;
     if (!root) return;
-    const target = root.querySelector<HTMLElement>(      `[data-testid="editor-tab-${cssEscape(activeTabId)}"]`,
-);
+    const target = root.querySelector<HTMLElement>(
+      `[data-testid="editor-tab-${cssEscape(activeTabId)}"]`,
+    );
     // jsdom (vitest) doesn't implement scrollIntoView; guard so unit
     // tests don't crash on a missing platform API.
     if (target && typeof target.scrollIntoView === "function") {
@@ -225,7 +226,7 @@ export function EditorTabs(): JSX.Element {
       setPendingClose(tab);
       return;
     }
-    // Äî object-editor tabs keep their dirty state in
+    // object-editor tabs keep their dirty state in
     // `useObjectEditorStore`, not on the tab object itself. Mirror the
     // SQL-editor guard.
     if (tab.kind === "object-editor") {
@@ -257,7 +258,7 @@ export function EditorTabs(): JSX.Element {
     useEditor.getState().openHealthTab(activeConnId);
   }
 
-  // Äî Notebook tab kind already exists in editor store, but had no
+  // Notebook tab kind already exists in editor store, but had no
   // user-facing entry point. Create a fresh notebook with one empty SQL cell
   // and open it in a new tab; the user can rename + add cells as usual.
   async function handleOpenNotebook() {
@@ -297,7 +298,8 @@ export function EditorTabs(): JSX.Element {
     setPendingClose(null);
   }
 
-  return (    <>
+  return (
+    <>
       <div
         role="tablist"
         aria-label={t("editor.tabs.new")}
@@ -362,9 +364,10 @@ export function EditorTabs(): JSX.Element {
                                           ? t("notebook.tab.title")
                                           : tab.kind === "backup"
                                             ? t("backup.tab.title", {
-                                                connection: getConnectionName(                                                  tab.connectionId,
+                                                connection: getConnectionName(
+                                                  tab.connectionId,
                                                   connections,
-),
+                                                ),
                                               })
                                             : t("editor.explain.tab.title", {
                                                 source: tab.sourceTabId
@@ -379,7 +382,8 @@ export function EditorTabs(): JSX.Element {
                     })()
                   : false;
               const dirty = (tab.kind === "editor" && tab.dirty) || objectEditorDirty;
-              return (                <div
+              return (
+                <div
                   key={tab.id}
                   className={`q-tab ${isActive ? "active" : ""}`}
                   style={{ paddingRight: 6 }}
@@ -414,7 +418,8 @@ export function EditorTabs(): JSX.Element {
                   >
                     {tab.kind === "live-ops" ? <Radar size={11} aria-hidden="true" /> : null}
                     {tab.kind === "erd" ? <Network size={11} aria-hidden="true" /> : null}
-                    {editingTabId === tab.id ? (                      <input
+                    {editingTabId === tab.id ? (
+                      <input
                         ref={renameInputRef}
                         value={renameDraft}
                         onChange={(e) => setRenameDraft(e.target.value)}
@@ -445,18 +450,20 @@ export function EditorTabs(): JSX.Element {
                           outline: "none",
                         }}
                       />
-) : (                      <span style={{ maxWidth: 280, overflow: "hidden", textOverflow: "ellipsis" }}>
+                    ) : (
+                      <span style={{ maxWidth: 280, overflow: "hidden", textOverflow: "ellipsis" }}>
                         {tabName}
                       </span>
-)}
-                    {dirty ? (                      <span
+                    )}
+                    {dirty ? (
+                      <span
                         aria-hidden="true"
                         style={{ color: "var(--accent)", fontSize: 9 }}
                         data-testid={`editor-tab-dirty-${tab.id}`}
                       >
                         ‚óè
                       </span>
-) : null}
+                    ) : null}
                   </button>
                   <button
                     type="button"
@@ -469,10 +476,11 @@ export function EditorTabs(): JSX.Element {
                     <X size={11} aria-hidden="true" />
                   </button>
                 </div>
-);
+              );
             })}
           </div>
-          {scrollMeta.visible ? (            <div className="q-tab-scrollbar" aria-hidden="true">
+          {scrollMeta.visible ? (
+            <div className="q-tab-scrollbar" aria-hidden="true">
               <div
                 className="q-tab-scrollbar-thumb"
                 onPointerDown={onThumbPointerDown}
@@ -482,7 +490,7 @@ export function EditorTabs(): JSX.Element {
                 }}
               />
             </div>
-) : null}
+          ) : null}
         </div>
         <button
           type="button"
@@ -540,7 +548,7 @@ export function EditorTabs(): JSX.Element {
         >
           <Activity size={13} aria-hidden="true" />
         </button>
-        {/* Äî Notebook entry. Always enabled; SQL cells will surface
+        {/* Notebook entry. Always enabled; SQL cells will surface
             "Pick a connection" if no active connection. */}
         <button
           type="button"
@@ -553,7 +561,7 @@ export function EditorTabs(): JSX.Element {
         >
           <BookOpen size={13} aria-hidden="true" />
         </button>
-        {/* Äî Backup/Restore center entry. Disabled until a connection
+        {/* Backup/Restore center entry. Disabled until a connection
             is active because the wizard dispatches against `connectionId`. */}
         <button
           type="button"
@@ -618,11 +626,11 @@ export function EditorTabs(): JSX.Element {
         }
       />
     </>
-);
+  );
 }
 
 /**
- * Äî escape an id for use inside an attribute selector. Live Ops
+ * escape an id for use inside an attribute selector. Live Ops
  * tab ids look like `live-ops-<uuid>` (already querySelector-safe), but
  * other call paths can mint ids with `:` or `.` that would otherwise
  * make the selector invalid. Prefer the native CSS.escape when present;
@@ -663,7 +671,8 @@ function planDiffSideShortLabel(side: import("./store").PlanDiffSide): string {
  * ‚Äî resolve the display name for a Health tab's connection.
  * Falls back to a short id slice when the connection has been deleted.
  */
-function getConnectionName(  connectionId: string,
+function getConnectionName(
+  connectionId: string,
   connections: ReadonlyArray<{ id: string; name: string }>,
 ): string {
   const conn = connections.find((c) => c.id === connectionId);

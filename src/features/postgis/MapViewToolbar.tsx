@@ -43,7 +43,8 @@ const TOOLS: readonly ToolDef[] = [
 ];
 
 export function MapViewToolbar({ active, onChange }: MapViewToolbarProps): JSX.Element {
-  return (    <div
+  return (
+    <div
       data-testid="map-view-toolbar"
       role="toolbar"
       aria-label="Map drawing tools"
@@ -51,7 +52,8 @@ export function MapViewToolbar({ active, onChange }: MapViewToolbarProps): JSX.E
     >
       {TOOLS.map((t) => {
         const isActive = active === t.tool;
-        return (          <button
+        return (
+          <button
             key={t.tool}
             type="button"
             data-testid={t.testId}
@@ -71,8 +73,8 @@ export function MapViewToolbar({ active, onChange }: MapViewToolbarProps): JSX.E
           >
             {t.label}
           </button>
-);
+        );
       })}
     </div>
-);
+  );
 }

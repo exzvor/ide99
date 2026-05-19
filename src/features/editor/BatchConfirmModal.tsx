@@ -65,20 +65,23 @@ export function BatchConfirmModal(props: Props): JSX.Element | null {
       env: props.environment,
       count: props.destructive.length,
     }),
-);
+  );
 
-  const list = (    <ul className="q-batch-confirm-list">
-      {props.destructive.map((d) => (        <li key={d.index}>
+  const list = (
+    <ul className="q-batch-confirm-list">
+      {props.destructive.map((d) => (
+        <li key={d.index}>
           <span className="idx">#{d.index + 1}</span>
           <span className="sql" title={d.snippet}>
             {d.snippet}
           </span>
         </li>
-))}
+      ))}
     </ul>
-);
+  );
 
-  return (    <TypingConfirmModal
+  return (
+    <TypingConfirmModal
       title={t("editor.batch.confirm.title")}
       description={lead}
       bodyExtras={list}
@@ -90,5 +93,5 @@ export function BatchConfirmModal(props: Props): JSX.Element | null {
       onCancel={props.onCancel}
       onConfirm={() => props.onConfirm()}
     />
-);
+  );
 }

@@ -13,14 +13,16 @@ const baseMv = (over: Partial<MatviewForm> = {}): MatviewForm => ({
 describe("generateMatviewDdl", () => {
   test("create-mode WITH DATA", () => {
     const result = generateMatviewDdl(null, baseMv());
-    expect(result.sql).toBe(      "CREATE MATERIALIZED VIEW public.agg_mv AS\nSELECT count(*) FROM events\nWITH DATA;",
-);
+    expect(result.sql).toBe(
+      "CREATE MATERIALIZED VIEW public.agg_mv AS\nSELECT count(*) FROM events\nWITH DATA;",
+    );
   });
 
   test("create-mode WITH NO DATA", () => {
     const result = generateMatviewDdl(null, baseMv({ withData: false }));
-    expect(result.sql).toBe(      "CREATE MATERIALIZED VIEW public.agg_mv AS\nSELECT count(*) FROM events\nWITH NO DATA;",
-);
+    expect(result.sql).toBe(
+      "CREATE MATERIALIZED VIEW public.agg_mv AS\nSELECT count(*) FROM events\nWITH NO DATA;",
+    );
   });
 
   test("edit-mode body change → DROP + CREATE + warning", () => {
@@ -28,13 +30,14 @@ describe("generateMatviewDdl", () => {
     const current = baseMv({ body: "SELECT count(DISTINCT user_id) FROM events" });
     const result = generateMatviewDdl(initial, current);
     expect(result.warnings.find((w) => w.code === "matview_recreate")).toBeTruthy();
-    expect(result.sql).toBe(      [
+    expect(result.sql).toBe(
+      [
         "DROP MATERIALIZED VIEW IF EXISTS public.agg_mv;",
         "CREATE MATERIALIZED VIEW public.agg_mv AS",
         "SELECT count(DISTINCT user_id) FROM events",
         "WITH DATA;",
       ].join("\n"),
-);
+    );
   });
 
   test("edit-mode withData toggle (body unchanged) → REFRESH", () => {

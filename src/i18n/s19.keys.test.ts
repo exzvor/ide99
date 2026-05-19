@@ -41,10 +41,11 @@ const REQUIRED_S19_KEYS: string[] = [
 function pluck(obj: unknown, dotted: string): unknown {
   return dotted
     .split(".")
-    .reduce<unknown>(      (acc, k) =>
+    .reduce<unknown>(
+      (acc, k) =>
         acc && typeof acc === "object" ? (acc as Record<string, unknown>)[k] : undefined,
       obj,
-);
+    );
 }
 
 describe("i18n keys", () => {
@@ -60,10 +61,12 @@ describe("i18n keys", () => {
   });
   it("en/ru have same key set under erd.edit", () => {
     type ErdEditMap = Record<string, unknown>;
-    const enKeys = JSON.stringify(      Object.keys(((en as Record<string, ErdEditMap>).erd as ErdEditMap).edit as ErdEditMap).sort(),
-);
-    const ruKeys = JSON.stringify(      Object.keys(((ru as Record<string, ErdEditMap>).erd as ErdEditMap).edit as ErdEditMap).sort(),
-);
+    const enKeys = JSON.stringify(
+      Object.keys(((en as Record<string, ErdEditMap>).erd as ErdEditMap).edit as ErdEditMap).sort(),
+    );
+    const ruKeys = JSON.stringify(
+      Object.keys(((ru as Record<string, ErdEditMap>).erd as ErdEditMap).edit as ErdEditMap).sort(),
+    );
     expect(enKeys).toBe(ruKeys);
   });
 });

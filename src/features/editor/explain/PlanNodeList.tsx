@@ -87,7 +87,8 @@ export function PlanNodeList({ plan, highlight, onSelect }: PlanNodeListProps): 
   const sorted = [...annotated].sort((a, b) => b.cost - a.cost);
   const maxCost = sorted[0]?.cost || 1;
 
-  return (    <div data-testid="plan-node-list" className="q-scroll" style={{ overflow: "auto" }}>
+  return (
+    <div data-testid="plan-node-list" className="q-scroll" style={{ overflow: "auto" }}>
       <div
         style={{
           padding: "10px 12px 6px",
@@ -107,17 +108,19 @@ export function PlanNodeList({ plan, highlight, onSelect }: PlanNodeListProps): 
           const widthPct = Math.max(2, Math.round((n.cost / maxCost) * 100));
           const isActive = highlight === n.label;
           const sevClass = n.severity === "crit" ? "crit" : n.severity === "hot" ? "hot" : "";
-          return (            <button
+          return (
+            <button
               type="button"
               key={`${n.idx}-${n.label}`}
               data-testid={`plan-node-row-${n.idx}`}
               data-severity={n.severity}
               className={`q-plan-node ${sevClass} ${isActive ? "active" : ""}`}
               onClick={() =>
-                onSelect(                  isActive ? null : n.label,
+                onSelect(
+                  isActive ? null : n.label,
                   isActive ? null : n.node,
                   isActive ? null : n.idx,
-)
+                )
               }
               title={n.label}
             >
@@ -135,9 +138,9 @@ export function PlanNodeList({ plan, highlight, onSelect }: PlanNodeListProps): 
                 {n.severity !== "ok" ? <span className="pn-flag" /> : null}
               </span>
             </button>
-);
+          );
         })}
       </div>
     </div>
-);
+  );
 }

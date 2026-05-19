@@ -153,7 +153,8 @@ export function InsightsPanel({ tabId, plan, onHighlight }: InsightsPanelProps):
   const [vibepgOpen, setVibepgOpen] = useState(false);
 
   if (insights.length === 0) {
-    return (      <aside
+    return (
+      <aside
         className="insights-panel"
         data-testid="insights-panel"
         style={{
@@ -198,19 +199,21 @@ export function InsightsPanel({ tabId, plan, onHighlight }: InsightsPanelProps):
         </div>
         <VibepgResultDialog open={vibepgOpen} onOpenChange={setVibepgOpen} />
       </aside>
-);
+    );
   }
 
-  const counts = insights.reduce(    (acc, ins) => {
+  const counts = insights.reduce(
+    (acc, ins) => {
       acc[ins.severity]++;
       return acc;
     },
     { high: 0, med: 0, low: 0 } as Record<InsightSeverity, number>,
-);
+  );
 
   const idxByPath = buildInsightIdxMap(plan);
 
-  return (    <aside
+  return (
+    <aside
       className="insights-panel"
       data-testid="insights-panel"
       style={{
@@ -248,7 +251,8 @@ export function InsightsPanel({ tabId, plan, onHighlight }: InsightsPanelProps):
         {insights.map((insight) => {
           const idx = idxByPath.get(insight.nodePath.join("."));
           const meta = buildInsightMeta(insight, plan);
-          return (            <InsightCard
+          return (
+            <InsightCard
               key={`${insight.ruleId}-${insight.nodePath.join(".")}`}
               insight={insight}
               idx={idx}
@@ -266,12 +270,12 @@ export function InsightsPanel({ tabId, plan, onHighlight }: InsightsPanelProps):
                 }
               }}
             />
-);
+          );
         })}
       </ul>
       <VibepgResultDialog open={vibepgOpen} onOpenChange={setVibepgOpen} />
     </aside>
-);
+  );
 }
 
 interface InsightCardProps {
@@ -295,7 +299,8 @@ function InsightCard({
   const tone = SEVERITY_TONE[insight.severity];
   const testid = `insight-card-${insight.ruleId}-${insight.nodePath.join("-")}`;
 
-  return (    <li
+  return (
+    <li
       data-testid={testid}
       data-severity={insight.severity}
       className={`q-insight ${tone}`}
@@ -342,7 +347,7 @@ function InsightCard({
         </div>
       </div>
     </li>
-);
+  );
 }
 
 // Re-export severity colour map for tests / consumers.

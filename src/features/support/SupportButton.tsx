@@ -14,7 +14,8 @@ export function SupportButton(): JSX.Element {
   const [open, setOpen] = useState(false);
   const label = t("support.button", { defaultValue: "Support" });
 
-  return (    <>
+  return (
+    <>
       <button
         type="button"
         onClick={() => setOpen(true)}
@@ -37,5 +38,5 @@ export function SupportButton(): JSX.Element {
       </button>
       <SupportDialog open={open} onOpenChange={setOpen} />
     </>
-);
+  );
 }

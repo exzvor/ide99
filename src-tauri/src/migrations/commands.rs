@@ -166,7 +166,7 @@ pub async fn migrations_list(    state: State<'_, AppState>,
     let conn = load_connection(&state, &conn_id).await?;
     let (migrations, tracking_table_missing) = list_with_ledger(&state, &conn_id).await?;
 
-    // €” auto-spawn the fs watcher if the connection has a
+    // auto-spawn the fs watcher if the connection has a
     // persisted migrations_dir but no live watcher (typical after restart:
     // the persisted dir is loaded but `migrations_set_dir` was never called
     // again, so the listener never started).
@@ -204,7 +204,7 @@ pub async fn migrations_list(    state: State<'_, AppState>,
     Ok(ListResult {
         migrations,
         tracking_table_missing,
-        // €” surface persisted state so the panel can hydrate
+        // surface persisted state so the panel can hydrate
         // its zustand store on first render after restart.
         migrations_dir: conn.migrations_dir.clone(),
         tracking_enabled: conn.migration_tracking_enabled,
@@ -277,7 +277,7 @@ fn select_for_apply<'a>(    merged: &'a [Migration],
                 .iter()
                 .find(|m| m.version == *version)
                 .ok_or_else(|| MigrationsError::NotFound(version.clone()))?;
-            // €” refuse parse-error rows here (defense in depth;
+            // refuse parse-error rows here (defense in depth;
             // executor::select_targets also checks). Gives a cleaner error
             // path than the executor for the orchestration layer.
             if let Some(err) = &m.parse_error {

@@ -24,14 +24,15 @@ afterEach(() => vi.clearAllMocks());
 
 describe("PlanDiffToolbar", () => {
   it("renders both side labels and Swap / Open A / Open B buttons", () => {
-    render(      <PlanDiffToolbar
+    render(
+      <PlanDiffToolbar
         tabId="plan-diff-x"
         left={{ kind: "recent", recentPlanId: "rA" }}
         right={{ kind: "recent", recentPlanId: "rB" }}
         leftLabel="ANALYZE · 04-29 14:02 · 142ms"
         rightLabel="ANALYZE · 04-29 14:18 · 3ms"
       />,
-);
+    );
     expect(screen.getByTestId("plan-diff-left-label").textContent).toContain("142ms");
     expect(screen.getByTestId("plan-diff-right-label").textContent).toContain("3ms");
     expect(screen.getByTestId("plan-diff-swap")).toBeTruthy();
@@ -41,14 +42,15 @@ describe("PlanDiffToolbar", () => {
 
   it("Swap calls swapPlanDiff(tabId)", () => {
     const spy = vi.spyOn(useEditor.getState(), "swapPlanDiff").mockImplementation(() => {});
-    render(      <PlanDiffToolbar
+    render(
+      <PlanDiffToolbar
         tabId="plan-diff-y"
         left={{ kind: "recent", recentPlanId: "rA" }}
         right={{ kind: "recent", recentPlanId: "rB" }}
         leftLabel="A"
         rightLabel="B"
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("plan-diff-swap"));
     expect(spy).toHaveBeenCalledWith("plan-diff-y");
   });
@@ -57,14 +59,15 @@ describe("PlanDiffToolbar", () => {
     const recentSpy = vi
       .spyOn(useEditor.getState(), "openEditorFromRecent")
       .mockResolvedValue(undefined);
-    render(      <PlanDiffToolbar
+    render(
+      <PlanDiffToolbar
         tabId="plan-diff-z"
         left={{ kind: "recent", recentPlanId: "rA" }}
         right={{ kind: "recent", recentPlanId: "rB" }}
         leftLabel="A"
         rightLabel="B"
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("plan-diff-open-a"));
     expect(recentSpy).toHaveBeenCalledWith("rA");
   });
@@ -83,7 +86,8 @@ describe("PlanDiffToolbar", () => {
         updatedAt: "",
       };
     });
-    render(      <PlanDiffToolbar
+    render(
+      <PlanDiffToolbar
         tabId="plan-diff-z"
         left={{ kind: "recent", recentPlanId: "rA" }}
         right={{
@@ -99,7 +103,7 @@ describe("PlanDiffToolbar", () => {
         leftLabel="A"
         rightLabel="B"
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("plan-diff-open-b"));
     expect(editorSpy).toHaveBeenCalledWith("conn-1", { prefillSql: "SELECT 42" });
   });

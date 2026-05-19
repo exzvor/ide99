@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * Inline (non-modal) directory selector embedded in the panel header.
  * Two buttons:
@@ -64,7 +64,8 @@ export function DirectorySelector(props: Props): JSX.Element {
     }
   }
 
-  return (    <div
+  return (
+    <div
       data-testid="directory-selector"
       style={{
         display: "flex",
@@ -97,7 +98,8 @@ export function DirectorySelector(props: Props): JSX.Element {
       >
         {t("migrations.panel.change")}
       </button>
-      {currentDir ? (        <button
+      {currentDir ? (
+        <button
           type="button"
           data-testid="directory-selector-clear"
           className="btn btn-ghost"
@@ -108,11 +110,12 @@ export function DirectorySelector(props: Props): JSX.Element {
         >
           {t("migrations.panel.clear")}
         </button>
-) : null}
-      {error ? (        <span role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
+      ) : null}
+      {error ? (
+        <span role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
           {error}
         </span>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

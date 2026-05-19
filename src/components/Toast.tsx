@@ -88,7 +88,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   const baseId = useId();
 
-  const api = useMemo<ToastApi>(    () => ({
+  const api = useMemo<ToastApi>(
+    () => ({
       success: (message) =>
         push({ message, variant: "success", duration: VARIANT_DURATIONS.success }, baseId),
       info: (message) =>
@@ -101,12 +102,14 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         push({ message, variant: "error", duration: VARIANT_DURATIONS.error, action }, baseId),
     }),
     [push, baseId],
-);
+  );
 
-  return (    <ToastContext.Provider value={api}>
+  return (
+    <ToastContext.Provider value={api}>
       <RadixToast.Provider swipeDirection="right">
         {children}
-        {items.map((entry) => (          <RadixToast.Root
+        {items.map((entry) => (
+          <RadixToast.Root
             key={entry.id}
             duration={entry.duration}
             onOpenChange={(open) => {
@@ -118,7 +121,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             <RadixToast.Description className="break-words text-[var(--text-sm)] leading-[var(--text-sm-lh)]">
               {entry.message}
             </RadixToast.Description>
-            {entry.action ? (              <RadixToast.Action
+            {entry.action ? (
+              <RadixToast.Action
                 altText={entry.action.label}
                 asChild
                 onClick={() => {
@@ -134,13 +138,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                   {entry.action.label}
                 </button>
               </RadixToast.Action>
-) : null}
+            ) : null}
           </RadixToast.Root>
-))}
+        ))}
         <RadixToast.Viewport className="fixed right-[var(--space-4)] top-[var(--space-4)] z-[var(--z-toast)] flex w-[20rem] max-w-[calc(100vw-2rem)] flex-col gap-[var(--space-2)] outline-none" />
       </RadixToast.Provider>
     </ToastContext.Provider>
-);
+  );
 }
 
 export function useToast(): ToastApi {

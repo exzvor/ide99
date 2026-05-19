@@ -70,7 +70,8 @@ export function RestoreWizard({ connectionId }: { connectionId: string }): JSX.E
     };
   }, [subscribeJob, clearJob]);
 
-  const opts = useMemo<RestoreOptions>(    () => ({
+  const opts = useMemo<RestoreOptions>(
+    () => ({
       connectionId,
       sourcePath,
       cleanBeforeRestore: clean,
@@ -80,7 +81,7 @@ export function RestoreWizard({ connectionId }: { connectionId: string }): JSX.E
       selectedObjects: [],
     }),
     [connectionId, sourcePath, clean, createDb, noOwner, parallelJobs],
-);
+  );
 
   useEffect(() => {
     if (!sourcePath.trim()) {
@@ -141,12 +142,14 @@ export function RestoreWizard({ connectionId }: { connectionId: string }): JSX.E
   const isRunning = job?.status === "running";
   const canRun = !isRunning && sourcePath.trim().length > 0;
 
-  return (    <form
+  return (
+    <form
       data-testid="restore-wizard"
       onSubmit={(e) => e.preventDefault()}
       style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 720 }}
     >
-      {connection ? (        <header
+      {connection ? (
+        <header
           style={{
             padding: 8,
             border: "1px solid var(--hairline)",
@@ -160,7 +163,7 @@ export function RestoreWizard({ connectionId }: { connectionId: string }): JSX.E
             {connection.host}:{connection.port} / {connection.database}
           </div>
         </header>
-) : null}
+      ) : null}
 
       <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         <span>{t("backup.field.source_path")}</span>
@@ -248,11 +251,13 @@ export function RestoreWizard({ connectionId }: { connectionId: string }): JSX.E
         }}
       >
         <h3 style={{ margin: 0, fontSize: 12, fontWeight: 600 }}>{t("backup.preview.title")}</h3>
-        {previewError ? (          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12, marginTop: 6 }}>
+        {previewError ? (
+          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12, marginTop: 6 }}>
             {previewError}
           </div>
-) : null}
-        {previewArgs ? (          <code
+        ) : null}
+        {previewArgs ? (
+          <code
             style={{
               display: "block",
               marginTop: 6,
@@ -265,10 +270,11 @@ export function RestoreWizard({ connectionId }: { connectionId: string }): JSX.E
           >
             pg_restore {previewArgs.join(" ")}
           </code>
-) : (          <div style={{ marginTop: 6, fontSize: 12, color: "var(--ink-3)" }}>
+        ) : (
+          <div style={{ marginTop: 6, fontSize: 12, color: "var(--ink-3)" }}>
             {t("backup.preview.hint")}
           </div>
-)}
+        )}
       </section>
 
       <ProgressCard job={job} onCancel={() => void cancelJob(jobIdRef.current)} />
@@ -285,7 +291,8 @@ export function RestoreWizard({ connectionId }: { connectionId: string }): JSX.E
         </button>
       </div>
 
-      {confirmOpen ? (        <TypingConfirmModal
+      {confirmOpen ? (
+        <TypingConfirmModal
           title={t("backup.restore.confirm_title")}
           description={t("backup.restore.confirm_body", {
             target: connection?.database ?? connectionId,
@@ -300,7 +307,7 @@ export function RestoreWizard({ connectionId }: { connectionId: string }): JSX.E
             void performRun();
           }}
         />
-) : null}
+      ) : null}
     </form>
-);
+  );
 }

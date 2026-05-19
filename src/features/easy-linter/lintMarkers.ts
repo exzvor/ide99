@@ -18,7 +18,8 @@ export type Locale = "en" | "ru";
  * EN/RU strings end up in the marker tooltip. `source` is fixed to
  * `"easy-mistakes"` so this owner does not collide with `"squawk"`.
  */
-export function lintFindingsToMarkers(  findings: LintFinding[],
+export function lintFindingsToMarkers(
+  findings: LintFinding[],
   locale: Locale = "en",
 ): editor.IMarkerData[] {
   return findings.map((f): editor.IMarkerData => {

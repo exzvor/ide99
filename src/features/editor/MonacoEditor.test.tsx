@@ -19,9 +19,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, opts?: Record<string, unknown>) => {
       if (opts && typeof opts === "object") {
-        return Object.entries(opts).reduce<string>(          (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
+        return Object.entries(opts).reduce<string>(
+          (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
           key,
-);
+        );
       }
       return key;
     },
@@ -176,12 +177,13 @@ vi.mock("@monaco-editor/react", () => {
         onMount?.(ed, monaco);
       }, [onMount]);
 
-      return (        <textarea
+      return (
+        <textarea
           data-testid="mock-monaco-textarea"
           value={value ?? ""}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) => onChange?.(e.target.value)}
         />
-);
+      );
     },
   };
 });
@@ -226,7 +228,8 @@ beforeEach(() => {
   lastMockEditor = null;
   lastMockMonaco = null;
 
-  useEditor.setState(    {
+  useEditor.setState(
+    {
       ...initialEditorState,
       tabs: [makeTab()],
       activeTabId: "tab-1",
@@ -237,7 +240,7 @@ beforeEach(() => {
       runExplain: runExplainMock,
     },
     true,
-);
+  );
 });
 
 describe("MonacoEditor", () => {

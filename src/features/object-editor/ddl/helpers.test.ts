@@ -131,8 +131,9 @@ describe("formatColumnDef", () => {
       generated: { kind: "stored", expression: "first || ' ' || last" },
       comment: null,
     };
-    expect(formatColumnDef(col)).toBe(      `full_name TEXT NOT NULL GENERATED ALWAYS AS (first || ' ' || last) STORED`,
-);
+    expect(formatColumnDef(col)).toBe(
+      `full_name TEXT NOT NULL GENERATED ALWAYS AS (first || ' ' || last) STORED`,
+    );
   });
 });
 
@@ -164,8 +165,9 @@ describe("formatConstraintDef", () => {
       onDelete: "cascade",
       onUpdate: "no_action",
     };
-    expect(formatConstraintDef(c)).toBe(      "CONSTRAINT fk_owner FOREIGN KEY (owner_id) REFERENCES public.users (id) ON DELETE CASCADE ON UPDATE NO ACTION",
-);
+    expect(formatConstraintDef(c)).toBe(
+      "CONSTRAINT fk_owner FOREIGN KEY (owner_id) REFERENCES public.users (id) ON DELETE CASCADE ON UPDATE NO ACTION",
+    );
   });
 
   test("FOREIGN KEY with set_null/set_default", () => {
@@ -179,8 +181,9 @@ describe("formatConstraintDef", () => {
       onDelete: "set_null",
       onUpdate: "set_default",
     };
-    expect(formatConstraintDef(c)).toBe(      "FOREIGN KEY (a) REFERENCES public.t (b) ON DELETE SET NULL ON UPDATE SET DEFAULT",
-);
+    expect(formatConstraintDef(c)).toBe(
+      "FOREIGN KEY (a) REFERENCES public.t (b) ON DELETE SET NULL ON UPDATE SET DEFAULT",
+    );
   });
 
   test("CHECK constraint", () => {

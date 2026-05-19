@@ -34,7 +34,8 @@ export function DdlPreviewPanel({
 }: DdlPreviewPanelProps): JSX.Element {
   const { t } = useTranslation();
   const sql = result.sql.trim().length > 0 ? result.sql : t("object_editor.actions.no_changes");
-  return (    <div
+  return (
+    <div
       data-testid="object-editor-ddl-preview"
       style={{
         display: "flex",
@@ -69,7 +70,8 @@ export function DdlPreviewPanel({
       >
         {sql}
       </pre>
-      {result.warnings.length > 0 ? (        <ul
+      {result.warnings.length > 0 ? (
+        <ul
           data-testid="object-editor-ddl-warnings"
           style={{
             listStyle: "none",
@@ -80,11 +82,13 @@ export function DdlPreviewPanel({
             fontSize: 12,
           }}
         >
-          {result.warnings.map((w) => (            <li key={w.code}>{w.message}</li>
-))}
+          {result.warnings.map((w) => (
+            <li key={w.code}>{w.message}</li>
+          ))}
         </ul>
-) : null}
-      {showErrors && result.errors.length > 0 ? (        <ul
+      ) : null}
+      {showErrors && result.errors.length > 0 ? (
+        <ul
           data-testid="object-editor-ddl-errors"
           style={{
             listStyle: "none",
@@ -96,11 +100,13 @@ export function DdlPreviewPanel({
             fontSize: 12,
           }}
         >
-          {result.errors.map((e) => (            <li key={e.code}>{e.message}</li>
-))}
+          {result.errors.map((e) => (
+            <li key={e.code}>{e.message}</li>
+          ))}
         </ul>
-) : null}
-      {banner ? (        <div
+      ) : null}
+      {banner ? (
+        <div
           // biome-ignore lint/a11y/useSemanticElements: passive banner; not a form <output>.
           role="status"
           data-testid="object-editor-banner"
@@ -117,7 +123,7 @@ export function DdlPreviewPanel({
         >
           {banner.message}
         </div>
-) : null}
+      ) : null}
       <div
         style={{
           padding: 12,
@@ -155,5 +161,5 @@ export function DdlPreviewPanel({
         </button>
       </div>
     </div>
-);
+  );
 }

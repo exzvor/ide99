@@ -1,5 +1,5 @@
 /**
- * — generalized typing-confirm modal extracted 
+ * — generalized typing-confirm modal extracted
  * `BatchConfirmModal` so the JSONB editor can reuse it for the production
  * write guard.
  *
@@ -50,7 +50,8 @@ export function TypingConfirmModal(props: TypingConfirmModalProps): JSX.Element 
 
   const inputId = "typing-confirm-input";
 
-  return (    <Dialog.Root open onOpenChange={(o) => (o ? null : props.onCancel())}>
+  return (
+    <Dialog.Root open onOpenChange={(o) => (o ? null : props.onCancel())}>
       <Dialog.Portal>
         <Dialog.Overlay className="q-backdrop" />
         <Dialog.Content className="q-modal sm" style={{ padding: 24 }}>
@@ -61,7 +62,8 @@ export function TypingConfirmModal(props: TypingConfirmModalProps): JSX.Element 
             {props.description}
           </Dialog.Description>
           {props.bodyExtras ?? null}
-          {props.dangerSqlPreview ? (            <pre
+          {props.dangerSqlPreview ? (
+            <pre
               style={{
                 marginTop: 12,
                 padding: 12,
@@ -78,8 +80,9 @@ export function TypingConfirmModal(props: TypingConfirmModalProps): JSX.Element 
             >
               {props.dangerSqlPreview}
             </pre>
-) : null}
-          {requireTyping ? (            <div className="q-field" style={{ marginTop: 10 }}>
+          ) : null}
+          {requireTyping ? (
+            <div className="q-field" style={{ marginTop: 10 }}>
               <label htmlFor={inputId}>{props.inputLabel}</label>
               <input
                 id={inputId}
@@ -91,7 +94,7 @@ export function TypingConfirmModal(props: TypingConfirmModalProps): JSX.Element 
                 className="q-input mono"
               />
             </div>
-) : null}
+          ) : null}
           <div
             style={{
               marginTop: 18,
@@ -115,5 +118,5 @@ export function TypingConfirmModal(props: TypingConfirmModalProps): JSX.Element 
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-);
+  );
 }

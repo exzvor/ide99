@@ -29,7 +29,7 @@ pub(crate) fn map_err(e: tokio_postgres::Error) -> LiveOpsError {
         |db| {
             let code = db.code().code();
             let message = db.message();
-            // €” extension is in pg_extension but the C library
+            // extension is in pg_extension but the C library
             // wasn't preloaded; map to Unavailable with a setup-aware hint
             // so the Slow Queries pane shows the same friendly state as
             // when the extension is missing entirely.

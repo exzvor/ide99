@@ -85,7 +85,8 @@ function SuggestionBody({ connId, suggestion, onClose }: SuggestionBodyProps): J
   }, [connId, suggestion.recommendedSql, onClose]);
 
   // Fires HypoPG IPC at most once per modal-open lifetime (on details expand).
-  const handleSpeedupToggle = useCallback(    (e: React.SyntheticEvent<HTMLDetailsElement>) => {
+  const handleSpeedupToggle = useCallback(
+    (e: React.SyntheticEvent<HTMLDetailsElement>) => {
       const details = e.currentTarget;
       if (details.open && !hypoPgFiredRef.current) {
         hypoPgFiredRef.current = true;
@@ -108,12 +109,13 @@ function SuggestionBody({ connId, suggestion, onClose }: SuggestionBodyProps): J
       }
     },
     [connId, suggestion.recommendedSql, suggestion.representativeQuery],
-);
+  );
 
   const opsText =
     suggestion.rationale.kind === "mined" ? suggestion.rationale.opsSeen.join(" / ") : "";
 
-  return (    <div data-testid="suggester-modal-body">
+  return (
+    <div data-testid="suggester-modal-body">
       {/* Recommended index */}
       <section style={{ marginBottom: 16 }}>
         <div
@@ -162,17 +164,19 @@ function SuggestionBody({ connId, suggestion, onClose }: SuggestionBodyProps): J
             lineHeight: "1.6",
           }}
         >
-          {suggestion.rationale.kind === "mined" ? (            <li data-testid="suggester-rationale-mined">
+          {suggestion.rationale.kind === "mined" ? (
+            <li data-testid="suggester-rationale-mined">
               {t("jsonb.suggester.rationale.minedSummary", {
                 calls: suggestion.rationale.calls.toLocaleString(),
                 time: formatMs(suggestion.rationale.totalExecTimeMs),
                 ops: opsText,
               })}
             </li>
-) : (            <li data-testid="suggester-rationale-generic">
+          ) : (
+            <li data-testid="suggester-rationale-generic">
               {t("jsonb.suggester.rationaleGeneric")}
             </li>
-)}
+          )}
           <li data-testid="suggester-rationale-benefit">
             {t(benefitKey, {
               ops:
@@ -187,13 +191,14 @@ function SuggestionBody({ connId, suggestion, onClose }: SuggestionBodyProps): J
       </section>
 
       {/* Estimated index size (conditional) */}
-      {suggestion.estimatedSizeBytes != null ? (        <div style={{ marginBottom: 12, fontSize: 13 }} data-testid="suggester-size-estimate">
+      {suggestion.estimatedSizeBytes != null ? (
+        <div style={{ marginBottom: 12, fontSize: 13 }} data-testid="suggester-size-estimate">
           <span style={{ fontWeight: 600 }}>{t("jsonb.suggester.sizeEstimateLabel")}</span>{" "}
           {t("jsonb.suggester.sizeEstimateValue", {
             size: formatBytes(suggestion.estimatedSizeBytes),
           })}
         </div>
-) : null}
+      ) : null}
 
       {/* Estimated speedup (collapsible) */}
       <details
@@ -221,7 +226,8 @@ function SuggestionBody({ connId, suggestion, onClose }: SuggestionBodyProps): J
       </details>
 
       {/* Representative query (conditional) */}
-      {suggestion.representativeQuery != null ? (        <section style={{ marginBottom: 16 }} data-testid="suggester-representative-query">
+      {suggestion.representativeQuery != null ? (
+        <section style={{ marginBottom: 16 }} data-testid="suggester-representative-query">
           <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
             {t("jsonb.suggester.representativeQueryLabel")}
           </div>
@@ -242,7 +248,7 @@ function SuggestionBody({ connId, suggestion, onClose }: SuggestionBodyProps): J
             {suggestion.representativeQuery}
           </pre>
         </section>
-) : null}
+      ) : null}
 
       {/* Action buttons */}
       <div
@@ -259,11 +265,13 @@ function SuggestionBody({ connId, suggestion, onClose }: SuggestionBodyProps): J
           data-testid="suggester-copy-btn"
           onClick={handleCopy}
         >
-          {copied ? (            <span data-testid="suggester-copied-badge" style={{ color: "var(--accent)" }}>
+          {copied ? (
+            <span data-testid="suggester-copied-badge" style={{ color: "var(--accent)" }}>
               {t("jsonb.suggester.actions.copied")}
             </span>
-) : (            t("jsonb.suggester.actions.copy")
-)}
+          ) : (
+            t("jsonb.suggester.actions.copy")
+          )}
         </button>
         <button
           type="button"
@@ -283,7 +291,7 @@ function SuggestionBody({ connId, suggestion, onClose }: SuggestionBodyProps): J
         </button>
       </div>
     </div>
-);
+  );
 }
 
 /** Format milliseconds as a human-friendly time string */
@@ -357,7 +365,8 @@ export function SuggesterModal({
       ? loadState.result.suggestions[0]
       : null;
 
-  return (    <div
+  return (
+    <div
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
@@ -434,17 +443,19 @@ export function SuggesterModal({
         </div>
 
         {/* Loading */}
-        {loadState.status === "loading" ? (          <div
+        {loadState.status === "loading" ? (
+          <div
             data-testid="suggester-loading"
             style={{ padding: "32px 0", textAlign: "center", opacity: 0.7 }}
             aria-live="polite"
           >
             {t("jsonb.suggester.speedupComputing")}
           </div>
-) : null}
+        ) : null}
 
         {/* Error — /006: localized error block, no raw error JSON */}
-        {loadState.status === "error" ? (          <div data-testid="suggester-error" role="alert">
+        {loadState.status === "error" ? (
+          <div data-testid="suggester-error" role="alert">
             <p
               style={{
                 color: "var(--accent-strong-danger, red)",
@@ -462,18 +473,20 @@ export function SuggesterModal({
               {t("jsonb.suggester.actions.retry")}
             </button>
           </div>
-) : null}
+        ) : null}
 
         {/* Ready */}
-        {loadState.status === "ready" && suggestion !== null ? (          <SuggestionBody connId={connId} suggestion={suggestion} onClose={onClose} />
-) : null}
+        {loadState.status === "ready" && suggestion !== null ? (
+          <SuggestionBody connId={connId} suggestion={suggestion} onClose={onClose} />
+        ) : null}
 
         {/* Ready but empty suggestions — generic fallback banner */}
-        {loadState.status === "ready" && suggestion === null ? (          <div data-testid="suggester-no-suggestion" style={{ fontSize: 13, opacity: 0.8 }}>
+        {loadState.status === "ready" && suggestion === null ? (
+          <div data-testid="suggester-no-suggestion" style={{ fontSize: 13, opacity: 0.8 }}>
             {t("jsonb.suggester.extensions.pgStatStatementsRequiredColumn")}
           </div>
-) : null}
+        ) : null}
       </div>
     </div>
-);
+  );
 }

@@ -3,8 +3,9 @@ import { ACTION_REFRESH } from "./refreshMap";
 
 describe("ACTION_REFRESH", () => {
   it("has an entry for every ActionKind including explain", () => {
-    expect(Object.keys(ACTION_REFRESH).sort()).toEqual(      ["analyze", "dropIndex", "explain", "killPid", "reindexTable", "vacuum"].sort(),
-);
+    expect(Object.keys(ACTION_REFRESH).sort()).toEqual(
+      ["analyze", "dropIndex", "explain", "killPid", "reindexTable", "vacuum"].sort(),
+    );
   });
 
   it("vacuum invalidates vacuum_status and bloat", () => {

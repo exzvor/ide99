@@ -43,20 +43,23 @@ export function Titlebar({ name, context, connected = false, right }: TitlebarPr
     void getCurrentWindow().toggleMaximize();
   }, []);
 
-  return (    <div
+  return (
+    <div
       className="q-titlebar"
       onMouseDown={handleMouseDown}
       onDoubleClick={handleDoubleClick}
       style={{ paddingLeft: 80 }}
     >
-      {(name || context) && (        <div className="tl-center">
+      {(name || context) && (
+        <div className="tl-center">
           {connected ? <span className="dot" aria-hidden="true" /> : null}
           {name ? <span>{name}</span> : null}
           {name && context ? <span className="sep">·</span> : null}
           {context ? <span className="ctx">{context}</span> : null}
         </div>
-)}
-      {right ? (        <div
+      )}
+      {right ? (
+        <div
           style={{
             position: "absolute",
             right: 12,
@@ -69,7 +72,7 @@ export function Titlebar({ name, context, connected = false, right }: TitlebarPr
         >
           {right}
         </div>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

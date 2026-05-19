@@ -31,7 +31,7 @@ export function EmptyState(): JSX.Element {
   const toast = useToast();
   const openCreateForm = useConnections((s) => s.openCreateForm);
   const [uri, setUri] = useState("");
-  // �� only show the coach mark after the user has cleared the
+  // only show the coach mark after the user has cleared the
   // privacy + onboarding dialogs. While either is open, an inline
   // "ничего страшного, давайте подключимся" hint behind the modal
   // creates a confusing two-source onboarding state.
@@ -62,18 +62,20 @@ export function EmptyState(): JSX.Element {
     }
   }, [uri, openCreateForm, toast, t]);
 
-  const handleKeyDown = useCallback(    (event: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key === "Enter") {
         event.preventDefault();
         void handleParse();
       }
     },
     [handleParse],
-);
+  );
 
   const uriLabel = t("welcome.no_connections.uri_label");
 
-  return (    <section
+  return (
+    <section
       style={{
         display: "flex",
         flexDirection: "column",
@@ -141,7 +143,8 @@ export function EmptyState(): JSX.Element {
         <Spg99InstantDbButton />
       </div>
 
-      {showCoachMark ? (        <div style={{ width: 460, maxWidth: "100%" }}>
+      {showCoachMark ? (
+        <div style={{ width: 460, maxWidth: "100%" }}>
           <CoachMark
             id="empty-connections-help"
             title={t("coach.empty_connections.title")}
@@ -149,7 +152,7 @@ export function EmptyState(): JSX.Element {
             dismissLabel={t("coach.dismiss")}
           />
         </div>
-) : null}
+      ) : null}
     </section>
-);
+  );
 }

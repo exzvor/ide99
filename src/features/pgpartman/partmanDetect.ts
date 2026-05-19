@@ -3,7 +3,8 @@
 // without re-querying.
 import { type PartmanParent, usePgPartman } from "./store";
 
-export function getPartmanParent(  connId: string,
+export function getPartmanParent(
+  connId: string,
   schema: string,
   table: string,
 ): PartmanParent | null {

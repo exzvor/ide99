@@ -18,7 +18,8 @@ import { EmptyState } from "../features/connections/EmptyState";
  */
 export default function Welcome() {
   const { t } = useTranslation();
-  return (    <main aria-labelledby="welcome-heading" className="app-frame">
+  return (
+    <main aria-labelledby="welcome-heading" className="app-frame">
       <Titlebar />
       <Mesh variant="subtle" />
       <Particles />
@@ -78,5 +79,5 @@ export default function Welcome() {
         </div>
       </div>
     </main>
-);
+  );
 }

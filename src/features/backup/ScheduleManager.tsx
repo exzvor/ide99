@@ -49,9 +49,10 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
   const [cronPreview, setCronPreview] = useState<string | null>(null);
   const [cronPreviewError, setCronPreviewError] = useState<string | null>(null);
 
-  const editingExisting = useMemo(    () => schedules.find((s) => s.id === editingId) ?? null,
+  const editingExisting = useMemo(
+    () => schedules.find((s) => s.id === editingId) ?? null,
     [schedules, editingId],
-);
+  );
 
   useEffect(() => {
     setOpts((o) => ({ ...o, connectionId }));
@@ -120,7 +121,8 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
       setRunResult(jobId);
     });
 
-  return (    <div
+  return (
+    <div
       style={{ display: "flex", flexDirection: "column", gap: 16 }}
       data-testid="schedule-manager"
     >
@@ -138,11 +140,12 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
             {t("backup.schedule.add")}
           </button>
         </div>
-        {error ? (          <div role="alert" style={{ color: "var(--err, #d33)", marginTop: 8, fontSize: 12 }}>
+        {error ? (
+          <div role="alert" style={{ color: "var(--err, #d33)", marginTop: 8, fontSize: 12 }}>
             {error}
           </div>
-) : null}
-        {runResult ? (          // biome-ignore lint/a11y/useSemanticElements: passive status banner
+        ) : null}
+        {runResult ? ( // biome-ignore lint/a11y/useSemanticElements: passive status banner
           <div
             role="status"
             data-testid="schedule-run-result"
@@ -150,10 +153,12 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
           >
             {t("backup.schedule.run_started", { jobId: runResult })}
           </div>
-) : null}
+        ) : null}
 
-        {schedules.length === 0 ? (          <div style={{ color: "var(--ink-3)", padding: 12 }}>{t("backup.schedule.empty")}</div>
-) : (          <ul
+        {schedules.length === 0 ? (
+          <div style={{ color: "var(--ink-3)", padding: 12 }}>{t("backup.schedule.empty")}</div>
+        ) : (
+          <ul
             style={{
               listStyle: "none",
               padding: 0,
@@ -163,7 +168,8 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
               gap: 4,
             }}
           >
-            {schedules.map((s) => (              <li
+            {schedules.map((s) => (
+              <li
                 key={s.id}
                 style={{
                   display: "flex",
@@ -178,7 +184,8 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
                 <span style={{ fontWeight: 600 }}>{s.label}</span>
                 <code style={{ fontFamily: "var(--font-mono-q, monospace)" }}>{s.cron}</code>
                 <span style={{ color: "var(--ink-3)", fontSize: 12 }}>{s.backup.outputPath}</span>
-                {s.installed ? (                  <span
+                {s.installed ? (
+                  <span
                     style={{
                       fontSize: 11,
                       padding: "1px 6px",
@@ -190,7 +197,7 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
                   >
                     {t("backup.schedule.installed_badge")}
                   </span>
-) : null}
+                ) : null}
                 <div style={{ display: "flex", gap: 4, marginLeft: "auto" }}>
                   <button
                     type="button"
@@ -209,7 +216,8 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
                   >
                     {t("backup.schedule.run_now")}
                   </button>
-                  {s.installed ? (                    <button
+                  {s.installed ? (
+                    <button
                       type="button"
                       onClick={() => void withBusy(s.id, () => uninstallSchedule(s.id))()}
                       disabled={busy[s.id]}
@@ -218,7 +226,8 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
                     >
                       {t("backup.schedule.uninstall")}
                     </button>
-) : (                    <button
+                  ) : (
+                    <button
                       type="button"
                       onClick={() => void withBusy(s.id, () => installSchedule(s.id))()}
                       disabled={busy[s.id]}
@@ -227,7 +236,7 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
                     >
                       {t("backup.schedule.install")}
                     </button>
-)}
+                  )}
                   <button
                     type="button"
                     onClick={() => void removeSchedule(s.id)}
@@ -238,12 +247,13 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
                   </button>
                 </div>
               </li>
-))}
+            ))}
           </ul>
-)}
+        )}
       </section>
 
-      {drawerOpen ? (        <section
+      {drawerOpen ? (
+        <section
           aria-label={
             editingExisting ? t("backup.schedule.edit_title") : t("backup.schedule.add_title")
           }
@@ -301,7 +311,8 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
             >
               {t("backup.schedule.preview_cron")}
             </button>
-            {cronPreview ? (              <code
+            {cronPreview ? (
+              <code
                 data-testid="schedule-cron-preview"
                 style={{
                   fontFamily: "var(--font-mono-q, monospace)",
@@ -311,11 +322,12 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
               >
                 {cronPreview}
               </code>
-) : null}
-            {cronPreviewError ? (              <span role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
+            ) : null}
+            {cronPreviewError ? (
+              <span role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
                 {cronPreviewError}
               </span>
-) : null}
+            ) : null}
           </div>
 
           <BackupOptionsForm value={opts} onChange={setOpts} idPrefix="sched" hideConnection />
@@ -334,7 +346,7 @@ export function ScheduleManager({ connectionId }: { connectionId: string }): JSX
             </button>
           </div>
         </section>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

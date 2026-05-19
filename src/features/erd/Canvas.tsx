@@ -116,11 +116,12 @@ export function Canvas({
       // Begin table drag if mousedown is inside a card and not on an
       // interactive control inside it (FK handle, +column, inputs).
       const target = e.target as Element | null;
-      if (        target &&
+      if (
+        target &&
         !target.closest("[data-testid='table-card-fk-handle']") &&
         !target.closest("[data-testid='table-card-add-column']") &&
         !target.closest("input")
-) {
+      ) {
         const tableId = findEnclosingCardId(e.target);
         if (tableId) {
           const node = laid.nodes.find((n) => n.id === tableId);
@@ -195,7 +196,8 @@ export function Canvas({
 
   const fkSourceNode = fkDrag ? laid.nodes.find((n) => n.id === fkDrag.sourceId) : null;
 
-  return (    <svg
+  return (
+    <svg
       data-testid="erd-canvas"
       width="100%"
       height="100%"
@@ -229,9 +231,11 @@ export function Canvas({
         </marker>
       </defs>
       <g data-testid="erd-canvas-inner" transform={`translate(${panX} ${panY}) scale(${zoom})`}>
-        {laid.edges.map((edge) => (          <FkEdge key={edge.id} edge={edge} highlighted={highlight.edgeId === edge.id} />
-))}
-        {laid.nodes.map((node) => (          <TableCard
+        {laid.edges.map((edge) => (
+          <FkEdge key={edge.id} edge={edge} highlighted={highlight.edgeId === edge.id} />
+        ))}
+        {laid.nodes.map((node) => (
+          <TableCard
             key={node.id}
             node={node}
             highlighted={highlight.nodeId === node.id}
@@ -257,8 +261,9 @@ export function Canvas({
             }
             onAddColumn={editable && onAddColumn ? () => onAddColumn(node.id) : undefined}
           />
-))}
-        {fkDrag && fkSourceNode && (          <line
+        ))}
+        {fkDrag && fkSourceNode && (
+          <line
             data-testid="erd-fk-drag-line"
             x1={fkSourceNode.x + fkSourceNode.width / 2}
             y1={fkSourceNode.y + fkSourceNode.height / 2}
@@ -269,8 +274,8 @@ export function Canvas({
             strokeDasharray="4 3"
             pointerEvents="none"
           />
-)}
+        )}
       </g>
     </svg>
-);
+  );
 }

@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * Public surface of the migrations feature. Phase E imports
  * `MigrationsPanel` from here and wires it into the Workspace tab

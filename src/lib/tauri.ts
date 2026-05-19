@@ -274,7 +274,8 @@ export const healthSnapshotRowSchema = z.object({
 });
 export type HealthSnapshotRow = z.infer<typeof healthSnapshotRowSchema>;
 
-async function invokeCardCommand<T>(  cmd: string,
+async function invokeCardCommand<T>(
+  cmd: string,
   args: Record<string, unknown>,
   schema: z.ZodType<T>,
 ): Promise<CardResult<T>> {
@@ -309,7 +310,8 @@ export function healthUnusedIndexes(connId: string): Promise<CardResult<UnusedIn
 export function healthCacheHit(connId: string): Promise<CardResult<CacheHitData>> {
   return invokeCardCommand("health_cache_hit", { connId }, cacheHitDataSchema);
 }
-export function healthActiveConnections(  connId: string,
+export function healthActiveConnections(
+  connId: string,
 ): Promise<CardResult<ActiveConnectionsData>> {
   return invokeCardCommand("health_active_connections", { connId }, activeConnectionsDataSchema);
 }
@@ -329,7 +331,8 @@ export function healthWalThroughput(connId: string): Promise<CardResult<WalThrou
 export async function healthSnapshotsSave(connId: string, dbSizeBytes: number): Promise<void> {
   await invoke<unknown>("health_snapshots_save", { connId, dbSizeBytes });
 }
-export async function healthSnapshotsRecent(  connId: string,
+export async function healthSnapshotsRecent(
+  connId: string,
   days: number,
 ): Promise<HealthSnapshotRow[]> {
   const raw = await invoke<unknown>("health_snapshots_recent", { connId, days });
@@ -349,7 +352,8 @@ const emptyResultSchema = z
   .union([z.null(), z.undefined(), z.void()])
   .transform((): void => {}) as z.ZodSchema<void>;
 
-async function invokeChecked<T>(  command: string,
+async function invokeChecked<T>(
+  command: string,
   args: Record<string, unknown> | undefined,
   schema: z.ZodSchema<T>,
 ): Promise<T> {
@@ -525,28 +529,32 @@ export function schemaListViews(connId: string, schema: string): Promise<ViewInf
   return invokeChecked("schema_list_views", { connId, schema }, z.array(viewInfoSchema));
 }
 
-export function schemaListColumns(  connId: string,
+export function schemaListColumns(
+  connId: string,
   schema: string,
   table: string,
 ): Promise<ColumnInfo[]> {
   return invokeChecked("schema_list_columns", { connId, schema, table }, z.array(columnInfoSchema));
 }
 
-export function schemaListIndexes(  connId: string,
+export function schemaListIndexes(
+  connId: string,
   schema: string,
   table: string,
 ): Promise<IndexInfo[]> {
   return invokeChecked("schema_list_indexes", { connId, schema, table }, z.array(indexInfoSchema));
 }
 
-export function schemaListForeignKeys(  connId: string,
+export function schemaListForeignKeys(
+  connId: string,
   schema: string,
   table: string,
 ): Promise<ForeignKeyInfo[]> {
-  return invokeChecked(    "schema_list_foreign_keys",
+  return invokeChecked(
+    "schema_list_foreign_keys",
     { connId, schema, table },
     z.array(foreignKeyInfoSchema),
-);
+  );
 }
 
 export function schemaGetAutocompleteSnapshot(connId: string): Promise<AutocompleteSnapshot> {
@@ -594,10 +602,11 @@ export type ErdForeignKey = z.infer<typeof erdForeignKeySchema>;
 export type ErdSchemaGraph = z.infer<typeof erdSchemaGraphSchema>;
 
 export function erdGetSchemaGraph(connId: string, schemas?: string[]): Promise<ErdSchemaGraph> {
-  return invokeChecked(    "erd_get_schema_graph",
+  return invokeChecked(
+    "erd_get_schema_graph",
     { connId, schemas: schemas ?? null },
     erdSchemaGraphSchema,
-);
+  );
 }
 
 // ---------- schema apply + ERD positions ----------
@@ -636,7 +645,8 @@ export const nodePosSchema = z.object({
 });
 export type NodePos = z.infer<typeof nodePosSchema>;
 
-export function erdSavePositions(  connId: string,
+export function erdSavePositions(
+  connId: string,
   schemasKey: string,
   positions: NodePos[],
 ): Promise<void> {
@@ -738,7 +748,8 @@ export const editorTabRowSchema = z.object({
 });
 export type EditorTabRow = z.infer<typeof editorTabRowSchema>;
 
-async function invokeCheckedQuery<T>(  command: string,
+async function invokeCheckedQuery<T>(
+  command: string,
   args: Record<string, unknown> | undefined,
   schema: z.ZodSchema<T>,
 ): Promise<T> {
@@ -825,14 +836,16 @@ export type BatchResult = z.infer<typeof batchResultSchema>;
  * first error the backend ROLLBACKs and stops — `failedAt` is the 0-based
  * index of the failed statement.
  */
-export function queryRunBatch(  connId: string,
+export function queryRunBatch(
+  connId: string,
   statements: string[],
   cursorForLast: boolean,
 ): Promise<BatchResult> {
-  return invokeCheckedQuery(    "query_run_batch",
+  return invokeCheckedQuery(
+    "query_run_batch",
     { connId, statements, cursorForLast },
     batchResultSchema,
-);
+  );
 }
 
 export function queryFetchPage(cursorId: string, limit: number): Promise<FetchPage> {
@@ -918,13 +931,15 @@ export function historyDelete(id: string): Promise<void> {
 }
 
 export function historyClearForConnection(connectionId: string): Promise<number> {
-  return invokeCheckedQuery(    "history_clear_for_connection",
+  return invokeCheckedQuery(
+    "history_clear_for_connection",
     { connectionId },
     z.number().int().nonnegative(),
-);
+  );
 }
 
-export function historyExport(  filter: HistorySearchFilter,
+export function historyExport(
+  filter: HistorySearchFilter,
   path: string,
 ): Promise<HistoryExportResult> {
   return invokeCheckedQuery("history_export", { filter, path }, historyExportResultSchema);
@@ -936,7 +951,8 @@ export function connectionSetExcludeFromHistory(id: string, exclude: boolean): P
 
 // ---------- per-field connection setters  ----------
 
-export function connectionSetEnvironment(  id: string,
+export function connectionSetEnvironment(
+  id: string,
   environment: Environment,
 ): Promise<Connection> {
   return invokeChecked("connection_set_environment", { id, environment }, connectionSchema);
@@ -1048,7 +1064,8 @@ export type ExplainResult = z.infer<typeof explainResultSchema>;
  * `tabId` is the EXPLAIN tab id (`explain-${sourceTabId}`); the backend
  * uses it to register the in-flight pid for `queryExplainCancel`.
  */
-export function queryExplain(  connId: string,
+export function queryExplain(
+  connId: string,
   tabId: string,
   sql: string,
   options: ExplainOptions,
@@ -1134,17 +1151,19 @@ export function recentPlansDelete(id: string): Promise<void> {
 }
 
 export function recentPlansClearForConnection(connectionId: string): Promise<number> {
-  return invokeChecked(    "recent_plans_clear_for_connection",
+  return invokeChecked(
+    "recent_plans_clear_for_connection",
     { connectionId },
     z.number().int().nonnegative(),
-);
+  );
 }
 
 export function connectionSetExcludeFromRecentPlans(id: string, exclude: boolean): Promise<void> {
-  return invokeChecked(    "connection_set_exclude_from_recent_plans",
+  return invokeChecked(
+    "connection_set_exclude_from_recent_plans",
     { id, exclude },
     emptyResultSchema,
-);
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -1188,7 +1207,8 @@ export type ProgressSnapshotWire = z.infer<typeof progressSnapshotSchema>;
 // — Health action IPC wrappers (Task C2).
 // ─────────────────────────────────────────────────────────────────────────
 
-async function invokeCheckedAction<T>(  cmd: string,
+async function invokeCheckedAction<T>(
+  cmd: string,
   args: Record<string, unknown>,
   schema: z.ZodType<T>,
 ): Promise<T> {
@@ -1206,54 +1226,64 @@ async function invokeCheckedAction<T>(  cmd: string,
   }
 }
 
-export async function healthActionReindexTable(  connId: string,
+export async function healthActionReindexTable(
+  connId: string,
   schema: string,
   table: string,
 ): Promise<ActionResultWire> {
-  return await invokeCheckedAction(    "health_action_reindex_table",
+  return await invokeCheckedAction(
+    "health_action_reindex_table",
     { connId, schema, table },
     actionResultSchema,
-);
+  );
 }
 
-export async function healthActionVacuum(  connId: string,
+export async function healthActionVacuum(
+  connId: string,
   schema: string,
   table: string,
 ): Promise<ActionResultWire> {
-  return await invokeCheckedAction(    "health_action_vacuum",
+  return await invokeCheckedAction(
+    "health_action_vacuum",
     { connId, schema, table },
     actionResultSchema,
-);
+  );
 }
 
-export async function healthActionAnalyze(  connId: string,
+export async function healthActionAnalyze(
+  connId: string,
   schema: string,
   table: string,
 ): Promise<ActionResultWire> {
-  return await invokeCheckedAction(    "health_action_analyze",
+  return await invokeCheckedAction(
+    "health_action_analyze",
     { connId, schema, table },
     actionResultSchema,
-);
+  );
 }
 
-export async function healthActionDropIndex(  connId: string,
+export async function healthActionDropIndex(
+  connId: string,
   schema: string,
   index: string,
 ): Promise<ActionResultWire> {
-  return await invokeCheckedAction(    "health_action_drop_index",
+  return await invokeCheckedAction(
+    "health_action_drop_index",
     { connId, schema, index },
     actionResultSchema,
-);
+  );
 }
 
-export async function healthActionKillPid(  connId: string,
+export async function healthActionKillPid(
+  connId: string,
   pid: number,
   terminate: boolean,
 ): Promise<ActionResultWire> {
-  return await invokeCheckedAction(    "health_action_kill_pid",
+  return await invokeCheckedAction(
+    "health_action_kill_pid",
     { connId, pid, terminate },
     actionResultSchema,
-);
+  );
 }
 
 export async function healthActionCheckPid(connId: string, pid: number): Promise<boolean> {
@@ -1271,13 +1301,15 @@ export async function healthActionCheckPid(connId: string, pid: number): Promise
   }
 }
 
-export async function healthActionProgress(  connId: string,
+export async function healthActionProgress(
+  connId: string,
   actionId: string,
 ): Promise<ProgressSnapshotWire> {
-  return await invokeCheckedAction(    "health_action_progress",
+  return await invokeCheckedAction(
+    "health_action_progress",
     { connId, actionId },
     progressSnapshotSchema,
-);
+  );
 }
 
 const actionStartedPayloadSchema = z.object({
@@ -1285,7 +1317,8 @@ const actionStartedPayloadSchema = z.object({
   pid: z.number().int(),
 });
 
-export async function onHealthActionStarted(  cb: (payload: { actionId: string; pid: number }) => void,
+export async function onHealthActionStarted(
+  cb: (payload: { actionId: string; pid: number }) => void,
 ): Promise<UnlistenFn> {
   return listen("health-action-started", (event) => {
     const parsed = actionStartedPayloadSchema.safeParse(event.payload);
@@ -1415,7 +1448,8 @@ export type LiveOpsError = z.infer<typeof liveOpsErrorSchema>;
 
 export type LiveOpsResult<T> = { ok: true; data: T } | { ok: false; error: LiveOpsError };
 
-async function invokeLiveOps<T>(  cmd: string,
+async function invokeLiveOps<T>(
+  cmd: string,
   args: Record<string, unknown>,
   schema: z.ZodType<T>,
 ): Promise<LiveOpsResult<T>> {
@@ -1460,12 +1494,14 @@ function extractErrorMessage(e: unknown, cmd: string): string {
   return `${cmd} failed (${String(e)})`;
 }
 
-export function liveOpsSessions(  connId: string,
+export function liveOpsSessions(
+  connId: string,
   mode: SessionsMode,
 ): Promise<LiveOpsResult<SessionsSnapshot>> {
   return invokeLiveOps("live_ops_sessions", { connId, mode }, sessionsSnapshotSchema);
 }
-export function liveOpsSlow(  connId: string,
+export function liveOpsSlow(
+  connId: string,
   sortBy: SlowSortBy,
 ): Promise<LiveOpsResult<SlowSnapshot>> {
   return invokeLiveOps("live_ops_slow", { connId, sortBy }, slowSnapshotSchema);
@@ -1624,17 +1660,19 @@ export const inferenceResponseSchema = z.discriminatedUnion("status", [
 export type InferenceResponse = z.infer<typeof inferenceResponseSchema>;
 
 export function jsonbInferenceRequest(connId: string, fqn: Fqn): Promise<InferenceResponse> {
-  return invokeChecked(    "jsonb_inference_request",
+  return invokeChecked(
+    "jsonb_inference_request",
     { connId, schema: fqn.schema, table: fqn.table, column: fqn.column },
     inferenceResponseSchema,
-);
+  );
 }
 
 export function jsonbInferenceInvalidate(connId: string, fqn: Fqn): Promise<void> {
-  return invokeChecked(    "jsonb_inference_invalidate",
+  return invokeChecked(
+    "jsonb_inference_invalidate",
     { connId, schema: fqn.schema, table: fqn.table, column: fqn.column },
     emptyResultSchema,
-);
+  );
 }
 
 export interface JsonbInferenceUpdatedEvent {
@@ -1653,15 +1691,18 @@ export interface JsonbInferenceFailedEvent {
  * — subscribe to inference background-task results.
  * Returns a single unsubscribe function that detaches both listeners.
  */
-export async function subscribeJsonbInference(  onUpdated: (e: JsonbInferenceUpdatedEvent) => void,
+export async function subscribeJsonbInference(
+  onUpdated: (e: JsonbInferenceUpdatedEvent) => void,
   onFailed: (e: JsonbInferenceFailedEvent) => void,
 ): Promise<() => void> {
-  const offUpd: UnlistenFn = await listen<JsonbInferenceUpdatedEvent>(    "jsonb-inference-updated",
+  const offUpd: UnlistenFn = await listen<JsonbInferenceUpdatedEvent>(
+    "jsonb-inference-updated",
     (ev) => onUpdated(ev.payload),
-);
-  const offFail: UnlistenFn = await listen<JsonbInferenceFailedEvent>(    "jsonb-inference-failed",
+  );
+  const offFail: UnlistenFn = await listen<JsonbInferenceFailedEvent>(
+    "jsonb-inference-failed",
     (ev) => onFailed(ev.payload),
-);
+  );
   return () => {
     offUpd();
     offFail();
@@ -1944,54 +1985,64 @@ export const sequenceSummarySchema = z.object({
 });
 export type SequenceSummary = z.infer<typeof sequenceSummarySchema>;
 
-export function schemaGetTableDefinition(  connId: string,
+export function schemaGetTableDefinition(
+  connId: string,
   schema: string,
   table: string,
 ): Promise<TableDefinition> {
-  return invokeChecked(    "schema_get_table_definition",
+  return invokeChecked(
+    "schema_get_table_definition",
     { connId, schema, table },
     tableDefinitionSchema,
-);
+  );
 }
 
-export function schemaGetViewDefinition(  connId: string,
+export function schemaGetViewDefinition(
+  connId: string,
   schema: string,
   view: string,
 ): Promise<ViewDefinition> {
-  return invokeChecked(    "schema_get_view_definition",
+  return invokeChecked(
+    "schema_get_view_definition",
     { connId, schema, view },
     viewDefinitionSchema,
-);
+  );
 }
 
-export function schemaGetMatviewDefinition(  connId: string,
+export function schemaGetMatviewDefinition(
+  connId: string,
   schema: string,
   matview: string,
 ): Promise<MatviewDefinition> {
-  return invokeChecked(    "schema_get_matview_definition",
+  return invokeChecked(
+    "schema_get_matview_definition",
     { connId, schema, matview },
     matviewDefinitionSchema,
-);
+  );
 }
 
-export function schemaGetIndexDefinition(  connId: string,
+export function schemaGetIndexDefinition(
+  connId: string,
   schema: string,
   index: string,
 ): Promise<IndexDefinition> {
-  return invokeChecked(    "schema_get_index_definition",
+  return invokeChecked(
+    "schema_get_index_definition",
     { connId, schema, index },
     indexDefinitionSchema,
-);
+  );
 }
 
-export function schemaGetSequenceDefinition(  connId: string,
+export function schemaGetSequenceDefinition(
+  connId: string,
   schema: string,
   sequence: string,
 ): Promise<SequenceDefinition> {
-  return invokeChecked(    "schema_get_sequence_definition",
+  return invokeChecked(
+    "schema_get_sequence_definition",
     { connId, schema, sequence },
     sequenceDefinitionSchema,
-);
+  );
 }
 
 export function schemaListMatviews(connId: string, schema: string): Promise<MatviewSummary[]> {
@@ -2088,64 +2139,75 @@ export const triggerSummarySchema = z.object({
 });
 export type TriggerSummary = z.infer<typeof triggerSummarySchema>;
 
-export function schemaGetFunctionDefinition(  connId: string,
+export function schemaGetFunctionDefinition(
+  connId: string,
   schema: string,
   fnName: string,
   fnArgs: string,
 ): Promise<FunctionDefinition> {
-  return invokeChecked(    "schema_get_function_definition",
+  return invokeChecked(
+    "schema_get_function_definition",
     { connId, schema, fnName, fnArgs },
     functionDefinitionSchema,
-);
+  );
 }
 
-export function schemaGetProcedureDefinition(  connId: string,
+export function schemaGetProcedureDefinition(
+  connId: string,
   schema: string,
   procName: string,
   procArgs: string,
 ): Promise<ProcedureDefinition> {
-  return invokeChecked(    "schema_get_procedure_definition",
+  return invokeChecked(
+    "schema_get_procedure_definition",
     { connId, schema, procName, procArgs },
     procedureDefinitionSchema,
-);
+  );
 }
 
-export function schemaGetTriggerDefinition(  connId: string,
+export function schemaGetTriggerDefinition(
+  connId: string,
   schema: string,
   table: string,
   triggerName: string,
 ): Promise<TriggerDefinition> {
-  return invokeChecked(    "schema_get_trigger_definition",
+  return invokeChecked(
+    "schema_get_trigger_definition",
     { connId, schema, table, triggerName },
     triggerDefinitionSchema,
-);
+  );
 }
 
-export function schemaListFunctions(  connId: string,
+export function schemaListFunctions(
+  connId: string,
   schema: string,
   triggerOnly: boolean,
 ): Promise<FunctionSummary[]> {
-  return invokeChecked(    "schema_list_functions",
+  return invokeChecked(
+    "schema_list_functions",
     { connId, schema, triggerOnly },
     z.array(functionSummarySchema),
-);
+  );
 }
 
 export function schemaListProcedures(connId: string, schema: string): Promise<ProcedureSummary[]> {
-  return invokeChecked(    "schema_list_procedures",
+  return invokeChecked(
+    "schema_list_procedures",
     { connId, schema },
     z.array(procedureSummarySchema),
-);
+  );
 }
 
-export function schemaListTriggers(  connId: string,
+export function schemaListTriggers(
+  connId: string,
   schema: string,
   table: string | null,
 ): Promise<TriggerSummary[]> {
-  return invokeChecked(    "schema_list_triggers",
+  return invokeChecked(
+    "schema_list_triggers",
     { connId, schema, table },
     z.array(triggerSummarySchema),
-);
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -2295,47 +2357,56 @@ export const customTypeDefinitionSchema = z.discriminatedUnion("kind", [
 ]);
 export type CustomTypeDefinitionDto = z.infer<typeof customTypeDefinitionSchema>;
 
-export async function schemaGetFdwServerDefinition(  connId: string,
+export async function schemaGetFdwServerDefinition(
+  connId: string,
   serverName: string,
 ): Promise<FdwServerDefinitionDto> {
-  return invokeChecked(    "schema_get_fdw_server_definition",
+  return invokeChecked(
+    "schema_get_fdw_server_definition",
     { connId, serverName },
     fdwServerDefinitionSchema,
-);
+  );
 }
 
-export async function schemaGetPublicationDefinition(  connId: string,
+export async function schemaGetPublicationDefinition(
+  connId: string,
   pubName: string,
 ): Promise<PublicationDefinitionDto> {
-  return invokeChecked(    "schema_get_publication_definition",
+  return invokeChecked(
+    "schema_get_publication_definition",
     { connId, pubName },
     publicationDefinitionSchema,
-);
+  );
 }
 
-export async function schemaGetSubscriptionDefinition(  connId: string,
+export async function schemaGetSubscriptionDefinition(
+  connId: string,
   subName: string,
 ): Promise<SubscriptionDefinitionDto> {
-  return invokeChecked(    "schema_get_subscription_definition",
+  return invokeChecked(
+    "schema_get_subscription_definition",
     { connId, subName },
     subscriptionDefinitionSchema,
-);
+  );
 }
 
-export async function schemaGetRoleDefinition(  connId: string,
+export async function schemaGetRoleDefinition(
+  connId: string,
   roleName: string,
 ): Promise<RoleDefinitionDto> {
   return invokeChecked("schema_get_role_definition", { connId, roleName }, roleDefinitionSchema);
 }
 
-export async function schemaGetCustomTypeDefinition(  connId: string,
+export async function schemaGetCustomTypeDefinition(
+  connId: string,
   schema: string,
   name: string,
 ): Promise<CustomTypeDefinitionDto> {
-  return invokeChecked(    "schema_get_custom_type_definition",
+  return invokeChecked(
+    "schema_get_custom_type_definition",
     { connId, schema, name },
     customTypeDefinitionSchema,
-);
+  );
 }
 
 export async function schemaListPublishableTables(connId: string): Promise<QualifiedNameDto[]> {

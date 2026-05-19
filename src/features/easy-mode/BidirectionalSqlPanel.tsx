@@ -45,7 +45,7 @@ export function BidirectionalSqlPanel(props: BidirectionalSqlPanelProps): JSX.El
   });
   const shape = useEditor((s) =>
     activeTabId !== null ? (s.queryShapes.get(activeTabId) ?? null) : null,
-);
+  );
 
   // WHERE-pulse: whenever the WHERE signature changes, briefly mark the panel
   // so CSS can flash the affected region. We track the previous signature in
@@ -76,7 +76,8 @@ export function BidirectionalSqlPanel(props: BidirectionalSqlPanelProps): JSX.El
 
   const sql = props.sql ?? (shape ? shapeToSql(shape) : "");
 
-  return (    <aside
+  return (
+    <aside
       className="bidi-sql-panel"
       data-collapsed={collapsed}
       data-changed-recently={pulse ? "true" : undefined}
@@ -99,13 +100,14 @@ export function BidirectionalSqlPanel(props: BidirectionalSqlPanelProps): JSX.El
           {collapsed ? "▾" : "▴"}
         </button>
       </header>
-      {!collapsed ? (        <>
+      {!collapsed ? (
+        <>
           <pre className="bidi-sql-panel-body" data-testid="bidi-sql-panel-body">
             {sql}
           </pre>
           <p className="bidi-sql-panel-hint">{t("easyMode.bidi.hint")}</p>
         </>
-) : null}
+      ) : null}
     </aside>
-);
+  );
 }

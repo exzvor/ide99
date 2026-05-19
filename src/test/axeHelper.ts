@@ -28,7 +28,8 @@ export interface ExpectNoAxeOptions {
   disabledRules?: string[];
 }
 
-export async function expectNoAxeViolations(  container: Element,
+export async function expectNoAxeViolations(
+  container: Element,
   options: ExpectNoAxeOptions = {},
 ): Promise<void> {
   const rules: Record<string, { enabled: boolean }> = {};

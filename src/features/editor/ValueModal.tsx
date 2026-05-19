@@ -29,7 +29,8 @@ function pretty(value: string, language: ValueModalProps["language"]): string {
 
 export function ValueModal({ open, onClose, value, language }: ValueModalProps): JSX.Element {
   const { t } = useTranslation();
-  return (    <Dialog
+  return (
+    <Dialog
       open={open}
       onOpenChange={(next) => {
         if (!next) onClose();
@@ -62,5 +63,5 @@ export function ValueModal({ open, onClose, value, language }: ValueModalProps):
         {pretty(value, language)}
       </pre>
     </Dialog>
-);
+  );
 }

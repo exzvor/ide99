@@ -46,10 +46,11 @@ export function ViewEditor({ tab }: ViewEditorProps): JSX.Element {
     }
     void (async () => {
       try {
-        const def = await schemaGetViewDefinition(          tab.connectionId,
+        const def = await schemaGetViewDefinition(
+          tab.connectionId,
           tab.target.schema,
           tab.target.name ?? "",
-);
+        );
         if (cancelled) return;
         const form: ViewForm = { schema: def.schema, name: def.name, body: def.body };
         setForm(tab.id, { kind: "view", form, initial: form });
@@ -69,11 +70,12 @@ export function ViewEditor({ tab }: ViewEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: ViewForm) => ViewForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: ViewForm) => ViewForm): void => {
       updateForm(tab.id, (s) => (s.kind === "view" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "view" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -88,16 +90,18 @@ export function ViewEditor({ tab }: ViewEditorProps): JSX.Element {
   const touched = useTouched(stableFormState?.form, stableFormState?.initial);
 
   if (loadError) {
-    return (      <div data-testid="view-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="view-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="view-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="view-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -142,7 +146,8 @@ export function ViewEditor({ tab }: ViewEditorProps): JSX.Element {
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="view-editor"
       style={{
         display: "grid",
@@ -179,10 +184,11 @@ export function ViewEditor({ tab }: ViewEditorProps): JSX.Element {
             style={{ width: 200 }}
           />
         </label>
-        {dirty ? (          <span data-testid="view-dirty-badge" style={{ fontSize: 11 }}>
+        {dirty ? (
+          <span data-testid="view-dirty-badge" style={{ fontSize: 11 }}>
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <HelpLink topic="view" />
       </div>
@@ -230,5 +236,5 @@ export function ViewEditor({ tab }: ViewEditorProps): JSX.Element {
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

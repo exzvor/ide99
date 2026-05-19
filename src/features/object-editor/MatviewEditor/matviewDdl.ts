@@ -8,11 +8,12 @@ export function generateMatviewDdl(initial: MatviewForm | null, current: Matview
   if (initial === null) {
     return { sql: createSql(current), warnings: [], errors: [] };
   }
-  if (    initial.body === current.body &&
+  if (
+    initial.body === current.body &&
     initial.name === current.name &&
     initial.schema === current.schema &&
     initial.withData === current.withData
-) {
+  ) {
     return { sql: "", warnings: [], errors: [] };
   }
   // Body change → DROP + CREATE (PG can't ALTER a matview's defining query).

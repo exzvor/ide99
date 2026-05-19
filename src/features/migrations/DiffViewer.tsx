@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * DiffViewer: two version dropdowns (only versions with `hasSnapshot=true`
  * are selectable) + a read-only Monaco editor displaying the unified diff
@@ -68,18 +68,20 @@ export function DiffViewer(props: Props): JSX.Element {
   }, [fromVersion, toVersion, connectionId]);
 
   if (candidates.length === 0) {
-    return (      <div
+    return (
+      <div
         data-testid="diff-no-snapshots"
         style={{ padding: 24, color: "var(--ink-3)", fontSize: 13, textAlign: "center" }}
       >
         {t("migrations.diff.noSnapshots")}
       </div>
-);
+    );
   }
 
   const noChanges = diff !== null && diff.length === 0;
 
-  return (    <div
+  return (
+    <div
       data-testid="diff-viewer"
       style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1, minHeight: 0 }}
     >
@@ -93,10 +95,11 @@ export function DiffViewer(props: Props): JSX.Element {
             onChange={(e) => setFromVersion(e.target.value)}
           >
             <option value="">—</option>
-            {candidates.map((m) => (              <option key={m.version} value={m.version}>
+            {candidates.map((m) => (
+              <option key={m.version} value={m.version}>
                 {m.version} — {m.name}
               </option>
-))}
+            ))}
           </select>
         </label>
         <label style={{ display: "flex", gap: 6, alignItems: "center" }}>
@@ -108,32 +111,37 @@ export function DiffViewer(props: Props): JSX.Element {
             onChange={(e) => setToVersion(e.target.value)}
           >
             <option value="">—</option>
-            {candidates.map((m) => (              <option key={m.version} value={m.version}>
+            {candidates.map((m) => (
+              <option key={m.version} value={m.version}>
                 {m.version} — {m.name}
               </option>
-))}
+            ))}
           </select>
         </label>
       </div>
 
-      {error ? (        <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
+      {error ? (
+        <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
           {t("migrations.diff.error", { error })}
         </div>
-) : null}
+      ) : null}
 
-      {!fromVersion || !toVersion ? (        <div
+      {!fromVersion || !toVersion ? (
+        <div
           data-testid="diff-select-prompt"
           style={{ color: "var(--ink-3)", fontSize: 12, padding: 12 }}
         >
           {t("migrations.diff.selectBoth")}
         </div>
-) : loading ? (        <div
+      ) : loading ? (
+        <div
           data-testid="diff-loading"
           style={{ color: "var(--ink-3)", fontSize: 12, padding: 12 }}
         >
           {t("migrations.diff.loading")}
         </div>
-) : noChanges ? (        <div
+      ) : noChanges ? (
+        <div
           data-testid="diff-no-changes"
           style={{
             color: "var(--ink-3)",
@@ -146,7 +154,8 @@ export function DiffViewer(props: Props): JSX.Element {
         >
           {t("migrations.diff.noChanges")}
         </div>
-) : (        <div
+      ) : (
+        <div
           style={{
             flex: 1,
             minHeight: 280,
@@ -167,7 +176,7 @@ export function DiffViewer(props: Props): JSX.Element {
             }}
           />
         </div>
-)}
+      )}
     </div>
-);
+  );
 }

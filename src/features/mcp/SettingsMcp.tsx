@@ -27,11 +27,12 @@ import {
 
 function formatBackendError(err: unknown): string {
   if (err instanceof Error) return err.message;
-  if (    err &&
+  if (
+    err &&
     typeof err === "object" &&
     "message" in err &&
     typeof (err as { message: unknown }).message === "string"
-) {
+  ) {
     return (err as { message: string }).message;
   }
   return String(err);
@@ -133,7 +134,8 @@ export function SettingsMcp(): JSX.Element {
 
   const enabled = status?.enabled ?? false;
 
-  return (    <section className="mcp-section settings-mcp">
+  return (
+    <section className="mcp-section settings-mcp">
       <header>
         <h2>{t("settings.mcp.title")}</h2>
         <p className="mcp-description">{t("settings.mcp.description")}</p>
@@ -149,19 +151,23 @@ export function SettingsMcp(): JSX.Element {
           />
           {t("settings.mcp.enableLabel")}
         </label>
-        {enabled && status?.httpPort != null ? (          <span className="mcp-port-info">
+        {enabled && status?.httpPort != null ? (
+          <span className="mcp-port-info">
             {t("settings.mcp.runningOnPort", { port: status.httpPort })}
           </span>
-) : null}
+        ) : null}
       </div>
 
       <div className="mcp-clients">
         <h3>{t("settings.mcp.authorizedClients")}</h3>
-        {clients.length === 0 ? (          <p className="mcp-empty">{t("settings.mcp.noClients")}</p>
-) : (          <ul>
+        {clients.length === 0 ? (
+          <p className="mcp-empty">{t("settings.mcp.noClients")}</p>
+        ) : (
+          <ul>
             {clients.map((c) => {
               const lastUsed = formatLastUsed(c.lastUsedAt);
-              return (                <li key={c.id} className="mcp-client-row">
+              return (
+                <li key={c.id} className="mcp-client-row">
                   <span className="mcp-client-name">{c.name}</span>
                   <span className="mcp-scopes">{c.scopes.join(", ")}</span>
                   <span className="mcp-last-used">
@@ -178,19 +184,22 @@ export function SettingsMcp(): JSX.Element {
                     {t("settings.mcp.revoke")}
                   </button>
                 </li>
-);
+              );
             })}
           </ul>
-)}
+        )}
       </div>
 
       <div className="mcp-onboarding">
         <h3>{t("settings.mcp.connectAgent")}</h3>
         <p>{t("settings.mcp.connectAgentHint")}</p>
 
-        {!enabled ? (          <p className="mcp-empty">{t("settings.mcp.connect.enableFirst")}</p>
-) : snippetError ? (          <p className="mcp-empty">{snippetError}</p>
-) : snippet ? (          <div className="mcp-config-blocks">
+        {!enabled ? (
+          <p className="mcp-empty">{t("settings.mcp.connect.enableFirst")}</p>
+        ) : snippetError ? (
+          <p className="mcp-empty">{snippetError}</p>
+        ) : snippet ? (
+          <div className="mcp-config-blocks">
             <div className="mcp-config-block">
               <header>
                 <strong>{t("settings.mcp.connect.claudeCode")}</strong>
@@ -225,14 +234,10 @@ export function SettingsMcp(): JSX.Element {
               <pre className="mcp-config-json">{snippet.cursor}</pre>
             </div>
           </div>
-) : null}
+        ) : null}
 
         <p className="mcp-help-link">
-          <a
-            href="https://ide99.ru/docs/mcp"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="https://ide99.ru/docs/mcp" target="_blank" rel="noopener noreferrer">
             {t("settings.mcp.connect.readGuide")}
           </a>
         </p>
@@ -241,5 +246,5 @@ export function SettingsMcp(): JSX.Element {
       {/* — outbound MCP client to external servers (Linear, GitHub, …). */}
       <ExternalServers />
     </section>
-);
+  );
 }

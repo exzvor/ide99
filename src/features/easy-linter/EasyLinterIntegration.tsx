@@ -34,7 +34,8 @@ interface MonacoNamespace {
  * @param monaco   The Monaco namespace returned by `onMount`.
  * @param sql      Current buffer text (re-runs on change, debounced).
  */
-export function useEasyLinter(  ed: editor.IStandaloneCodeEditor | null,
+export function useEasyLinter(
+  ed: editor.IStandaloneCodeEditor | null,
   monaco: MonacoNamespace | null,
   sql: string,
 ): void {

@@ -13,13 +13,14 @@ describe("buildRefreshPolicySql", () => {
       mode: "create",
     };
     const sql = buildRefreshPolicySql(form);
-    expect(sql).toBe(      "SELECT add_continuous_aggregate_policy(\n" +
+    expect(sql).toBe(
+      "SELECT add_continuous_aggregate_policy(\n" +
         '  \'"public"."hourly_metrics"\',\n' +
         "  start_offset => INTERVAL '30 days',\n" +
         "  end_offset => INTERVAL '1 hour',\n" +
         "  schedule_interval => INTERVAL '1 hour'\n" +
         ");",
-);
+    );
   });
 
   it("drop-mode emits remove_continuous_aggregate_policy", () => {
@@ -30,7 +31,8 @@ describe("buildRefreshPolicySql", () => {
       scheduleInterval: "ignored",
       mode: "drop",
     };
-    expect(buildRefreshPolicySql(form)).toBe(      'SELECT remove_continuous_aggregate_policy(\'"public"."hourly_metrics"\');',
-);
+    expect(buildRefreshPolicySql(form)).toBe(
+      'SELECT remove_continuous_aggregate_policy(\'"public"."hourly_metrics"\');',
+    );
   });
 });

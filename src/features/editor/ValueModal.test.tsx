@@ -11,8 +11,9 @@ vi.mock("react-i18next", () => ({
 
 describe("ValueModal", () => {
   test("renders nothing when open=false", () => {
-    const { container } = render(      <ValueModal open={false} onClose={() => {}} value="x" language="text" />,
-);
+    const { container } = render(
+      <ValueModal open={false} onClose={() => {}} value="x" language="text" />,
+    );
     expect(container.querySelector('[role="dialog"]')).toBeNull();
   });
 

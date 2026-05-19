@@ -24,7 +24,8 @@ export function MarkdownCell({ cell, notebookCells, onChange }: Props): JSX.Elem
 
   const html = renderMarkdown(substituteVariables(cell.source, notebookCells, { mode: "html" }));
 
-  return (    <div
+  return (
+    <div
       data-testid={`md-cell-${cell.id}`}
       style={{ display: "flex", flexDirection: "column", gap: 8 }}
     >
@@ -39,7 +40,8 @@ export function MarkdownCell({ cell, notebookCells, onChange }: Props): JSX.Elem
           {editing ? t("notebook.markdown.preview") : t("notebook.markdown.edit")}
         </button>
       </div>
-      {editing ? (        <textarea
+      {editing ? (
+        <textarea
           data-testid={`md-cell-${cell.id}-source`}
           value={cell.source}
           onChange={(e) => onChange({ ...cell, source: e.target.value })}
@@ -58,8 +60,8 @@ export function MarkdownCell({ cell, notebookCells, onChange }: Props): JSX.Elem
             padding: 8,
             resize: "vertical",
           }}
-        />
-) : (        // biome-ignore lint/a11y/useSemanticElements: native <button> would not allow rendering arbitrary markdown HTML inside; role/tabIndex/keys are wired by hand.
+        /> // biome-ignore lint/a11y/useSemanticElements: native <button> would not allow rendering arbitrary markdown HTML inside; role/tabIndex/keys are wired by hand.
+      ) : (
         <div
           data-testid={`md-cell-${cell.id}-preview`}
           role="button"
@@ -81,7 +83,7 @@ export function MarkdownCell({ cell, notebookCells, onChange }: Props): JSX.Elem
             }
           }}
         />
-)}
+      )}
     </div>
-);
+  );
 }

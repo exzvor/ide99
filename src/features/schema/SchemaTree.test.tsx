@@ -10,10 +10,11 @@ vi.mock("../jsonb/panels/InferredSchemaPanel", () => ({
   InferredSchemaPanel: ({
     connId,
     fqn,
-  }: { connId: string; fqn: { schema: string; table: string; column: string } }) => (    <div data-testid="inferred-panel-mock">
+  }: { connId: string; fqn: { schema: string; table: string; column: string } }) => (
+    <div data-testid="inferred-panel-mock">
       panel:{connId}:{fqn.schema}.{fqn.table}.{fqn.column}
     </div>
-),
+  ),
 }));
 
 // react-arborist relies on ResizeObserver; jsdom doesn't ship it. Stub a
@@ -71,7 +72,8 @@ function seedFullCache() {
 }
 
 function reset() {
-  useSchema.setState(    {
+  useSchema.setState(
+    {
       ...initial,
       connection: { status: "idle" },
       cache: new Map(),
@@ -79,14 +81,15 @@ function reset() {
       filter: "",
     },
     true,
-);
+  );
 }
 
 function renderUI() {
-  return render(    <I18nextProvider i18n={i18n}>
+  return render(
+    <I18nextProvider i18n={i18n}>
       <SchemaTree />
     </I18nextProvider>,
-);
+  );
 }
 
 beforeEach(reset);
@@ -290,14 +293,16 @@ describe("SchemaTree — S16 JSONB inferred schema panel", () => {
     await userEvent.click(eventsRow);
 
     // The jsonb column should have a chevron toggle button.
-    const chevron = await screen.findByTestId(      "schema-tree-jsonb-chevron-column:public/events/payload",
-);
+    const chevron = await screen.findByTestId(
+      "schema-tree-jsonb-chevron-column:public/events/payload",
+    );
     expect(chevron).toBeInTheDocument();
     expect(chevron).toHaveAttribute("aria-expanded", "false");
 
     // The plain integer column must NOT have a chevron.
-    expect(      screen.queryByTestId("schema-tree-jsonb-chevron-column:public/events/id"),
-).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("schema-tree-jsonb-chevron-column:public/events/id"),
+    ).not.toBeInTheDocument();
   });
 
   test("clicking the chevron mounts InferredSchemaPanel with correct connId + fqn", async () => {
@@ -316,8 +321,9 @@ describe("SchemaTree — S16 JSONB inferred schema panel", () => {
     expect(screen.queryByTestId("inferred-panel-mock")).not.toBeInTheDocument();
 
     // Click the chevron.
-    const chevron = await screen.findByTestId(      "schema-tree-jsonb-chevron-column:public/events/payload",
-);
+    const chevron = await screen.findByTestId(
+      "schema-tree-jsonb-chevron-column:public/events/payload",
+    );
     await userEvent.click(chevron);
 
     // InferredSchemaPanel (mocked) should render with correct props.
@@ -326,8 +332,9 @@ describe("SchemaTree — S16 JSONB inferred schema panel", () => {
 
     // Re-query the chevron after re-render to check updated aria-expanded.
     await waitFor(() => {
-      const updatedChevron = screen.getByTestId(        "schema-tree-jsonb-chevron-column:public/events/payload",
-);
+      const updatedChevron = screen.getByTestId(
+        "schema-tree-jsonb-chevron-column:public/events/payload",
+      );
       expect(updatedChevron).toHaveAttribute("aria-expanded", "true");
     });
   });
@@ -343,23 +350,26 @@ describe("SchemaTree — S16 JSONB inferred schema panel", () => {
     const eventsRow = await screen.findByTestId("schema-tree-row-table:public/events");
     await userEvent.click(eventsRow);
 
-    const chevron = await screen.findByTestId(      "schema-tree-jsonb-chevron-column:public/events/payload",
-);
+    const chevron = await screen.findByTestId(
+      "schema-tree-jsonb-chevron-column:public/events/payload",
+    );
 
     // Expand.
     await userEvent.click(chevron);
     expect(await screen.findByTestId("inferred-panel-mock")).toBeInTheDocument();
 
     // Re-query chevron after re-render then collapse.
-    const chevronAfterExpand = await screen.findByTestId(      "schema-tree-jsonb-chevron-column:public/events/payload",
-);
+    const chevronAfterExpand = await screen.findByTestId(
+      "schema-tree-jsonb-chevron-column:public/events/payload",
+    );
     await userEvent.click(chevronAfterExpand);
     await waitFor(() => {
       expect(screen.queryByTestId("inferred-panel-mock")).not.toBeInTheDocument();
     });
     await waitFor(() => {
-      const chevronAfterCollapse = screen.getByTestId(        "schema-tree-jsonb-chevron-column:public/events/payload",
-);
+      const chevronAfterCollapse = screen.getByTestId(
+        "schema-tree-jsonb-chevron-column:public/events/payload",
+      );
       expect(chevronAfterCollapse).toHaveAttribute("aria-expanded", "false");
     });
   });
@@ -376,8 +386,9 @@ describe("SchemaTree — S16 JSONB inferred schema panel", () => {
     await userEvent.click(eventsRow);
 
     // The json column ("meta") should also have a chevron.
-    const chevron = await screen.findByTestId(      "schema-tree-jsonb-chevron-column:public/events/meta",
-);
+    const chevron = await screen.findByTestId(
+      "schema-tree-jsonb-chevron-column:public/events/meta",
+    );
     expect(chevron).toBeInTheDocument();
   });
 });
@@ -409,10 +420,12 @@ describe("S17 context-menu items on JSONB columns", () => {
     const menu = await screen.findByTestId("schema-tree-context-menu");
     expect(menu).toBeInTheDocument();
 
-    expect(      screen.getByRole("menuitem", { name: i18n.t("schema.tree.menu.buildJsonbQuery") }),
-).toBeInTheDocument();
-    expect(      screen.getByRole("menuitem", { name: i18n.t("schema.tree.menu.suggestGinIndex") }),
-).toBeInTheDocument();
+    expect(
+      screen.getByRole("menuitem", { name: i18n.t("schema.tree.menu.buildJsonbQuery") }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("menuitem", { name: i18n.t("schema.tree.menu.suggestGinIndex") }),
+    ).toBeInTheDocument();
   });
 
   test("does NOT show these items on non-JSONB columns", async () => {
@@ -429,10 +442,11 @@ describe("S17 context-menu items on JSONB columns", () => {
   test("clicking 'Build query…' invokes onOpenBuilder with the right FQN", async () => {
     const onOpenBuilder = vi.fn();
     seedJsonbCache();
-    render(      <I18nextProvider i18n={i18n}>
+    render(
+      <I18nextProvider i18n={i18n}>
         <SchemaTree onOpenBuilder={onOpenBuilder} />
       </I18nextProvider>,
-);
+    );
 
     const schemaRow = await screen.findByTestId("schema-tree-row-schema:public");
     await userEvent.click(schemaRow);
@@ -459,10 +473,11 @@ describe("S17 context-menu items on JSONB columns", () => {
   test("clicking 'Suggest GIN index…' invokes onOpenSuggester with the right FQN", async () => {
     const onOpenSuggester = vi.fn();
     seedJsonbCache();
-    render(      <I18nextProvider i18n={i18n}>
+    render(
+      <I18nextProvider i18n={i18n}>
         <SchemaTree onOpenSuggester={onOpenSuggester} />
       </I18nextProvider>,
-);
+    );
 
     const schemaRow = await screen.findByTestId("schema-tree-row-schema:public");
     await userEvent.click(schemaRow);
@@ -491,10 +506,11 @@ describe("S17 context-menu items on JSONB columns", () => {
 describe("S23 — context-menu entry-points to object editor", () => {
   test("right-click on a schema node shows 4 'New …' items", async () => {
     seedJsonbCache();
-    render(      <I18nextProvider i18n={i18n}>
+    render(
+      <I18nextProvider i18n={i18n}>
         <SchemaTree />
       </I18nextProvider>,
-);
+    );
 
     const schemaRow = await screen.findByTestId("schema-tree-row-schema:public");
     fireEvent.contextMenu(schemaRow);
@@ -512,10 +528,11 @@ describe("S23 — context-menu entry-points to object editor", () => {
     editorMod.useEditor.setState({ ...original, openObjectEditor });
 
     seedJsonbCache();
-    render(      <I18nextProvider i18n={i18n}>
+    render(
+      <I18nextProvider i18n={i18n}>
         <SchemaTree />
       </I18nextProvider>,
-);
+    );
 
     const schemaRow = await screen.findByTestId("schema-tree-row-schema:public");
     fireEvent.contextMenu(schemaRow);
@@ -523,21 +540,23 @@ describe("S23 — context-menu entry-points to object editor", () => {
     await userEvent.click(btn);
 
     await waitFor(() => {
-      expect(openObjectEditor).toHaveBeenCalledWith(        expect.objectContaining({
+      expect(openObjectEditor).toHaveBeenCalledWith(
+        expect.objectContaining({
           objectKind: "table",
           mode: "create",
           schema: "public",
         }),
-);
+      );
     });
   });
 
   test("right-click on a table node shows 'Edit table…' + 'New index on this table…'", async () => {
     seedJsonbCache();
-    render(      <I18nextProvider i18n={i18n}>
+    render(
+      <I18nextProvider i18n={i18n}>
         <SchemaTree />
       </I18nextProvider>,
-);
+    );
 
     const schemaRow = await screen.findByTestId("schema-tree-row-schema:public");
     await userEvent.click(schemaRow);
@@ -559,10 +578,11 @@ describe("S23 — context-menu entry-points to object editor", () => {
     });
 
     seedJsonbCache();
-    render(      <I18nextProvider i18n={i18n}>
+    render(
+      <I18nextProvider i18n={i18n}>
         <SchemaTree />
       </I18nextProvider>,
-);
+    );
 
     const schemaRow = await screen.findByTestId("schema-tree-row-schema:public");
     await userEvent.click(schemaRow);
@@ -574,13 +594,14 @@ describe("S23 — context-menu entry-points to object editor", () => {
     await userEvent.click(btn);
 
     await waitFor(() => {
-      expect(openObjectEditor).toHaveBeenCalledWith(        expect.objectContaining({
+      expect(openObjectEditor).toHaveBeenCalledWith(
+        expect.objectContaining({
           objectKind: "table",
           mode: "edit",
           schema: "public",
           name: "events",
         }),
-);
+      );
     });
   });
 
@@ -593,10 +614,11 @@ describe("S23 — context-menu entry-points to object editor", () => {
     });
 
     seedJsonbCache();
-    render(      <I18nextProvider i18n={i18n}>
+    render(
+      <I18nextProvider i18n={i18n}>
         <SchemaTree />
       </I18nextProvider>,
-);
+    );
 
     const schemaRow = await screen.findByTestId("schema-tree-row-schema:public");
     await userEvent.click(schemaRow);
@@ -608,22 +630,24 @@ describe("S23 — context-menu entry-points to object editor", () => {
     await userEvent.click(btn);
 
     await waitFor(() => {
-      expect(openObjectEditor).toHaveBeenCalledWith(        expect.objectContaining({
+      expect(openObjectEditor).toHaveBeenCalledWith(
+        expect.objectContaining({
           objectKind: "index",
           mode: "create",
           schema: "public",
           parentTable: "events",
         }),
-);
+      );
     });
   });
 
   test("schema node menu does NOT show PENDING placeholder items", async () => {
     seedJsonbCache();
-    render(      <I18nextProvider i18n={i18n}>
+    render(
+      <I18nextProvider i18n={i18n}>
         <SchemaTree />
       </I18nextProvider>,
-);
+    );
 
     const schemaRow = await screen.findByTestId("schema-tree-row-schema:public");
     fireEvent.contextMenu(schemaRow);

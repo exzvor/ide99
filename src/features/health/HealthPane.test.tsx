@@ -12,14 +12,15 @@ vi.mock("../../lib/tauri", async () => {
   }
   return {
     ...actual,
-    healthDbSize: vi.fn().mockResolvedValue(      ok({
+    healthDbSize: vi.fn().mockResolvedValue(
+      ok({
         bytes: 1024,
         pretty: "1 kB",
         growth7dBytes: 0,
         growth7dPct: 0,
         sparklinePoints: [1024],
       }),
-),
+    ),
     healthBloat: vi.fn().mockResolvedValue(ok({ rows: [] })),
     healthSlowQueries: vi.fn().mockResolvedValue(ok({ rows: [] })),
     healthMissingIndexes: vi.fn().mockResolvedValue(ok({ rows: [] })),

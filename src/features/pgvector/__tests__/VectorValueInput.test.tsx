@@ -10,9 +10,11 @@ import {
 } from "../VectorValueInput";
 
 function Harness(props: Partial<VectorValueInputProps> & { initial?: VectorValue }) {
-  const [value, setValue] = useState<VectorValue>(    props.initial ?? { mode: "literal", literal: "" },
-);
-  return (    <VectorValueInput
+  const [value, setValue] = useState<VectorValue>(
+    props.initial ?? { mode: "literal", literal: "" },
+  );
+  return (
+    <VectorValueInput
       value={value}
       onChange={(v) => {
         setValue(v);
@@ -20,7 +22,7 @@ function Harness(props: Partial<VectorValueInputProps> & { initial?: VectorValue
       }}
       dimHint={props.dimHint}
     />
-);
+  );
 }
 
 describe("VectorValueInput", () => {
@@ -74,12 +76,13 @@ describe("VectorValueInput", () => {
   });
 
   it("renders the expected-dim hint when dimHint is provided", () => {
-    render(      <VectorValueInput
+    render(
+      <VectorValueInput
         value={{ mode: "literal", literal: "" }}
         onChange={() => {}}
         dimHint={384}
       />,
-);
+    );
     expect(screen.getByText(/expected dim: 384/i)).toBeInTheDocument();
   });
 });

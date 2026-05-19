@@ -14,14 +14,15 @@ describe("UnusedIndexesCard", () => {
   });
 
   it("empty rows → no-issues message", () => {
-    render(      <UnusedIndexesCard
+    render(
+      <UnusedIndexesCard
         connId="c1"
         state={{
           status: "ready",
           card: { id: "unused_indexes", data: { rows: [] } },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("health-card-unused_indexes-empty")).toBeTruthy();
   });
 
@@ -29,23 +30,27 @@ describe("UnusedIndexesCard", () => {
     const rows = [
       { schema: "public", index: "idx_a", onTable: "t1", sizeBytes: 200 * 1024 * 1024 },
     ];
-    render(      <UnusedIndexesCard
+    render(
+      <UnusedIndexesCard
         connId="c1"
         state={{ status: "ready", card: { id: "unused_indexes", data: { rows } } }}
       />,
-);
-    expect(screen.getByTestId("health-card-unused_indexes-status").getAttribute("data-tone")).toBe(      "warn",
-);
+    );
+    expect(screen.getByTestId("health-card-unused_indexes-status").getAttribute("data-tone")).toBe(
+      "warn",
+    );
   });
 
   it("ready: ok when total <= 100 MB", () => {
     const rows = [{ schema: "public", index: "idx_a", onTable: "t1", sizeBytes: 1024 * 1024 }];
-    render(      <UnusedIndexesCard
+    render(
+      <UnusedIndexesCard
         connId="c1"
         state={{ status: "ready", card: { id: "unused_indexes", data: { rows } } }}
       />,
-);
-    expect(screen.getByTestId("health-card-unused_indexes-status").getAttribute("data-tone")).toBe(      "ok",
-);
+    );
+    expect(screen.getByTestId("health-card-unused_indexes-status").getAttribute("data-tone")).toBe(
+      "ok",
+    );
   });
 });

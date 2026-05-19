@@ -249,11 +249,12 @@ describe("UpdateChecker", () => {
     render(<UpdateChecker />);
     await user.selectOptions(screen.getByTestId("updater-channel"), "beta");
     await waitFor(() => {
-      expect(invokeMock).toHaveBeenCalledWith(        "settings_set",
+      expect(invokeMock).toHaveBeenCalledWith(
+        "settings_set",
         expect.objectContaining({
           settings: expect.objectContaining({ releaseChannel: "beta" }) as Partial<AppSettings>,
         }),
-);
+      );
     });
   });
 

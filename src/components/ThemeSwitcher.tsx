@@ -39,7 +39,8 @@ export function ThemeSwitcher(): JSX.Element {
   const currentLabel = t(`theme.${theme}`);
   const ariaLabel = t("theme.toggle.label", { current: currentLabel });
 
-  return (    <button
+  return (
+    <button
       type="button"
       aria-label={ariaLabel}
       aria-pressed={theme !== "system"}
@@ -49,5 +50,5 @@ export function ThemeSwitcher(): JSX.Element {
     >
       <Icon size={14} aria-hidden="true" data-testid="theme-icon" data-theme-icon={theme} />
     </button>
-);
+  );
 }

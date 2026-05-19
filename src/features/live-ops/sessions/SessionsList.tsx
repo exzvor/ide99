@@ -14,7 +14,8 @@ function shortQuery(q: string, max: number): string {
 }
 
 /** Match SessionsDag's `localizeState` so list + DAG agree on the visible label. */
-function localizeState(  t: (key: string, options?: { defaultValue: string }) => string,
+function localizeState(
+  t: (key: string, options?: { defaultValue: string }) => string,
   raw: string,
 ): string {
   const slug = raw
@@ -28,7 +29,8 @@ export function SessionsList({ snapshot, connId }: Props): JSX.Element {
   const { t } = useTranslation();
   const blockedSet = new Set<number>();
   for (const e of snapshot.blockingEdges) blockedSet.add(e.blockedPid);
-  return (    <table className="live-ops-sessions-table">
+  return (
+    <table className="live-ops-sessions-table">
       <thead>
         <tr>
           <th>{t("live_ops.sessions.list.col.pid")}</th>
@@ -46,7 +48,8 @@ export function SessionsList({ snapshot, connId }: Props): JSX.Element {
             e.preventDefault();
             useLiveOps.getState().openContextMenu(connId, e.clientX, e.clientY, s);
           };
-          return (            <tr
+          return (
+            <tr
               key={s.pid}
               className={isBlocked ? "is-blocked" : ""}
               onContextMenu={onCtx}
@@ -68,9 +71,9 @@ export function SessionsList({ snapshot, connId }: Props): JSX.Element {
               </td>
               <td className="mono query">{shortQuery(s.query, 120)}</td>
             </tr>
-);
+          );
         })}
       </tbody>
     </table>
-);
+  );
 }

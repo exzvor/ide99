@@ -28,7 +28,8 @@ const fieldLabel: React.CSSProperties = {
   gap: 2,
 };
 
-export function ContinuousAggregateWizard(  props: ContinuousAggregateWizardProps,
+export function ContinuousAggregateWizard(
+  props: ContinuousAggregateWizardProps,
 ): JSX.Element | null {
   const { open, connId, qualifiedTable, schema, columns, onClose } = props;
 
@@ -61,7 +62,8 @@ export function ContinuousAggregateWizard(  props: ContinuousAggregateWizardProp
     onClose();
   };
 
-  return (    <RadixDialog.Root
+  return (
+    <RadixDialog.Root
       open={open}
       onOpenChange={(o) => {
         if (!o) onClose();
@@ -82,7 +84,8 @@ export function ContinuousAggregateWizard(  props: ContinuousAggregateWizardProp
           </RadixDialog.Description>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {customQualifiedName ? (              <label style={fieldLabel}>
+            {customQualifiedName ? (
+              <label style={fieldLabel}>
                 <span>Qualified view name (raw)</span>
                 <input
                   type="text"
@@ -92,7 +95,8 @@ export function ContinuousAggregateWizard(  props: ContinuousAggregateWizardProp
                   placeholder='analytics."cagg_v1"'
                 />
               </label>
-) : (              <label style={fieldLabel}>
+            ) : (
+              <label style={fieldLabel}>
                 <span>{`View name (will be quoted as "${schema}"."<name>")`}</span>
                 <input
                   type="text"
@@ -102,7 +106,7 @@ export function ContinuousAggregateWizard(  props: ContinuousAggregateWizardProp
                   placeholder="hourly_metrics"
                 />
               </label>
-)}
+            )}
             <label style={{ fontSize: 12, display: "flex", gap: 6 }}>
               <input
                 type="checkbox"
@@ -127,12 +131,14 @@ export function ContinuousAggregateWizard(  props: ContinuousAggregateWizardProp
                 value={timeCol}
                 onChange={(e) => setTimeCol(e.target.value)}
               >
-                {timeCandidates.length === 0 ? (                  <option value="">No timestamp/date columns detected</option>
-) : null}
-                {timeCandidates.map((c) => (                  <option key={c.name} value={c.name}>
+                {timeCandidates.length === 0 ? (
+                  <option value="">No timestamp/date columns detected</option>
+                ) : null}
+                {timeCandidates.map((c) => (
+                  <option key={c.name} value={c.name}>
                     {c.name} ({c.typeName})
                   </option>
-))}
+                ))}
               </select>
             </label>
 
@@ -190,5 +196,5 @@ export function ContinuousAggregateWizard(  props: ContinuousAggregateWizardProp
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
-);
+  );
 }

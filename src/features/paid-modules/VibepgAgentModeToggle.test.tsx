@@ -68,10 +68,11 @@ describe("VibepgAgentModeToggle (S37)", () => {
     });
 
     expect(onModeChange).not.toHaveBeenCalled();
-    expect(openSpy).toHaveBeenCalledWith(      "https://vibepg.ai/upgrade",
+    expect(openSpy).toHaveBeenCalledWith(
+      "https://vibepg.ai/upgrade",
       "_blank",
       "noopener,noreferrer",
-);
+    );
     expect(invokeMock).toHaveBeenCalledWith("telemetry_send_event", {
       name: "feature_used",
       props: { feature_id: "paid_modules.vibepg.agent_mode.upgrade_click" },

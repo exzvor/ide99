@@ -34,7 +34,8 @@ export function SpotlightOverlay(props: SpotlightOverlayProps): JSX.Element {
   const rect = props.rect;
 
   if (rect === null) {
-    return (      <div
+    return (
+      <div
         data-testid="tour-spotlight-fallback"
         aria-hidden="true"
         style={{
@@ -45,7 +46,7 @@ export function SpotlightOverlay(props: SpotlightOverlayProps): JSX.Element {
           pointerEvents: "none",
         }}
       />
-);
+    );
   }
 
   const top = Math.max(0, rect.top - padding);
@@ -53,7 +54,8 @@ export function SpotlightOverlay(props: SpotlightOverlayProps): JSX.Element {
   const width = rect.width + padding * 2;
   const height = rect.height + padding * 2;
 
-  return (    <div
+  return (
+    <div
       data-testid="tour-spotlight"
       aria-hidden="true"
       style={{
@@ -70,5 +72,5 @@ export function SpotlightOverlay(props: SpotlightOverlayProps): JSX.Element {
         pointerEvents: "none",
       }}
     />
-);
+  );
 }

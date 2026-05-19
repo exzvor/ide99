@@ -290,8 +290,9 @@ describe("setContent (debounced persistence)", () => {
 
     await vi.advanceTimersByTimeAsync(500);
     expect(tabsSaveMock).toHaveBeenCalledTimes(1);
-    expect(tabsSaveMock).toHaveBeenCalledWith(      expect.objectContaining({ id: tab.id, content: "SELECT 3" }),
-);
+    expect(tabsSaveMock).toHaveBeenCalledWith(
+      expect.objectContaining({ id: tab.id, content: "SELECT 3" }),
+    );
 
     // Post-save: dirty cleared
     const after = useEditor.getState().tabs[0];
@@ -399,8 +400,9 @@ describe("runQuery", () => {
     // Backend invocation failure (notConnected) is still surfaced via a
     // thrown QueryError because the batch never got far enough to return
     // a structured result.
-    queryRunBatchMock.mockRejectedValueOnce(      new QueryError({ kind: "notConnected", connId: "conn-1" }),
-);
+    queryRunBatchMock.mockRejectedValueOnce(
+      new QueryError({ kind: "notConnected", connId: "conn-1" }),
+    );
 
     await useEditor.getState().runQuery(tab.id);
 
@@ -661,7 +663,8 @@ describe("openPlanDiff ", () => {
   });
 
   test("runtime side does NOT persist", () => {
-    useEditor.getState().openPlanDiff(      { kind: "recent", recentPlanId: "rA" },
+    useEditor.getState().openPlanDiff(
+      { kind: "recent", recentPlanId: "rA" },
       {
         kind: "runtime",
         planJson: [{ Plan: { "Node Type": "Result" } }],
@@ -672,7 +675,7 @@ describe("openPlanDiff ", () => {
         mode: "explain",
         optionsJson: "{}",
       },
-);
+    );
     expect(tabsSaveMock).not.toHaveBeenCalled();
   });
 

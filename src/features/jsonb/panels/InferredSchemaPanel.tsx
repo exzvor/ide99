@@ -65,7 +65,8 @@ export function InferredSchemaPanel({
   };
 
   // Common region wrapper used by every status branch.
-  const Region: React.FC<{ children: React.ReactNode; busy?: boolean }> = ({ children, busy }) => (    <section
+  const Region: React.FC<{ children: React.ReactNode; busy?: boolean }> = ({ children, busy }) => (
+    <section
       aria-label={t("jsonb.inference.panel.ariaRegion", { column: fqn.column })}
       aria-busy={busy ? "true" : undefined}
       className={containerClass}
@@ -73,10 +74,11 @@ export function InferredSchemaPanel({
     >
       {children}
     </section>
-);
+  );
 
   if (entry.status === "pending") {
-    return (      <Region busy>
+    return (
+      <Region busy>
         <div className="ide99-jsonb-inference-skeleton">
           <SkeletonRow widthCh={6} />
           <SkeletonRow widthCh={4} />
@@ -86,11 +88,12 @@ export function InferredSchemaPanel({
           </span>
         </div>
       </Region>
-);
+    );
   }
 
   if (entry.status === "error") {
-    return (      <Region>
+    return (
+      <Region>
         <div className="ide99-jsonb-inference-error">
           <span>{t("jsonb.inference.panel.error", { message: entry.message })}</span>
           <button type="button" onClick={handleReinfer}>
@@ -98,14 +101,15 @@ export function InferredSchemaPanel({
           </button>
         </div>
       </Region>
-);
+    );
   }
 
   // ready | stale
   const schema = entry.schema;
   const isStale = entry.status === "stale";
 
-  return (    <Region>
+  return (
+    <Region>
       <Header
         sampleCount={schema.sampleCount}
         keyCount={schema.nodes.length}
@@ -114,21 +118,23 @@ export function InferredSchemaPanel({
         onReinfer={handleReinfer}
         t={t}
       />
-      {schema.nodes.length === 0 ? (        <div className="ide99-jsonb-inference-empty">{t("jsonb.inference.panel.empty")}</div>
-) : (        // TODO: TanStack Virtual when nodes > 100 (typical case is < 50).
+      {schema.nodes.length === 0 ? (
+        <div className="ide99-jsonb-inference-empty">{t("jsonb.inference.panel.empty")}</div> // TODO: TanStack Virtual when nodes > 100 (typical case is < 50).
+      ) : (
         <ul className="ide99-jsonb-inference-tree" role="tree">
-          {tree?.children.map((node) => (            <TreeRow
+          {tree?.children.map((node) => (
+            <TreeRow
               key={pathToString(node)}
               node={node}
               depth={0}
               onPathSelect={onPathSelect}
               selectedPath={selectedPath}
             />
-))}
+          ))}
         </ul>
-)}
+      )}
     </Region>
-);
+  );
 }
 
 interface HeaderProps {
@@ -157,22 +163,24 @@ function Header({
     keys: keysStr,
     ago: agoStr,
   });
-  return (    <header className="ide99-jsonb-inference-header">
+  return (
+    <header className="ide99-jsonb-inference-header">
       <span>
-        {isStale && (          <span
+        {isStale && (
+          <span
             className="ide99-jsonb-inference-stale"
             title={t("jsonb.inference.panel.staleTooltip")}
           >
             ⚠ {t("jsonb.inference.panel.staleBadge")} ·{" "}
           </span>
-)}
+        )}
         {summary}
       </span>
       <button type="button" onClick={onReinfer} className="ide99-jsonb-inference-reinfer">
         ↻ {t("jsonb.inference.panel.reinferAction")}
       </button>
     </header>
-);
+  );
 }
 
 interface TreeRowProps {
@@ -188,7 +196,8 @@ function TreeRow({ node, depth, onPathSelect, selectedPath }: TreeRowProps): JSX
   const isPickerMode = onPathSelect !== undefined;
   const isSelected = selectedPath !== undefined && pathsEqual(node.path, selectedPath);
 
-  const rowContent = (    <>
+  const rowContent = (
+    <>
       <span className="ide99-jsonb-inference-label">{node.label}</span>
       <span className="ide99-jsonb-inference-type">{node.typeLabel || ""}</span>
       <span className="ide99-jsonb-inference-freq">{freqPct}%</span>
@@ -205,10 +214,12 @@ function TreeRow({ node, depth, onPathSelect, selectedPath }: TreeRowProps): JSX
           : ""}
       </span>
     </>
-);
+  );
 
-  return (    <li role={isPickerMode ? undefined : "treeitem"} style={{ paddingLeft: `${indent}px` }}>
-      {isPickerMode ? (        <button
+  return (
+    <li role={isPickerMode ? undefined : "treeitem"} style={{ paddingLeft: `${indent}px` }}>
+      {isPickerMode ? (
+        <button
           type="button"
           aria-pressed={isSelected}
           onClick={() => onPathSelect(node.path)}
@@ -216,30 +227,34 @@ function TreeRow({ node, depth, onPathSelect, selectedPath }: TreeRowProps): JSX
         >
           <div className="ide99-jsonb-inference-row">{rowContent}</div>
         </button>
-) : (        <div className="ide99-jsonb-inference-row">{rowContent}</div>
-)}
-      {node.children.length > 0 && (        <ul className="ide99-jsonb-inference-children" role={isPickerMode ? undefined : "group"}>
-          {node.children.map((child) => (            <TreeRow
+      ) : (
+        <div className="ide99-jsonb-inference-row">{rowContent}</div>
+      )}
+      {node.children.length > 0 && (
+        <ul className="ide99-jsonb-inference-children" role={isPickerMode ? undefined : "group"}>
+          {node.children.map((child) => (
+            <TreeRow
               key={pathToString(child)}
               node={child}
               depth={depth + 1}
               onPathSelect={onPathSelect}
               selectedPath={selectedPath}
             />
-))}
+          ))}
         </ul>
-)}
+      )}
     </li>
-);
+  );
 }
 
 function SkeletonRow({ widthCh }: { widthCh: number }): JSX.Element {
-  return (    <div
+  return (
+    <div
       className="ide99-jsonb-inference-skeleton-row"
       aria-hidden="true"
       style={{ width: `${widthCh * 4}ch` }}
     />
-);
+  );
 }
 
 function pathToString(node: TreeNode): string {

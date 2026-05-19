@@ -22,7 +22,8 @@ export type AutosaveResult = {
   errorMessage: string | null;
 };
 
-export function useAutosave(  notebook: Notebook | null,
+export function useAutosave(
+  notebook: Notebook | null,
   options: { delayMs?: number; enabled?: boolean } = {},
 ): AutosaveResult {
   const delayMs = options.delayMs ?? 500;
@@ -30,7 +31,7 @@ export function useAutosave(  notebook: Notebook | null,
   const save = useNotebooks((s) => s.save);
   const isRunning = useNotebooks((s) =>
     notebook ? s.runningByNotebookId[notebook.id] === true : false,
-);
+  );
 
   const [status, setStatus] = useState<AutosaveStatus>("idle");
   const [lastSavedAt, setLastSavedAt] = useState<number | null>(null);

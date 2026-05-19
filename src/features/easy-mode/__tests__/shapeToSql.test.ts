@@ -23,42 +23,47 @@ describe("shapeToSql", () => {
   });
 
   it("qualifies the table with its schema when present", () => {
-    expect(      shapeToSql(shape({ baseSelect: { schema: "app", table: "users", columns: ["*"] } })),
-).toBe(`SELECT *\nFROM "app"."users"`);
+    expect(
+      shapeToSql(shape({ baseSelect: { schema: "app", table: "users", columns: ["*"] } })),
+    ).toBe(`SELECT *\nFROM "app"."users"`);
   });
 
   it("renders explicit columns with double-quotes", () => {
-    const sql = shapeToSql(      shape({ baseSelect: { schema: null, table: "users", columns: ["id", "email"] } }),
-);
+    const sql = shapeToSql(
+      shape({ baseSelect: { schema: null, table: "users", columns: ["id", "email"] } }),
+    );
     expect(sql).toBe(`SELECT "id", "email"\nFROM "users"`);
   });
 
   it("renders WHERE / ORDER BY / LIMIT", () => {
-    const sql = shapeToSql(      shape({
+    const sql = shapeToSql(
+      shape({
         filters: [{ column: "status", op: "eq", value: "active" }],
         sort: { column: "created_at", dir: "desc" },
         limit: 50,
       }),
-);
-    expect(sql).toBe(      [
+    );
+    expect(sql).toBe(
+      [
         "SELECT *",
         `FROM "users"`,
         `WHERE "status" = 'active'`,
         `ORDER BY "created_at" DESC`,
         "LIMIT 50",
       ].join("\n"),
-);
+    );
   });
 
   it("AND-chains multiple filters", () => {
-    const sql = shapeToSql(      shape({
+    const sql = shapeToSql(
+      shape({
         filters: [
           { column: "status", op: "eq", value: "active" },
           { column: "age", op: "gt", value: 18 },
           { column: "deleted_at", op: "isNull" },
         ],
       }),
-);
+    );
     expect(sql).toContain(`WHERE "status" = 'active'`);
     expect(sql).toContain(`  AND "age" > 18`);
     expect(sql).toContain(`  AND "deleted_at" IS NULL`);

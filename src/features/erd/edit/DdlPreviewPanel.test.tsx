@@ -13,12 +13,13 @@ vi.mock("@monaco-editor/react", () => ({
   Editor: (props: {
     value?: string;
     onChange?: (v: string | undefined) => void;
-  }) => (    <textarea
+  }) => (
+    <textarea
       data-testid="ddl-monaco-mock"
       value={props.value ?? ""}
       onChange={(e) => props.onChange?.(e.target.value)}
     />
-),
+  ),
 }));
 
 vi.mock("../../../lib/parser", () => ({
@@ -37,7 +38,8 @@ beforeEach(() => {
 });
 
 function harness(args: Partial<React.ComponentProps<typeof DdlPreviewPanel>>) {
-  return render(    <I18nextProvider i18n={i18n}>
+  return render(
+    <I18nextProvider i18n={i18n}>
       <DdlPreviewPanel
         ddl={{ sql: "", statements: [] }}
         issues={[]}
@@ -47,7 +49,7 @@ function harness(args: Partial<React.ComponentProps<typeof DdlPreviewPanel>>) {
         {...args}
       />
     </I18nextProvider>,
-);
+  );
 }
 
 describe("DdlPreviewPanel", () => {
@@ -62,8 +64,9 @@ describe("DdlPreviewPanel", () => {
       statements: [{ sql: 'CREATE TABLE "public"."events" ();', opIds: ["t1"], warnings: [] }],
     };
     harness({ ddl });
-    expect((screen.getByTestId("ddl-monaco-mock") as HTMLTextAreaElement).value).toContain(      "CREATE TABLE",
-);
+    expect((screen.getByTestId("ddl-monaco-mock") as HTMLTextAreaElement).value).toContain(
+      "CREATE TABLE",
+    );
   });
 
   it("statement_count label reflects N", () => {
@@ -121,14 +124,16 @@ describe("DdlPreviewPanel", () => {
   it("AST warnings list rendered when store has astWarnings", () => {
     useEditStore
       .getState()
-      .replaceOpsFromAst(        TAB,
+      .replaceOpsFromAst(
+        TAB,
         [],
         [{ message: "Index DDL not supported", sqlSnippet: "CREATE INDEX foo ON bar (x)" }],
         "CREATE INDEX foo ON bar (x);",
-);
+      );
     harness({});
     expect(screen.getByTestId("ddl-preview-ast-warnings")).toBeInTheDocument();
-    expect(screen.getByTestId("ddl-preview-ast-warnings-list")).toHaveTextContent(      "Index DDL not supported",
-);
+    expect(screen.getByTestId("ddl-preview-ast-warnings-list")).toHaveTextContent(
+      "Index DDL not supported",
+    );
   });
 });

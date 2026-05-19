@@ -42,9 +42,10 @@ describe("useOnboarding store", () => {
   it("ignores stale progress blob in localStorage on next setMode", () => {
     // Stash a bogus shape that points at a removed step. The store doesn't
     // read it; resetting + setting mode should still produce a clean state.
-    window.localStorage.setItem(      LEGACY_STORAGE_KEY,
+    window.localStorage.setItem(
+      LEGACY_STORAGE_KEY,
       JSON.stringify({ step: "tour-handoff", mode: "easy" }),
-);
+    );
     useOnboarding.getState().reset();
     useOnboarding.getState().setMode("standard");
     expect(useOnboarding.getState().step).toBe("welcome");

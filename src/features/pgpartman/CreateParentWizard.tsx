@@ -63,19 +63,21 @@ const PARTMAN_DEFAULT_PREMAKE = 4;
 export function CreateParentWizard(props: CreateParentWizardProps): JSX.Element | null {
   const { open, connId, schema, table, qualifiedTable, columns, onClose } = props;
 
-  const controlCandidates = useMemo(    () => columns.filter((c) => PARTMAN_CONTROL_TYPES.has(c.typeName)),
+  const controlCandidates = useMemo(
+    () => columns.filter((c) => PARTMAN_CONTROL_TYPES.has(c.typeName)),
     [columns],
-);
+  );
 
   // Prefer a temporal column for the default — `events(id, created_at, ...)`
   // should land on `created_at`, not `id`. If no time column exists, fall
   // back to the first candidate (preserves the previous behaviour).
-  const defaultControlCol = useMemo(    () =>
+  const defaultControlCol = useMemo(
+    () =>
       controlCandidates.find((c) => PARTMAN_TIME_TYPES.has(c.typeName))?.name ??
       controlCandidates[0]?.name ??
       "",
     [controlCandidates],
-);
+  );
   const [controlCol, setControlCol] = useState<string>(defaultControlCol);
   // The panel may mount before SchemaBrowser's column cache loads, so the
   // first render's `controlCandidates` is `[]` and `defaultControlCol` is "".
@@ -111,7 +113,8 @@ export function CreateParentWizard(props: CreateParentWizardProps): JSX.Element 
     onClose();
   };
 
-  return (    <RadixDialog.Root
+  return (
+    <RadixDialog.Root
       open={open}
       onOpenChange={(o) => {
         if (!o) onClose();
@@ -140,12 +143,14 @@ export function CreateParentWizard(props: CreateParentWizardProps): JSX.Element 
                 value={controlCol}
                 onChange={(e) => setControlCol(e.target.value)}
               >
-                {controlCandidates.length === 0 ? (                  <option value="">No timestamp/date/integer columns detected</option>
-) : null}
-                {controlCandidates.map((c) => (                  <option key={c.name} value={c.name}>
+                {controlCandidates.length === 0 ? (
+                  <option value="">No timestamp/date/integer columns detected</option>
+                ) : null}
+                {controlCandidates.map((c) => (
+                  <option key={c.name} value={c.name}>
                     {c.name} ({c.typeName})
                   </option>
-))}
+                ))}
               </select>
             </label>
 
@@ -183,7 +188,8 @@ export function CreateParentWizard(props: CreateParentWizardProps): JSX.Element 
               <span>Enable retention</span>
             </label>
 
-            {retentionEnabled ? (              <div style={{ ...fieldLabel }}>
+            {retentionEnabled ? (
+              <div style={{ ...fieldLabel }}>
                 <span>Retention interval</span>
                 <IntervalInput
                   idSuffix="pg-partman-retention"
@@ -191,7 +197,7 @@ export function CreateParentWizard(props: CreateParentWizardProps): JSX.Element 
                   onChange={setRetention}
                 />
               </div>
-) : null}
+            ) : null}
 
             <p style={{ fontSize: 11, color: "var(--ink-3)", margin: 0 }}>
               Retention is configured via direct UPDATE on partman.part_config — review the SQL
@@ -220,5 +226,5 @@ export function CreateParentWizard(props: CreateParentWizardProps): JSX.Element 
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
-);
+  );
 }

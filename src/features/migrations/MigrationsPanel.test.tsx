@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * MigrationsPanel is the top-level container glueing the directory
  * selector, the option toggles, the toolbar, and the timeline. It also
@@ -80,9 +80,10 @@ vi.mock("react-i18next", () => ({
     t: (key: string, vars?: Record<string, unknown>) => {
       const template = FAKE_DICT[key] ?? key;
       if (!vars) return template;
-      return Object.entries(vars).reduce<string>(        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
+      return Object.entries(vars).reduce<string>(
+        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
         template,
-);
+      );
     },
   }),
 }));
@@ -110,12 +111,13 @@ const baseConnection: Connection = {
 };
 
 vi.mock("../connections/store", () => ({
-  useConnections: Object.assign(    (selector: (s: { connections: Connection[] }) => unknown) =>
+  useConnections: Object.assign(
+    (selector: (s: { connections: Connection[] }) => unknown) =>
       selector({ connections: [baseConnection] }),
     {
       getState: () => ({ connections: [baseConnection] }),
     },
-),
+  ),
 }));
 
 beforeAll(() => {

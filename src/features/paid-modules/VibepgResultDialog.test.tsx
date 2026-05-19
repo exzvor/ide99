@@ -104,13 +104,14 @@ describe("VibepgResultDialog (S37)", () => {
     const onApply = vi.fn();
     const onOpenChange = vi.fn();
 
-    render(      <VibepgResultDialog
+    render(
+      <VibepgResultDialog
         open={true}
         onOpenChange={onOpenChange}
         preview={PREVIEW}
         onApply={onApply}
       />,
-);
+    );
     (screen.getByTestId("vibepg-result-apply") as HTMLButtonElement).click();
     await waitFor(() => {
       expect(onApply).toHaveBeenCalledWith(PREVIEW);

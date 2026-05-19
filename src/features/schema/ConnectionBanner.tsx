@@ -25,7 +25,8 @@ export function ConnectionBanner(): JSX.Element | null {
   const conn = connections.find((c) => c.id === connection.connId);
   const name = conn?.name ?? connection.connId;
 
-  return (    // biome-ignore lint/a11y/useSemanticElements: passive status strip, not a form-result <output>
+  return (
+    // biome-ignore lint/a11y/useSemanticElements: passive status strip, not a form-result <output>
     <div
       role="status"
       aria-live="polite"
@@ -84,5 +85,5 @@ export function ConnectionBanner(): JSX.Element | null {
         </button>
       </div>
     </div>
-);
+  );
 }

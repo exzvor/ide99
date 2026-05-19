@@ -9,9 +9,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, opts?: Record<string, unknown>) => {
       if (opts && typeof opts === "object") {
-        return Object.entries(opts).reduce<string>(          (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
+        return Object.entries(opts).reduce<string>(
+          (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
           key,
-);
+        );
       }
       return key;
     },

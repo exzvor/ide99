@@ -9,7 +9,8 @@ import { formatParameterTypes } from "./functionDdl";
 import { qualifiedName, quoteIdent } from "./helpers";
 import type { DdlError, DdlResult, DdlWarning, FunctionParameter, ProcedureForm } from "./types";
 
-export function generateProcedureDdl(  initial: ProcedureForm | null,
+export function generateProcedureDdl(
+  initial: ProcedureForm | null,
   current: ProcedureForm,
 ): DdlResult {
   const errors = validate(current);

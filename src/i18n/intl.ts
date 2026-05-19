@@ -22,7 +22,8 @@ function resolveLocale(locale?: string): string {
 }
 
 /** Locale-aware integer / float formatter. */
-export function formatNumber(  value: number,
+export function formatNumber(
+  value: number,
   options?: Intl.NumberFormatOptions,
   locale?: string,
 ): string {
@@ -63,7 +64,8 @@ export function formatBytes(value: number, locale?: string, decimal = false): st
 }
 
 /** Format an ISO timestamp / Date as a locale-aware date+time string. */
-export function formatDateTime(  value: Date | string | number,
+export function formatDateTime(
+  value: Date | string | number,
   options?: Intl.DateTimeFormatOptions,
   locale?: string,
 ): string {
@@ -80,7 +82,8 @@ export function formatDateTime(  value: Date | string | number,
 }
 
 /** Date only (used in History / Recent Plans rows). */
-export function formatDate(  value: Date | string | number,
+export function formatDate(
+  value: Date | string | number,
   options?: Intl.DateTimeFormatOptions,
   locale?: string,
 ): string {
@@ -98,7 +101,8 @@ export function formatDate(  value: Date | string | number,
  * Relative time (locale-aware, e.g. "5 minutes ago") — picks the largest
  * sensible unit. `from` defaults to now.
  */
-export function formatRelativeTime(  target: Date | string | number,
+export function formatRelativeTime(
+  target: Date | string | number,
   from: Date = new Date(),
   locale?: string,
 ): string {

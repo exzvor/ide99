@@ -47,20 +47,23 @@ export function MemberOfPicker({
   };
 
   if (error) {
-    return (      <div data-testid="role-members-error" role="alert" style={{ fontSize: 12 }}>
+    return (
+      <div data-testid="role-members-error" role="alert" style={{ fontSize: 12 }}>
         {error}
       </div>
-);
+    );
   }
   if (available === null) {
-    return (      <div data-testid="role-members-loading" style={{ fontSize: 12 }}>
+    return (
+      <div data-testid="role-members-loading" style={{ fontSize: 12 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const filtered = available.filter((r) => r.name !== selfName);
-  return (    <div
+  return (
+    <div
       data-testid="role-member-of-picker"
       style={{
         maxHeight: 160,
@@ -70,9 +73,11 @@ export function MemberOfPicker({
         padding: 6,
       }}
     >
-      {filtered.length === 0 ? (        <div style={{ fontSize: 12 }}>{t("object_editor.role.member_of_picker_placeholder")}</div>
-) : null}
-      {filtered.map((r) => (        <label key={r.name} style={{ display: "flex", gap: 6, fontSize: 12, alignItems: "center" }}>
+      {filtered.length === 0 ? (
+        <div style={{ fontSize: 12 }}>{t("object_editor.role.member_of_picker_placeholder")}</div>
+      ) : null}
+      {filtered.map((r) => (
+        <label key={r.name} style={{ display: "flex", gap: 6, fontSize: 12, alignItems: "center" }}>
           <input
             type="checkbox"
             data-testid={`role-member-${r.name}`}
@@ -81,7 +86,7 @@ export function MemberOfPicker({
           />
           <span>{r.name}</span>
         </label>
-))}
+      ))}
     </div>
-);
+  );
 }

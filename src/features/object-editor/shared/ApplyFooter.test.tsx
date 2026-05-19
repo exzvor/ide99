@@ -57,10 +57,11 @@ function H(props: Partial<React.ComponentProps<typeof ApplyFooter>> = {}) {
     errors: [],
     onSuccess: vi.fn(),
   };
-  return render(    <I18nextProvider i18n={i18n}>
+  return render(
+    <I18nextProvider i18n={i18n}>
       <ApplyFooter {...defaults} {...props} />
     </I18nextProvider>,
-);
+  );
 }
 
 describe("ApplyFooter", () => {
@@ -89,9 +90,10 @@ describe("ApplyFooter", () => {
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalled();
     });
-    expect(vi.mocked(schemaApplyDdl)).toHaveBeenCalledWith(      "conn-1",
+    expect(vi.mocked(schemaApplyDdl)).toHaveBeenCalledWith(
+      "conn-1",
       "CREATE TABLE foo (id BIGINT);",
-);
+    );
   });
 
   test("Apply error shows red banner and does not fire onSuccess", async () => {

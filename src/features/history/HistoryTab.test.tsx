@@ -23,9 +23,10 @@ beforeAll(() => {
 const { translation } = vi.hoisted(() => {
   const t = (key: string, opts?: Record<string, unknown>) => {
     if (opts && typeof opts === "object") {
-      return Object.entries(opts).reduce<string>(        (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
+      return Object.entries(opts).reduce<string>(
+        (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
         key,
-);
+      );
     }
     return key;
   };
@@ -99,7 +100,8 @@ beforeEach(() => {
   historyDeleteMock.mockResolvedValue(undefined);
   historyClearForConnectionMock.mockResolvedValue(0);
   historySearchMock.mockResolvedValue({ rows: [], totalMatched: 0 });
-  useHistory.setState(    {
+  useHistory.setState(
+    {
       ...initialHistoryState,
       filters: { ...DEFAULT_FILTERS },
       rows: [],
@@ -109,8 +111,9 @@ beforeEach(() => {
       lastFetchOffset: 0,
     },
     true,
-);
-  useConnections.setState(    {
+  );
+  useConnections.setState(
+    {
       ...initialConnectionsState,
       connections: [],
       selectedId: null,
@@ -119,14 +122,15 @@ beforeEach(() => {
       error: null,
     },
     true,
-);
+  );
 });
 
 function renderTab() {
-  return render(    <ToastProvider>
+  return render(
+    <ToastProvider>
       <HistoryTab />
     </ToastProvider>,
-);
+  );
 }
 
 describe("HistoryTab", () => {

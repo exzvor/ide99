@@ -21,7 +21,8 @@ export interface ShapeApplyDecision {
   unrepresentable?: string;
 }
 
-export function decideShapeApply(  current: QueryShape | null,
+export function decideShapeApply(
+  current: QueryShape | null,
   parsed: QueryShape,
 ): ShapeApplyDecision {
   if (parsed.unrepresentableTail) {

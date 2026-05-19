@@ -65,35 +65,39 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps): JSX.E
     onOpenChange(false);
   }, [onOpenChange]);
 
-  const handleFilesPicked = useCallback(    async (files: FileList | null) => {
+  const handleFilesPicked = useCallback(
+    async (files: FileList | null) => {
       if (!files || files.length === 0) return;
       const next: PendingScreenshot[] = [];
       const room = MAX_FILES - screenshots.length;
       if (room <= 0) {
-        toast.error(          t("support.dialog.error.too_many", {
+        toast.error(
+          t("support.dialog.error.too_many", {
             defaultValue: "Maximum {{n}} screenshots",
             n: MAX_FILES,
           }),
-);
+        );
         return;
       }
       const slice = Array.from(files).slice(0, room);
       for (const file of slice) {
         if (!ALLOWED_TYPES.has(file.type)) {
-          toast.error(            t("support.dialog.error.bad_type", {
+          toast.error(
+            t("support.dialog.error.bad_type", {
               defaultValue: "Unsupported file: {{name}}",
               name: file.name,
             }),
-);
+          );
           continue;
         }
         if (file.size > MAX_PER_FILE_BYTES) {
-          toast.error(            t("support.dialog.error.too_large", {
+          toast.error(
+            t("support.dialog.error.too_large", {
               defaultValue: "{{name}} is over {{limit}}",
               name: file.name,
               limit: formatBytes(MAX_PER_FILE_BYTES),
             }),
-);
+          );
           continue;
         }
         try {
@@ -105,11 +109,12 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps): JSX.E
             bytes: file.size,
           });
         } catch (err) {
-          toast.error(            t("support.dialog.error.read_failed", {
+          toast.error(
+            t("support.dialog.error.read_failed", {
               defaultValue: "Failed to read {{name}}",
               name: file.name,
             }),
-);
+          );
           if (err instanceof Error) {
             console.error("[support] read failed", err.message);
           }
@@ -120,7 +125,7 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps): JSX.E
       }
     },
     [screenshots.length, t, toast],
-);
+  );
 
   const removeScreenshot = useCallback((idx: number) => {
     setScreenshots((prev) => prev.filter((_, i) => i !== idx));
@@ -155,34 +160,38 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps): JSX.E
           dataBase64,
         })),
       });
-      toast.success(        t("support.dialog.success", {
+      toast.success(
+        t("support.dialog.success", {
           defaultValue: "Sent — thanks, we'll get back to you.",
         }),
-);
+      );
       reset();
       close();
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      toast.error(        t("support.dialog.error.send_failed", {
+      toast.error(
+        t("support.dialog.error.send_failed", {
           defaultValue: "Couldn't send: {{msg}}",
           msg,
         }),
-);
+      );
     } finally {
       setSubmitting(false);
     }
   }, [submitting, email, message, screenshots, t, toast, reset, close]);
 
-  const handleOpenChange = useCallback(    (next: boolean) => {
+  const handleOpenChange = useCallback(
+    (next: boolean) => {
       if (next) return;
       if (submitting) return;
       reset();
       onOpenChange(false);
     },
     [submitting, reset, onOpenChange],
-);
+  );
 
-  return (    <Dialog
+  return (
+    <Dialog
       open={open}
       onOpenChange={handleOpenChange}
       title={t("support.dialog.title", { defaultValue: "Support" })}
@@ -246,10 +255,11 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps): JSX.E
             aria-invalid={errors.email ? "true" : undefined}
             data-testid="support-email"
           />
-          {errors.email ? (            <p role="alert" style={{ fontSize: 11, color: "var(--danger-q)", margin: 0 }}>
+          {errors.email ? (
+            <p role="alert" style={{ fontSize: 11, color: "var(--danger-q)", margin: 0 }}>
               {errors.email}
             </p>
-) : null}
+          ) : null}
         </div>
 
         <div className="q-field">
@@ -272,10 +282,11 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps): JSX.E
             data-testid="support-message"
             style={{ resize: "vertical", minHeight: 120, fontFamily: "inherit" }}
           />
-          {errors.message ? (            <p role="alert" style={{ fontSize: 11, color: "var(--danger-q)", margin: 0 }}>
+          {errors.message ? (
+            <p role="alert" style={{ fontSize: 11, color: "var(--danger-q)", margin: 0 }}>
               {errors.message}
             </p>
-) : null}
+          ) : null}
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -320,7 +331,8 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps): JSX.E
               e.currentTarget.value = "";
             }}
           />
-          {screenshots.length > 0 ? (            <ul
+          {screenshots.length > 0 ? (
+            <ul
               style={{
                 listStyle: "none",
                 margin: 0,
@@ -331,7 +343,8 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps): JSX.E
               }}
               data-testid="support-screenshot-list"
             >
-              {screenshots.map((s, idx) => (                <li
+              {screenshots.map((s, idx) => (
+                <li
                   key={`${s.filename}-${idx}`}
                   style={{
                     display: "flex",
@@ -370,11 +383,11 @@ export function SupportDialog({ open, onOpenChange }: SupportDialogProps): JSX.E
                     <X size={12} aria-hidden="true" />
                   </button>
                 </li>
-))}
+              ))}
             </ul>
-) : null}
+          ) : null}
         </div>
       </form>
     </Dialog>
-);
+  );
 }

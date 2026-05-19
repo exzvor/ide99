@@ -143,13 +143,15 @@ function diffSql(initial: TableForm, current: TableForm): string {
     if (old === undefined) continue;
     // 5a — rename first; use the post-rename name for subsequent ALTERs.
     if (old.name !== cur.name) {
-      chunks.push(        `ALTER TABLE ${newRef} RENAME COLUMN ${quoteIdent(old.name)} TO ${quoteIdent(cur.name)};`,
-);
+      chunks.push(
+        `ALTER TABLE ${newRef} RENAME COLUMN ${quoteIdent(old.name)} TO ${quoteIdent(cur.name)};`,
+      );
     }
     // 5b — type
     if (formatTypeText(old.typeText) !== formatTypeText(cur.typeText)) {
-      chunks.push(        `ALTER TABLE ${newRef} ALTER COLUMN ${quoteIdent(cur.name)} TYPE ${formatTypeText(cur.typeText)};`,
-);
+      chunks.push(
+        `ALTER TABLE ${newRef} ALTER COLUMN ${quoteIdent(cur.name)} TYPE ${formatTypeText(cur.typeText)};`,
+      );
     }
     // 5c — nullable
     if (old.nullable !== cur.nullable) {
@@ -161,14 +163,16 @@ function diffSql(initial: TableForm, current: TableForm): string {
       if (cur.default === null) {
         chunks.push(`ALTER TABLE ${newRef} ALTER COLUMN ${quoteIdent(cur.name)} DROP DEFAULT;`);
       } else {
-        chunks.push(          `ALTER TABLE ${newRef} ALTER COLUMN ${quoteIdent(cur.name)} SET DEFAULT ${cur.default};`,
-);
+        chunks.push(
+          `ALTER TABLE ${newRef} ALTER COLUMN ${quoteIdent(cur.name)} SET DEFAULT ${cur.default};`,
+        );
       }
     }
     // 5e — generated added (toggling off is unsupported by PG inline; skipped)
     if (old.generated === null && cur.generated !== null) {
-      chunks.push(        `ALTER TABLE ${newRef} ALTER COLUMN ${quoteIdent(cur.name)} ADD GENERATED ALWAYS AS (${cur.generated.expression}) STORED;`,
-);
+      chunks.push(
+        `ALTER TABLE ${newRef} ALTER COLUMN ${quoteIdent(cur.name)} ADD GENERATED ALWAYS AS (${cur.generated.expression}) STORED;`,
+      );
     }
   }
 
@@ -197,8 +201,9 @@ function diffSql(initial: TableForm, current: TableForm): string {
 
   // (9) RLS toggle.
   if (initial.rls.enabled !== current.rls.enabled) {
-    chunks.push(      `ALTER TABLE ${newRef} ${current.rls.enabled ? "ENABLE" : "DISABLE"} ROW LEVEL SECURITY;`,
-);
+    chunks.push(
+      `ALTER TABLE ${newRef} ${current.rls.enabled ? "ENABLE" : "DISABLE"} ROW LEVEL SECURITY;`,
+    );
   }
 
   return chunks.join("\n");

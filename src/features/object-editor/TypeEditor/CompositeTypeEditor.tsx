@@ -58,10 +58,11 @@ export function CompositeTypeEditor({ tab }: CompositeTypeEditorProps): JSX.Elem
     }
     void (async () => {
       try {
-        const def = await schemaGetCustomTypeDefinition(          tab.connectionId,
+        const def = await schemaGetCustomTypeDefinition(
+          tab.connectionId,
           tab.target.schema,
           tab.target.name ?? "",
-);
+        );
         if (cancelled) return;
         const union = fromDefinition(def);
         if (union.kind !== "composite") {
@@ -85,13 +86,14 @@ export function CompositeTypeEditor({ tab }: CompositeTypeEditorProps): JSX.Elem
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: CompositeTypeForm) => CompositeTypeForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: CompositeTypeForm) => CompositeTypeForm): void => {
       updateForm(tab.id, (s) =>
         s.kind === "composite_type" ? { ...s, form: mutator(s.form) } : s,
-);
+      );
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "composite_type" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -110,16 +112,18 @@ export function CompositeTypeEditor({ tab }: CompositeTypeEditorProps): JSX.Elem
   const touched = useTouched(stableFormState?.form, stableFormState?.initial);
 
   if (loadError) {
-    return (      <div data-testid="composite-type-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="composite-type-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="composite-type-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="composite-type-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -168,7 +172,8 @@ export function CompositeTypeEditor({ tab }: CompositeTypeEditorProps): JSX.Elem
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="composite-type-editor"
       style={{
         display: "grid",
@@ -192,7 +197,8 @@ export function CompositeTypeEditor({ tab }: CompositeTypeEditorProps): JSX.Elem
             ? t("object_editor.type.composite_title_new")
             : t("object_editor.type.composite_title_edit")}
         </h2>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="composite-dirty-badge"
             style={{
               fontSize: 11,
@@ -203,7 +209,7 @@ export function CompositeTypeEditor({ tab }: CompositeTypeEditorProps): JSX.Elem
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <HelpLink topic="composite_type" />
       </div>
@@ -248,7 +254,8 @@ export function CompositeTypeEditor({ tab }: CompositeTypeEditorProps): JSX.Elem
           >
             {t("object_editor.type.composite_fields_section")}
           </legend>
-          {form.fields.map((field, i) => (            <div
+          {form.fields.map((field, i) => (
+            <div
               key={field.id}
               data-testid={`composite-field-${i}`}
               style={{ display: "flex", gap: 8, alignItems: "center" }}
@@ -263,7 +270,7 @@ export function CompositeTypeEditor({ tab }: CompositeTypeEditorProps): JSX.Elem
                     ...f,
                     fields: f.fields.map((it) =>
                       it.id === field.id ? { ...it, fieldName: e.target.value } : it,
-),
+                    ),
                   }))
                 }
                 style={{ flex: 1 }}
@@ -278,7 +285,7 @@ export function CompositeTypeEditor({ tab }: CompositeTypeEditorProps): JSX.Elem
                     ...f,
                     fields: f.fields.map((it) =>
                       it.id === field.id ? { ...it, typeText: e.target.value } : it,
-),
+                    ),
                   }))
                 }
                 style={{ flex: 1 }}
@@ -295,7 +302,7 @@ export function CompositeTypeEditor({ tab }: CompositeTypeEditorProps): JSX.Elem
                       it.id === field.id
                         ? { ...it, collation: e.target.value === "" ? undefined : e.target.value }
                         : it,
-),
+                    ),
                   }))
                 }
                 style={{ width: 160 }}
@@ -316,7 +323,7 @@ export function CompositeTypeEditor({ tab }: CompositeTypeEditorProps): JSX.Elem
                 ×
               </button>
             </div>
-))}
+          ))}
           <button
             type="button"
             data-testid="composite-fields-add"
@@ -357,5 +364,5 @@ export function CompositeTypeEditor({ tab }: CompositeTypeEditorProps): JSX.Elem
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

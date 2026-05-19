@@ -143,7 +143,8 @@ export function VibepgCommandPalette({ open, onOpenChange, onSelect }: Props): J
   // Find the index where the connections section ends and commands begin.
   const firstCommandIdx = items.findIndex((it) => it.kind === "command");
 
-  return (    <Dialog
+  return (
+    <Dialog
       open={open}
       onOpenChange={onOpenChange}
       title={t("paid_modules.vibepg.command_palette_items.title")}
@@ -171,13 +172,15 @@ export function VibepgCommandPalette({ open, onOpenChange, onSelect }: Props): J
           className="q-input"
           style={{ width: "100%", padding: "6px 10px", fontSize: 13 }}
         />
-        {items.length === 0 ? (          <div
+        {items.length === 0 ? (
+          <div
             data-testid="vibepg-command-empty"
             style={{ padding: "12px 4px", color: "var(--ink-3)", fontSize: 12 }}
           >
             {t("paid_modules.vibepg.command_palette_items.no_results")}
           </div>
-) : (          <div
+        ) : (
+          <div
             id={listboxId}
             // biome-ignore lint/a11y/useSemanticElements: native <select>/<datalist> cannot host the compound row layout we need
             role="listbox"
@@ -201,8 +204,10 @@ export function VibepgCommandPalette({ open, onOpenChange, onSelect }: Props): J
                   : i === firstCommandIdx && item.kind === "command"
                     ? t("paid_modules.vibepg.command_palette_items.section_commands")
                     : null;
-              return (                <div key={optionId}>
-                  {headerLabel ? (                    <div
+              return (
+                <div key={optionId}>
+                  {headerLabel ? (
+                    <div
                       style={{
                         padding: "6px 10px 2px",
                         fontSize: 10.5,
@@ -213,7 +218,7 @@ export function VibepgCommandPalette({ open, onOpenChange, onSelect }: Props): J
                     >
                       {headerLabel}
                     </div>
-) : null}
+                  ) : null}
                   <div
                     id={optionId}
                     // biome-ignore lint/a11y/useSemanticElements: native <option> only valid inside <select>; we host a custom listbox
@@ -255,11 +260,11 @@ export function VibepgCommandPalette({ open, onOpenChange, onSelect }: Props): J
                     </span>
                   </div>
                 </div>
-);
+              );
             })}
           </div>
-)}
+        )}
       </div>
     </Dialog>
-);
+  );
 }

@@ -27,9 +27,10 @@ function stubMatchMedia(prefersDark = false) {
     removeListener: vi.fn(),
     dispatchEvent: vi.fn(),
   };
-  vi.stubGlobal(    "matchMedia",
+  vi.stubGlobal(
+    "matchMedia",
     vi.fn().mockImplementation(() => mql),
-);
+  );
 }
 
 import { ThemeSwitcher } from "./ThemeSwitcher";

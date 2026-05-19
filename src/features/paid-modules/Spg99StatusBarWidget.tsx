@@ -20,7 +20,8 @@ export function Spg99StatusBarWidget({
 
   if (!subscribed || !activeInstantDb) return null;
 
-  return (    <span
+  return (
+    <span
       data-testid="spg99-status-bar"
       style={{
         display: "inline-flex",
@@ -36,5 +37,5 @@ export function Spg99StatusBarWidget({
         minutes: activeInstantDb.expiresInMinutes,
       })}
     </span>
-);
+  );
 }

@@ -59,7 +59,8 @@ export function FunctionPicker({
   const selectedInList =
     items?.some((it) => it.name === value.name) && value.schema === schema && value.name !== "";
 
-  return (    <div data-testid="trigger-fn-picker" style={{ display: "grid", gap: 6 }}>
+  return (
+    <div data-testid="trigger-fn-picker" style={{ display: "grid", gap: 6 }}>
       <input
         data-testid="trigger-fn-picker-search"
         className="q-input"
@@ -67,7 +68,8 @@ export function FunctionPicker({
         placeholder={t("object_editor.trigger.function_picker_search")}
         onChange={(e) => setFilter(e.target.value)}
       />
-      {error ? (        <div
+      {error ? (
+        <div
           // biome-ignore lint/a11y/useSemanticElements: passive banner.
           role="status"
           data-testid="trigger-fn-picker-error"
@@ -82,19 +84,22 @@ export function FunctionPicker({
         >
           {error}
         </div>
-) : null}
-      {items === null && error === null ? (        <span
+      ) : null}
+      {items === null && error === null ? (
+        <span
           data-testid="trigger-fn-picker-loading"
           style={{ fontSize: 12, color: "var(--ink-4)" }}
         >
           {t("object_editor.trigger.function_picker_loading")}
         </span>
-) : null}
-      {items !== null && visible.length === 0 ? (        <span data-testid="trigger-fn-picker-empty" style={{ fontSize: 12, color: "var(--ink-4)" }}>
+      ) : null}
+      {items !== null && visible.length === 0 ? (
+        <span data-testid="trigger-fn-picker-empty" style={{ fontSize: 12, color: "var(--ink-4)" }}>
           {t("object_editor.trigger.function_picker_empty")}
         </span>
-) : null}
-      {visible.length > 0 ? (        <ul
+      ) : null}
+      {visible.length > 0 ? (
+        <ul
           data-testid="trigger-fn-picker-list"
           style={{
             listStyle: "none",
@@ -109,7 +114,8 @@ export function FunctionPicker({
         >
           {visible.map((fn) => {
             const selected = value.schema === schema && value.name === fn.name;
-            return (              <li key={`${fn.name}(${fn.args})`}>
+            return (
+              <li key={`${fn.name}(${fn.args})`}>
                 <button
                   type="button"
                   data-testid={`trigger-fn-option-${fn.name}`}
@@ -131,11 +137,12 @@ export function FunctionPicker({
                   {fn.name}({fn.args})
                 </button>
               </li>
-);
+            );
           })}
         </ul>
-) : null}
-      {value.name !== "" && !selectedInList ? (        <span
+      ) : null}
+      {value.name !== "" && !selectedInList ? (
+        <span
           data-testid="trigger-fn-picker-outside"
           style={{ fontSize: 11, color: "var(--ink-4)" }}
         >
@@ -144,7 +151,7 @@ export function FunctionPicker({
             name: value.name,
           })}
         </span>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

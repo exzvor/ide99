@@ -161,8 +161,9 @@ describe("notebook store — runCell", () => {
     invokeMock.mockResolvedValueOnce({ sql: "BAD", importedNames: [] });
     queryExecuteMock.mockRejectedValueOnce(new Error("syntax error"));
 
-    await expect(useNotebooks.getState().runCell("err", "boom", "conn-1")).rejects.toThrow(      "syntax error",
-);
+    await expect(useNotebooks.getState().runCell("err", "boom", "conn-1")).rejects.toThrow(
+      "syntax error",
+    );
     const rs = useNotebooks.getState().runStateByCellId.boom;
     expect(rs?.status).toBe("error");
     if (rs?.status === "error") expect(rs.message).toContain("syntax error");

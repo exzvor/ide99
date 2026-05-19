@@ -34,7 +34,8 @@ const tierWidth = 4;
 const sortKey = (tier: number, label: string) =>
   `${tier.toString().padStart(tierWidth, "0")}_${label.toLowerCase()}`;
 
-export function rankAndBuild(  scope: Scope,
+export function rankAndBuild(
+  scope: Scope,
   snapshot: AutocompleteSnapshot,
   snippets: readonly SnippetTemplate[],
   retrigger?: () => void,
@@ -58,10 +59,11 @@ export function rankAndBuild(  scope: Scope,
       }
       return { suggestions: [], incomplete: true };
     }
-    const completions = buildJsonbCompletions(      cached,
+    const completions = buildJsonbCompletions(
+      cached,
       trigger.path as CompletionPath,
       trigger.partial,
-);
+    );
     for (const c of completions) {
       items.push({
         label: c.label,
@@ -84,8 +86,9 @@ export function rankAndBuild(  scope: Scope,
       return finalise(items, false);
     }
     // FROM alias
-    const from = scope.fromAliases.find(      (a) => a.alias.toLowerCase() === trigger.alias.toLowerCase(),
-);
+    const from = scope.fromAliases.find(
+      (a) => a.alias.toLowerCase() === trigger.alias.toLowerCase(),
+    );
     if (from) {
       if (from.columns) {
         for (const col of from.columns) items.push(makeColumn(col, "", true, 1000));
@@ -122,8 +125,9 @@ export function rankAndBuild(  scope: Scope,
       });
     }
     for (const rel of snapshot.relations) {
-      const schemaIdx = snapshot.searchPath.findIndex(        (s) => s.toLowerCase() === rel.schema.toLowerCase(),
-);
+      const schemaIdx = snapshot.searchPath.findIndex(
+        (s) => s.toLowerCase() === rel.schema.toLowerCase(),
+      );
       const tier = schemaIdx === 0 ? 2000 : 3000;
       items.push(makeRelation(rel, tier, schemaIdx > 0));
     }
@@ -173,7 +177,8 @@ function makeColumn(name: string, dataType: string, nullable: boolean, tier: num
   };
 }
 
-function makeRelation(  rel: AutocompleteSnapshot["relations"][number],
+function makeRelation(
+  rel: AutocompleteSnapshot["relations"][number],
   tier: number,
   qualified: boolean,
 ): RawItem {
@@ -187,7 +192,8 @@ function makeRelation(  rel: AutocompleteSnapshot["relations"][number],
   };
 }
 
-function resolveJsonbColumn(  scope: Scope,
+function resolveJsonbColumn(
+  scope: Scope,
   snapshot: AutocompleteSnapshot,
   alias: string | null,
   column: string,
@@ -223,8 +229,9 @@ function resolveJsonbColumn(  scope: Scope,
       const matchesInSchema: Match[] = [];
       for (const rel of snapshot.relations) {
         if (rel.schema.toLowerCase() !== sch.toLowerCase()) continue;
-        const col = rel.columns.find(          (c) => c.name.toLowerCase() === column.toLowerCase() && c.isJsonb,
-);
+        const col = rel.columns.find(
+          (c) => c.name.toLowerCase() === column.toLowerCase() && c.isJsonb,
+        );
         if (col) {
           matchesInSchema.push({
             connId: snapshot.connId,
@@ -248,28 +255,32 @@ function resolveJsonbColumn(  scope: Scope,
   return null;
 }
 
-function findRelation(  snapshot: AutocompleteSnapshot,
+function findRelation(
+  snapshot: AutocompleteSnapshot,
   schema: string | undefined,
   name: string,
 ): AutocompleteSnapshot["relations"][number] | undefined {
   if (schema) {
-    return snapshot.relations.find(      (r) =>
+    return snapshot.relations.find(
+      (r) =>
         r.name.toLowerCase() === name.toLowerCase() &&
         r.schema.toLowerCase() === schema.toLowerCase(),
-);
+    );
   }
   // No schema: walk search_path order.
   for (const sch of snapshot.searchPath) {
-    const r = snapshot.relations.find(      (rel) =>
+    const r = snapshot.relations.find(
+      (rel) =>
         rel.name.toLowerCase() === name.toLowerCase() &&
         rel.schema.toLowerCase() === sch.toLowerCase(),
-);
+    );
     if (r) return r;
   }
   return undefined;
 }
 
-function addSnippets(  items: RawItem[],
+function addSnippets(
+  items: RawItem[],
   scope: Scope,
   snippets: readonly SnippetTemplate[],
   explicitOnly: boolean,
@@ -302,7 +313,8 @@ function addKeywords(items: RawItem[], words: string[]): void {
   }
 }
 
-function finalise(  items: RawItem[],
+function finalise(
+  items: RawItem[],
   incomplete: boolean,
 ): { suggestions: languages.CompletionItem[]; incomplete: boolean } {
   // Stable sort by (tier, label) so the returned array order matches the

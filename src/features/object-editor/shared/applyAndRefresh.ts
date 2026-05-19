@@ -1,4 +1,4 @@
-// €” Apply path with consistent dirty-reset and schema/ERD
+// Apply path with consistent dirty-reset and schema/ERD
 // invalidation across every object editor.
 //
 // Replaces ad-hoc `await schemaApplyDdl(connId, sql)` calls in 15 editors.

@@ -19,7 +19,8 @@ const CYAN_NUMBERS =
  */
 export function Wordmark({ size = "lg", className = "" }: WordmarkProps): JSX.Element {
   const sizeClass = size === "lg" ? "" : size === "md" ? "md" : "sm";
-  return (    <svg
+  return (
+    <svg
       className={`q-wordmark ${sizeClass} ${className}`.trim()}
       viewBox="528 192 1000 290"
       role="img"
@@ -46,5 +47,5 @@ export function Wordmark({ size = "lg", className = "" }: WordmarkProps): JSX.El
       />
       <circle className="q-wordmark-dot" cx="679" cy="239.5" r="22.8" fill="currentColor" />
     </svg>
-);
+  );
 }

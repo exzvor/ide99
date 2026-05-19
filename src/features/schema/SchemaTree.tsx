@@ -84,7 +84,8 @@ const PENDING_MENU_ITEMS = [
  * Recursively project a NodeChild list into TreeNode form by walking the
  * cache. Synthetic group node names are translated here at the call site.
  */
-function buildTreeNodes(  rootKey: NodeKey,
+function buildTreeNodes(
+  rootKey: NodeKey,
   cache: Map<NodeKey, NodeChild[]>,
   translate: (key: string) => string,
 ): TreeNode[] {
@@ -281,7 +282,8 @@ function Row({
   })();
   const jsonbExpanded = isJsonb && fqnKey !== "" && expandedJsonbColumnKey === fqnKey;
 
-  return (    <div
+  return (
+    <div
       ref={dragHandle}
       style={style}
       role="treeitem"
@@ -303,10 +305,13 @@ function Row({
       className={`q-tree-row ${node.isSelected ? "selected" : ""}`}
     >
       <span className="caret">
-        {isTreeExpandable && ((kind !== "table" && kind !== "view") || node.data.hasChildren) ? (          node.isOpen ? (            <ChevronDown size={11} aria-hidden="true" />
-) : (            <ChevronRight size={11} aria-hidden="true" />
-)
-) : null}
+        {isTreeExpandable && ((kind !== "table" && kind !== "view") || node.data.hasChildren) ? (
+          node.isOpen ? (
+            <ChevronDown size={11} aria-hidden="true" />
+          ) : (
+            <ChevronRight size={11} aria-hidden="true" />
+          )
+        ) : null}
       </span>
       <span className="icon">{iconForKind(kind)}</span>
       <span
@@ -315,7 +320,8 @@ function Row({
       >
         {node.data.name}
       </span>
-      {hypertableInfo !== null && (        <span
+      {hypertableInfo !== null && (
+        <span
           title={t("schema.tree.badge.hypertable")}
           aria-label={t("schema.tree.badge.hypertable")}
           style={{
@@ -328,8 +334,9 @@ function Row({
         >
           <Clock size={11} aria-hidden="true" />
         </span>
-)}
-      {partmanInfo !== null && (        <span
+      )}
+      {partmanInfo !== null && (
+        <span
           title={t("schema.tree.badge.partman")}
           aria-label={t("schema.tree.badge.partman")}
           style={{
@@ -342,13 +349,14 @@ function Row({
         >
           <Layers size={11} aria-hidden="true" />
         </span>
-)}
+      )}
       {isColumn &&
         node.data.dataType &&
         // — when the column type is a recognised concept (currently
         // only `jsonb`), wrap the type label in a ConceptTooltip so Easy mode
         // users can hover for an explanation. Standard mode is a no-op.
-        (isJsonb ? (          <ConceptTooltip id="jsonb" showHelpIcon={false}>
+        (isJsonb ? (
+          <ConceptTooltip id="jsonb" showHelpIcon={false}>
             <span
               style={{ fontSize: 10, color: "var(--ink-4)", marginRight: 4, flexShrink: 0 }}
               aria-label={`type: ${node.data.dataType}`}
@@ -356,14 +364,16 @@ function Row({
               {node.data.dataType}
             </span>
           </ConceptTooltip>
-) : (          <span
+        ) : (
+          <span
             style={{ fontSize: 10, color: "var(--ink-4)", marginRight: 4, flexShrink: 0 }}
             aria-label={`type: ${node.data.dataType}`}
           >
             {node.data.dataType}
           </span>
-))}
-      {isJsonb && fqnKey !== "" && (        <button
+        ))}
+      {isJsonb && fqnKey !== "" && (
+        <button
           type="button"
           aria-expanded={jsonbExpanded}
           aria-label={t("schema.tree.toggle_inferred_schema")}
@@ -386,7 +396,7 @@ function Row({
         >
           {jsonbExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
         </button>
-)}
+      )}
       {/*
        * S16 fix: the InferredSchemaPanel is no longer rendered inside
        * this row (react-arborist clips rows at a fixed rowHeight). Only one
@@ -394,7 +404,7 @@ function Row({
        * floating block below the entire <Tree/> by SchemaTree itself.
        */}
     </div>
-);
+  );
 }
 
 function searchMatch(node: NodeApi<TreeNode>, term: string): boolean {
@@ -485,7 +495,8 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
     return () => observer.disconnect();
   }, []);
 
-  const handleToggle = useCallback(    (id: NodeKey) => {
+  const handleToggle = useCallback(
+    (id: NodeKey) => {
       if (!cache.has(id)) {
         // Fire-and-forget — failure is surfaced via the toast layer when wired
         // by the main agent. Errors are caught inside the store action so we
@@ -494,9 +505,10 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
       }
     },
     [cache, loadChildren],
-);
+  );
 
-  const handleSelect = useCallback(    (id: NodeKey, kind: NodeKind) => {
+  const handleSelect = useCallback(
+    (id: NodeKey, kind: NodeKind) => {
       if (kind === "table" || kind === "view") {
         selectNode(id);
         // also dispatch an editor object tab so the user gets a
@@ -516,7 +528,7 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
       }
     },
     [selectNode],
-);
+  );
 
   const handleContext = useCallback((state: ContextMenuState) => {
     setContextMenu(state);
@@ -557,7 +569,8 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
    * For "New index on this table…" we pass `parentTable` so the IndexEditor
    * pre-fills the FROM clause.
    */
-  const handleOpenObjectEditor = useCallback(    (params: {
+  const handleOpenObjectEditor = useCallback(
+    (params: {
       objectKind: "table" | "view" | "matview" | "index" | "sequence";
       mode: "create" | "edit";
       schema: string;
@@ -584,23 +597,27 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
       setContextMenu(null);
     },
     [connId],
-);
+  );
 
-  return (    <div ref={containerRef} className="relative h-full w-full" data-testid="schema-tree">
-      {searchPreloading ? (        <p
+  return (
+    <div ref={containerRef} className="relative h-full w-full" data-testid="schema-tree">
+      {searchPreloading ? (
+        <p
           style={{ padding: "8px 12px", fontSize: 11, color: "var(--ink-4)" }}
           data-testid="schema-tree-search-loading"
         >
           {t("schema.search.loading")}
         </p>
-) : null}
-      {noMatches ? (        <p
+      ) : null}
+      {noMatches ? (
+        <p
           style={{ padding: "16px 12px", fontSize: 12.5, color: "var(--ink-4)" }}
           data-testid="schema-tree-empty-results"
         >
           {t("schema.search.empty_results", { query: filter })}
         </p>
-) : (        <Tree<TreeNode>
+      ) : (
+        <Tree<TreeNode>
           data={treeData}
           openByDefault={false}
           width={size.width}
@@ -614,7 +631,8 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
           disableDrag
           disableDrop
         >
-          {({ node, style, dragHandle }) => (            <Row
+          {({ node, style, dragHandle }) => (
+            <Row
               node={node}
               style={style}
               dragHandle={dragHandle}
@@ -625,9 +643,9 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
               expandedJsonbColumnKey={expandedJsonbColumnKey}
               connId={connId}
             />
-)}
+          )}
         </Tree>
-)}
+      )}
 
       {/*
        * S16 fix: render the InferredSchemaPanel as a floating block
@@ -636,7 +654,8 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
        * panel is visible at a time; clicking the chevron of another column
        * swaps it; clicking the same chevron collapses it.
        */}
-      {expandedJsonbColumn !== null && connId !== null ? (        <div
+      {expandedJsonbColumn !== null && connId !== null ? (
+        <div
           className="schema-tree-jsonb-overlay"
           data-testid="schema-tree-jsonb-overlay"
           style={{
@@ -661,9 +680,10 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
             variant="browser"
           />
         </div>
-) : null}
+      ) : null}
 
-      {contextMenu ? (        <div
+      {contextMenu ? (
+        <div
           role="menu"
           aria-label={t("schema.tree.copy_name")}
           style={{
@@ -680,7 +700,8 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
           className="q-popover"
           data-testid="schema-tree-context-menu"
         >
-          {contextMenu.nodeKind === "column" && contextMenu.isJsonb ? (            <>
+          {contextMenu.nodeKind === "column" && contextMenu.isJsonb ? (
+            <>
               <button
                 type="button"
                 role="menuitem"
@@ -719,8 +740,9 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
               </button>
               <hr className="q-popover-sep" />
             </>
-) : null}
-          {contextMenu.nodeKind !== "schema" ? (            <>
+          ) : null}
+          {contextMenu.nodeKind !== "schema" ? (
+            <>
               <button
                 type="button"
                 role="menuitem"
@@ -732,13 +754,14 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
               </button>
               <hr className="q-popover-sep" />
             </>
-) : null}
+          ) : null}
           {/* — active object-editor entry-points. */}
           {contextMenu.nodeKind === "schema"
             ? (() => {
                 const schema = parseSchemaKey(contextMenu.nodeId);
                 if (!schema) return null;
-                return (                  <>
+                return (
+                  <>
                     <button
                       type="button"
                       role="menuitem"
@@ -784,14 +807,15 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
                       {t("object_editor.tree_menu.new_sequence")}
                     </button>
                   </>
-);
+                );
               })()
             : null}
           {contextMenu.nodeKind === "table"
             ? (() => {
                 const parsed = parseLeafKey(contextMenu.nodeId);
                 if (!parsed) return null;
-                return (                  <>
+                return (
+                  <>
                     <button
                       type="button"
                       role="menuitem"
@@ -826,14 +850,15 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
                     </button>
                     <hr className="q-popover-sep" />
                   </>
-);
+                );
               })()
             : null}
           {contextMenu.nodeKind === "view"
             ? (() => {
                 const parsed = parseLeafKey(contextMenu.nodeId);
                 if (!parsed) return null;
-                return (                  <>
+                return (
+                  <>
                     <button
                       type="button"
                       role="menuitem"
@@ -852,7 +877,7 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
                     </button>
                     <hr className="q-popover-sep" />
                   </>
-);
+                );
               })()
             : null}
           {/* PENDING (placeholder) items — only for table/view, not schema. */}
@@ -860,7 +885,8 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
             ? PENDING_MENU_ITEMS.map((item) => {
                 if (item.tableOnly && contextMenu.nodeKind !== "table") return null;
                 const tooltip = t("schema.tree.menu.soon", { sprint: item.sprint });
-                return (                  <button
+                return (
+                  <button
                     key={item.key}
                     type="button"
                     role="menuitem"
@@ -871,11 +897,11 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
                   >
                     {t(item.labelKey)}
                   </button>
-);
+                );
               })
             : null}
         </div>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

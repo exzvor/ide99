@@ -9,7 +9,8 @@ interface HealthGridProps {
  * based on viewport width). See spec §7.4.
  */
 export function HealthGrid({ children }: HealthGridProps): JSX.Element {
-  return (    <div
+  return (
+    <div
       data-testid="health-grid"
       style={{
         display: "grid",
@@ -19,5 +20,5 @@ export function HealthGrid({ children }: HealthGridProps): JSX.Element {
     >
       {children}
     </div>
-);
+  );
 }

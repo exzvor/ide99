@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * DirectorySelector wraps the OS folder-picker (`@tauri-apps/plugin-dialog`)
  * and the two persistence commands. Two tests cover the happy paths:
@@ -73,12 +73,13 @@ describe("DirectorySelector", () => {
   it("Clear invokes migrations_clear_dir", async () => {
     const user = userEvent.setup();
     const onChanged = vi.fn();
-    render(      <DirectorySelector
+    render(
+      <DirectorySelector
         connectionId="c1"
         currentDir="/repo/db/migrations"
         onChanged={onChanged}
       />,
-);
+    );
     await user.click(screen.getByTestId("directory-selector-clear"));
     await waitFor(() => {
       expect(invokeMock).toHaveBeenCalledWith("migrations_clear_dir", { connId: "c1" });

@@ -69,7 +69,8 @@ export function ConnectionDetails(): JSX.Element {
   }, [conn, removeLocal, toast, t]);
 
   if (!conn) {
-    return (      <div
+    return (
+      <div
         style={{
           height: "100%",
           display: "flex",
@@ -82,7 +83,7 @@ export function ConnectionDetails(): JSX.Element {
           {t("connection.details.no_selection")}
         </p>
       </div>
-);
+    );
   }
 
   const lastTestLabel = (() => {
@@ -110,7 +111,8 @@ export function ConnectionDetails(): JSX.Element {
         ? "var(--accent)"
         : "var(--danger-q)";
 
-  return (    <article style={{ padding: "32px 40px", maxWidth: 720, margin: "0 auto" }}>
+  return (
+    <article style={{ padding: "32px 40px", maxWidth: 720, margin: "0 auto" }}>
       <p className="q-eyebrow" style={{ marginBottom: 6 }}>
         {t("connection.details.host", "Подключение")}
       </p>
@@ -164,13 +166,14 @@ export function ConnectionDetails(): JSX.Element {
               <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
                 <StatusIcon size={13} style={{ color: statusColor }} aria-hidden="true" />
                 <span>{lastTestLabel}</span>
-                {lastTestRelative ? (                  <span
+                {lastTestRelative ? (
+                  <span
                     style={{ color: "var(--ink-4)", marginLeft: 8 }}
                     data-testid="last-test-relative"
                   >
                     {lastTestRelative}
                   </span>
-) : null}
+                ) : null}
               </span>
             </td>
           </tr>
@@ -257,7 +260,7 @@ export function ConnectionDetails(): JSX.Element {
         </button>
       </div>
 
-      {confirmOpen ? (        // biome-ignore lint/a11y/useSemanticElements: <dialog> element lacks the styling/positioning hooks we need; aria role is sufficient
+      {confirmOpen ? ( // biome-ignore lint/a11y/useSemanticElements: <dialog> element lacks the styling/positioning hooks we need; aria role is sufficient
         <div
           role="dialog"
           aria-modal="true"
@@ -336,9 +339,9 @@ export function ConnectionDetails(): JSX.Element {
             </div>
           </div>
         </div>
-) : null}
+      ) : null}
     </article>
-);
+  );
 }
 
 interface ConnectButtonProps {
@@ -373,24 +376,27 @@ function ConnectButton({
 
   if (isThisConnected) {
     const label = t("connection.action.disconnect");
-    return (      <button type="button" onClick={onDisconnect} aria-label={label} className="btn">
+    return (
+      <button type="button" onClick={onDisconnect} aria-label={label} className="btn">
         {label}
       </button>
-);
+    );
   }
 
   if (isThisConnecting) {
     const label = t("connection.connecting");
-    return (      <button type="button" disabled aria-busy="true" aria-label={label} className="btn btn-accent">
+    return (
+      <button type="button" disabled aria-busy="true" aria-label={label} className="btn btn-accent">
         <Loader2 size={14} className="q-spin" aria-hidden="true" />
         <span>{label}</span>
       </button>
-);
+    );
   }
 
   const label = t("connection.action.connect");
   const disabledReason = isOtherInFlight ? t("connection.action.other_in_flight") : undefined;
-  return (    <button
+  return (
+    <button
       type="button"
       onClick={onConnect}
       disabled={isOtherInFlight}
@@ -400,5 +406,5 @@ function ConnectButton({
     >
       {label}
     </button>
-);
+  );
 }

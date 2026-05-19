@@ -62,7 +62,8 @@ describe("Canvas — 50 tables perf budget", () => {
 
     const t0 = performance.now();
     const laid = layoutGraph(graph);
-    const { container, unmount } = render(      <Canvas
+    const { container, unmount } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={() => {}}
@@ -70,7 +71,7 @@ describe("Canvas — 50 tables perf budget", () => {
         panY={0}
         zoom={1}
       />,
-);
+    );
     const elapsed = performance.now() - t0;
 
     expect(laid.nodes).toHaveLength(50);

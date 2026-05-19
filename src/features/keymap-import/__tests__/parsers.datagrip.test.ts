@@ -23,8 +23,9 @@ const xml = (body: string): string =>
 
 describe("parseKeymap — datagrip", () => {
   it("extracts a single keyboard-shortcut", () => {
-    const raw = xml(      `<action id="EditorPaste"><keyboard-shortcut first-keystroke="meta V"/></action>`,
-);
+    const raw = xml(
+      `<action id="EditorPaste"><keyboard-shortcut first-keystroke="meta V"/></action>`,
+    );
     const result = parseKeymap("datagrip", raw);
     expect(result.format).toBe("datagrip");
     expect(result.bindings).toEqual([{ sequence: "Cmd+V", externalCommand: "EditorPaste" }]);
@@ -32,23 +33,24 @@ describe("parseKeymap — datagrip", () => {
   });
 
   it("translates meta/control/shift/alt to Cmd/Ctrl/Shift/Alt", () => {
-    const raw = xml(      `<action id="A"><keyboard-shortcut first-keystroke="control shift alt P"/></action>`,
-);
+    const raw = xml(
+      `<action id="A"><keyboard-shortcut first-keystroke="control shift alt P"/></action>`,
+    );
     expect(parseKeymap("datagrip", raw).bindings[0].sequence).toBe("Ctrl+Alt+Shift+P");
   });
 
   it("combines first-keystroke + second-keystroke with a single space", () => {
-    const raw = xml(      `<action id="GotoDeclaration"><keyboard-shortcut first-keystroke="meta K" second-keystroke="meta S"/></action>`,
-);
+    const raw = xml(
+      `<action id="GotoDeclaration"><keyboard-shortcut first-keystroke="meta K" second-keystroke="meta S"/></action>`,
+    );
     expect(parseKeymap("datagrip", raw).bindings[0].sequence).toBe("Cmd+K Cmd+S");
   });
 
   it("yields one binding per <keyboard-shortcut> when an action has multiple", () => {
-    const raw = xml(      `<action id="EditorCut">
+    const raw = xml(`<action id="EditorCut">
          <keyboard-shortcut first-keystroke="meta X"/>
          <keyboard-shortcut first-keystroke="shift DELETE"/>
-       </action>`,
-);
+       </action>`);
     const { bindings } = parseKeymap("datagrip", raw);
     expect(bindings).toHaveLength(2);
     expect(bindings[0].externalCommand).toBe("EditorCut");
@@ -56,9 +58,8 @@ describe("parseKeymap — datagrip", () => {
   });
 
   it("normalises function keys + special key names", () => {
-    const raw = xml(      `<action id="Run"><keyboard-shortcut first-keystroke="control F5"/></action>
-       <action id="Cancel"><keyboard-shortcut first-keystroke="ESCAPE"/></action>`,
-);
+    const raw = xml(`<action id="Run"><keyboard-shortcut first-keystroke="control F5"/></action>
+       <action id="Cancel"><keyboard-shortcut first-keystroke="ESCAPE"/></action>`);
     const seqs = parseKeymap("datagrip", raw).bindings.map((b) => b.sequence);
     expect(seqs).toEqual(["Ctrl+F5", "Escape"]);
   });
@@ -100,20 +101,20 @@ describe("parseKeymap — datagrip", () => {
   });
 
   it("ignores <mouse-shortcut> entries (we only project keyboard)", () => {
-    const raw = xml(      `<action id="A">
+    const raw = xml(`<action id="A">
          <mouse-shortcut keystroke="button1"/>
          <keyboard-shortcut first-keystroke="meta J"/>
-       </action>`,
-);
+       </action>`);
     const { bindings } = parseKeymap("datagrip", raw);
     expect(bindings).toEqual([{ sequence: "Cmd+J", externalCommand: "A" }]);
   });
 
   it("handles many actions in one document", () => {
-    const body = Array.from(      { length: 10 },
+    const body = Array.from(
+      { length: 10 },
       (_, i) =>
         `<action id="Cmd${i}"><keyboard-shortcut first-keystroke="meta ${String.fromCharCode(65 + i)}"/></action>`,
-).join("");
+    ).join("");
     const result = parseKeymap("datagrip", xml(body));
     expect(result.bindings).toHaveLength(10);
     expect(result.bindings[0]).toEqual({ sequence: "Cmd+A", externalCommand: "Cmd0" });

@@ -8,7 +8,8 @@ export interface RerunBannerProps {
 
 export function RerunBanner({ onRerun, onDismiss }: RerunBannerProps) {
   const { t } = useTranslation();
-  return (    <div
+  return (
+    <div
       className="rerun-banner"
       // biome-ignore lint/a11y/useSemanticElements: interactive status banner with action buttons; <output> loses the action affordance + dismiss styling hook.
       role="status"
@@ -26,5 +27,5 @@ export function RerunBanner({ onRerun, onDismiss }: RerunBannerProps) {
         ×
       </button>
     </div>
-);
+  );
 }

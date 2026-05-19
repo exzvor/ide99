@@ -12,13 +12,14 @@ describe("buildCompressionPolicySql", () => {
       mode: "create",
     };
     const sql = buildCompressionPolicySql(form);
-    expect(sql).toBe(      'ALTER TABLE "public"."metrics" SET (\n' +
+    expect(sql).toBe(
+      'ALTER TABLE "public"."metrics" SET (\n' +
         "  timescaledb.compress,\n" +
         "  timescaledb.compress_segmentby = 'device_id',\n" +
         "  timescaledb.compress_orderby = 'ts DESC'\n" +
         ");\n" +
         "SELECT add_compression_policy('\"public\".\"metrics\"', INTERVAL '7 days');",
-);
+    );
   });
 
   it("create-mode minimal (no segmentBy / no orderBy) keeps only timescaledb.compress flag", () => {
@@ -28,11 +29,12 @@ describe("buildCompressionPolicySql", () => {
       mode: "create",
     };
     const sql = buildCompressionPolicySql(form);
-    expect(sql).toBe(      'ALTER TABLE "public"."metrics" SET (\n' +
+    expect(sql).toBe(
+      'ALTER TABLE "public"."metrics" SET (\n' +
         "  timescaledb.compress\n" +
         ");\n" +
         "SELECT add_compression_policy('\"public\".\"metrics\"', INTERVAL '7 days');",
-);
+    );
   });
 
   it("drop-mode emits remove_compression_policy", () => {

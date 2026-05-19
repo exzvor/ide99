@@ -36,8 +36,9 @@ const sample: CrashReport = {
 
 describe("CrashReportDialog", () => {
   it("returns null when report is null", () => {
-    const { container } = render(      <CrashReportDialog open report={null} onApprove={vi.fn()} onCancel={vi.fn()} />,
-);
+    const { container } = render(
+      <CrashReportDialog open report={null} onApprove={vi.fn()} onCancel={vi.fn()} />,
+    );
     expect(container.querySelector("[data-testid='crash-report-dialog']")).toBeNull();
   });
 

@@ -204,13 +204,14 @@ describe("ErdPane edit-mode happy path", () => {
     const manualScript =
       "CREATE TABLE foo (id int);\n-- preserve this comment\nCREATE INDEX idx_foo ON foo (id);";
     const { makeAddTableOp } = await import("./edit/ops");
-    useEditStore.getState().replaceOpsFromAst(      "erd-c1",
+    useEditStore.getState().replaceOpsFromAst(
+      "erd-c1",
       // Default seedColumns (single id PK) — keeps validateOps happy so
       // Apply isn't gated by no-columns error.
       [makeAddTableOp("public", "foo")],
       [{ message: "Index DDL not supported" }],
       manualScript,
-);
+    );
 
     render(<ErdPane connId="c1" schemas={undefined} tabId="erd-c1" />);
     await user.click(screen.getByTestId("edit-toggle"));

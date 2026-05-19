@@ -21,10 +21,11 @@ function harness(props: Partial<React.ComponentProps<typeof EditToolbar>> = {}) 
     canResetLayout: true,
     canApply: true,
   };
-  return render(    <I18nextProvider i18n={i18n}>
+  return render(
+    <I18nextProvider i18n={i18n}>
       <EditToolbar {...defaults} {...props} />
     </I18nextProvider>,
-);
+  );
 }
 
 describe("EditToolbar", () => {

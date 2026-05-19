@@ -8,12 +8,13 @@ vi.mock("../RepackDialog", () => ({
   RepackDialog: (props: { open: boolean; onClose: () => void }) => {
     RepackDialogMock(props);
     if (!props.open) return null;
-    return (      <div data-testid="repack-dialog-mock">
+    return (
+      <div data-testid="repack-dialog-mock">
         <button type="button" data-testid="repack-dialog-mock-close" onClick={props.onClose}>
           close
         </button>
       </div>
-);
+    );
   },
 }));
 

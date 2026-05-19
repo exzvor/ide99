@@ -138,7 +138,8 @@ export function TourHost(): JSX.Element | null {
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === TOUR_STEPS.length - 1;
 
-  return (    <div data-testid="tour-host" data-tour-step={step.id}>
+  return (
+    <div data-testid="tour-host" data-tour-step={step.id}>
       <SpotlightOverlay rect={rect} />
       <TourBubble
         step={{ id: step.id, body: step.body }}
@@ -153,7 +154,7 @@ export function TourHost(): JSX.Element | null {
         onFinish={finish}
       />
     </div>
-);
+  );
 }
 
 /** Imperative re-trigger — wired to Help menu (or any other surface). */

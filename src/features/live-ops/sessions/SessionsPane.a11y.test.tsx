@@ -45,9 +45,10 @@ vi.mock("react-i18next", () => ({
         return `${opts.count} active sessions, no blocking`;
       }
       if (opts && typeof opts === "object") {
-        return Object.entries(opts).reduce<string>(          (acc, [k, v]) => acc.replace(`{{${k}}}`, String(v)),
+        return Object.entries(opts).reduce<string>(
+          (acc, [k, v]) => acc.replace(`{{${k}}}`, String(v)),
           key,
-);
+        );
       }
       return key;
     },

@@ -7,9 +7,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, opts?: Record<string, unknown>) => {
       if (opts && typeof opts === "object") {
-        return Object.entries(opts).reduce<string>(          (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
+        return Object.entries(opts).reduce<string>(
+          (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
           key,
-);
+        );
       }
       return key;
     },
@@ -32,12 +33,13 @@ const initialConnectionsState = useConnections.getState();
 const initialSchemaState = useSchema.getState();
 
 function setSchemaConnected(connId: string) {
-  useSchema.setState(    {
+  useSchema.setState(
+    {
       ...initialSchemaState,
       connection: { status: "connected", connId, serverVersion: "16.0", database: "test" },
     },
     true,
-);
+  );
 }
 
 function makeTab(overrides: Partial<Tab> = {}): Tab {
@@ -86,7 +88,8 @@ beforeEach(() => {
   runQueryMock.mockReset();
   setTabConnectionMock.mockReset();
   cancelRunMock.mockReset();
-  useEditor.setState(    {
+  useEditor.setState(
+    {
       ...initialEditorState,
       tabs: [makeTab()],
       activeTabId: "tab-1",
@@ -96,14 +99,15 @@ beforeEach(() => {
       cancelRun: cancelRunMock,
     },
     true,
-);
-  useConnections.setState(    {
+  );
+  useConnections.setState(
+    {
       ...initialConnectionsState,
       connections: [],
       selectedId: null,
     },
     true,
-);
+  );
   useSchema.setState({ ...initialSchemaState, connection: { status: "idle" } }, true);
 });
 

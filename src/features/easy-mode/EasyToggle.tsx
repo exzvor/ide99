@@ -32,7 +32,8 @@ export function EasyToggle(): JSX.Element {
   };
 
   const label = mode === "easy" ? t("easyMode.toggle.easyOn") : t("easyMode.toggle.standardOn");
-  return (    <button
+  return (
+    <button
       type="button"
       className="easy-toggle btn-icon"
       data-mode={mode}
@@ -46,5 +47,5 @@ export function EasyToggle(): JSX.Element {
       </span>
       <span className="easy-toggle-label">{label}</span>
     </button>
-);
+  );
 }

@@ -26,35 +26,38 @@ describe("ActionButton", () => {
 
   it("renders an icon button when easy mode is off and connection exists", () => {
     useConnections.setState({ connections: [conn as never] });
-    render(      <ActionButton
+    render(
+      <ActionButton
         kind="vacuum"
         target={{ kind: "vacuum", schema: "public", table: "users" }}
         connId="c1"
       />,
-);
+    );
     expect(screen.getByTestId("health-action-vacuum-public.users")).toBeInTheDocument();
   });
 
   it("renders nothing in Easy mode", () => {
     useConnections.setState({ connections: [conn as never] });
     setEasyModeForTesting(true);
-    const { container } = render(      <ActionButton
+    const { container } = render(
+      <ActionButton
         kind="vacuum"
         target={{ kind: "vacuum", schema: "public", table: "users" }}
         connId="c1"
       />,
-);
+    );
     expect(container.firstChild).toBeNull();
   });
 
   it("opens the preview modal on click", () => {
     useConnections.setState({ connections: [conn as never] });
-    render(      <ActionButton
+    render(
+      <ActionButton
         kind="vacuum"
         target={{ kind: "vacuum", schema: "public", table: "users" }}
         connId="c1"
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("health-action-vacuum-public.users"));
     expect(useHealthActions.getState().phase.kind).toBe("preview");
   });

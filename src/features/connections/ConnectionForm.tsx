@@ -74,9 +74,10 @@ function buildSchema({ t, existingNames, editingId }: BuildSchemaArgs) {
       .string()
       .min(1, t("connection.form.error.name_required"))
       .max(80)
-      .refine(        (value) => !existingNames.some((entry) => entry.name === value && entry.id !== editingId),
+      .refine(
+        (value) => !existingNames.some((entry) => entry.name === value && entry.id !== editingId),
         { message: t("connection.form.error.name_taken") },
-),
+      ),
     host: z.string().min(1, t("connection.form.error.host_required")),
     port: z.coerce
       .number({ invalid_type_error: t("connection.form.error.port_invalid") })
@@ -161,13 +162,15 @@ export function ConnectionForm() {
     formMode.type === "edit" ? connections.find((c) => c.id === formMode.id) : undefined;
 
   const editingId = editingConnection?.id;
-  const existingNames = useMemo(    () => connections.map((c) => ({ id: c.id, name: c.name })),
+  const existingNames = useMemo(
+    () => connections.map((c) => ({ id: c.id, name: c.name })),
     [connections],
-);
+  );
 
-  const schema = useMemo(    () => buildSchema({ t, existingNames, editingId }),
+  const schema = useMemo(
+    () => buildSchema({ t, existingNames, editingId }),
     [t, existingNames, editingId],
-);
+  );
 
   const initialValues: FormValues = useMemo(() => {
     if (formMode.type === "edit" && editingConnection) return defaultsForEdit(editingConnection);
@@ -201,8 +204,9 @@ export function ConnectionForm() {
     setShowDiscardConfirm(false);
     setSubmitting(false);
     setShowPassword(false);
-    setPendingInstantDbId(      formMode.type === "create" ? (formMode.prefill?.instantDbId ?? null) : null,
-);
+    setPendingInstantDbId(
+      formMode.type === "create" ? (formMode.prefill?.instantDbId ?? null) : null,
+    );
   }, [formMode.type, editingId]);
 
   const cancelAndCleanup = useCallback(() => {
@@ -235,7 +239,7 @@ export function ConnectionForm() {
     // "Test connection" is about reachability/auth, not save-time form
     // completeness. Clear any pre-existing name error (e.g. blurred from the
     // autoFocus on open) so the success/failure panel is the sole feedback for
-    // this action and we don't render the contradictory pair from ��
+    // this action and we don't render the contradictory pair from
     // a green "connected" banner alongside a red "укажите название" error.
     methods.clearErrors("name");
     const valid = await methods.trigger(["host", "port", "database", "username"]);
@@ -285,7 +289,7 @@ export function ConnectionForm() {
     }
   }, [methods, t, toast, formMode.type, editingConnection]);
 
-  // �� when the user just ran a successful test in the form, mirror
+  // when the user just ran a successful test in the form, mirror
   // that result onto the persisted row so ConnectionDetails doesn't go from
   // "Connection successful" straight to "Never tested". Failure-after-save is
   // best-effort: we already toasted the save success and the next manual
@@ -389,7 +393,8 @@ export function ConnectionForm() {
     }
   });
 
-  const handleOpenChange = useCallback(    (next: boolean) => {
+  const handleOpenChange = useCallback(
+    (next: boolean) => {
       if (next) return; // Radix only ever calls with `false` here in our usage.
       if (methods.formState.isDirty) {
         setShowDiscardConfirm(true);
@@ -398,7 +403,7 @@ export function ConnectionForm() {
       cancelAndCleanup();
     },
     [methods.formState.isDirty, cancelAndCleanup],
-);
+  );
 
   if (!isOpen) return null;
 
@@ -421,7 +426,8 @@ export function ConnectionForm() {
       ? t("connection.form.description.edit")
       : t("connection.form.description.create");
 
-  return (    <>
+  return (
+    <>
       <Dialog
         open={isOpen && !showDiscardConfirm}
         onOpenChange={handleOpenChange}
@@ -447,19 +453,21 @@ export function ConnectionForm() {
                 disabled={testState.status === "running"}
                 className="btn"
               >
-                {testState.status === "running" ? (                  <Loader2 size={14} className="q-spin" aria-hidden="true" />
-) : null}
+                {testState.status === "running" ? (
+                  <Loader2 size={14} className="q-spin" aria-hidden="true" />
+                ) : null}
                 {testState.status === "running"
                   ? t("connection.form.test.testing")
                   : t("connection.form.action.test")}
               </button>
               {/*
-               * �� inline status badge next to the Test button so the
+               * inline status badge next to the Test button so the
                * action's outcome is visible at the click site even when the
                * detailed inline block at the bottom of the form scrolls below
                * the modal fold and the auto-dismissed toast has expired.
                */}
-              {testState.status === "success" ? (                <span
+              {testState.status === "success" ? (
+                <span
                   data-testid="form-test-success-badge"
                   aria-live="polite"
                   style={{
@@ -475,8 +483,9 @@ export function ConnectionForm() {
                   <CheckCircle2 size={12} aria-hidden="true" />
                   {t("connection.form.test.success")}
                 </span>
-) : null}
-              {testState.status === "failure" ? (                <span
+              ) : null}
+              {testState.status === "failure" ? (
+                <span
                   data-testid="form-test-failure-badge"
                   aria-live="polite"
                   style={{
@@ -492,7 +501,7 @@ export function ConnectionForm() {
                   <XCircle size={12} aria-hidden="true" />
                   {t("connection.form.test.failure")}
                 </span>
-) : null}
+              ) : null}
             </span>
             <button
               type="submit"
@@ -520,7 +529,8 @@ export function ConnectionForm() {
                 autoFocus: true,
               }}
             />
-            {isInstantDbManaged ? (              <p
+            {isInstantDbManaged ? (
+              <p
                 data-testid="instant-db-managed-notice"
                 style={{
                   margin: 0,
@@ -537,7 +547,7 @@ export function ConnectionForm() {
                     "Connection details are managed by Instant DB and cannot be changed. You can rename the row above.",
                 })}
               </p>
-) : null}
+            ) : null}
             <Field
               label={t("connection.form.field.host")}
               name="host"
@@ -592,7 +602,8 @@ export function ConnectionForm() {
               disabled={isInstantDbManaged}
             />
 
-            {showSslWarning ? (              <div role="alert" className="q-answer warn">
+            {showSslWarning ? (
+              <div role="alert" className="q-answer warn">
                 <span style={{ marginTop: 1 }} aria-hidden="true">
                   ⚠
                 </span>
@@ -600,7 +611,7 @@ export function ConnectionForm() {
                   {t("connection.form.warning.ssl_disable_remote")}
                 </span>
               </div>
-) : null}
+            ) : null}
 
             <EnvironmentField label={t("connection.form.field.environment")} />
 
@@ -656,7 +667,8 @@ export function ConnectionForm() {
 
             <SaveRecentPlansField />
 
-            {testState.status === "success" ? (              <output className="q-answer ok" data-testid="form-test-success">
+            {testState.status === "success" ? (
+              <output className="q-answer ok" data-testid="form-test-success">
                 <CheckCircle2
                   size={16}
                   aria-hidden="true"
@@ -676,13 +688,15 @@ export function ConnectionForm() {
                   </span>
                 </div>
               </output>
-) : null}
+            ) : null}
 
-            {testState.status === "failure" ? (              <div role="alert" className="q-answer err" data-testid="form-test-failure">
+            {testState.status === "failure" ? (
+              <div role="alert" className="q-answer err" data-testid="form-test-failure">
                 <XCircle size={16} aria-hidden="true" style={{ marginTop: 1, flexShrink: 0 }} />
                 <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }}>
                   <span className="title">{t("connection.form.test.failure")}</span>
-                  {testState.result.error ? (                    <pre
+                  {testState.result.error ? (
+                    <pre
                       style={{
                         margin: 0,
                         whiteSpace: "pre-wrap",
@@ -694,10 +708,10 @@ export function ConnectionForm() {
                     >
                       {testState.result.error}
                     </pre>
-) : null}
+                  ) : null}
                 </div>
               </div>
-) : null}
+            ) : null}
           </form>
         </FormProvider>
       </Dialog>
@@ -736,7 +750,7 @@ export function ConnectionForm() {
         <p>{t("connection.form.discard.body")}</p>
       </Dialog>
     </>
-);
+  );
 }
 
 interface PasswordFieldProps {
@@ -758,7 +772,8 @@ function PasswordField({
   onToggle,
   readOnly = false,
 }: PasswordFieldProps) {
-  return (    <div className="relative">
+  return (
+    <div className="relative">
       <Field
         label={label}
         name="password"
@@ -772,12 +787,14 @@ function PasswordField({
         className="btn-icon"
         style={{ position: "absolute", right: 4, top: 24, width: 28, height: 28 }}
       >
-        {showPassword ? (          <EyeOff size={14} aria-hidden="true" />
-) : (          <Eye size={14} aria-hidden="true" />
-)}
+        {showPassword ? (
+          <EyeOff size={14} aria-hidden="true" />
+        ) : (
+          <Eye size={14} aria-hidden="true" />
+        )}
       </button>
     </div>
-);
+  );
 }
 
 interface SslModeFieldProps {
@@ -791,7 +808,8 @@ function SslModeField({ label, ariaLabel, disabled = false }: SslModeFieldProps)
   const ctx = useFormContext<FormValues>();
   const value = ctx?.watch("sslMode") ?? "prefer";
 
-  return (    <Field label={label} htmlFor="sslMode-trigger">
+  return (
+    <Field label={label} htmlFor="sslMode-trigger">
       <Select
         id="sslMode-trigger"
         value={value}
@@ -809,7 +827,7 @@ function SslModeField({ label, ariaLabel, disabled = false }: SslModeFieldProps)
         }))}
       />
     </Field>
-);
+  );
 }
 
 interface EnvironmentFieldProps {
@@ -839,7 +857,8 @@ function SaveRecentPlansField(): JSX.Element {
   const { t } = useTranslation();
   const ctx = useFormContext<FormValues>();
   const exclude = ctx?.watch("excludeFromRecentPlans") ?? false;
-  return (    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
       <label className="q-checkbox" data-testid="exclude-recent-plans-label">
         <input
           type="checkbox"
@@ -859,7 +878,7 @@ function SaveRecentPlansField(): JSX.Element {
         {t("connection.form.exclude_from_recent_plans.help")}
       </p>
     </div>
-);
+  );
 }
 
 function EnvironmentField({ label }: EnvironmentFieldProps) {
@@ -867,7 +886,8 @@ function EnvironmentField({ label }: EnvironmentFieldProps) {
   const ctx = useFormContext<FormValues>();
   const value = ctx?.watch("environment") ?? "local";
 
-  return (    <Field label={label} htmlFor="environment-trigger">
+  return (
+    <Field label={label} htmlFor="environment-trigger">
       <EnvironmentSelect
         ariaLabel={t("connection.form.field.environment")}
         value={value}
@@ -886,5 +906,5 @@ function EnvironmentField({ label }: EnvironmentFieldProps) {
         }}
       />
     </Field>
-);
+  );
 }

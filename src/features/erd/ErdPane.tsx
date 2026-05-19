@@ -110,12 +110,14 @@ function workingToLayoutInput(working: WorkingErdGraph): {
       name: fk.name,
       sourceSchema: srcT.schema,
       sourceTable: srcT.id, // synthetic
-      sourceColumns: fk.source.columnIds.map(        (cid) => srcT.columns.find((c) => c.id === cid)?.name ?? cid,
-),
+      sourceColumns: fk.source.columnIds.map(
+        (cid) => srcT.columns.find((c) => c.id === cid)?.name ?? cid,
+      ),
       targetSchema: tgtT.schema,
       targetTable: tgtT.id, // synthetic
-      targetColumns: fk.target.columnIds.map(        (cid) => tgtT.columns.find((c) => c.id === cid)?.name ?? cid,
-),
+      targetColumns: fk.target.columnIds.map(
+        (cid) => tgtT.columns.find((c) => c.id === cid)?.name ?? cid,
+      ),
     });
   }
   return {
@@ -155,7 +157,7 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
   const isDirty = useEditStore((s) => (s.tabs.get(tabId)?.ops.length ?? 0) > 0);
   const pushOp = useEditStore((s) => s.pushOp);
   const discard = useEditStore((s) => s.discard);
-  // S20 + �� Apply must be blocked while a SQL parse error is
+  // S20 + Apply must be blocked while a SQL parse error is
   // active and must use the user's verbatim text when the latest change came
   // from typing in the DDL panel (so unrepresentable statements / ordered
   // scripts survive).
@@ -178,9 +180,10 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
   // Compute working graph (memoized on graph + ops identity).
   const baseGraph: ErdSchemaGraph =
     state.kind === "ready" ? state.graph : { tables: [], foreignKeys: [], fetchedInMs: 0 };
-  const working = useMemo<WorkingErdGraph>(    () => applyOps(baseGraph, ops as Op[]),
+  const working = useMemo<WorkingErdGraph>(
+    () => applyOps(baseGraph, ops as Op[]),
     [baseGraph, ops],
-);
+  );
   const ddl = useMemo(() => generateDdl(baseGraph, ops as Op[]), [baseGraph, ops]);
   const issues = useMemo(() => validateOps(baseGraph, ops as Op[]), [baseGraph, ops]);
   // S20 a SQL parse error must block Apply (same kind of gate as a
@@ -235,9 +238,10 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
   }, [state, layoutInput, layoutOverrides, working.tables, layoutIdToWorkingId]);
 
   const getSvgEl = useCallback((): SVGSVGElement | null => {
-    return (      (containerRef.current?.querySelector('[data-testid="erd-canvas"]') as SVGSVGElement | null) ??
+    return (
+      (containerRef.current?.querySelector('[data-testid="erd-canvas"]') as SVGSVGElement | null) ??
       null
-);
+    );
   }, []);
 
   /**
@@ -257,14 +261,15 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
     return null;
   }, [getSvgEl]);
 
-  const fitNow = useCallback(    (currentLaid: LaidErd) => {
+  const fitNow = useCallback(
+    (currentLaid: LaidErd) => {
       const viewport = measureViewport();
       if (!viewport) return false;
       panZoom.fitToScreen({ width: currentLaid.width, height: currentLaid.height }, viewport);
       return true;
     },
     [measureViewport, panZoom],
-);
+  );
 
   const onFit = useCallback((): void => {
     if (!laid) return;
@@ -351,11 +356,12 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
       // Success: clear ops, refresh base graph, toast.
       discard(tabId);
       useErdStore.getState().invalidate(connId);
-      toast.success(        t("erd.edit.toast.apply_success", {
+      toast.success(
+        t("erd.edit.toast.apply_success", {
           n: result.statementsExecuted,
           ms: result.durationMs,
         }),
-);
+      );
     } catch (raw) {
       // Coerced ApplyError from schemaApplyDdl wrapper.
       const e = raw as ApplyError;
@@ -388,12 +394,14 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
   // Canvas drag-table handlers — update positions cache live (so the canvas
   // re-renders the table at the cursor) and on drop also push a moveTable
   // op when in edit-mode (so undo restores prior position).
-  const onTableDragMove = useCallback(    (nodeId: string, x: number, y: number) => {
+  const onTableDragMove = useCallback(
+    (nodeId: string, x: number, y: number) => {
       positionsApi.setPosition(nodeId, x, y);
     },
     [positionsApi],
-);
-  const onTableDragEnd = useCallback(    (nodeId: string, x: number, y: number) => {
+  );
+  const onTableDragEnd = useCallback(
+    (nodeId: string, x: number, y: number) => {
       positionsApi.setPosition(nodeId, x, y);
       if (mode === "edit") {
         const t = working.tables.find((wt) => wt.id === nodeId);
@@ -401,13 +409,14 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
       }
     },
     [positionsApi, mode, working.tables, pushOp, tabId],
-);
+  );
 
   // FK drag — open picker on drop.
   const onFkDragStart = useCallback((sourceId: string) => {
     fkDragSourceRef.current = sourceId;
   }, []);
-  const onFkDragEnd = useCallback(    (targetId: string | null) => {
+  const onFkDragEnd = useCallback(
+    (targetId: string | null) => {
       const source = fkDragSourceRef.current;
       fkDragSourceRef.current = null;
       if (!source || !targetId || source === targetId) return;
@@ -417,9 +426,10 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
       setFkPicker({ source: srcT, target: tgtT });
     },
     [working.tables],
-);
+  );
 
-  const onFkPickerConfirm = useCallback(    (sourceColIds: string[], targetColIds: string[], constraintName: string) => {
+  const onFkPickerConfirm = useCallback(
+    (sourceColIds: string[], targetColIds: string[], constraintName: string) => {
       if (!fkPicker) return;
       const srcRefs: ColumnRef[] = sourceColIds.map((cid) => {
         const c = fkPicker.source.columns.find((cc) => cc.id === cid)!;
@@ -447,17 +457,19 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
       setFkPicker(null);
     },
     [fkPicker, pushOp, tabId],
-);
+  );
 
   // Inline edit handlers — TableCard-side click → renameTable / addColumn.
-  const onRenameTable = useCallback(    (nodeId: string, newName: string) => {
+  const onRenameTable = useCallback(
+    (nodeId: string, newName: string) => {
       const t = working.tables.find((wt) => wt.id === nodeId);
       if (!t) return;
       pushOp(tabId, makeRenameTableOp(tableRefForWorking(t), newName));
     },
     [working.tables, pushOp, tabId],
-);
-  const onRenameColumn = useCallback(    (nodeId: string, columnId: string, newName: string) => {
+  );
+  const onRenameColumn = useCallback(
+    (nodeId: string, columnId: string, newName: string) => {
       const t = working.tables.find((wt) => wt.id === nodeId);
       if (!t) return;
       const col = t.columns.find((c) => c.id === columnId);
@@ -471,21 +483,23 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
       pushOp(tabId, makeRenameColumnOp(ref, newName));
     },
     [working.tables, pushOp, tabId],
-);
-  const onAddColumn = useCallback(    (nodeId: string) => {
+  );
+  const onAddColumn = useCallback(
+    (nodeId: string) => {
       const t = working.tables.find((wt) => wt.id === nodeId);
       if (!t) return;
       const idx = t.columns.length + 1;
       pushOp(tabId, makeAddColumnOp(tableRefForWorking(t), `col_${idx}`, "TEXT", true, false));
     },
     [working.tables, pushOp, tabId],
-);
+  );
 
   // (a11y, acceptance #3) — keyboard pan/zoom for the ERD canvas.
   // Arrow keys pan in 32 px steps (×4 with Shift); `=` / `+` zoom in; `-`
   // zooms out; `0` resets. We swallow only the keys we handle so Tab still
   // moves focus between table cards (per `09-accessibility.md` §2 ERD).
-  const onCanvasKeyDown = useCallback(    (e: React.KeyboardEvent<SVGSVGElement>) => {
+  const onCanvasKeyDown = useCallback(
+    (e: React.KeyboardEvent<SVGSVGElement>) => {
       const PAN_STEP = 32;
       const step = e.shiftKey ? PAN_STEP * 4 : PAN_STEP;
       switch (e.key) {
@@ -529,11 +543,12 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
       }
     },
     [panZoom, onFit],
-);
+  );
 
   // ─── Loading ───────────────────────────────────────────────────────────────
   if (state.kind === "loading" || state.kind === "idle") {
-    return (      <div
+    return (
+      <div
         ref={containerRef}
         data-testid="erd-pane"
         data-state="loading"
@@ -552,12 +567,13 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
         <Loader2 size={16} className="animate-spin" aria-hidden="true" />
         <span>{t("erd.loading")}</span>
       </div>
-);
+    );
   }
 
   // ─── Error ─────────────────────────────────────────────────────────────────
   if (state.kind === "error") {
-    return (      <div
+    return (
+      <div
         ref={containerRef}
         data-testid="erd-pane"
         data-state="error"
@@ -587,12 +603,13 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
           {t("erd.error.retry")}
         </button>
       </div>
-);
+    );
   }
 
   // ─── Empty ─────────────────────────────────────────────────────────────────
   if (state.kind === "ready" && state.graph.tables.length === 0 && working.tables.length === 0) {
-    return (      <div
+    return (
+      <div
         ref={containerRef}
         data-testid="erd-pane"
         data-state="empty"
@@ -617,12 +634,13 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
           {t("erd.empty.body")}
         </div>
       </div>
-);
+    );
   }
 
   // ─── Ready ─────────────────────────────────────────────────────────────────
   if (laid && state.kind === "ready") {
-    return (      <div
+    return (
+      <div
         ref={containerRef}
         data-testid="erd-pane"
         data-state="ready"
@@ -643,7 +661,8 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
           onFit={onFit}
           getSvgEl={getSvgEl}
         />
-        {mode === "edit" && (          <EditActionsBar
+        {mode === "edit" && (
+          <EditActionsBar
             tabId={tabId}
             onApply={onApply}
             onDiscard={onDiscardClick}
@@ -652,7 +671,7 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
             canResetLayout={positionsApi.positions.size > 0}
             canApply={!hasErrors}
           />
-)}
+        )}
         <div style={{ flex: 1, minHeight: 0, position: "relative" }}>
           <Canvas
             laid={laid}
@@ -677,14 +696,15 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
             onAddColumn={onAddColumn}
           />
         </div>
-        {mode === "edit" && (          <DdlPreviewPanel
+        {mode === "edit" && (
+          <DdlPreviewPanel
             ddl={ddl}
             issues={issues}
             applyError={applyError}
             tabId={tabId}
             baseGraph={baseGraph}
           />
-)}
+        )}
         <ApplyConfirmModal
           open={applyConfirmOpen}
           statementCount={ddl.statements.length}
@@ -692,7 +712,8 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
           onConfirm={onConfirmApply}
           onCancel={() => setApplyConfirmOpen(false)}
         />
-        {fkPicker && (          <FkPickerModal
+        {fkPicker && (
+          <FkPickerModal
             open
             sourceTable={{
               id: fkPicker.source.id,
@@ -717,8 +738,9 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
             onConfirm={onFkPickerConfirm}
             onCancel={() => setFkPicker(null)}
           />
-)}
-        {discardConfirmOpen && (          <div
+        )}
+        {discardConfirmOpen && (
+          <div
             data-testid="discard-confirm-modal"
             role="dialog"
             aria-modal="true"
@@ -783,8 +805,9 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
               </div>
             </div>
           </div>
-)}
-        {resetConfirmOpen && (          <div
+        )}
+        {resetConfirmOpen && (
+          <div
             data-testid="reset-confirm-modal"
             role="dialog"
             aria-modal="true"
@@ -846,12 +869,13 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
               </div>
             </div>
           </div>
-)}
+        )}
       </div>
-);
+    );
   }
 
-  return (    <div
+  return (
+    <div
       ref={containerRef}
       data-testid="erd-pane"
       data-state="loading"
@@ -860,5 +884,5 @@ export function ErdPane({ connId, schemas, tabId }: ErdPaneProps): JSX.Element {
       data-tab-id={tabId}
       style={PANE_BASE_STYLE}
     />
-);
+  );
 }

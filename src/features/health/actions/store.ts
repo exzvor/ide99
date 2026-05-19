@@ -117,30 +117,35 @@ export const useHealthActions = create<HealthActionsState>((set, _get) => ({
         (t: ActionTarget) => Promise<ActionResultWire>
       > = {
         reindexTable: (t) =>
-          healthActionReindexTable(            conn.id,
+          healthActionReindexTable(
+            conn.id,
             (t as { schema: string }).schema,
             (t as { table: string }).table,
-),
+          ),
         vacuum: (t) =>
-          healthActionVacuum(            conn.id,
+          healthActionVacuum(
+            conn.id,
             (t as { schema: string }).schema,
             (t as { table: string }).table,
-),
+          ),
         analyze: (t) =>
-          healthActionAnalyze(            conn.id,
+          healthActionAnalyze(
+            conn.id,
             (t as { schema: string }).schema,
             (t as { table: string }).table,
-),
+          ),
         dropIndex: (t) =>
-          healthActionDropIndex(            conn.id,
+          healthActionDropIndex(
+            conn.id,
             (t as { schema: string }).schema,
             (t as { index: string }).index,
-),
+          ),
         killPid: (t) =>
-          healthActionKillPid(            conn.id,
+          healthActionKillPid(
+            conn.id,
             (t as { pid: number }).pid,
             (t as { terminate?: boolean }).terminate ?? false,
-),
+          ),
       };
 
       const result = await dispatch[target.kind as keyof typeof dispatch](target);
@@ -148,15 +153,17 @@ export const useHealthActions = create<HealthActionsState>((set, _get) => ({
       // Handle kill PID NotFound and prompt-for-terminate fallback.
       if (target.kind === "killPid" && result.status === "notFound") {
         toast.info(`Session ${(target as { pid: number }).pid} already finished.`);
-      } else if (        target.kind === "killPid" &&
+      } else if (
+        target.kind === "killPid" &&
         result.status === "completed" &&
         !(target as { terminate?: boolean }).terminate
-) {
+      ) {
         // Cancel succeeded — verify the session actually died after ~1.5s.
         await new Promise((r) => setTimeout(r, 1500));
-        const stillAlive = await healthActionCheckPid(          conn.id,
+        const stillAlive = await healthActionCheckPid(
+          conn.id,
           (target as { pid: number }).pid,
-).catch(() => false);
+        ).catch(() => false);
         if (stillAlive) {
           set({
             phase: {

@@ -48,7 +48,8 @@ export function ActionButton({ kind, target, connId, size = 14 }: Props): JSX.El
   if (isEasyMode()) return null;
   if (!conn) return null;
   const Icon = ICON_MAP[kind];
-  return (    <button
+  return (
+    <button
       type="button"
       className="health-action-btn"
       onClick={() => useHealthActions.getState().openPreview(target, conn)}
@@ -58,5 +59,5 @@ export function ActionButton({ kind, target, connId, size = 14 }: Props): JSX.El
     >
       <Icon size={size} aria-hidden="true" />
     </button>
-);
+  );
 }

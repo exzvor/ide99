@@ -23,7 +23,8 @@ const COLUMNS = [
 
 describe("CreateParentWizard", () => {
   it("returns null when closed", () => {
-    render(      <CreateParentWizard
+    render(
+      <CreateParentWizard
         open={false}
         connId="conn-1"
         schema="public"
@@ -32,12 +33,13 @@ describe("CreateParentWizard", () => {
         columns={COLUMNS}
         onClose={() => {}}
       />,
-);
+    );
     expect(screen.queryByTestId("pg-partman-create-parent-wizard")).not.toBeInTheDocument();
   });
 
   it("renders only time/integer columns in the control select", () => {
-    render(      <CreateParentWizard
+    render(
+      <CreateParentWizard
         open={true}
         connId="conn-1"
         schema="public"
@@ -46,7 +48,7 @@ describe("CreateParentWizard", () => {
         columns={COLUMNS}
         onClose={() => {}}
       />,
-);
+    );
     expect(screen.getByTestId("pg-partman-create-parent-wizard")).toBeInTheDocument();
     const select = screen.getByTestId("pg-partman-create-parent-control-col") as HTMLSelectElement;
     const options = Array.from(select.options).map((o) => o.value);
@@ -58,7 +60,8 @@ describe("CreateParentWizard", () => {
   it("emits SQL via openEditorTab when Apply is clicked with default values", () => {
     openEditorTab.mockClear();
     const onClose = vi.fn();
-    render(      <CreateParentWizard
+    render(
+      <CreateParentWizard
         open={true}
         connId="conn-1"
         schema="public"
@@ -67,7 +70,7 @@ describe("CreateParentWizard", () => {
         columns={COLUMNS}
         onClose={onClose}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("pg-partman-create-parent-apply"));
     expect(openEditorTab).toHaveBeenCalledTimes(1);
     const [connArg, opts] = openEditorTab.mock.calls[0];
@@ -94,7 +97,8 @@ describe("CreateParentWizard", () => {
   it("emits premake + retention when set by the user", () => {
     openEditorTab.mockClear();
     const onClose = vi.fn();
-    render(      <CreateParentWizard
+    render(
+      <CreateParentWizard
         open={true}
         connId="conn-1"
         schema="public"
@@ -103,15 +107,16 @@ describe("CreateParentWizard", () => {
         columns={COLUMNS}
         onClose={onClose}
       />,
-);
+    );
 
     // Change premake to 8.
     const premakeInput = screen.getByTestId("pg-partman-create-parent-premake") as HTMLInputElement;
     fireEvent.change(premakeInput, { target: { value: "8" } });
 
     // Toggle retention on (default 6 month).
-    const retentionToggle = screen.getByTestId(      "pg-partman-create-parent-retention-toggle",
-) as HTMLInputElement;
+    const retentionToggle = screen.getByTestId(
+      "pg-partman-create-parent-retention-toggle",
+    ) as HTMLInputElement;
     fireEvent.click(retentionToggle);
 
     fireEvent.click(screen.getByTestId("pg-partman-create-parent-apply"));
@@ -127,7 +132,8 @@ describe("CreateParentWizard", () => {
   it("Cancel closes without emitting SQL", () => {
     openEditorTab.mockClear();
     const onClose = vi.fn();
-    render(      <CreateParentWizard
+    render(
+      <CreateParentWizard
         open={true}
         connId="conn-1"
         schema="public"
@@ -136,7 +142,7 @@ describe("CreateParentWizard", () => {
         columns={COLUMNS}
         onClose={onClose}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("pg-partman-create-parent-cancel"));
     expect(openEditorTab).not.toHaveBeenCalled();
     expect(onClose).toHaveBeenCalledTimes(1);

@@ -8,9 +8,10 @@ interface State {
 }
 
 interface Actions {
-  loadSnapshot: (    connId: string,
+  loadSnapshot: (
+    connId: string,
     onResolved?: () => void,
-) => Promise<AutocompleteSnapshot | undefined>;
+  ) => Promise<AutocompleteSnapshot | undefined>;
   refresh: (connId: string) => Promise<AutocompleteSnapshot | undefined>;
   evict: (connId: string) => void;
   getSnapshot: (connId: string) => AutocompleteSnapshot | undefined;

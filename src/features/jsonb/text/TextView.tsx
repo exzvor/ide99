@@ -57,11 +57,13 @@ export function TextView({ value, onChange, readOnly, parseError }: TextViewProp
     }
   }, [value]);
 
-  return (    <div
+  return (
+    <div
       data-testid="jsonb-text-view"
       style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0 }}
     >
-      {parseError ? (        <div
+      {parseError ? (
+        <div
           role="alert"
           data-testid="jsonb-text-parse-error"
           style={{
@@ -75,7 +77,7 @@ export function TextView({ value, onChange, readOnly, parseError }: TextViewProp
         >
           {t("jsonb.text.invalidJson", { message: parseError })}
         </div>
-) : null}
+      ) : null}
       <div style={{ flex: 1, minHeight: 0 }}>
         <Editor
           value={pretty}
@@ -96,5 +98,5 @@ export function TextView({ value, onChange, readOnly, parseError }: TextViewProp
         />
       </div>
     </div>
-);
+  );
 }

@@ -37,7 +37,8 @@ export function LanguageSwitcher(): JSX.Element {
     void i18n.changeLanguage(next);
   }, [i18n, next]);
 
-  return (    <button
+  return (
+    <button
       type="button"
       aria-label={t("language.switch")}
       onClick={onClick}
@@ -49,5 +50,5 @@ export function LanguageSwitcher(): JSX.Element {
         {current.toUpperCase()}
       </span>
     </button>
-);
+  );
 }

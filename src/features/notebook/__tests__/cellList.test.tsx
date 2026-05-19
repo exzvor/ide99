@@ -19,12 +19,13 @@ vi.mock("@monaco-editor/react", () => ({
   }: {
     value: string;
     onChange?: (next: string | undefined) => void;
-  }) => (    <textarea
+  }) => (
+    <textarea
       data-testid="monaco-stub"
       value={value ?? ""}
       onChange={(e) => onChange?.(e.target.value)}
     />
-),
+  ),
 }));
 
 vi.mock("monaco-sql-languages", () => ({
@@ -82,9 +83,10 @@ vi.mock("react-i18next", () => ({
     t: (key: string, opts?: Record<string, unknown>) => {
       const base = FAKE_DICT[key] ?? key;
       if (opts && typeof opts === "object") {
-        return Object.entries(opts).reduce<string>(          (acc, [k, v]) => acc.replace(`{{${k}}}`, String(v)),
+        return Object.entries(opts).reduce<string>(
+          (acc, [k, v]) => acc.replace(`{{${k}}}`, String(v)),
           base,
-);
+        );
       }
       return base;
     },

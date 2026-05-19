@@ -48,14 +48,16 @@ export function EditorPane(): JSX.Element {
   };
 
   if (tab === null) {
-    return (      <div id="editor-pane" role="tabpanel" style={paneStyle} data-testid="editor-pane">
+    return (
+      <div id="editor-pane" role="tabpanel" style={paneStyle} data-testid="editor-pane">
         <EmptyState />
       </div>
-);
+    );
   }
 
   if (tab.kind === "object") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -64,11 +66,12 @@ export function EditorPane(): JSX.Element {
       >
         <ObjectDetails node={tab.nodeKey} />
       </div>
-);
+    );
   }
 
   if (tab.kind === "history") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -77,11 +80,12 @@ export function EditorPane(): JSX.Element {
       >
         <HistoryTab />
       </div>
-);
+    );
   }
 
   if (tab.kind === "map-view") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -90,11 +94,12 @@ export function EditorPane(): JSX.Element {
       >
         <MapViewTab tab={tab} />
       </div>
-);
+    );
   }
 
   if (tab.kind === "pg-stat-statements") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -103,11 +108,12 @@ export function EditorPane(): JSX.Element {
       >
         <PgStatStatementsTab tab={tab} />
       </div>
-);
+    );
   }
 
   if (tab.kind === "explain") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -116,11 +122,12 @@ export function EditorPane(): JSX.Element {
       >
         <ExplainPane tabId={tab.id} />
       </div>
-);
+    );
   }
 
   if (tab.kind === "recent-plans") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -129,11 +136,12 @@ export function EditorPane(): JSX.Element {
       >
         <RecentPlansTabPane />
       </div>
-);
+    );
   }
 
   if (tab.kind === "plan-diff") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -142,11 +150,12 @@ export function EditorPane(): JSX.Element {
       >
         <PlanDiffPane tabId={tab.id} />
       </div>
-);
+    );
   }
 
   if (tab.kind === "health") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -155,11 +164,12 @@ export function EditorPane(): JSX.Element {
       >
         <HealthPane connId={tab.connectionId} />
       </div>
-);
+    );
   }
 
   if (tab.kind === "live-ops") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -168,11 +178,12 @@ export function EditorPane(): JSX.Element {
       >
         <LiveOpsPane connId={tab.connectionId} />
       </div>
-);
+    );
   }
 
   if (tab.kind === "erd") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -181,11 +192,12 @@ export function EditorPane(): JSX.Element {
       >
         <ErdPane connId={tab.connectionId} schemas={tab.schemas} tabId={tab.id} />
       </div>
-);
+    );
   }
 
   if (tab.kind === "migrations") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -194,11 +206,12 @@ export function EditorPane(): JSX.Element {
       >
         <MigrationsPanel connectionId={tab.connectionId} />
       </div>
-);
+    );
   }
 
   if (tab.kind === "object-editor") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -207,11 +220,12 @@ export function EditorPane(): JSX.Element {
       >
         <ObjectEditorTab tab={tab} />
       </div>
-);
+    );
   }
 
   if (tab.kind === "notebook") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -220,11 +234,12 @@ export function EditorPane(): JSX.Element {
       >
         <NotebookPane tab={tab} />
       </div>
-);
+    );
   }
 
   if (tab.kind === "backup") {
-    return (      <div
+    return (
+      <div
         id="editor-pane"
         role="tabpanel"
         aria-labelledby={`editor-tab-${tab.id}`}
@@ -233,10 +248,11 @@ export function EditorPane(): JSX.Element {
       >
         <BackupCenter tab={tab} />
       </div>
-);
+    );
   }
 
-  return (    <div
+  return (
+    <div
       id="editor-pane"
       role="tabpanel"
       aria-labelledby={`editor-tab-${tab.id}`}
@@ -283,5 +299,5 @@ export function EditorPane(): JSX.Element {
         </div>
       </div>
     </div>
-);
+  );
 }

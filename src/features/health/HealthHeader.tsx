@@ -21,7 +21,8 @@ function getConnectionName(connId: string, connections: { id: string; name: stri
   return connId.slice(0, 8);
 }
 
-function getEnvForConnection(  connId: string,
+function getEnvForConnection(
+  connId: string,
   connections: { id: string; environment: Environment }[],
 ): Environment {
   const found = connections.find((c) => c.id === connId);
@@ -125,7 +126,8 @@ export function HealthHeader({
           seconds: Math.round(refreshIntervalMs / 1000),
         });
 
-  return (    <div
+  return (
+    <div
       data-testid="health-header"
       style={{
         display: "flex",
@@ -148,18 +150,21 @@ export function HealthHeader({
       </div>
 
       <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
-        {counts.danger > 0 ? (          <span className="q-pill crit" data-testid="health-pill-critical">
+        {counts.danger > 0 ? (
+          <span className="q-pill crit" data-testid="health-pill-critical">
             {t("health.header.pill_critical", { count: counts.danger })}
           </span>
-) : null}
-        {counts.warn > 0 ? (          <span className="q-pill warn" data-testid="health-pill-warning">
+        ) : null}
+        {counts.warn > 0 ? (
+          <span className="q-pill warn" data-testid="health-pill-warning">
             {t("health.header.pill_warning", { count: counts.warn })}
           </span>
-) : null}
-        {counts.ok > 0 ? (          <span className="q-pill ok" data-testid="health-pill-ok">
+        ) : null}
+        {counts.ok > 0 ? (
+          <span className="q-pill ok" data-testid="health-pill-ok">
             {t("health.header.pill_ok", { count: counts.ok })}
           </span>
-) : null}
+        ) : null}
 
         <label
           htmlFor={`health-auto-refresh-${connId}`}
@@ -181,11 +186,12 @@ export function HealthHeader({
             const tooltip = capped
               ? t("health.refresh.cap_tooltip", { minMs: minMsForEnv(env), env })
               : undefined;
-            return (              <option key={value} value={value} disabled={capped} title={tooltip}>
+            return (
+              <option key={value} value={value} disabled={capped} title={tooltip}>
                 {t(opt.labelKey)}
                 {capped ? " ⚠" : ""}
               </option>
-);
+            );
           })}
         </select>
 
@@ -206,7 +212,7 @@ export function HealthHeader({
         </button>
       </div>
     </div>
-);
+  );
 }
 
 // Re-export for tests that want to assert tone classification independently.

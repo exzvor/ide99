@@ -13,7 +13,8 @@
 import { qualifiedName, quoteIdent } from "./helpers";
 import type { DdlError, DdlResult, DdlWarning, FunctionForm, FunctionParameter } from "./types";
 
-export function generateFunctionDdl(  initial: FunctionForm | null,
+export function generateFunctionDdl(
+  initial: FunctionForm | null,
   current: FunctionForm,
 ): DdlResult {
   const errors = validate(current);
@@ -64,9 +65,10 @@ function validate(form: FunctionForm): DdlError[] {
   if (!form.body.trim()) {
     errors.push({ code: "body_required", message: "Function body is required" });
   }
-  if (    (form.returnKind === "scalar" || form.returnKind === "setof") &&
+  if (
+    (form.returnKind === "scalar" || form.returnKind === "setof") &&
     (!form.returnType || !form.returnType.trim())
-) {
+  ) {
     errors.push({
       code: "return_type_required",
       message: "Return type is required for scalar/setof functions",

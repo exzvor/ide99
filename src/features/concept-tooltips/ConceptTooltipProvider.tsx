@@ -15,8 +15,9 @@ interface ConceptTooltipProviderProps {
 }
 
 export function ConceptTooltipProvider({ children }: ConceptTooltipProviderProps): JSX.Element {
-  return (    <Tooltip.Provider delayDuration={300} skipDelayDuration={150}>
+  return (
+    <Tooltip.Provider delayDuration={300} skipDelayDuration={150}>
       {children}
     </Tooltip.Provider>
-);
+  );
 }

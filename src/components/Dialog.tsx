@@ -42,7 +42,8 @@ export function Dialog({
   size = "md",
 }: DialogProps) {
   const sizeClass = size === "md" ? "" : size;
-  return (    <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
+  return (
+    <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
       <RadixDialog.Portal>
         <RadixDialog.Overlay className="q-backdrop" data-testid="dialog-overlay" />
         <RadixDialog.Content
@@ -60,7 +61,8 @@ export function Dialog({
           <div className="q-modal-header">
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               <RadixDialog.Title className="q-modal-title">{title}</RadixDialog.Title>
-              {description ? (                <RadixDialog.Description
+              {description ? (
+                <RadixDialog.Description
                   style={{
                     fontSize: 12.5,
                     color: "var(--ink-3)",
@@ -69,16 +71,17 @@ export function Dialog({
                 >
                   {description}
                 </RadixDialog.Description>
-) : null}
+              ) : null}
             </div>
-            {closeAriaLabel ? (              <RadixDialog.Close
+            {closeAriaLabel ? (
+              <RadixDialog.Close
                 aria-label={closeAriaLabel}
                 className="btn-icon"
                 style={{ width: 28, height: 28 }}
               >
                 <X size={14} aria-hidden="true" />
               </RadixDialog.Close>
-) : null}
+            ) : null}
           </div>
           <div className="q-modal-body" style={{ color: "var(--ink-2)" }}>
             {children}
@@ -87,7 +90,7 @@ export function Dialog({
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
-);
+  );
 }
 
 export const DialogClose = RadixDialog.Close;

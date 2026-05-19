@@ -40,25 +40,27 @@ describe("CONCEPTS knowledge base", () => {
     expect(CONCEPTS_BY_ID.has(id)).toBe(true);
   });
 
-  it.each(CONCEPTS)(    "entry %# uses a slug-like id (lowercase + underscores)",
+  it.each(CONCEPTS)(
+    "entry %# uses a slug-like id (lowercase + underscores)",
     (entry: ConceptEntry) => {
       expect(entry.id).toMatch(SLUG_RE);
     },
-);
+  );
 
   it.each(CONCEPTS)("entry %# has non-empty EN + RU explanation", (entry: ConceptEntry) => {
     expect(entry.explanation.en.trim().length).toBeGreaterThan(0);
     expect(entry.explanation.ru.trim().length).toBeGreaterThan(0);
   });
 
-  it.each(CONCEPTS)(    "entry %# either omits `example` or supplies non-empty EN + RU",
+  it.each(CONCEPTS)(
+    "entry %# either omits `example` or supplies non-empty EN + RU",
     (entry: ConceptEntry) => {
       if (entry.example !== undefined) {
         expect(entry.example.en.trim().length).toBeGreaterThan(0);
         expect(entry.example.ru.trim().length).toBeGreaterThan(0);
       }
     },
-);
+  );
 
   it.each(CONCEPTS)("entry %# has at least one matcher regex", (entry: ConceptEntry) => {
     expect(entry.matchers.length).toBeGreaterThan(0);

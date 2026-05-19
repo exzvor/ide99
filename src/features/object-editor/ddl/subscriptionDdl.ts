@@ -14,7 +14,8 @@ import type { DdlResult, DdlWarning, SubscriptionForm } from "./types";
 const PASSWORD_NOTICE =
   "-- ⚠ Connection string contains the password in plain text. Do not commit this DDL preview to version control.\n";
 
-export function generateSubscriptionDdl(  initial: SubscriptionForm | null,
+export function generateSubscriptionDdl(
+  initial: SubscriptionForm | null,
   current: SubscriptionForm,
 ): DdlResult {
   if (!initial) return createDdl(current);
@@ -73,8 +74,9 @@ function alterDdl(initial: SubscriptionForm, current: SubscriptionForm): DdlResu
     stmts.push(`ALTER SUBSCRIPTION ${name} DROP PUBLICATION ${toDrop.map(quoteIdent).join(", ")};`);
   }
   if (initial.synchronousCommit !== current.synchronousCommit && current.synchronousCommit) {
-    stmts.push(      `ALTER SUBSCRIPTION ${name} SET (synchronous_commit = ${quoteString(current.synchronousCommit)});`,
-);
+    stmts.push(
+      `ALTER SUBSCRIPTION ${name} SET (synchronous_commit = ${quoteString(current.synchronousCommit)});`,
+    );
   }
   if (initial.slotName !== current.slotName) {
     warnings.push({

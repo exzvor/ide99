@@ -14,7 +14,8 @@ describe("ActiveConnectionsCard", () => {
   });
 
   it("ready: ok when ratio < 50%, chips per state", () => {
-    render(      <ActiveConnectionsCard
+    render(
+      <ActiveConnectionsCard
         connId="c1"
         state={{
           status: "ready",
@@ -24,15 +25,17 @@ describe("ActiveConnectionsCard", () => {
           },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("active-conn-current").textContent).toMatch(/10 \/ 100/);
     expect(screen.getAllByTestId("active-conn-state-chip")).toHaveLength(2);
-    expect(      screen.getByTestId("health-card-active_connections-status").getAttribute("data-tone"),
-).toBe("ok");
+    expect(
+      screen.getByTestId("health-card-active_connections-status").getAttribute("data-tone"),
+    ).toBe("ok");
   });
 
   it("ready: danger when ratio >= 80%", () => {
-    render(      <ActiveConnectionsCard
+    render(
+      <ActiveConnectionsCard
         connId="c1"
         state={{
           status: "ready",
@@ -42,8 +45,9 @@ describe("ActiveConnectionsCard", () => {
           },
         }}
       />,
-);
-    expect(      screen.getByTestId("health-card-active_connections-status").getAttribute("data-tone"),
-).toBe("danger");
+    );
+    expect(
+      screen.getByTestId("health-card-active_connections-status").getAttribute("data-tone"),
+    ).toBe("danger");
   });
 });

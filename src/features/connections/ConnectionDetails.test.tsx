@@ -7,9 +7,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, opts?: Record<string, unknown>) => {
       if (opts && typeof opts === "object") {
-        return Object.entries(opts).reduce<string>(          (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
+        return Object.entries(opts).reduce<string>(
+          (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
           key,
-);
+        );
       }
       return key;
     },
@@ -34,10 +35,11 @@ vi.mock("../../lib/tauri", async () => {
 });
 
 vi.mock("./TestButton", () => ({
-  TestButton: ({ connectionId, variant }: { connectionId?: string; variant?: string }) => (    <button type="button" data-testid="test-button" data-conn={connectionId} data-variant={variant}>
+  TestButton: ({ connectionId, variant }: { connectionId?: string; variant?: string }) => (
+    <button type="button" data-testid="test-button" data-conn={connectionId} data-variant={variant}>
       test-button
     </button>
-),
+  ),
 }));
 
 import { useSchema } from "../schema/store";
@@ -77,7 +79,8 @@ beforeEach(() => {
   deleteConnectionMock.mockReset();
   schemaConnectMock.mockReset();
   schemaDisconnectMock.mockReset();
-  useConnections.setState(    {
+  useConnections.setState(
+    {
       ...initialState,
       connections: [],
       selectedId: null,
@@ -86,8 +89,9 @@ beforeEach(() => {
       error: null,
     },
     true,
-);
-  useSchema.setState(    {
+  );
+  useSchema.setState(
+    {
       ...initialSchemaState,
       connection: { status: "idle" },
       cache: new Map(),
@@ -97,7 +101,7 @@ beforeEach(() => {
       disconnect: schemaDisconnectMock,
     },
     true,
-);
+  );
 });
 
 import { ConnectionDetails } from "./ConnectionDetails";
@@ -235,10 +239,12 @@ describe("ConnectionDetails", () => {
     });
     render(<ConnectionDetails />);
 
-    expect(      screen.getByRole("button", { name: "connection.action.disconnect" }),
-).toBeInTheDocument();
-    expect(      screen.queryByRole("button", { name: "connection.action.connect" }),
-).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "connection.action.disconnect" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "connection.action.connect" }),
+    ).not.toBeInTheDocument();
   });
 
   test("Connecting label is visible while in-flight for this connection", () => {

@@ -31,8 +31,10 @@ export function ReplicationLagCard({ connId, state }: CardProps): JSX.Element {
   if (data.state === "streaming") {
     const maxBytes = data.slots.reduce((acc, s) => Math.max(acc, s.lagBytes ?? 0), 0);
     const tone = lagTone(maxBytes);
-    const body = (      <ul style={{ margin: 0, padding: 0, listStyle: "none", fontSize: 12 }}>
-        {data.slots.map((s) => (          <li
+    const body = (
+      <ul style={{ margin: 0, padding: 0, listStyle: "none", fontSize: 12 }}>
+        {data.slots.map((s) => (
+          <li
             key={s.slot}
             data-testid="replication-slot-row"
             style={{ fontFamily: "var(--font-mono)" }}
@@ -43,23 +45,25 @@ export function ReplicationLagCard({ connId, state }: CardProps): JSX.Element {
               lag_seconds: s.lagSeconds !== null ? s.lagSeconds.toFixed(1) : "—",
             })}
           </li>
-))}
+        ))}
       </ul>
-);
-    return (      <CardShell
+    );
+    return (
+      <CardShell
         cardId="replication_lag"
         connId={connId}
         state={state}
         body={body}
         status={{ tone, tooltip: t(`health.status.${tone}`) }}
       />
-);
+    );
   }
 
   // lagging branch
   if (data.state === "lagging") {
     const maxBytes = data.slots.reduce((acc, s) => Math.max(acc, s.lagBytes ?? 0), 0);
-    const body = (      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+    const body = (
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         <span
           data-testid="replication-lag-badge"
           style={{
@@ -75,7 +79,8 @@ export function ReplicationLagCard({ connId, state }: CardProps): JSX.Element {
           {prettyBytes(maxBytes)}
         </span>
         <ul style={{ margin: 0, padding: 0, listStyle: "none", fontSize: 12 }}>
-          {data.slots.map((s) => (            <li
+          {data.slots.map((s) => (
+            <li
               key={s.slot}
               data-testid="replication-slot-row"
               style={{ fontFamily: "var(--font-mono)" }}
@@ -86,25 +91,27 @@ export function ReplicationLagCard({ connId, state }: CardProps): JSX.Element {
                 lag_seconds: s.lagSeconds !== null ? s.lagSeconds.toFixed(1) : "—",
               })}
             </li>
-))}
+          ))}
         </ul>
       </div>
-);
-    return (      <CardShell
+    );
+    return (
+      <CardShell
         cardId="replication_lag"
         connId={connId}
         state={state}
         body={body}
         status={{ tone: "danger", tooltip: t("health.status.danger") }}
       />
-);
+    );
   }
 
   // no_replicas — store should have already translated to empty, but defend.
-  return (    <CardShell
+  return (
+    <CardShell
       cardId="replication_lag"
       connId={connId}
       state={{ status: "empty", reason: "no_replicas" }}
     />
-);
+  );
 }

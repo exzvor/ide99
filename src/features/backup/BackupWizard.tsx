@@ -130,12 +130,14 @@ export function BackupWizard({ connectionId }: { connectionId: string }): JSX.El
   const isRunning = job?.status === "running";
   const canRun = !isRunning && opts.outputPath.trim().length > 0;
 
-  return (    <form
+  return (
+    <form
       data-testid="backup-wizard"
       onSubmit={(e) => e.preventDefault()}
       style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 720 }}
     >
-      {connection ? (        <header
+      {connection ? (
+        <header
           style={{
             padding: 8,
             border: "1px solid var(--hairline)",
@@ -149,7 +151,7 @@ export function BackupWizard({ connectionId }: { connectionId: string }): JSX.El
             {connection.host}:{connection.port} / {connection.database}
           </div>
         </header>
-) : null}
+      ) : null}
 
       <BackupOptionsForm value={opts} onChange={setOpts} hideConnection idPrefix="bk" />
 
@@ -163,11 +165,13 @@ export function BackupWizard({ connectionId }: { connectionId: string }): JSX.El
         }}
       >
         <h3 style={{ margin: 0, fontSize: 12, fontWeight: 600 }}>{t("backup.preview.title")}</h3>
-        {previewError ? (          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12, marginTop: 6 }}>
+        {previewError ? (
+          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12, marginTop: 6 }}>
             {previewError}
           </div>
-) : null}
-        {previewArgs ? (          <code
+        ) : null}
+        {previewArgs ? (
+          <code
             style={{
               display: "block",
               marginTop: 6,
@@ -181,10 +185,11 @@ export function BackupWizard({ connectionId }: { connectionId: string }): JSX.El
           >
             pg_dump {previewArgs.join(" ")}
           </code>
-) : (          <div style={{ marginTop: 6, fontSize: 12, color: "var(--ink-3)" }}>
+        ) : (
+          <div style={{ marginTop: 6, fontSize: 12, color: "var(--ink-3)" }}>
             {t("backup.preview.hint")}
           </div>
-)}
+        )}
       </section>
 
       <ProgressCard job={job} onCancel={onCancel} />
@@ -201,5 +206,5 @@ export function BackupWizard({ connectionId }: { connectionId: string }): JSX.El
         </button>
       </div>
     </form>
-);
+  );
 }

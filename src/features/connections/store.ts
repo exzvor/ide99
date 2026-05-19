@@ -92,7 +92,7 @@ export const useConnections = create<ConnectionsState>((set) => ({
     set((s) => ({
       connections: s.connections.map((c) =>
         c.id === id ? { ...c, excludeFromHistory: exclude } : c,
-),
+      ),
     }));
   },
 }));

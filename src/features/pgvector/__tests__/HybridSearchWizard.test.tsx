@@ -22,14 +22,15 @@ vi.mock("../VectorValueInput", () => {
       onChange,
     }: {
       onChange: (v: { mode: "literal"; literal: string }) => void;
-    }) => (      <button
+    }) => (
+      <button
         type="button"
         data-testid="mock-set-literal"
         onClick={() => onChange({ mode: "literal", literal: "[0.1,0.2]" })}
       >
         set literal
       </button>
-),
+    ),
   };
 });
 
@@ -40,7 +41,8 @@ describe("HybridSearchWizard", () => {
     const onClose = vi.fn();
     openEditorTab.mockClear();
 
-    render(      <HybridSearchWizard
+    render(
+      <HybridSearchWizard
         open={true}
         connId="conn-1"
         qualifiedTable="public.items"
@@ -49,7 +51,7 @@ describe("HybridSearchWizard", () => {
         textColumns={["title_ts"]}
         onClose={onClose}
       />,
-);
+    );
 
     // Trigger the literal-mode pivot via the mocked VectorValueInput.
     await userEvent.click(screen.getByTestId("mock-set-literal"));
@@ -81,7 +83,8 @@ describe("HybridSearchWizard", () => {
 
   it("returns null when closed", () => {
     const onClose = vi.fn();
-    render(      <HybridSearchWizard
+    render(
+      <HybridSearchWizard
         open={false}
         connId="conn-1"
         qualifiedTable="public.items"
@@ -90,7 +93,7 @@ describe("HybridSearchWizard", () => {
         textColumns={["title_ts"]}
         onClose={onClose}
       />,
-);
+    );
     expect(screen.queryByTestId("hybrid-search-wizard")).not.toBeInTheDocument();
   });
 });

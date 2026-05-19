@@ -8,7 +8,8 @@ import { useTranslation } from "react-i18next";
  */
 export function ExplainEmpty(): JSX.Element {
   const { t } = useTranslation();
-  return (    <div
+  return (
+    <div
       className="q-empty"
       data-testid="explain-empty"
       style={{
@@ -21,5 +22,5 @@ export function ExplainEmpty(): JSX.Element {
     >
       <span style={{ opacity: 0.65 }}>{t("editor.explain.empty")}</span>
     </div>
-);
+  );
 }

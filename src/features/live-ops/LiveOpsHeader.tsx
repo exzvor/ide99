@@ -26,8 +26,9 @@ function envCapMs(env: string): number {
 export function LiveOpsHeader({ connId }: Props): JSX.Element | null {
   const { t } = useTranslation();
   const slice = useLiveOps((s) => s.byConn.get(connId));
-  const env = useConnections(    (s) => s.connections.find((c) => c.id === connId)?.environment ?? "local",
-);
+  const env = useConnections(
+    (s) => s.connections.find((c) => c.id === connId)?.environment ?? "local",
+  );
 
   // Cosmetic relative-time refresh
   const [, setTick] = useState(0);
@@ -42,7 +43,7 @@ export function LiveOpsHeader({ connId }: Props): JSX.Element | null {
   const interval = subSlice.intervalMs;
   const cap = envCapMs(env);
   const lastFetched = subSlice.data.status === "ready" ? subSlice.data.fetchedAt : null;
-  // €” was hardcoded "Ns ago" string, leaking English into RU UI.
+  // was hardcoded "Ns ago" string, leaking English into RU UI.
   // The same i18n pattern as health.header.last_refreshed.
   const relative = lastFetched
     ? t("live_ops.header.x_ago", {
@@ -50,9 +51,11 @@ export function LiveOpsHeader({ connId }: Props): JSX.Element | null {
       })
     : "â€”";
 
-  return (    <div className="live-ops-header" data-testid="live-ops-header">
+  return (
+    <div className="live-ops-header" data-testid="live-ops-header">
       <div className="live-ops-tab-group">
-        {SUB_TABS.map((s) => (          <button
+        {SUB_TABS.map((s) => (
+          <button
             key={s}
             type="button"
             className="btn-tab"
@@ -62,7 +65,7 @@ export function LiveOpsHeader({ connId }: Props): JSX.Element | null {
           >
             {t(`live_ops.subtab.${s}`)}
           </button>
-))}
+        ))}
       </div>
       <select
         className="q-input"
@@ -77,7 +80,8 @@ export function LiveOpsHeader({ connId }: Props): JSX.Element | null {
       >
         {INTERVAL_OPTIONS.map((o) => {
           const disabled = o.ms !== null && o.ms < cap;
-          return (            <option
+          return (
+            <option
               key={o.value === null ? "off" : o.value}
               value={o.value === null ? "off" : String(o.value)}
               disabled={disabled}
@@ -89,7 +93,7 @@ export function LiveOpsHeader({ connId }: Props): JSX.Element | null {
             >
               {t(o.labelKey)}
             </option>
-);
+          );
         })}
       </select>
       <button
@@ -103,5 +107,5 @@ export function LiveOpsHeader({ connId }: Props): JSX.Element | null {
       </button>
       <span className="last-refresh">{t("live_ops.header.last_refresh", { relative })}</span>
     </div>
-);
+  );
 }

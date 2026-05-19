@@ -92,9 +92,10 @@ describe("TourHost", () => {
     for (let i = 0; i < TOUR_STEPS.length - 1; i++) {
       fireEvent.click(screen.getByTestId("tour-bubble-next"));
     }
-    expect(screen.getByTestId("tour-host")).toHaveAttribute(      "data-tour-step",
+    expect(screen.getByTestId("tour-host")).toHaveAttribute(
+      "data-tour-step",
       TOUR_STEPS[TOUR_STEPS.length - 1].id,
-);
+    );
     fireEvent.click(screen.getByTestId("tour-bubble-finish"));
     expect(screen.queryByTestId("tour-host")).toBeNull();
     expect(useUiMode.getState().tourCompleted).toBe(true);

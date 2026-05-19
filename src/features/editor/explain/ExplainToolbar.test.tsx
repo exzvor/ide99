@@ -60,7 +60,7 @@ describe("ExplainToolbar", () => {
             x.id === tabId && x.kind === "explain"
               ? { ...x, options: { ...x.options, [key]: !x.options[key] } }
               : x,
-),
+          ),
         }));
       });
 

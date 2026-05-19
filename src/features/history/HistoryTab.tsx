@@ -190,7 +190,8 @@ export function HistoryTab(): JSX.Element {
 
   const showLoadMore = rows.length < totalMatched;
 
-  return (    <div
+  return (
+    <div
       data-testid="history-tab"
       style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0 }}
     >
@@ -276,7 +277,8 @@ export function HistoryTab(): JSX.Element {
           background: "var(--bg-elev)",
         }}
       >
-        {error ? (          <div
+        {error ? (
+          <div
             role="alert"
             data-testid="history-error"
             style={{
@@ -302,9 +304,10 @@ export function HistoryTab(): JSX.Element {
               {t("history.error.retry")}
             </button>
           </div>
-) : null}
+        ) : null}
 
-        {!loading && rows.length === 0 && !error ? (          <div
+        {!loading && rows.length === 0 && !error ? (
+          <div
             data-testid="history-empty"
             style={{
               display: "flex",
@@ -324,16 +327,18 @@ export function HistoryTab(): JSX.Element {
               {t("history.empty.body")}
             </p>
           </div>
-) : null}
+        ) : null}
 
-        {rows.length > 0 ? (          <div
+        {rows.length > 0 ? (
+          <div
             style={{ height: virtualizer.getTotalSize(), position: "relative" }}
             data-testid="history-list"
           >
             {virtualizer.getVirtualItems().map((vi) => {
               const row = rows[vi.index];
               if (!row) return null;
-              return (                <HistoryRow
+              return (
+                <HistoryRow
                   key={row.id}
                   row={row}
                   style={{
@@ -345,10 +350,10 @@ export function HistoryTab(): JSX.Element {
                     transform: `translateY(${vi.start}px)`,
                   }}
                 />
-);
+              );
             })}
           </div>
-) : null}
+        ) : null}
       </main>
 
       <footer
@@ -367,7 +372,8 @@ export function HistoryTab(): JSX.Element {
         <span data-testid="history-pagination-summary">
           {t("history.pagination.showing", { shown: rows.length, total: totalMatched })}
         </span>
-        {showLoadMore ? (          <button
+        {showLoadMore ? (
+          <button
             type="button"
             onClick={() => {
               void useHistory.getState().loadMore();
@@ -378,7 +384,7 @@ export function HistoryTab(): JSX.Element {
           >
             {t("history.pagination.load_more")}
           </button>
-) : null}
+        ) : null}
       </footer>
 
       <Dialog
@@ -411,5 +417,5 @@ export function HistoryTab(): JSX.Element {
         }
       />
     </div>
-);
+  );
 }

@@ -89,8 +89,9 @@ function makeResult(overrides?: Partial<SuggesterResult>): SuggesterResult {
 
 function renderModal(open = true) {
   const onClose = vi.fn();
-  const { container, unmount } = render(    <SuggesterModal open={open} connId="c1" fqn={BASE_FQN} onClose={onClose} />,
-);
+  const { container, unmount } = render(
+    <SuggesterModal open={open} connId="c1" fqn={BASE_FQN} onClose={onClose} />,
+  );
   return { container, unmount, onClose };
 }
 
@@ -110,8 +111,9 @@ describe("SuggesterModal", () => {
   });
 
   it("renders null when not open", () => {
-    const { container } = render(      <SuggesterModal open={false} connId="c1" fqn={BASE_FQN} onClose={vi.fn()} />,
-);
+    const { container } = render(
+      <SuggesterModal open={false} connId="c1" fqn={BASE_FQN} onClose={vi.fn()} />,
+    );
     expect(container.firstChild).toBeNull();
   });
 
@@ -127,9 +129,10 @@ describe("SuggesterModal", () => {
     renderModal();
     await waitFor(() =>
       expect(screen.getByTestId("suggester-recommended-sql")).toBeInTheDocument(),
-);
-    expect(screen.getByTestId("suggester-recommended-sql").textContent).toContain(      "idx_events_data_gin",
-);
+    );
+    expect(screen.getByTestId("suggester-recommended-sql").textContent).toContain(
+      "idx_events_data_gin",
+    );
   });
 
   it("shows error state and retry button on fetch failure", async () => {
@@ -148,7 +151,7 @@ describe("SuggesterModal", () => {
     fireEvent.click(screen.getByTestId("suggester-retry-btn"));
     await waitFor(() =>
       expect(screen.getByTestId("suggester-recommended-sql")).toBeInTheDocument(),
-);
+    );
     expect(mockJsonbSuggesterRun).toHaveBeenCalledTimes(2);
   });
 
@@ -172,14 +175,15 @@ describe("SuggesterModal", () => {
     });
 
     it("Q2: pg_stat_statements=✅ hypopg=✅ PG<16 — speedup shows pgTooOld", async () => {
-      mockJsonbSuggesterRun.mockResolvedValue(        makeResult({
+      mockJsonbSuggesterRun.mockResolvedValue(
+        makeResult({
           extensions: {
             pgStatStatements: { kind: "available" },
             hypopg: { kind: "available" },
             genericPlan: false,
           },
         }),
-);
+      );
       mockJsonbSuggesterHypotheticalExplain.mockResolvedValue({
         kind: "unavailable",
         reason: { kind: "pgVersionTooOld", actual: "15.2", required: "16" },
@@ -192,7 +196,8 @@ describe("SuggesterModal", () => {
     });
 
     it("Q3: pg_stat_statements=✅ hypopg=❌ — speedup shows hypopgMissing", async () => {
-      mockJsonbSuggesterRun.mockResolvedValue(        makeResult({
+      mockJsonbSuggesterRun.mockResolvedValue(
+        makeResult({
           extensions: {
             pgStatStatements: { kind: "available" },
             hypopg: {
@@ -202,7 +207,7 @@ describe("SuggesterModal", () => {
             genericPlan: true,
           },
         }),
-);
+      );
       mockJsonbSuggesterHypotheticalExplain.mockResolvedValue({
         kind: "unavailable",
         reason: { kind: "extensionMissing" },
@@ -216,7 +221,8 @@ describe("SuggesterModal", () => {
     });
 
     it("Q4: pg_stat_statements=❌ hypopg=✅ — generic rationale, speedup shows noRepresentativeQuery", async () => {
-      mockJsonbSuggesterRun.mockResolvedValue(        makeResult({
+      mockJsonbSuggesterRun.mockResolvedValue(
+        makeResult({
           extensions: {
             pgStatStatements: {
               kind: "unavailable",
@@ -239,7 +245,7 @@ describe("SuggesterModal", () => {
             },
           ],
         }),
-);
+      );
       mockJsonbSuggesterHypotheticalExplain.mockResolvedValue({
         kind: "unavailable",
         reason: { kind: "noRepresentativeQuery" },
@@ -258,7 +264,8 @@ describe("SuggesterModal", () => {
     });
 
     it("Q5: pg_stat_statements=❌ hypopg=❌ — generic rationale, no size, noRepresentativeQuery speedup", async () => {
-      mockJsonbSuggesterRun.mockResolvedValue(        makeResult({
+      mockJsonbSuggesterRun.mockResolvedValue(
+        makeResult({
           extensions: {
             pgStatStatements: {
               kind: "unavailable",
@@ -284,7 +291,7 @@ describe("SuggesterModal", () => {
             },
           ],
         }),
-);
+      );
       mockJsonbSuggesterHypotheticalExplain.mockResolvedValue({
         kind: "unavailable",
         reason: { kind: "noRepresentativeQuery" },

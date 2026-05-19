@@ -2,6 +2,9 @@
 
 PostgreSQL IDE for developers. Cross-platform desktop application (macOS, Linux, Windows) with Russian and English UI, built on Tauri 2.0 + Rust core and a React/TypeScript frontend.
 
+**Website:** [ide99.ru](https://ide99.ru) (Russian) · [ide99.io](https://ide99.io) (English)
+**Docs:** [ide99.ru/docs](https://ide99.ru/docs/) · [ide99.io/docs](https://ide99.io/docs/)
+
 ## Features
 
 - **SQL editor** with PostgreSQL-aware autocomplete (CTEs, window functions, JSONB operators, `pg_catalog` awareness)
@@ -16,23 +19,30 @@ PostgreSQL IDE for developers. Cross-platform desktop application (macOS, Linux,
 - **Extension power-packs** — pgvector, PostGIS, TimescaleDB, pg_partman, pg_stat_statements, pg_repack
 - **Backup / Restore** workflows
 - **MCP server** — expose ide99 to AI agents (Claude Code, Cursor, Windsurf, Cline) for context-aware SQL assistance
-- **Easy mode** — guided UX with plain-English error explanations, safe-mode by default
+
+### Optional paid module
+
+- **Instant DB** (currently **free beta**) — on-demand throwaway PostgreSQL instances for SQL prototyping, migration dry-runs, and extension probes. Backend at [api.spg99.ru](https://api.spg99.ru). The IDE works fully without it.
 
 ## Install
 
 Prebuilt binaries are published on the [Releases](https://github.com/exzvor/ide99/releases) page for macOS, Linux and Windows.
 
-Note: current builds are unsigned. First-launch instructions:
+Current builds are unsigned. First-launch instructions:
 
-- **macOS**: open the `.pkg`, accept the one Gatekeeper warning. Subsequent launches are clean.
-- **Windows**: download the `.zip`, extract and run the executable. Browser may flag the download (no signing certificate yet).
-- **Linux**: `.AppImage` and `.deb` provided.
-
-Documentation: [ide99.ru/docs](https://ide99.ru/docs/) (Russian) · [ide99.io/docs](https://ide99.io/docs/) (English).
+- **macOS** — open the `.pkg`, accept the one Gatekeeper warning. Subsequent launches are clean.
+- **Windows** — download the `.zip`, extract, and run the executable. The browser may flag the download (no EV certificate yet).
+- **Linux** — `.AppImage` or `.deb` available.
 
 ## Build from source
 
-Prerequisites: Node.js 20+, Rust stable, platform Tauri dependencies ([Tauri prerequisites](https://tauri.app/start/prerequisites/)).
+### Prerequisites
+
+- **Node.js** 20 or newer
+- **Rust** stable (install via [rustup](https://rustup.rs/))
+- **Tauri prerequisites** for your OS — see [tauri.app/start/prerequisites](https://tauri.app/start/prerequisites/) (system libraries on Linux, Xcode CLT on macOS, MSVC build tools on Windows)
+
+### Clone and run in dev mode
 
 ```bash
 git clone https://github.com/exzvor/ide99.git
@@ -41,13 +51,25 @@ npm install
 npm run tauri dev
 ```
 
-Production build:
+The first build pulls Rust crates and takes a few minutes. Subsequent runs are incremental and start in seconds.
+
+### Production build
 
 ```bash
 npm run tauri build
 ```
 
-Output binaries land in `src-tauri/target/release/bundle/`.
+Output bundles land in `src-tauri/target/release/bundle/` — `.dmg` / `.pkg` on macOS, `.deb` / `.AppImage` on Linux, `.exe` / `.msi` on Windows.
+
+### Useful scripts
+
+```bash
+npm run typecheck            # tsc --noEmit
+npm run lint                 # biome check .
+npm run test                 # vitest unit tests
+cd src-tauri && cargo test   # Rust unit tests
+cd src-tauri && cargo clippy -- -D warnings
+```
 
 ## Connect an AI agent (MCP)
 
@@ -74,7 +96,7 @@ On first connect, each client passes an in-IDE authorize flow: pick a scope (`Al
 
 ## Security
 
-To report a security issue, please follow the process in [SECURITY.md](./SECURITY.md).
+To report a security issue, see [SECURITY.md](./SECURITY.md).
 
 ## Contributing
 

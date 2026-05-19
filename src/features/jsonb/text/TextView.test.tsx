@@ -10,14 +10,15 @@ interface MockEditorProps {
 }
 
 vi.mock("@monaco-editor/react", () => ({
-  Editor: ({ value, language, onChange, options }: MockEditorProps) => (    <textarea
+  Editor: ({ value, language, onChange, options }: MockEditorProps) => (
+    <textarea
       data-testid="mock-monaco"
       data-language={language}
       readOnly={options?.readOnly ?? false}
       value={value}
       onChange={(e) => onChange(e.target.value)}
     />
-),
+  ),
 }));
 
 import { TextView } from "./TextView";
@@ -41,13 +42,14 @@ describe("TextView", () => {
   });
 
   it("shows parse error banner with role=alert when parseError set", () => {
-    render(      <TextView
+    render(
+      <TextView
         value="not json"
         onChange={() => {}}
         readOnly={false}
         parseError="Unexpected token"
       />,
-);
+    );
     const alert = screen.getByRole("alert");
     expect(alert).toHaveTextContent(/Unexpected token/);
   });

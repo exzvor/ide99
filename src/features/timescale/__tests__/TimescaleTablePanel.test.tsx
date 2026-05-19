@@ -65,8 +65,9 @@ describe("TimescaleTablePanel", () => {
   });
 
   it("hypertable (not CA): Convert hidden, 3 buttons enabled, each opens its dialog", () => {
-    render(      <TimescaleTablePanel {...baseProps({ isHypertable: true, isContinuousAggregate: false })} />,
-);
+    render(
+      <TimescaleTablePanel {...baseProps({ isHypertable: true, isContinuousAggregate: false })} />,
+    );
 
     expect(screen.queryByTestId("ts-panel-convert")).toBeNull();
     expect(screen.queryByTestId("ts-panel-refresh")).toBeNull();
@@ -91,8 +92,9 @@ describe("TimescaleTablePanel", () => {
   });
 
   it("continuous aggregate: 4 buttons enabled, Refresh opens refresh dialog", () => {
-    render(      <TimescaleTablePanel {...baseProps({ isHypertable: true, isContinuousAggregate: true })} />,
-);
+    render(
+      <TimescaleTablePanel {...baseProps({ isHypertable: true, isContinuousAggregate: true })} />,
+    );
 
     expect(screen.queryByTestId("ts-panel-convert")).toBeNull();
 

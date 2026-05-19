@@ -15,7 +15,8 @@ export interface ConnInfoInputProps {
 
 export function ConnInfoInput({ value, onChange }: ConnInfoInputProps): JSX.Element {
   const { t } = useTranslation();
-  return (    <div data-testid="sub-conninfo-wrap" style={{ display: "grid", gap: 8 }}>
+  return (
+    <div data-testid="sub-conninfo-wrap" style={{ display: "grid", gap: 8 }}>
       <output
         data-testid="sub-conninfo-warning"
         style={{
@@ -44,5 +45,5 @@ export function ConnInfoInput({ value, onChange }: ConnInfoInputProps): JSX.Elem
         />
       </div>
     </div>
-);
+  );
 }

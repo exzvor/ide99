@@ -4,30 +4,33 @@ import { buildOpenMapViewSql } from "../mapViewSql";
 
 describe("buildOpenMapViewSql", () => {
   it("emits SELECT pk, geom FROM table LIMIT 5000 by default", () => {
-    expect(      buildOpenMapViewSql({
+    expect(
+      buildOpenMapViewSql({
         qualifiedTable: "public.items",
         pk: "id",
         geometryColumn: "geom",
       }),
-).toBe("SELECT id, geom FROM public.items LIMIT 5000");
+    ).toBe("SELECT id, geom FROM public.items LIMIT 5000");
   });
 
   it("omits the pk when null", () => {
-    expect(      buildOpenMapViewSql({
+    expect(
+      buildOpenMapViewSql({
         qualifiedTable: "public.items",
         pk: null,
         geometryColumn: "geom",
       }),
-).toBe("SELECT geom FROM public.items LIMIT 5000");
+    ).toBe("SELECT geom FROM public.items LIMIT 5000");
   });
 
   it("respects a custom limit", () => {
-    expect(      buildOpenMapViewSql({
+    expect(
+      buildOpenMapViewSql({
         qualifiedTable: "public.items",
         pk: "id",
         geometryColumn: "geom",
         limit: 100,
       }),
-).toBe("SELECT id, geom FROM public.items LIMIT 100");
+    ).toBe("SELECT id, geom FROM public.items LIMIT 100");
   });
 });

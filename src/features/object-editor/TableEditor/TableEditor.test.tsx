@@ -21,9 +21,10 @@ vi.mock("../../editor/store", async () => {
   const closeTab = vi.fn().mockResolvedValue(true);
   return {
     ...actual,
-    useEditor: Object.assign(      (selector: (s: { closeTab: typeof closeTab }) => unknown) => selector({ closeTab }),
+    useEditor: Object.assign(
+      (selector: (s: { closeTab: typeof closeTab }) => unknown) => selector({ closeTab }),
       { getState: () => ({ closeTab }) },
-),
+    ),
   };
 });
 
@@ -34,7 +35,8 @@ import { TableEditor } from "./index";
 
 const mockedGet = schemaGetTableDefinition as unknown as ReturnType<typeof vi.fn>;
 const mockedApply = schemaApplyDdl as unknown as ReturnType<typeof vi.fn>;
-const mockedCloseTab = (  useEditor as unknown as { getState: () => { closeTab: ReturnType<typeof vi.fn> } }
+const mockedCloseTab = (
+  useEditor as unknown as { getState: () => { closeTab: ReturnType<typeof vi.fn> } }
 ).getState().closeTab;
 
 function createTab(overrides: Partial<TabModel["target"]> = {}): TabModel {

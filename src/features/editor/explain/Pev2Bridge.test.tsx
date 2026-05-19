@@ -41,11 +41,12 @@ describe("Pev2Bridge", () => {
     }
 
     // Simulate the island sending its ready beacon.
-    window.dispatchEvent(      new MessageEvent("message", {
+    window.dispatchEvent(
+      new MessageEvent("message", {
         data: { type: "island-ready" },
         source: win,
       }),
-);
+    );
 
     await waitFor(() => {
       expect(post).toHaveBeenCalledTimes(1);
@@ -67,8 +68,9 @@ describe("Pev2Bridge", () => {
     if (win) {
       Object.defineProperty(win, "postMessage", { value: post, writable: true });
     }
-    window.dispatchEvent(      new MessageEvent("message", { data: { type: "island-ready" }, source: win }),
-);
+    window.dispatchEvent(
+      new MessageEvent("message", { data: { type: "island-ready" }, source: win }),
+    );
     await waitFor(() => {
       expect(post).toHaveBeenCalledTimes(1);
     });
@@ -92,27 +94,30 @@ describe("Pev2Bridge", () => {
 
   // — highlightQuery prop forwarded into pev2's planQuery.
   it("forwards highlightQuery into the planQuery field of the render payload", async () => {
-    const { rerender } = render(      <Pev2Bridge plan={{ Plan: { "Node Type": "Seq Scan" } }} theme="light" />,
-);
+    const { rerender } = render(
+      <Pev2Bridge plan={{ Plan: { "Node Type": "Seq Scan" } }} theme="light" />,
+    );
     const frame = screen.getByTestId("pev2-host") as HTMLIFrameElement;
     const win = frame.contentWindow;
     const post = vi.fn();
     if (win) {
       Object.defineProperty(win, "postMessage", { value: post, writable: true });
     }
-    window.dispatchEvent(      new MessageEvent("message", { data: { type: "island-ready" }, source: win }),
-);
+    window.dispatchEvent(
+      new MessageEvent("message", { data: { type: "island-ready" }, source: win }),
+    );
     await waitFor(() => {
       expect(post).toHaveBeenCalledTimes(1);
     });
     expect(post.mock.calls[0][0]).toMatchObject({ planQuery: "" });
 
-    rerender(      <Pev2Bridge
+    rerender(
+      <Pev2Bridge
         plan={{ Plan: { "Node Type": "Seq Scan" } }}
         theme="light"
         highlightQuery="users"
       />,
-);
+    );
     await waitFor(() => {
       expect(post).toHaveBeenCalledTimes(2);
     });
@@ -131,11 +136,12 @@ describe("Pev2Bridge", () => {
       Object.defineProperty(win, "postMessage", { value: post, writable: true });
     }
     // Source is a different window (parent window stub) — must be ignored.
-    window.dispatchEvent(      new MessageEvent("message", {
+    window.dispatchEvent(
+      new MessageEvent("message", {
         data: { type: "island-ready" },
         source: window,
       }),
-);
+    );
     // Give the effect a tick.
     await new Promise((r) => setTimeout(r, 20));
     expect(post).not.toHaveBeenCalled();

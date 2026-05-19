@@ -13,8 +13,9 @@ interface Props {
 }
 
 export function LiveOpsPane({ connId }: Props): JSX.Element {
-  const env = useConnections(    (s) => s.connections.find((c) => c.id === connId)?.environment ?? "local",
-);
+  const env = useConnections(
+    (s) => s.connections.find((c) => c.id === connId)?.environment ?? "local",
+  );
   const slice = useLiveOps((s) => s.byConn.get(connId));
 
   // Mount: ensure prefs + start polling
@@ -55,11 +56,12 @@ export function LiveOpsPane({ connId }: Props): JSX.Element {
     return () => window.removeEventListener("keydown", onKey);
   }, [connId]);
 
-  return (    <div className="live-ops-pane" data-testid="live-ops-pane">
+  return (
+    <div className="live-ops-pane" data-testid="live-ops-pane">
       <LiveOpsHeader connId={connId} />
       {slice?.activeSubTab === "sessions" && <SessionsPane connId={connId} />}
       {slice?.activeSubTab === "slow" && <SlowQueriesPane connId={connId} />}
       {slice?.activeSubTab === "replication" && <ReplicationPane connId={connId} />}
     </div>
-);
+  );
 }

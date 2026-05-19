@@ -20,7 +20,8 @@ describe("generateFdwServerDdl", () => {
   });
 
   it("create with type, version, options, and mapping emits full DDL", () => {
-    const r = generateFdwServerDdl(      null,
+    const r = generateFdwServerDdl(
+      null,
       baseForm({
         serverType: "postgresql",
         version: "17",
@@ -32,7 +33,7 @@ describe("generateFdwServerDdl", () => {
           { id: "u1", roleName: "PUBLIC", options: [{ id: "o", key: "user", value: "u" }] },
         ],
       }),
-);
+    );
     expect(r.sql).toContain("TYPE 'postgresql'");
     expect(r.sql).toContain("VERSION '17'");
     expect(r.sql).toContain("OPTIONS (host 'h', port '5432')");
@@ -114,8 +115,9 @@ describe("generateFdwServerDdl", () => {
       ],
     });
     const r = generateFdwServerDdl(init, cur);
-    expect(r.sql).toContain(      "ALTER USER MAPPING FOR alice SERVER srv1 OPTIONS (SET \"user\" 'new')",
-);
+    expect(r.sql).toContain(
+      "ALTER USER MAPPING FOR alice SERVER srv1 OPTIONS (SET \"user\" 'new')",
+    );
   });
 
   it("fdw_name change emits DROP+CREATE warning", () => {
@@ -142,12 +144,14 @@ describe("generateFdwServerDdl", () => {
   });
 
   it("create with options only (no type/version) renders OPTIONS clause", () => {
-    const r = generateFdwServerDdl(      null,
+    const r = generateFdwServerDdl(
+      null,
       baseForm({
         options: [{ id: "1", key: "dbname", value: "mydb" }],
       }),
-);
-    expect(r.sql).toBe(      "CREATE SERVER srv1 FOREIGN DATA WRAPPER postgres_fdw OPTIONS (dbname 'mydb');",
-);
+    );
+    expect(r.sql).toBe(
+      "CREATE SERVER srv1 FOREIGN DATA WRAPPER postgres_fdw OPTIONS (dbname 'mydb');",
+    );
   });
 });

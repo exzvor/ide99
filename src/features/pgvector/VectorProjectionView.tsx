@@ -23,7 +23,8 @@ const CANVAS_W = 800;
 const CANVAS_H = 600;
 const PADDING = 20;
 
-function buildSampleSql(  qualifiedTable: string,
+function buildSampleSql(
+  qualifiedTable: string,
   pk: string,
   vectorColumn: string,
   rowCount: number,
@@ -111,11 +112,12 @@ export function VectorProjectionView(props: VectorProjectionViewProps): JSX.Elem
   // Sample + initial PCA on mount / when inputs change.
   useEffect(() => {
     let cancelled = false;
-    const { sql, usedTablesample: tbs } = buildSampleSql(      qualifiedTable,
+    const { sql, usedTablesample: tbs } = buildSampleSql(
+      qualifiedTable,
       pk,
       vectorColumn,
       rowCount,
-);
+    );
     setUsedTablesample(tbs);
     setFetchError(null);
 
@@ -189,8 +191,10 @@ export function VectorProjectionView(props: VectorProjectionViewProps): JSX.Elem
     worker.postMessage({ type: "project", vectors });
   };
 
-  return (    <div data-testid="vector-projection-view" style={{ padding: 12 }}>
-      {usedTablesample && (        <div
+  return (
+    <div data-testid="vector-projection-view" style={{ padding: 12 }}>
+      {usedTablesample && (
+        <div
           data-testid="vector-projection-banner"
           style={{
             background: "var(--warn-bg, #ffeec2)",
@@ -201,14 +205,15 @@ export function VectorProjectionView(props: VectorProjectionViewProps): JSX.Elem
         >
           Using TABLESAMPLE for large table
         </div>
-)}
-      {fetchError && (        <div
+      )}
+      {fetchError && (
+        <div
           data-testid="vector-projection-fetch-error"
           style={{ color: "var(--danger)", padding: 8, fontSize: 12.5 }}
         >
           {fetchError}
         </div>
-)}
+      )}
       <div style={{ position: "relative", width: CANVAS_W, height: CANVAS_H }}>
         <canvas
           ref={canvasRef}
@@ -217,7 +222,8 @@ export function VectorProjectionView(props: VectorProjectionViewProps): JSX.Elem
           height={CANVAS_H}
           style={{ background: "var(--ink-7, #fafafa)", display: "block" }}
         />
-        {refining && (          <div
+        {refining && (
+          <div
             data-testid="vector-projection-loading"
             style={{
               position: "absolute",
@@ -231,15 +237,16 @@ export function VectorProjectionView(props: VectorProjectionViewProps): JSX.Elem
           >
             Running UMAP…
           </div>
-)}
+        )}
       </div>
-      {refineError && (        <div
+      {refineError && (
+        <div
           data-testid="vector-projection-error"
           style={{ color: "var(--danger)", padding: 8, fontSize: 12.5 }}
         >
           {refineError}
         </div>
-)}
+      )}
       <div style={{ marginTop: 12, display: "flex", gap: 8, justifyContent: "flex-end" }}>
         <button
           type="button"
@@ -255,5 +262,5 @@ export function VectorProjectionView(props: VectorProjectionViewProps): JSX.Elem
         </button>
       </div>
     </div>
-);
+  );
 }

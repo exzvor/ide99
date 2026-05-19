@@ -26,12 +26,14 @@ export function RecentPlansTab(): JSX.Element {
     return selected.map((id) => rows.find((r) => r.id === id) ?? null);
   }, [rows, selected]);
 
-  return (    <div
+  return (
+    <div
       style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}
       data-testid="recent-plans-tab"
     >
       <RecentPlansFilters />
-      {compareMode ? (        <div
+      {compareMode ? (
+        <div
           data-testid="recent-plans-compare-bar"
           style={{
             display: "flex",
@@ -45,20 +47,22 @@ export function RecentPlansTab(): JSX.Element {
           <div style={{ fontSize: 11 }}>
             {t("recent_plans.compare.selected_count", { count: selected.length })}
           </div>
-          {previews[0] ? (            <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", opacity: 0.85 }}>
+          {previews[0] ? (
+            <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", opacity: 0.85 }}>
               {t("recent_plans.compare.row_label_a")}{" "}
               {previews[0].sql.length > SQL_PREVIEW_MAX
                 ? `${previews[0].sql.slice(0, SQL_PREVIEW_MAX)}…`
                 : previews[0].sql}
             </div>
-) : null}
-          {previews[1] ? (            <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", opacity: 0.85 }}>
+          ) : null}
+          {previews[1] ? (
+            <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", opacity: 0.85 }}>
               {t("recent_plans.compare.row_label_b")}{" "}
               {previews[1].sql.length > SQL_PREVIEW_MAX
                 ? `${previews[1].sql.slice(0, SQL_PREVIEW_MAX)}…`
                 : previews[1].sql}
             </div>
-) : null}
+          ) : null}
           <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
             <button
               type="button"
@@ -79,7 +83,7 @@ export function RecentPlansTab(): JSX.Element {
             </button>
           </div>
         </div>
-) : null}
+      ) : null}
       <div
         style={{ flex: 1, minHeight: 0, display: "flex", flexWrap: "wrap" }}
         data-testid="recent-plans-split"
@@ -96,7 +100,8 @@ export function RecentPlansTab(): JSX.Element {
         >
           <RecentPlansList />
         </div>
-        {!compareMode ? (          <div
+        {!compareMode ? (
+          <div
             style={{
               flex: "1 1 280px",
               minWidth: 0,
@@ -106,8 +111,8 @@ export function RecentPlansTab(): JSX.Element {
           >
             <RecentPlansPreview />
           </div>
-) : null}
+        ) : null}
       </div>
     </div>
-);
+  );
 }

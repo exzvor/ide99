@@ -70,30 +70,34 @@ export function WalThroughputCard({ connId, state }: CardProps): JSX.Element {
   const samples = recentSamplesByConn.get(connId) ?? [data.bytesPerSec];
   const tone = "ok" as const;
 
-  const body = (    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+  const body = (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <div style={{ fontSize: 22, fontWeight: 600 }} data-testid="wal-throughput-rate">
         {data.secondsSinceReset > 0
           ? formatRate(data.bytesPerSec)
           : t("health.card.wal_throughput.no_data")}
       </div>
-      {data.secondsSinceReset > 0 ? (        <div style={{ fontSize: 11.5, color: "var(--ink-4)" }}>
+      {data.secondsSinceReset > 0 ? (
+        <div style={{ fontSize: 11.5, color: "var(--ink-4)" }}>
           {t("health.card.wal_throughput.since_reset", {
             relative: formatRelativeSeconds(data.secondsSinceReset),
           })}{" "}
           · {prettyBytes(data.totalBytes)}
         </div>
-) : null}
-      {samples.length >= 2 ? (        <Sparkline data={samples} ariaLabel={t("health.card.wal_throughput.title")} />
-) : null}
+      ) : null}
+      {samples.length >= 2 ? (
+        <Sparkline data={samples} ariaLabel={t("health.card.wal_throughput.title")} />
+      ) : null}
     </div>
-);
+  );
 
-  return (    <CardShell
+  return (
+    <CardShell
       cardId="wal_throughput"
       connId={connId}
       state={state}
       body={body}
       status={{ tone, tooltip: t(`health.status.${tone}`) }}
     />
-);
+  );
 }

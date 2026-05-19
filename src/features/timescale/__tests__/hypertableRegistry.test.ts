@@ -49,7 +49,8 @@ afterEach(() => {
 
 describe("loadHypertables", () => {
   it("maps catalog rows into a HypertableMap and updates useTimescale", async () => {
-    queryExecuteMock.mockResolvedValueOnce(      fakeResult([
+    queryExecuteMock.mockResolvedValueOnce(
+      fakeResult([
         // Plain hypertable.
         ["public", "metrics", "f", null, null],
         // Continuous aggregate (materialization hypertable + CA public view).
@@ -57,7 +58,7 @@ describe("loadHypertables", () => {
         // Another regular hypertable.
         ["analytics", "events", "f", null, null],
       ]),
-);
+    );
 
     const map = await loadHypertables("conn-1");
 
@@ -119,11 +120,12 @@ describe("loadHypertables", () => {
 
 describe("isHypertable / isContinuousAggregate", () => {
   it("synchronously reads the useTimescale store and returns boolean flags", async () => {
-    queryExecuteMock.mockResolvedValueOnce(      fakeResult([
+    queryExecuteMock.mockResolvedValueOnce(
+      fakeResult([
         ["public", "metrics", "f", null, null],
         ["_timescaledb_internal", "_materialized_hypertable_1", "t", "public", "hourly"],
       ]),
-);
+    );
     await loadHypertables("conn-1");
 
     expect(isHypertable("conn-1", "public", "metrics")).toBe(true);

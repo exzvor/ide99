@@ -36,7 +36,8 @@ function PanelButton(props: {
   const variant = primary
     ? "border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-300"
     : "border-slate-300 bg-white text-slate-800 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed";
-  return (    <button
+  return (
+    <button
       type="button"
       data-testid={testId}
       className={`${base} ${variant}`}
@@ -47,7 +48,7 @@ function PanelButton(props: {
       {icon}
       <span>{label}</span>
     </button>
-);
+  );
 }
 
 export function TimescaleTablePanel(props: TimescaleTablePanelProps): JSX.Element | null {
@@ -57,7 +58,8 @@ export function TimescaleTablePanel(props: TimescaleTablePanelProps): JSX.Elemen
   const [dialog, setDialog] = useState<DialogKind | null>(null);
   const close = () => setDialog(null);
 
-  return (    <div
+  return (
+    <div
       data-testid="timescale-table-panel"
       className="ts-panel rounded-lg border border-slate-200 bg-slate-50/50 p-3 dark:border-slate-800 dark:bg-slate-900/40"
     >
@@ -66,14 +68,15 @@ export function TimescaleTablePanel(props: TimescaleTablePanelProps): JSX.Elemen
       </div>
 
       <div className="ts-panel-actions flex flex-wrap gap-2">
-        {!isHypertable && (          <PanelButton
+        {!isHypertable && (
+          <PanelButton
             testId="ts-panel-convert"
             label="Convert to Hypertable…"
             icon={<Wand2 className="h-4 w-4" aria-hidden="true" />}
             primary
             onClick={() => setDialog("convert")}
           />
-)}
+        )}
 
         <PanelButton
           testId="ts-panel-ca"
@@ -100,13 +103,14 @@ export function TimescaleTablePanel(props: TimescaleTablePanelProps): JSX.Elemen
           onClick={() => setDialog("retention")}
         />
 
-        {isHypertable && isContinuousAggregate && (          <PanelButton
+        {isHypertable && isContinuousAggregate && (
+          <PanelButton
             testId="ts-panel-refresh"
             label="Refresh Policy…"
             icon={<Clock className="h-4 w-4" aria-hidden="true" />}
             onClick={() => setDialog("refresh")}
           />
-)}
+        )}
       </div>
 
       <HypertableWizard
@@ -151,5 +155,5 @@ export function TimescaleTablePanel(props: TimescaleTablePanelProps): JSX.Elemen
         onClose={close}
       />
     </div>
-);
+  );
 }

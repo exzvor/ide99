@@ -23,7 +23,8 @@ export function ModulesSettingsPanel(): JSX.Element {
     return <div style={{ padding: 16, color: "var(--ink-3)" }}>{t("paid_modules.loading")}</div>;
   }
 
-  return (    <section
+  return (
+    <section
       data-testid="modules-settings-panel"
       style={{ display: "flex", flexDirection: "column", gap: 16, padding: 16, maxWidth: 640 }}
     >
@@ -67,10 +68,11 @@ export function ModulesSettingsPanel(): JSX.Element {
           rel="noreferrer noopener"
           data-testid="modules-spg99-manage"
         >
-          {t(            subscription.spg99Subscribed
+          {t(
+            subscription.spg99Subscribed
               ? "paid_modules.action.manage"
               : "paid_modules.action.upgrade",
-)}
+          )}
         </a>
       </article>
 
@@ -110,12 +112,13 @@ export function ModulesSettingsPanel(): JSX.Element {
           rel="noreferrer noopener"
           data-testid="modules-vibepg-manage"
         >
-          {t(            subscription.vibepgSubscribed
+          {t(
+            subscription.vibepgSubscribed
               ? "paid_modules.action.manage"
               : "paid_modules.action.upgrade",
-)}
+          )}
         </a>
       </article>
     </section>
-);
+  );
 }

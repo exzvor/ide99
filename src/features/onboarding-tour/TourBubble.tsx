@@ -86,7 +86,8 @@ export function TourBubble(props: TourBubbleProps): JSX.Element {
     skipRef.current?.focus();
   }, []);
 
-  return (    <div
+  return (
+    <div
       role="dialog"
       aria-modal="true"
       aria-labelledby={`tour-bubble-title-${props.step.id}`}
@@ -174,7 +175,8 @@ export function TourBubble(props: TourBubbleProps): JSX.Element {
         >
           {t("onboardingTour.previous")}
         </button>
-        {props.isLast ? (          <button
+        {props.isLast ? (
+          <button
             type="button"
             onClick={props.onFinish}
             className="btn btn-primary"
@@ -182,7 +184,8 @@ export function TourBubble(props: TourBubbleProps): JSX.Element {
           >
             {t("onboardingTour.finish")}
           </button>
-) : (          <button
+        ) : (
+          <button
             type="button"
             onClick={props.onNext}
             className="btn btn-primary"
@@ -190,8 +193,8 @@ export function TourBubble(props: TourBubbleProps): JSX.Element {
           >
             {t("onboardingTour.next")}
           </button>
-)}
+        )}
       </footer>
     </div>
-);
+  );
 }

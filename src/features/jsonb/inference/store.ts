@@ -32,7 +32,8 @@ export const useJsonbInference = create<State>((set, get) => ({
     if (get().initialized) return;
     // Mark initialized BEFORE awaiting so a concurrent caller observes the flag.
     set({ initialized: true });
-    const off = await subscribeJsonbInference(      ({ connId, fqn, schema }) => {
+    const off = await subscribeJsonbInference(
+      ({ connId, fqn, schema }) => {
         const key = fqnKey(connId, fqn);
         set((s) => ({ byKey: { ...s.byKey, [key]: { status: "ready", schema } } }));
         const cbs = get().pendingCallbacks[key] ?? [];
@@ -45,7 +46,7 @@ export const useJsonbInference = create<State>((set, get) => ({
         const key = fqnKey(connId, fqn);
         set((s) => ({ byKey: { ...s.byKey, [key]: { status: "error", message } } }));
       },
-);
+    );
     set({ unsubscribe: off });
   },
 
@@ -70,7 +71,8 @@ export const useJsonbInference = create<State>((set, get) => ({
       set((s) => ({ byKey: { ...s.byKey, [key]: { status: "pending" } } }));
     }
 
-    void jsonbInferenceRequest(connId, fqn).then(      (res) => {
+    void jsonbInferenceRequest(connId, fqn).then(
+      (res) => {
         if (res.status === "ready") {
           set((s) => ({ byKey: { ...s.byKey, [key]: { status: "ready", schema: res.schema } } }));
           const cbs = get().pendingCallbacks[key] ?? [];
@@ -87,7 +89,7 @@ export const useJsonbInference = create<State>((set, get) => ({
         const message = e instanceof Error ? e.message : String(e);
         set((s) => ({ byKey: { ...s.byKey, [key]: { status: "error", message } } }));
       },
-);
+    );
   },
 
   async invalidate(connId, fqn) {

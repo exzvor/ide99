@@ -32,7 +32,8 @@ function Kv({ label, children, mono = true, tone }: KvProps): JSX.Element {
         : tone === "ok"
           ? "var(--accent-strong)"
           : "var(--ink)";
-  return (    <div
+  return (
+    <div
       style={{
         display: "grid",
         gridTemplateColumns: "92px 1fr",
@@ -54,7 +55,7 @@ function Kv({ label, children, mono = true, tone }: KvProps): JSX.Element {
         {children}
       </span>
     </div>
-);
+  );
 }
 
 function Section({
@@ -64,7 +65,8 @@ function Section({
   title: string;
   children: React.ReactNode;
 }): JSX.Element {
-  return (    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <div
         style={{
           fontSize: 10.5,
@@ -78,7 +80,7 @@ function Section({
       </div>
       {children}
     </div>
-);
+  );
 }
 
 function ratioTone(actual: number, planned: number): "ok" | "warn" | "crit" | undefined {
@@ -128,7 +130,8 @@ export function NodeDetailsPanel({ node, idx, onClose }: NodeDetailsPanelProps):
   const sortSpaceType = asString(node["Sort Space Type"]);
   const neverExecuted = actualLoops === 0;
 
-  return (    <div
+  return (
+    <div
       data-testid={`node-details-${idx}`}
       style={{
         display: "flex",
@@ -170,7 +173,8 @@ export function NodeDetailsPanel({ node, idx, onClose }: NodeDetailsPanelProps):
           gap: 16,
         }}
       >
-        {neverExecuted ? (          <div
+        {neverExecuted ? (
+          <div
             style={{
               padding: "8px 10px",
               borderRadius: 6,
@@ -181,37 +185,42 @@ export function NodeDetailsPanel({ node, idx, onClose }: NodeDetailsPanelProps):
           >
             ∅ Never executed
           </div>
-) : null}
+        ) : null}
 
-        {relation ? (          <Section title="relation">
+        {relation ? (
+          <Section title="relation">
             <Kv label="schema">{schema ?? "—"}</Kv>
             <Kv label="table">{relation}</Kv>
             {alias && alias !== relation ? <Kv label="alias">{alias}</Kv> : null}
             {indexName ? <Kv label="index">{indexName}</Kv> : null}
           </Section>
-) : null}
+        ) : null}
 
         <Section title="timing">
-          {actualTotal != null ? (            <Kv label="total">{actualTotal.toFixed(3)} ms</Kv>
-) : (            <Kv label="total">—</Kv>
-)}
+          {actualTotal != null ? (
+            <Kv label="total">{actualTotal.toFixed(3)} ms</Kv>
+          ) : (
+            <Kv label="total">—</Kv>
+          )}
           {actualStartup != null ? <Kv label="startup">{actualStartup.toFixed(3)} ms</Kv> : null}
           {actualLoops != null ? <Kv label="loops">{actualLoops.toLocaleString()}</Kv> : null}
         </Section>
 
         <Section title="rows">
-          {actualRows != null ? (            <Kv
+          {actualRows != null ? (
+            <Kv
               label="actual"
               tone={planRows != null ? ratioTone(actualRows, planRows) : undefined}
             >
               {actualRows.toLocaleString()}
             </Kv>
-) : null}
+          ) : null}
           {planRows != null ? <Kv label="planned">{planRows.toLocaleString()}</Kv> : null}
-          {actualRows != null && planRows != null && planRows > 0 ? (            <Kv label="ratio" tone={ratioTone(actualRows, planRows)}>
+          {actualRows != null && planRows != null && planRows > 0 ? (
+            <Kv label="ratio" tone={ratioTone(actualRows, planRows)}>
               {(actualRows / Math.max(planRows, 1)).toFixed(2)}×
             </Kv>
-) : null}
+          ) : null}
           {rowsRemoved != null ? <Kv label="filtered">{rowsRemoved.toLocaleString()}</Kv> : null}
           {planWidth != null ? <Kv label="width">{planWidth} B</Kv> : null}
         </Section>
@@ -221,53 +230,66 @@ export function NodeDetailsPanel({ node, idx, onClose }: NodeDetailsPanelProps):
           {startupCost != null ? <Kv label="startup">{startupCost.toFixed(2)}</Kv> : null}
         </Section>
 
-        {buffers ? (          <Section title="buffers">
-            {buffers.hit > 0 ? (              <Kv label="shared hit">
+        {buffers ? (
+          <Section title="buffers">
+            {buffers.hit > 0 ? (
+              <Kv label="shared hit">
                 {buffers.hit.toLocaleString()} ({prettyBytes(blocksToBytes(buffers.hit))})
               </Kv>
-) : null}
-            {buffers.read > 0 ? (              <Kv label="shared read" tone="warn">
+            ) : null}
+            {buffers.read > 0 ? (
+              <Kv label="shared read" tone="warn">
                 {buffers.read.toLocaleString()} ({prettyBytes(blocksToBytes(buffers.read))})
               </Kv>
-) : null}
-            {buffers.dirtied > 0 ? (              <Kv label="dirtied">{buffers.dirtied.toLocaleString()}</Kv>
-) : null}
-            {buffers.written > 0 ? (              <Kv label="written" tone="crit">
+            ) : null}
+            {buffers.dirtied > 0 ? (
+              <Kv label="dirtied">{buffers.dirtied.toLocaleString()}</Kv>
+            ) : null}
+            {buffers.written > 0 ? (
+              <Kv label="written" tone="crit">
                 {buffers.written.toLocaleString()}
               </Kv>
-) : null}
-            {heapFetches != null ? (              <Kv label="heap fetches">{heapFetches.toLocaleString()}</Kv>
-) : null}
+            ) : null}
+            {heapFetches != null ? (
+              <Kv label="heap fetches">{heapFetches.toLocaleString()}</Kv>
+            ) : null}
           </Section>
-) : null}
+        ) : null}
 
-        {filter || indexCond || hashCond || joinFilter ? (          <Section title="conditions">
+        {filter || indexCond || hashCond || joinFilter ? (
+          <Section title="conditions">
             {indexCond ? <Kv label="index cond">{indexCond}</Kv> : null}
             {hashCond ? <Kv label="hash cond">{hashCond}</Kv> : null}
             {joinFilter ? <Kv label="join filter">{joinFilter}</Kv> : null}
             {filter ? <Kv label="filter">{filter}</Kv> : null}
           </Section>
-) : null}
+        ) : null}
 
-        {sortMethod || (Array.isArray(sortKey) && sortKey.length > 0) ? (          <Section title="sort">
-            {Array.isArray(sortKey) && sortKey.length > 0 ? (              <Kv label="key">{sortKey.join(", ")}</Kv>
-) : null}
+        {sortMethod || (Array.isArray(sortKey) && sortKey.length > 0) ? (
+          <Section title="sort">
+            {Array.isArray(sortKey) && sortKey.length > 0 ? (
+              <Kv label="key">{sortKey.join(", ")}</Kv>
+            ) : null}
             {sortMethod ? <Kv label="method">{sortMethod}</Kv> : null}
-            {sortSpaceUsed != null ? (              <Kv label="memory">
+            {sortSpaceUsed != null ? (
+              <Kv label="memory">
                 {sortSpaceUsed} kB ({sortSpaceType ?? "—"})
               </Kv>
-) : null}
+            ) : null}
           </Section>
-) : null}
+        ) : null}
 
-        {Array.isArray(groupKey) && groupKey.length > 0 ? (          <Section title="group by">
+        {Array.isArray(groupKey) && groupKey.length > 0 ? (
+          <Section title="group by">
             <Kv label="keys">{groupKey.join(", ")}</Kv>
           </Section>
-) : null}
+        ) : null}
 
-        {workersLaunched != null || workersPlanned != null ? (          <Section title="parallel">
+        {workersLaunched != null || workersPlanned != null ? (
+          <Section title="parallel">
             {workersPlanned != null ? <Kv label="planned">{workersPlanned}</Kv> : null}
-            {workersLaunched != null ? (              <Kv
+            {workersLaunched != null ? (
+              <Kv
                 label="launched"
                 tone={
                   workersPlanned != null && workersLaunched < workersPlanned ? "warn" : undefined
@@ -275,11 +297,12 @@ export function NodeDetailsPanel({ node, idx, onClose }: NodeDetailsPanelProps):
               >
                 {workersLaunched}
               </Kv>
-) : null}
+            ) : null}
           </Section>
-) : null}
+        ) : null}
 
-        {Array.isArray(output) && output.length > 0 ? (          <Section title="output">
+        {Array.isArray(output) && output.length > 0 ? (
+          <Section title="output">
             <div
               style={{
                 fontFamily: "var(--font-mono-q)",
@@ -295,10 +318,10 @@ export function NodeDetailsPanel({ node, idx, onClose }: NodeDetailsPanelProps):
               {(output as unknown[]).map((c, i) => (i === 0 ? `${c}` : `, ${c}`)).join("")}
             </div>
           </Section>
-) : null}
+        ) : null}
 
         <div style={{ fontSize: 10.5, color: "var(--ink-5)", marginTop: 8 }}>{label}</div>
       </div>
     </div>
-);
+  );
 }

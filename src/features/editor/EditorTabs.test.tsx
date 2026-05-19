@@ -6,9 +6,10 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 const { translation } = vi.hoisted(() => {
   const t = (key: string, opts?: Record<string, unknown>) => {
     if (opts && typeof opts === "object") {
-      return Object.entries(opts).reduce<string>(        (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
+      return Object.entries(opts).reduce<string>(
+        (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
         key,
-);
+      );
     }
     return key;
   };
@@ -129,10 +130,11 @@ describe("EditorTabs", () => {
     const dialog = await screen.findByRole("dialog");
     expect(within(dialog).getByText("editor.tabs.confirm_discard.title")).toBeInTheDocument();
 
-    await userEvent.click(      within(dialog).getByRole("button", {
+    await userEvent.click(
+      within(dialog).getByRole("button", {
         name: "editor.tabs.confirm_discard.cancel",
       }),
-);
+    );
     expect(useEditor.getState().tabs.find((t) => t.id === id)).toBeDefined();
   });
 
@@ -146,10 +148,11 @@ describe("EditorTabs", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /editor.tabs.close/ }));
     const dialog = await screen.findByRole("dialog");
-    await userEvent.click(      within(dialog).getByRole("button", {
+    await userEvent.click(
+      within(dialog).getByRole("button", {
         name: "editor.tabs.confirm_discard.confirm",
       }),
-);
+    );
 
     expect(useEditor.getState().tabs.find((t) => t.id === id)).toBeUndefined();
   });

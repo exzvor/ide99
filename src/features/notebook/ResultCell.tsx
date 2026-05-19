@@ -25,7 +25,8 @@ export function ResultCell({ result, cellId }: Props): JSX.Element {
   const visible = expanded ? result.rows : result.rows.slice(0, DEFAULT_VISIBLE);
   const hasMore = result.rows.length > DEFAULT_VISIBLE;
 
-  return (    <div
+  return (
+    <div
       data-testid={`result-cell-${cellId}`}
       style={{
         border: "1px solid var(--hairline)",
@@ -49,13 +50,16 @@ export function ResultCell({ result, cellId }: Props): JSX.Element {
           {t("notebook.result.row_count", { count: result.rows.length })}
         </span>
         <span>{t("notebook.result.duration", { ms: result.durationMs })}</span>
-        {result.truncated ? (          <span style={{ color: "var(--warn, #d49b1c)" }}>{t("notebook.result.truncated")}</span>
-) : null}
+        {result.truncated ? (
+          <span style={{ color: "var(--warn, #d49b1c)" }}>{t("notebook.result.truncated")}</span>
+        ) : null}
       </div>
-      {result.rows.length === 0 ? (        <div style={{ padding: 12, fontSize: 12, color: "var(--muted, #888)" }}>
+      {result.rows.length === 0 ? (
+        <div style={{ padding: 12, fontSize: 12, color: "var(--muted, #888)" }}>
           {t("notebook.result.empty")}
         </div>
-) : (        <div style={{ overflowX: "auto" }}>
+      ) : (
+        <div style={{ overflowX: "auto" }}>
           <table
             data-testid={`result-cell-${cellId}-table`}
             style={{
@@ -67,7 +71,8 @@ export function ResultCell({ result, cellId }: Props): JSX.Element {
           >
             <thead>
               <tr>
-                {result.columns.map((c) => (                  <th
+                {result.columns.map((c) => (
+                  <th
                     key={c}
                     style={{
                       textAlign: "left",
@@ -79,34 +84,41 @@ export function ResultCell({ result, cellId }: Props): JSX.Element {
                   >
                     {c}
                   </th>
-))}
+                ))}
               </tr>
             </thead>
             <tbody>
-              {visible.map((row, ri) => (                // biome-ignore lint/suspicious/noArrayIndexKey: snapshot rows have no stable id
-                <tr key={ri}>
-                  {row.map((v, ci) => (                    <td
-                      // biome-ignore lint/suspicious/noArrayIndexKey: snapshot rows have no stable id
-                      key={ci}
-                      style={{
-                        padding: "4px 8px",
-                        borderBottom: "1px solid var(--hairline)",
-                        whiteSpace: "nowrap",
-                        maxWidth: 320,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      {v === null ? <span style={{ color: "var(--muted, #888)" }}>NULL</span> : v}
-                    </td>
-))}
-                </tr>
-))}
+              {visible.map(
+                (
+                  row,
+                  ri, // biome-ignore lint/suspicious/noArrayIndexKey: snapshot rows have no stable id
+                ) => (
+                  <tr key={ri}>
+                    {row.map((v, ci) => (
+                      <td
+                        // biome-ignore lint/suspicious/noArrayIndexKey: snapshot rows have no stable id
+                        key={ci}
+                        style={{
+                          padding: "4px 8px",
+                          borderBottom: "1px solid var(--hairline)",
+                          whiteSpace: "nowrap",
+                          maxWidth: 320,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {v === null ? <span style={{ color: "var(--muted, #888)" }}>NULL</span> : v}
+                      </td>
+                    ))}
+                  </tr>
+                ),
+              )}
             </tbody>
           </table>
         </div>
-)}
-      {hasMore ? (        <div style={{ padding: 8, textAlign: "center", borderTop: "1px solid var(--hairline)" }}>
+      )}
+      {hasMore ? (
+        <div style={{ padding: 8, textAlign: "center", borderTop: "1px solid var(--hairline)" }}>
           <button
             type="button"
             data-testid={`result-cell-${cellId}-toggle`}
@@ -118,7 +130,7 @@ export function ResultCell({ result, cellId }: Props): JSX.Element {
               : t("notebook.result.show_all", { count: result.rows.length })}
           </button>
         </div>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

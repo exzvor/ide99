@@ -138,7 +138,8 @@ export function NotebookPane({ tab }: { tab: NotebookTab }): JSX.Element {
             ? t("notebook.autosave.error")
             : null;
 
-  return (    <div
+  return (
+    <div
       style={{
         display: "flex",
         flexDirection: "column",
@@ -202,23 +203,25 @@ export function NotebookPane({ tab }: { tab: NotebookTab }): JSX.Element {
         >
           {t("notebook.action.open")}
         </button>
-        {autosaveLabel ? (          <span
+        {autosaveLabel ? (
+          <span
             data-testid="notebook-autosave-status"
             style={{ fontSize: 11, color: "var(--muted, #888)", marginLeft: "auto" }}
           >
             {autosaveLabel}
           </span>
-) : null}
+        ) : null}
       </header>
-      {opError ? (        <div
+      {opError ? (
+        <div
           data-testid="notebook-op-error"
           role="alert"
           style={{ padding: "6px 16px", fontSize: 12, color: "var(--err, #d33)" }}
         >
           {opError}
         </div>
-) : null}
+      ) : null}
       <CellList notebook={notebook} onChange={onChange} connectionId={tab.connectionId} />
     </div>
-);
+  );
 }

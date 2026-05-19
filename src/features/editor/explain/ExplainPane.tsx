@@ -109,7 +109,8 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
   // Right rail is shown if we have either insights OR a selected node.
   const hasRightRail = hasInsights || selectedNode !== null;
 
-  const handleSelect = useCallback(    (label: string | null, node: PlanNodeRecord | null, idx: number | null) => {
+  const handleSelect = useCallback(
+    (label: string | null, node: PlanNodeRecord | null, idx: number | null) => {
       setHighlight(label);
       if (label && node && idx !== null) {
         setSelectedNode({ label, node, idx });
@@ -122,7 +123,7 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
       }
     },
     [],
-);
+  );
 
   // Drop selection when the plan changes (re-run produces fresh node refs).
   useEffect(() => {
@@ -181,8 +182,9 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
     dragStateRef.current = { startX: e.clientX, startWidth: 0 };
     // We use a closure that reads the current width from state so the
     // delta is computed against the value at drag-start time.
-    const startWidth = (e.currentTarget.parentElement as HTMLDivElement | null)?.querySelector(      "[data-testid='insights-panel-host']",
-)?.clientWidth;
+    const startWidth = (e.currentTarget.parentElement as HTMLDivElement | null)?.querySelector(
+      "[data-testid='insights-panel-host']",
+    )?.clientWidth;
     if (typeof startWidth === "number") dragStateRef.current.startWidth = startWidth;
 
     function onMove(ev: MouseEvent) {
@@ -209,7 +211,8 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
 
   const isReady = runState.status === "ready";
 
-  return (    <div
+  return (
+    <div
       style={{
         display: "flex",
         flexDirection: "column",
@@ -232,14 +235,18 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
         }}
       >
         {runState.status === "idle" ? <ExplainEmpty /> : null}
-        {runState.status === "running" ? (          <div data-testid="explain-spinner" style={{ padding: 16, opacity: 0.7 }}>
+        {runState.status === "running" ? (
+          <div data-testid="explain-spinner" style={{ padding: 16, opacity: 0.7 }}>
             {t("editor.explain.spinner")}
           </div>
-) : null}
-        {runState.status === "error" ? (          <ExplainErrorView state={runState} sourceTabId={tab.sourceTabId} />
-) : null}
-        {isReady ? (          <>
-            {!nodesCollapsed ? (              <div
+        ) : null}
+        {runState.status === "error" ? (
+          <ExplainErrorView state={runState} sourceTabId={tab.sourceTabId} />
+        ) : null}
+        {isReady ? (
+          <>
+            {!nodesCollapsed ? (
+              <div
                 data-testid="explain-nodes-rail"
                 style={{
                   width: NODES_RAIL_WIDTH,
@@ -275,7 +282,8 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
                 </button>
                 <PlanNodeList plan={runState.plan} highlight={highlight} onSelect={handleSelect} />
               </div>
-) : (              <button
+            ) : (
+              <button
                 type="button"
                 className="btn btn-ghost"
                 onClick={() => setNodesCollapsed(false)}
@@ -291,7 +299,7 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
               >
                 ›
               </button>
-)}
+            )}
             <div
               style={{
                 flex: 1,
@@ -324,7 +332,8 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
               </div>
               <QuietPlanCanvas plan={runState.plan} highlight={highlight} onSelect={handleSelect} />
             </div>
-            {hasRightRail && !collapsed ? (              <>
+            {hasRightRail && !collapsed ? (
+              <>
                 <div
                   role="separator"
                   aria-orientation="vertical"
@@ -377,7 +386,8 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
                     >
                       Подсказки · {insightCount}
                     </button>
-                    {selectedNode ? (                      <button
+                    {selectedNode ? (
+                      <button
                         type="button"
                         className="btn btn-sm"
                         aria-pressed={rightTab === "details"}
@@ -392,7 +402,7 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
                       >
                         Узел #{selectedNode.idx}
                       </button>
-) : null}
+                    ) : null}
                     <div style={{ flex: 1 }} />
                     <button
                       type="button"
@@ -407,7 +417,8 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
                     </button>
                   </div>
                   <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
-                    {rightTab === "details" && selectedNode ? (                      <NodeDetailsPanel
+                    {rightTab === "details" && selectedNode ? (
+                      <NodeDetailsPanel
                         node={selectedNode.node}
                         idx={selectedNode.idx}
                         onClose={() => {
@@ -416,16 +427,18 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
                           setRightTab("insights");
                         }}
                       />
-) : (                      <InsightsPanel
+                    ) : (
+                      <InsightsPanel
                         tabId={tabId}
                         plan={runState.plan}
                         onHighlight={setHighlight}
                       />
-)}
+                    )}
                   </div>
                 </div>
               </>
-) : hasRightRail && collapsed ? (              <button
+            ) : hasRightRail && collapsed ? (
+              <button
                 type="button"
                 className="btn btn-ghost"
                 onClick={() => setCollapsed(false)}
@@ -441,15 +454,17 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
               >
                 ‹
               </button>
-) : null}
+            ) : null}
           </>
-) : null}
-        {runState.status === "cancelled" ? (          <div data-testid="explain-cancelled" style={{ padding: 16, opacity: 0.65 }}>
+        ) : null}
+        {runState.status === "cancelled" ? (
+          <div data-testid="explain-cancelled" style={{ padding: 16, opacity: 0.65 }}>
             {t("editor.explain.empty")}
           </div>
-) : null}
+        ) : null}
       </div>
-      {isReady ? (        <>
+      {isReady ? (
+        <>
           <div
             className="q-statusbar"
             data-testid="explain-footer"
@@ -471,9 +486,9 @@ export function ExplainPane({ tabId }: ExplainPaneProps): JSX.Element {
             highlight={highlight}
           />
         </>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }
 
 /**

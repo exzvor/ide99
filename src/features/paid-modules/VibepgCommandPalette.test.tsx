@@ -94,10 +94,11 @@ describe("VibepgCommandPalette (S37)", () => {
     });
 
     expect(onSelect).not.toHaveBeenCalled();
-    expect(openSpy).toHaveBeenCalledWith(      "https://vibepg.ai/upgrade",
+    expect(openSpy).toHaveBeenCalledWith(
+      "https://vibepg.ai/upgrade",
       "_blank",
       "noopener,noreferrer",
-);
+    );
     expect(invokeMock).toHaveBeenCalledWith("telemetry_send_event", {
       name: "feature_used",
       props: { feature_id: "paid_modules.vibepg.command_palette.upgrade_click" },

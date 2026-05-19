@@ -44,7 +44,8 @@ export function RecentPlansFilters(): JSX.Element {
   // cheaply without asking the backend for a distinct list.
   const tablesInRows = Array.from(new Set(rows.flatMap((r) => r.involvedTables))).sort();
 
-  return (    <div
+  return (
+    <div
       className="q-runbar"
       data-testid="recent-plans-filters"
       style={{
@@ -73,10 +74,11 @@ export function RecentPlansFilters(): JSX.Element {
         style={{ flex: "0 0 auto", width: "auto", minWidth: 140 }}
       >
         <option value="">{t("recent_plans.filter.table_any")}</option>
-        {tablesInRows.map((tName) => (          <option key={tName} value={tName}>
+        {tablesInRows.map((tName) => (
+          <option key={tName} value={tName}>
             {tName}
           </option>
-))}
+        ))}
       </select>
       <input
         type="number"
@@ -112,10 +114,11 @@ export function RecentPlansFilters(): JSX.Element {
         style={{ flex: "0 0 auto", width: "auto", minWidth: 160 }}
       >
         <option value="">{t("recent_plans.filter.conn_all")}</option>
-        {connections.map((c) => (          <option key={c.id} value={c.id}>
+        {connections.map((c) => (
+          <option key={c.id} value={c.id}>
             {c.name}
           </option>
-))}
+        ))}
       </select>
       <button
         type="button"
@@ -144,5 +147,5 @@ export function RecentPlansFilters(): JSX.Element {
         {compareMode ? ` (${compareSelected.length})` : ""}
       </button>
     </div>
-);
+  );
 }

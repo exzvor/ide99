@@ -74,14 +74,15 @@ describe("computeDiff — unit matrix", () => {
 
 describe("computeDiff — property", () => {
   const arbJson: fc.Arbitrary<unknown> = fc.letrec((tie) => ({
-    json: fc.oneof(      { maxDepth: 4 },
+    json: fc.oneof(
+      { maxDepth: 4 },
       fc.constant(null),
       fc.boolean(),
       fc.integer({ min: -1000, max: 1000 }),
       fc.string({ maxLength: 8 }),
       fc.array(tie("json"), { maxLength: 4 }),
       fc.dictionary(fc.string({ maxLength: 4 }), tie("json"), { maxKeys: 4 }),
-),
+    ),
   })).json as fc.Arbitrary<unknown>;
 
   function clone<T>(v: T): T {
@@ -143,22 +144,24 @@ describe("computeDiff — property", () => {
   }
 
   it("round-trip", () => {
-    fc.assert(      fc.property(arbJson, arbJson, (a, b) => {
+    fc.assert(
+      fc.property(arbJson, arbJson, (a, b) => {
         const d = computeDiff(a, b);
         const applied = applyDiff(a, d);
         expect(applied).toEqual(b);
       }),
       { numRuns: 200 },
-);
+    );
   });
 
   it("identical → empty", () => {
-    fc.assert(      fc.property(arbJson, (v) => {
+    fc.assert(
+      fc.property(arbJson, (v) => {
         const d = computeDiff(v, v);
         expect(d.fullReplace).toBe(false);
         expect(d.ops).toHaveLength(0);
       }),
       { numRuns: 200 },
-);
+    );
   });
 });

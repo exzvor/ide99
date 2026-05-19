@@ -20,13 +20,14 @@ const baseTrg = (over: Partial<TriggerForm> = {}): TriggerForm => ({
 
 describe("generateTriggerDdl — validation", () => {
   test("empty form errors", () => {
-    const result = generateTriggerDdl(      null,
+    const result = generateTriggerDdl(
+      null,
       baseTrg({
         name: "",
         events: { insert: false, update: false, delete: false, truncate: false },
         functionRef: { schema: "public", name: "" },
       }),
-);
+    );
     expect(result.sql).toBe("");
     const codes = result.errors.map((e) => e.code);
     expect(codes).toContain("name_required");
@@ -35,9 +36,10 @@ describe("generateTriggerDdl — validation", () => {
   });
 
   test("WHEN + statement → error", () => {
-    const result = generateTriggerDdl(      null,
+    const result = generateTriggerDdl(
+      null,
       baseTrg({ forEach: "statement", whenClause: "NEW.x > 0" }),
-);
+    );
     const codes = result.errors.map((e) => e.code);
     expect(codes).toContain("when_requires_for_each_row");
   });
@@ -48,29 +50,33 @@ describe("generateTriggerDdl — create mode", () => {
     const result = generateTriggerDdl(null, baseTrg());
     expect(result.errors).toEqual([]);
     expect(result.warnings).toEqual([]);
-    expect(result.sql).toBe(      "CREATE TRIGGER my_trg\n    BEFORE INSERT ON public.users\n    FOR EACH ROW\n    EXECUTE FUNCTION public.fn();",
-);
+    expect(result.sql).toBe(
+      "CREATE TRIGGER my_trg\n    BEFORE INSERT ON public.users\n    FOR EACH ROW\n    EXECUTE FUNCTION public.fn();",
+    );
   });
 
   test("all 4 events trigger", () => {
-    const result = generateTriggerDdl(      null,
+    const result = generateTriggerDdl(
+      null,
       baseTrg({
         events: { insert: true, update: true, delete: true, truncate: true },
         forEach: "statement",
       }),
-);
+    );
     expect(result.errors).toEqual([]);
-    expect(result.sql).toBe(      "CREATE TRIGGER my_trg\n    BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON public.users\n    FOR EACH STATEMENT\n    EXECUTE FUNCTION public.fn();",
-);
+    expect(result.sql).toBe(
+      "CREATE TRIGGER my_trg\n    BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON public.users\n    FOR EACH STATEMENT\n    EXECUTE FUNCTION public.fn();",
+    );
   });
 
   test("UPDATE OF columns", () => {
-    const result = generateTriggerDdl(      null,
+    const result = generateTriggerDdl(
+      null,
       baseTrg({
         events: { insert: false, update: true, delete: false, truncate: false },
         updateColumns: ["col1", "col2"],
       }),
-);
+    );
     expect(result.errors).toEqual([]);
     expect(result.sql.includes("UPDATE OF col1, col2")).toBe(true);
   });

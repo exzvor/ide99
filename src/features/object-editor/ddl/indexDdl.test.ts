@@ -35,8 +35,9 @@ describe("generateIndexDdl — create mode", () => {
       predicate: "deleted_at IS NULL",
     });
     const result = generateIndexDdl(null, idx);
-    expect(result.sql).toBe(      "CREATE UNIQUE INDEX ix_partial ON public.items USING btree (lower(email) text_pattern_ops DESC NULLS LAST) INCLUDE (created_at, status) WHERE deleted_at IS NULL;",
-);
+    expect(result.sql).toBe(
+      "CREATE UNIQUE INDEX ix_partial ON public.items USING btree (lower(email) text_pattern_ops DESC NULLS LAST) INCLUDE (created_at, status) WHERE deleted_at IS NULL;",
+    );
   });
 
   test("create-mode without name → omits name (Postgres auto-generates)", () => {

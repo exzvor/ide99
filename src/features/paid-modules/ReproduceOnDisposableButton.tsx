@@ -48,7 +48,8 @@ export function ReproduceOnDisposableButton({
     window.dispatchEvent(new CustomEvent("ide99:spg99:open-template-picker", { detail }));
   };
 
-  return (    <button
+  return (
+    <button
       type="button"
       onClick={onClick}
       data-testid="spg99-reproduce-on-disposable"
@@ -71,5 +72,5 @@ export function ReproduceOnDisposableButton({
       <FlaskConical size={11} aria-hidden="true" />
       {t("paid_modules.spg99.reproduce.button_label")}
     </button>
-);
+  );
 }

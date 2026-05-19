@@ -77,13 +77,14 @@ describe("PgPartmanTablePanel", () => {
   });
 
   it("partman parent without retention: summary reads 'none'", () => {
-    render(      <PgPartmanTablePanel
+    render(
+      <PgPartmanTablePanel
         {...baseProps({
           isPartmanParent: true,
           partmanInfo: { ...PARENT, retentionText: null },
         })}
       />,
-);
+    );
     const summary = screen.getByTestId("pg-partman-panel-summary");
     expect(summary.textContent).toContain("none");
   });

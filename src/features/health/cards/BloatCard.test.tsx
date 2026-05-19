@@ -14,11 +14,12 @@ describe("BloatCard", () => {
   });
 
   it("empty → centered no-issues message", () => {
-    render(      <BloatCard
+    render(
+      <BloatCard
         connId="c1"
         state={{ status: "ready", card: { id: "bloat", data: { rows: [] } } }}
       />,
-);
+    );
     expect(screen.getByTestId("health-card-bloat-empty")).toBeTruthy();
   });
 
@@ -29,15 +30,17 @@ describe("BloatCard", () => {
       bloatPct: 35 - i,
       bloatBytes: (i + 1) * 1024 * 1024,
     }));
-    render(      <BloatCard connId="c1" state={{ status: "ready", card: { id: "bloat", data: { rows } } }} />,
-);
+    render(
+      <BloatCard connId="c1" state={{ status: "ready", card: { id: "bloat", data: { rows } } }} />,
+    );
     expect(screen.getAllByTestId("bloat-row")).toHaveLength(3);
     expect(screen.getByTestId("bloat-more").textContent).toMatch(/2 more/);
     expect(screen.getByTestId("health-card-bloat-status").getAttribute("data-tone")).toBe("danger");
   });
 
   it("warn tone when 15 < max <= 30", () => {
-    render(      <BloatCard
+    render(
+      <BloatCard
         connId="c1"
         state={{
           status: "ready",
@@ -49,7 +52,7 @@ describe("BloatCard", () => {
           },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("health-card-bloat-status").getAttribute("data-tone")).toBe("warn");
   });
 });

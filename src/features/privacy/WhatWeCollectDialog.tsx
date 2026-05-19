@@ -43,7 +43,8 @@ export function WhatWeCollectDialog({ open, onOpenChange }: WhatWeCollectDialogP
     };
   }, [open]);
 
-  return (    <Dialog
+  return (
+    <Dialog
       open={open}
       onOpenChange={onOpenChange}
       title={t("privacy.what_we_collect.title")}
@@ -65,8 +66,9 @@ export function WhatWeCollectDialog({ open, onOpenChange }: WhatWeCollectDialogP
         data-testid="what-we-collect"
         style={{ display: "flex", flexDirection: "column", gap: 8 }}
       >
-        {error ? (          <p style={{ margin: 0, fontSize: 12, color: "var(--err, #d33)" }}>{error}</p>
-) : null}
+        {error ? (
+          <p style={{ margin: 0, fontSize: 12, color: "var(--err, #d33)" }}>{error}</p>
+        ) : null}
         <ul
           style={{
             margin: 0,
@@ -79,7 +81,8 @@ export function WhatWeCollectDialog({ open, onOpenChange }: WhatWeCollectDialogP
             overflowY: "auto",
           }}
         >
-          {events.map((name) => (            <li
+          {events.map((name) => (
+            <li
               key={name}
               data-testid={`event-${name}`}
               style={{
@@ -96,9 +99,9 @@ export function WhatWeCollectDialog({ open, onOpenChange }: WhatWeCollectDialogP
                 {t(`privacy.events.${name}`, { defaultValue: name })}
               </span>
             </li>
-))}
+          ))}
         </ul>
       </div>
     </Dialog>
-);
+  );
 }

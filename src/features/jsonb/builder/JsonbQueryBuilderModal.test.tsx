@@ -39,7 +39,8 @@ vi.mock("../panels/InferredSchemaPanel", () => ({
   }: {
     onPathSelect?: (path: unknown[]) => void;
     selectedPath?: unknown[];
-  }) => (    <div data-testid="schema-panel-mock">
+  }) => (
+    <div data-testid="schema-panel-mock">
       <button
         type="button"
         data-testid="pick-path-btn"
@@ -49,7 +50,7 @@ vi.mock("../panels/InferredSchemaPanel", () => ({
       </button>
       <span data-testid="selected-path">{JSON.stringify(selectedPath)}</span>
     </div>
-),
+  ),
 }));
 
 // Mock OperatorForm to avoid deep inference store wiring in modal tests
@@ -57,7 +58,8 @@ vi.mock("./OperatorForm", () => ({
   OperatorForm: ({
     state,
     dispatch,
-  }: { state: { opKind: string }; dispatch: (a: unknown) => void }) => (    <div data-testid="operator-form-mock">
+  }: { state: { opKind: string }; dispatch: (a: unknown) => void }) => (
+    <div data-testid="operator-form-mock">
       <select
         aria-label="jsonb.builder.operatorLabel"
         value={state.opKind}
@@ -69,7 +71,7 @@ vi.mock("./OperatorForm", () => ({
         <option value="pathPredicate">pathPredicate</option>
       </select>
     </div>
-),
+  ),
 }));
 
 vi.mock("../../editor/store", () => ({
@@ -116,8 +118,9 @@ afterEach(() => {
 
 describe("JsonbQueryBuilderModal", () => {
   it("open=false renders nothing", () => {
-    const { container } = render(      <JsonbQueryBuilderModal open={false} connId="c1" fqn={fqn} onClose={() => {}} />,
-);
+    const { container } = render(
+      <JsonbQueryBuilderModal open={false} connId="c1" fqn={fqn} onClose={() => {}} />,
+    );
     expect(container).toBeEmptyDOMElement();
   });
 
@@ -169,11 +172,12 @@ describe("JsonbQueryBuilderModal", () => {
     await act(async () => {
       fireEvent.click(screen.getByTestId("pick-path-btn"));
     });
-    await waitFor(      () => {
+    await waitFor(
+      () => {
         expect(tauri.jsonbBuilderPreview).toHaveBeenCalled();
       },
       { timeout: 500 },
-);
+    );
   });
 
   it("[Generate] becomes enabled after path is set and IPC preview succeeds", async () => {
@@ -184,11 +188,12 @@ describe("JsonbQueryBuilderModal", () => {
     await act(async () => {
       fireEvent.click(screen.getByTestId("pick-path-btn"));
     });
-    await waitFor(      () => {
+    await waitFor(
+      () => {
         expect(screen.getByTestId("builder-generate-btn")).not.toBeDisabled();
       },
       { timeout: 500 },
-);
+    );
   });
 
   it("clicking [Generate] calls openEditorTab with prefillSql + closes modal", async () => {
@@ -200,11 +205,12 @@ describe("JsonbQueryBuilderModal", () => {
       fireEvent.click(screen.getByTestId("pick-path-btn"));
     });
     // Wait for IPC to have been called AND resolved so preview.sql = IPC value
-    await waitFor(      () => {
+    await waitFor(
+      () => {
         expect(tauri.jsonbBuilderPreview).toHaveBeenCalled();
       },
       { timeout: 500 },
-);
+    );
     // Give the promise resolution a tick to land
     await act(async () => {
       await Promise.resolve();
@@ -262,11 +268,12 @@ describe("JsonbQueryBuilderModal", () => {
     const tauri = await import("../../../lib/tauri");
     vi.mocked(tauri.jsonbBuilderPreview).mockRejectedValue(new Error("invalid json"));
     render(<JsonbQueryBuilderModal open={true} connId="c1" fqn={fqn} onClose={() => {}} />);
-    await waitFor(      () => {
+    await waitFor(
+      () => {
         expect(screen.getByTestId("builder-generate-btn")).toBeDisabled();
       },
       { timeout: 500 },
-);
+    );
   });
 
   it("shows InferredSchemaPanel with onPathSelect", () => {
@@ -289,11 +296,12 @@ describe("JsonbQueryBuilderModal", () => {
     // The select now shows containment
     expect(select).toHaveValue("containment");
     // A new preview should be triggered (path is set, so IPC fires)
-    await waitFor(      () => {
+    await waitFor(
+      () => {
         expect(tauri.jsonbBuilderPreview).toHaveBeenCalled();
       },
       { timeout: 500 },
-);
+    );
   });
 });
 
@@ -303,8 +311,9 @@ describe("JsonbQueryBuilderModal", () => {
 
 describe("JsonbQueryBuilderModal accessibility", () => {
   it("has 0 axe violations when open", async () => {
-    const { container } = render(      <JsonbQueryBuilderModal open={true} connId="c1" fqn={fqn} onClose={() => {}} />,
-);
+    const { container } = render(
+      <JsonbQueryBuilderModal open={true} connId="c1" fqn={fqn} onClose={() => {}} />,
+    );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });

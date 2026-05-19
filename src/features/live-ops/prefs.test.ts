@@ -35,9 +35,10 @@ describe("live-ops prefs", () => {
   });
 
   it("schema-version mismatch resets to defaults", () => {
-    window.localStorage.setItem(      `${LIVE_OPS_PREFS_LS_PREFIX}c1`,
+    window.localStorage.setItem(
+      `${LIVE_OPS_PREFS_LS_PREFIX}c1`,
       JSON.stringify({ schemaVersion: 999, activeSubTab: "sessions" }),
-);
+    );
     const p = loadPrefs("c1", "local");
     expect(p.schemaVersion).toBe(LIVE_OPS_PREFS_SCHEMA_VERSION);
     expect(p.activeSubTab).toBe("sessions");

@@ -75,11 +75,12 @@ export function SubscriptionEditor({ tab }: SubscriptionEditorProps): JSX.Elemen
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: SubscriptionForm) => SubscriptionForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: SubscriptionForm) => SubscriptionForm): void => {
       updateForm(tab.id, (s) => (s.kind === "subscription" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "subscription" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -93,16 +94,18 @@ export function SubscriptionEditor({ tab }: SubscriptionEditorProps): JSX.Elemen
     : false;
 
   if (loadError) {
-    return (      <div data-testid="subscription-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="subscription-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="subscription-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="subscription-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -147,7 +150,8 @@ export function SubscriptionEditor({ tab }: SubscriptionEditorProps): JSX.Elemen
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="subscription-editor"
       style={{
         display: "grid",
@@ -171,7 +175,8 @@ export function SubscriptionEditor({ tab }: SubscriptionEditorProps): JSX.Elemen
             ? t("object_editor.subscription.title_new")
             : t("object_editor.subscription.title_edit")}
         </h2>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="sub-dirty-badge"
             style={{
               fontSize: 11,
@@ -182,7 +187,7 @@ export function SubscriptionEditor({ tab }: SubscriptionEditorProps): JSX.Elemen
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <HelpLink topic="subscription" />
       </div>
@@ -314,5 +319,5 @@ export function SubscriptionEditor({ tab }: SubscriptionEditorProps): JSX.Elemen
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

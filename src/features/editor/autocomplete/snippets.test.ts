@@ -5,7 +5,8 @@ describe("BUILTIN_SNIPPETS", () => {
   it("ships 17 templates total (8  + 9)", () => {
     expect(BUILTIN_SNIPPETS.length).toBe(17);
     const ids = BUILTIN_SNIPPETS.map((s) => s.id).sort();
-    expect(ids).toEqual(      [
+    expect(ids).toEqual(
+      [
         // S7
         "create_index",
         "create_table",
@@ -26,7 +27,7 @@ describe("BUILTIN_SNIPPETS", () => {
         "window_lag",
         "window_row_number",
       ].sort(),
-);
+    );
   });
 
   it("each snippet has a non-empty body, label, prefixes and i18n key", () => {

@@ -82,10 +82,11 @@ const baseConnection: Connection = {
 };
 
 function renderForm() {
-  return render(    <ToastProvider>
+  return render(
+    <ToastProvider>
       <ConnectionForm />
     </ToastProvider>,
-);
+  );
 }
 
 describe("ConnectionForm", () => {
@@ -235,9 +236,10 @@ describe("ConnectionForm", () => {
     await userEvent.click(screen.getByRole("button", { name: "connection.form.action.save" }));
 
     await waitFor(() => {
-      expect(updateConnectionMock).toHaveBeenCalledWith(        "conn-1",
+      expect(updateConnectionMock).toHaveBeenCalledWith(
+        "conn-1",
         expect.objectContaining({ name: "renamed", password: { kind: "keep" } }),
-);
+      );
     });
     expect(storeState.upsertLocal).toHaveBeenCalled();
     expect(storeState.closeForm).toHaveBeenCalled();
@@ -251,8 +253,9 @@ describe("ConnectionForm", () => {
 
     await userEvent.click(showButton);
 
-    expect(      screen.getByRole("button", { name: "connection.form.password.hide" }),
-).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "connection.form.password.hide" }),
+    ).toBeInTheDocument();
     expect(passwordInput).toHaveAttribute("type", "text");
   });
 
@@ -297,8 +300,9 @@ describe("ConnectionForm", () => {
     const disableOption = await screen.findByRole("option", { name: /disable/ });
     await userEvent.click(disableOption);
 
-    expect(      screen.queryByText("connection.form.warning.ssl_disable_remote"),
-).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("connection.form.warning.ssl_disable_remote"),
+    ).not.toBeInTheDocument();
   });
 
   it("exclude-from-history checkbox is unchecked by default in create mode", () => {
@@ -322,8 +326,9 @@ describe("ConnectionForm", () => {
     await userEvent.click(screen.getByRole("button", { name: "connection.form.action.save" }));
 
     await waitFor(() => {
-      expect(createConnectionMock).toHaveBeenCalledWith(        expect.objectContaining({ excludeFromHistory: true }),
-);
+      expect(createConnectionMock).toHaveBeenCalledWith(
+        expect.objectContaining({ excludeFromHistory: true }),
+      );
     });
   });
 
@@ -353,8 +358,9 @@ describe("ConnectionForm", () => {
     renderForm();
     const readOnly = screen.getByTestId("read-only-checkbox") as HTMLInputElement;
     const slow = screen.getByTestId("slow-query-warning-checkbox") as HTMLInputElement;
-    const confirmDestructive = screen.getByTestId(      "confirm-destructive-checkbox",
-) as HTMLInputElement;
+    const confirmDestructive = screen.getByTestId(
+      "confirm-destructive-checkbox",
+    ) as HTMLInputElement;
     expect(readOnly).not.toBeChecked();
     expect(slow).not.toBeChecked();
     expect(confirmDestructive).not.toBeChecked();
@@ -385,8 +391,9 @@ describe("ConnectionForm", () => {
     const prodOption = await screen.findByRole("option", { name: /env\.label\.prod/ });
     await userEvent.click(prodOption);
 
-    const confirmDestructive = screen.getByTestId(      "confirm-destructive-checkbox",
-) as HTMLInputElement;
+    const confirmDestructive = screen.getByTestId(
+      "confirm-destructive-checkbox",
+    ) as HTMLInputElement;
     await waitFor(() => {
       expect(confirmDestructive).toBeChecked();
     });
@@ -422,21 +429,23 @@ describe("ConnectionForm", () => {
     await userEvent.click(screen.getByRole("button", { name: "connection.form.action.save" }));
 
     await waitFor(() => {
-      expect(createConnectionMock).toHaveBeenCalledWith(        expect.objectContaining({
+      expect(createConnectionMock).toHaveBeenCalledWith(
+        expect.objectContaining({
           environment: "stage",
           readOnly: false,
           slowQueryWarning: true,
           confirmDestructive: false,
         }),
-);
+      );
     });
   });
 
   it("confirm-destructive checkbox is independent of read-only", async () => {
     renderForm();
     const readOnly = screen.getByTestId("read-only-checkbox") as HTMLInputElement;
-    const confirmDestructive = screen.getByTestId(      "confirm-destructive-checkbox",
-) as HTMLInputElement;
+    const confirmDestructive = screen.getByTestId(
+      "confirm-destructive-checkbox",
+    ) as HTMLInputElement;
     expect(readOnly).not.toBeChecked();
     expect(confirmDestructive).not.toBeChecked();
 

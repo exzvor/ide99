@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * Pure conversion: Squawk findings → Monaco IMarkerData. Tested in
  * isolation so ApplyDialog's useEffect is just a thin glue layer.

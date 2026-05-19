@@ -35,7 +35,8 @@ beforeEach(() => {
   setSortMock.mockReset();
   setColumnWidthMock.mockReset();
   setColumnOrderMock.mockReset();
-  useEditor.setState(    {
+  useEditor.setState(
+    {
       ...initial,
       fetchMore: fetchMoreMock,
       setSort: setSortMock,
@@ -43,10 +44,11 @@ beforeEach(() => {
       setColumnOrder: setColumnOrderMock,
     },
     true,
-);
+  );
 });
 
-function streamingState(  rows: number,
+function streamingState(
+  rows: number,
   exhausted = false,
 ): Extract<RunState, { status: "streaming" }> {
   return {
@@ -74,10 +76,11 @@ describe("ResultGrid", () => {
 
   test("renders only a virtualized subset of rows for a 5000-row result", () => {
     const big = streamingState(5000);
-    render(      <div style={{ height: 300, width: 600 }}>
+    render(
+      <div style={{ height: 300, width: 600 }}>
         <ResultGrid tabId="tab-1" run={big} />
       </div>,
-);
+    );
     const cells = screen.queryAllByTestId(/^cell-/);
     expect(cells.length).toBeLessThan(5000);
   });
@@ -89,10 +92,11 @@ describe("ResultGrid", () => {
   });
 
   test("Resize handle dispatches setColumnWidth", () => {
-    const { container } = render(      <div style={{ height: 200, width: 600 }}>
+    const { container } = render(
+      <div style={{ height: 200, width: 600 }}>
         <ResultGrid tabId="tab-1" run={streamingState(5)} />
       </div>,
-);
+    );
     const handle = container.querySelector('[data-testid="col-resize-0"]');
     expect(handle).toBeInTheDocument();
     fireEvent.mouseDown(handle as Element, { pageX: 100, button: 0 });
@@ -105,10 +109,11 @@ describe("ResultGrid", () => {
   });
 
   test("Click on cell selects it (aria-selected=true)", () => {
-    render(      <div style={{ height: 300, width: 600 }}>
+    render(
+      <div style={{ height: 300, width: 600 }}>
         <ResultGrid tabId="tab-1" run={streamingState(20)} />
       </div>,
-);
+    );
     const cells = screen.queryAllByTestId(/^cell-/);
     if (cells.length === 0) return; // jsdom layout edge — virtualizer reports 0
     fireEvent.click(cells[0] as HTMLElement);
@@ -135,10 +140,11 @@ describe("ResultGrid", () => {
     const openSpy = vi.fn().mockResolvedValue(undefined);
     useJsonbEditor.setState({ openEditor: openSpy });
 
-    render(      <div style={{ height: 300, width: 600 }}>
+    render(
+      <div style={{ height: 300, width: 600 }}>
         <ResultGrid tabId="tab-jsonb" run={jsonbRun} />
       </div>,
-);
+    );
     const cells = screen.queryAllByTestId(/^cell-/);
     if (cells.length === 0) return; // jsdom virtualizer edge
     fireEvent.doubleClick(cells[0] as HTMLElement);
@@ -168,10 +174,11 @@ describe("ResultGrid", () => {
     const openSpy = vi.fn().mockResolvedValue(undefined);
     useJsonbEditor.setState({ openEditor: openSpy });
 
-    render(      <div style={{ height: 300, width: 600 }}>
+    render(
+      <div style={{ height: 300, width: 600 }}>
         <ResultGrid tabId="tab-json" run={jsonRun} />
       </div>,
-);
+    );
     const cells = screen.queryAllByTestId(/^cell-/);
     if (cells.length === 0) return;
     fireEvent.doubleClick(cells[0] as HTMLElement);
@@ -182,10 +189,11 @@ describe("ResultGrid", () => {
     const openSpy = vi.fn().mockResolvedValue(undefined);
     useJsonbEditor.setState({ openEditor: openSpy });
 
-    render(      <div style={{ height: 300, width: 600 }}>
+    render(
+      <div style={{ height: 300, width: 600 }}>
         <ResultGrid tabId="tab-text" run={streamingState(5)} />
       </div>,
-);
+    );
     const cells = screen.queryAllByTestId(/^cell-/);
     if (cells.length === 0) return;
     fireEvent.doubleClick(cells[0] as HTMLElement);
@@ -216,10 +224,11 @@ describe("S26 — kNN context-menu", () => {
   }
 
   test("right-click on a row with a vector column shows 'Find nearest by …' and opens the dialog", async () => {
-    render(      <div style={{ height: 300, width: 600 }}>
+    render(
+      <div style={{ height: 300, width: 600 }}>
         <ResultGrid tabId="tab-knn" run={streamingWithVector()} />
       </div>,
-);
+    );
     const cell = screen.queryAllByTestId(/^cell-0-/)[0];
     if (!cell) return;
     fireEvent.contextMenu(cell as HTMLElement);
@@ -229,10 +238,11 @@ describe("S26 — kNN context-menu", () => {
   });
 
   test("right-click on a row without vector columns does not show the menu item", () => {
-    render(      <div style={{ height: 300, width: 600 }}>
+    render(
+      <div style={{ height: 300, width: 600 }}>
         <ResultGrid tabId="tab-no-vec" run={streamingState(1)} />
       </div>,
-);
+    );
     const cell = screen.queryAllByTestId(/^cell-0-/)[0];
     if (!cell) return;
     fireEvent.contextMenu(cell as HTMLElement);
@@ -283,19 +293,21 @@ describe("S27 — PostGIS map view button", () => {
 
   test("renders 'Open Map View' button when geometry column present", async () => {
     setEditorTab();
-    render(      <div style={{ height: 300, width: 600 }}>
+    render(
+      <div style={{ height: 300, width: 600 }}>
         <ResultGrid tabId="tab-geom" run={streamingWithGeometry()} />
       </div>,
-);
+    );
     expect(await screen.findByTestId("result-grid-open-map-view")).toBeInTheDocument();
   });
 
   test("does not render the button when no geometry column", () => {
     setEditorTab();
-    render(      <div style={{ height: 300, width: 600 }}>
+    render(
+      <div style={{ height: 300, width: 600 }}>
         <ResultGrid tabId="tab-geom" run={streamingState(1)} />
       </div>,
-);
+    );
     expect(screen.queryByTestId("result-grid-open-map-view")).not.toBeInTheDocument();
   });
 
@@ -318,12 +330,14 @@ describe("S27 — PostGIS map view button", () => {
         },
       ],
     });
-    render(      <div style={{ height: 300, width: 600 }}>
+    render(
+      <div style={{ height: 300, width: 600 }}>
         <ResultGrid tabId="tab-geom" run={streamingWithGeometry()} />
       </div>,
-);
+    );
     fireEvent.click(screen.getByTestId("result-grid-open-map-view"));
-    expect(openMapViewTab).toHaveBeenCalledWith(      expect.objectContaining({ geometryColumn: "geom" }),
-);
+    expect(openMapViewTab).toHaveBeenCalledWith(
+      expect.objectContaining({ geometryColumn: "geom" }),
+    );
   });
 });

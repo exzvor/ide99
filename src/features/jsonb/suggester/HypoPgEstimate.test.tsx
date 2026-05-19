@@ -24,7 +24,8 @@ describe("HypoPgEstimate", () => {
   });
 
   it("renders computed result", () => {
-    render(      <HypoPgEstimate
+    render(
+      <HypoPgEstimate
         state={{
           kind: "computed",
           baselineCost: 1500.0,
@@ -32,7 +33,7 @@ describe("HypoPgEstimate", () => {
           reductionPct: 86.7,
         }}
       />,
-);
+    );
     expect(screen.getByTestId("hypopg-computed")).toBeInTheDocument();
     // The pct badge is rendered separately and always shows
     expect(screen.getByTestId("hypopg-pct")).toBeInTheDocument();
@@ -40,7 +41,8 @@ describe("HypoPgEstimate", () => {
   });
 
   it("renders computed result with green color when reduction > 0", () => {
-    render(      <HypoPgEstimate
+    render(
+      <HypoPgEstimate
         state={{
           kind: "computed",
           baselineCost: 1000.0,
@@ -48,20 +50,21 @@ describe("HypoPgEstimate", () => {
           reductionPct: 90.0,
         }}
       />,
-);
+    );
     const pctEl = screen.getByTestId("hypopg-pct");
     // Should have a color style (green for positive reduction)
     expect(pctEl.style.color).toBeTruthy();
   });
 
   it("renders extensionMissing unavailable with install SQL", () => {
-    render(      <HypoPgEstimate
+    render(
+      <HypoPgEstimate
         state={{
           kind: "unavailable",
           reason: { kind: "extensionMissing" },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("hypopg-unavailable-extensionMissing")).toBeInTheDocument();
     expect(screen.getByTestId("hypopg-install-sql")).toBeInTheDocument();
     // The install SQL code block shows the actual SQL from i18n
@@ -69,43 +72,48 @@ describe("HypoPgEstimate", () => {
   });
 
   it("renders pgVersionTooOld unavailable with version number", () => {
-    render(      <HypoPgEstimate
+    render(
+      <HypoPgEstimate
         state={{
           kind: "unavailable",
           reason: { kind: "pgVersionTooOld", actual: "15.2", required: "16" },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("hypopg-unavailable-pgTooOld")).toBeInTheDocument();
     // EN translation: "Hypothetical EXPLAIN requires PostgreSQL 16+ (current: {{actual}})"
     expect(screen.getByTestId("hypopg-unavailable-pgTooOld").textContent).toContain("15.2");
   });
 
   it("renders noRepresentativeQuery unavailable", () => {
-    render(      <HypoPgEstimate
+    render(
+      <HypoPgEstimate
         state={{
           kind: "unavailable",
           reason: { kind: "noRepresentativeQuery" },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("hypopg-unavailable-noRepresentativeQuery")).toBeInTheDocument();
     // EN: "No usage data — install pg_stat_statements to enable cost estimation"
-    expect(screen.getByTestId("hypopg-unavailable-noRepresentativeQuery").textContent).toContain(      "No usage data",
-);
+    expect(screen.getByTestId("hypopg-unavailable-noRepresentativeQuery").textContent).toContain(
+      "No usage data",
+    );
   });
 
   it("renders plannerError unavailable with message", () => {
-    render(      <HypoPgEstimate
+    render(
+      <HypoPgEstimate
         state={{
           kind: "unavailable",
           reason: { kind: "plannerError", message: "could not plan" },
         }}
       />,
-);
+    );
     expect(screen.getByTestId("hypopg-unavailable-plannerError")).toBeInTheDocument();
     // EN: "Planner error: {{message}}"
-    expect(screen.getByTestId("hypopg-unavailable-plannerError").textContent).toContain(      "could not plan",
-);
+    expect(screen.getByTestId("hypopg-unavailable-plannerError").textContent).toContain(
+      "could not plan",
+    );
   });
 });

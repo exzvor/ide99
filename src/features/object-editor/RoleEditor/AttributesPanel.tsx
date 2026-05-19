@@ -24,7 +24,8 @@ export function AttributesPanel({ form, onChange }: AttributesPanelProps): JSX.E
     ["bypassrls", "bypassrls_label"],
     ["inherit", "inherit_label"],
   ];
-  return (    <fieldset
+  return (
+    <fieldset
       data-testid="role-attributes-fieldset"
       style={{
         border: "1px solid var(--hairline)",
@@ -38,7 +39,8 @@ export function AttributesPanel({ form, onChange }: AttributesPanelProps): JSX.E
         {t("object_editor.role.attributes_section")}
       </legend>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4 }}>
-        {attrs.map(([key, k]) => (          <label key={key as string} style={{ fontSize: 12 }}>
+        {attrs.map(([key, k]) => (
+          <label key={key as string} style={{ fontSize: 12 }}>
             <input
               type="checkbox"
               data-testid={`role-attr-${String(key)}`}
@@ -47,7 +49,7 @@ export function AttributesPanel({ form, onChange }: AttributesPanelProps): JSX.E
             />{" "}
             {t(`object_editor.role.${k}`)}
           </label>
-))}
+        ))}
       </div>
       <label style={{ fontSize: 12, display: "flex", flexDirection: "column" }}>
         {t("object_editor.role.connection_limit_label")}
@@ -102,5 +104,5 @@ export function AttributesPanel({ form, onChange }: AttributesPanelProps): JSX.E
         {t("object_editor.role.password_is_hash_label")}
       </label>
     </fieldset>
-);
+  );
 }

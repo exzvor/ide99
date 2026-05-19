@@ -8,8 +8,9 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../KnnBrowseDialog", () => ({
-  KnnBrowseDialog: ({ open }: { open: boolean }) => (    <div data-testid="knn-mock" data-open={open ? "true" : "false"} />
-),
+  KnnBrowseDialog: ({ open }: { open: boolean }) => (
+    <div data-testid="knn-mock" data-open={open ? "true" : "false"} />
+  ),
 }));
 
 vi.mock("../VectorProjectionView", () => ({
@@ -17,8 +18,9 @@ vi.mock("../VectorProjectionView", () => ({
 }));
 
 vi.mock("../HybridSearchWizard", () => ({
-  HybridSearchWizard: ({ open }: { open: boolean }) => (    <div data-testid="hybrid-mock" data-open={open ? "true" : "false"} />
-),
+  HybridSearchWizard: ({ open }: { open: boolean }) => (
+    <div data-testid="hybrid-mock" data-open={open ? "true" : "false"} />
+  ),
 }));
 
 import { PgvectorTablePanel } from "../PgvectorTablePanel";

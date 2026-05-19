@@ -122,10 +122,11 @@ export function generateDdl(base: ErdSchemaGraph, ops: Op[]): DdlGenResult {
     const final = newColFinalName.get(op.id)!;
     const opIds = [op.id];
     for (const inner of ops) {
-      if (        (inner.kind === "renameColumn" || inner.kind === "retypeColumn") &&
+      if (
+        (inner.kind === "renameColumn" || inner.kind === "retypeColumn") &&
         "_newCol" in inner.column &&
         inner.column._newCol === op.id
-) {
+      ) {
         opIds.push(inner.id);
       }
     }
@@ -200,10 +201,11 @@ export function generateDdl(base: ErdSchemaGraph, ops: Op[]): DdlGenResult {
         warnings: [],
       });
     } else if (op.kind === "dropColumn") {
-      const tbl = resolveTableSchemaName(        { table: op.column.table, column: "_dropColumn" } as ColumnRef,
+      const tbl = resolveTableSchemaName(
+        { table: op.column.table, column: "_dropColumn" } as ColumnRef,
         ops,
         newTableFinalName,
-);
+      );
       const colName = columnFinalName(op.column, ops, newColFinalName);
       stmts.push({
         sql: `ALTER TABLE ${q(tbl.schema)}.${q(tbl.name)} DROP COLUMN ${q(colName)};`,
@@ -220,10 +222,11 @@ export function generateDdl(base: ErdSchemaGraph, ops: Op[]): DdlGenResult {
         warnings: [],
       });
     } else if (op.kind === "setColumnNullable") {
-      const tbl = resolveTableSchemaName(        { table: op.column.table, column: "_setNullable" } as ColumnRef,
+      const tbl = resolveTableSchemaName(
+        { table: op.column.table, column: "_setNullable" } as ColumnRef,
         ops,
         newTableFinalName,
-);
+      );
       const colName = columnFinalName(op.column, ops, newColFinalName);
       const action = op.nullable ? "DROP NOT NULL" : "SET NOT NULL";
       stmts.push({
@@ -274,7 +277,8 @@ function isNewTableRef(ref: AnyTableRef): ref is { _new: OpId } {
   return "_new" in ref;
 }
 
-function isFkSelfContained(  fk: Extract<Op, { kind: "addFk" }>,
+function isFkSelfContained(
+  fk: Extract<Op, { kind: "addFk" }>,
   candidateNewTableOpId: OpId | undefined,
   ops: Op[],
 ): boolean {
@@ -291,7 +295,8 @@ function newTableOpIdForColumnRef(cr: ColumnRef, _ops: Op[]): OpId | undefined {
   return isNewTableRef(cr.table) ? cr.table._new : undefined;
 }
 
-function emitInlineFk(  fk: Extract<Op, { kind: "addFk" }>,
+function emitInlineFk(
+  fk: Extract<Op, { kind: "addFk" }>,
   newColFinalName: Map<
     OpId,
     { name: string; dataType: string; nullable: boolean; isPrimaryKey: boolean; identity: boolean }
@@ -313,7 +318,8 @@ function emitInlineFk(  fk: Extract<Op, { kind: "addFk" }>,
   return `CONSTRAINT ${q(fk.constraintName)} FOREIGN KEY (${srcCols.map(q).join(", ")}) REFERENCES ${q(tgtTable.schema)}.${q(tgtTable.name)} (${tgtCols.map(q).join(", ")})`;
 }
 
-function columnFinalNameInline(  cr: ColumnRef,
+function columnFinalNameInline(
+  cr: ColumnRef,
   newColFinalName: Map<
     OpId,
     { name: string; dataType: string; nullable: boolean; isPrimaryKey: boolean; identity: boolean }
@@ -323,7 +329,8 @@ function columnFinalNameInline(  cr: ColumnRef,
   return cr.column;
 }
 
-function columnFinalName(  cr: ColumnRef,
+function columnFinalName(
+  cr: ColumnRef,
   ops: Op[],
   newColFinalName: Map<
     OpId,
@@ -338,20 +345,22 @@ function columnFinalName(  cr: ColumnRef,
   const crTableName = cr.table.name;
   const crColumn = cr.column;
   for (const op of ops) {
-    if (      op.kind === "renameColumn" &&
+    if (
+      op.kind === "renameColumn" &&
       !("_newCol" in op.column) &&
       !("_new" in op.column.table) &&
       op.column.table.schema === crTableSchema &&
       op.column.table.name === crTableName &&
       op.column.column === crColumn
-) {
+    ) {
       name = op.newName;
     }
   }
   return name;
 }
 
-function resolveTableSchemaName(  cr: ColumnRef,
+function resolveTableSchemaName(
+  cr: ColumnRef,
   ops: Op[],
   newTableFinalName: Map<OpId, { schema: string; name: string }>,
 ): { schema: string; name: string } {
@@ -362,11 +371,12 @@ function resolveTableSchemaName(  cr: ColumnRef,
   const schema = cr.table.schema;
   let name = cr.table.name;
   for (const op of ops) {
-    if (      op.kind === "renameTable" &&
+    if (
+      op.kind === "renameTable" &&
       !("_new" in op.table) &&
       op.table.schema === schema &&
       op.table.name === name
-) {
+    ) {
       name = op.newName;
     }
   }

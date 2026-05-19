@@ -69,6 +69,6 @@ describe("buildStatementsQuery", () => {
         sortBy: "foo; DROP TABLE users" as unknown as StatementsSortColumn,
         sortDir: "asc",
       }),
-).toThrow(/invalid sort column/);
+    ).toThrow(/invalid sort column/);
   });
 });

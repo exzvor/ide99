@@ -94,7 +94,8 @@ export function Spg99TemplatePickerDialog(): JSX.Element | null {
 
   if (!open) return null;
 
-  return (    <Dialog
+  return (
+    <Dialog
       open={open}
       onOpenChange={(o) => {
         if (!o) setOpen(false);
@@ -147,7 +148,8 @@ export function Spg99TemplatePickerDialog(): JSX.Element | null {
           <legend style={{ fontSize: 12, color: "var(--ink-3)", padding: "0 4px" }}>
             {t("paid_modules.spg99.template_picker.template_label")}
           </legend>
-          {ALL_TEMPLATES.map((tpl) => (            <label
+          {ALL_TEMPLATES.map((tpl) => (
+            <label
               key={tpl}
               style={{ display: "inline-flex", gap: 6, alignItems: "center", fontSize: 13 }}
             >
@@ -162,7 +164,7 @@ export function Spg99TemplatePickerDialog(): JSX.Element | null {
               />
               <span>{t(`paid_modules.spg99.template_picker.template.${tpl}`)}</span>
             </label>
-))}
+          ))}
         </fieldset>
 
         <label style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 12 }}>
@@ -209,5 +211,5 @@ export function Spg99TemplatePickerDialog(): JSX.Element | null {
         </div>
       </form>
     </Dialog>
-);
+  );
 }

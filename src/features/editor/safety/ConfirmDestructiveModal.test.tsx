@@ -76,13 +76,14 @@ describe("ConfirmDestructiveModal", () => {
   it("supports literal token like 'delete-all'", async () => {
     const onConfirm = vi.fn();
     const user = userEvent.setup();
-    render(      <ConfirmDestructiveModal
+    render(
+      <ConfirmDestructiveModal
         {...baseProps}
         target="delete-all"
         action="DELETE"
         onConfirm={onConfirm}
       />,
-);
+    );
     await user.type(screen.getByLabelText(/inputLabel/i), "delete-all");
     await user.click(screen.getByText(/confirmButton/i));
     expect(onConfirm).toHaveBeenCalled();

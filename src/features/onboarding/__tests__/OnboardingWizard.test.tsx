@@ -49,12 +49,13 @@ const BASE_SETTINGS = {
 };
 
 function ui() {
-  return render(    <I18nextProvider i18n={i18n}>
+  return render(
+    <I18nextProvider i18n={i18n}>
       <ToastProvider>
         <OnboardingWizard />
       </ToastProvider>
     </I18nextProvider>,
-);
+  );
 }
 
 async function hydrateAndRender(overrides: Partial<typeof BASE_SETTINGS> = {}) {
@@ -112,11 +113,12 @@ describe("OnboardingWizard", () => {
       fireEvent.click(screen.getByTestId("onboarding-mode-standard"));
     });
     await waitFor(() => {
-      expect(mockedInvoke).toHaveBeenCalledWith(        "settings_set",
+      expect(mockedInvoke).toHaveBeenCalledWith(
+        "settings_set",
         expect.objectContaining({
           settings: expect.objectContaining({ onboardingCompleted: true }),
         }),
-);
+      );
     });
     expect(useOnboarding.getState().mode).toBe(null); // reset() clears it after finish
     expect(tourListener).not.toHaveBeenCalled();
@@ -134,11 +136,12 @@ describe("OnboardingWizard", () => {
       fireEvent.click(screen.getByTestId("onboarding-mode-easy"));
     });
     await waitFor(() => {
-      expect(mockedInvoke).toHaveBeenCalledWith(        "settings_set",
+      expect(mockedInvoke).toHaveBeenCalledWith(
+        "settings_set",
         expect.objectContaining({
           settings: expect.objectContaining({ onboardingCompleted: true }),
         }),
-);
+      );
     });
     await waitFor(() => {
       expect(tourListener).toHaveBeenCalled();
@@ -156,11 +159,12 @@ describe("OnboardingWizard", () => {
       fireEvent.click(screen.getByTestId("onboarding-skip"));
     });
     await waitFor(() => {
-      expect(mockedInvoke).toHaveBeenCalledWith(        "settings_set",
+      expect(mockedInvoke).toHaveBeenCalledWith(
+        "settings_set",
         expect.objectContaining({
           settings: expect.objectContaining({ onboardingCompleted: true }),
         }),
-);
+      );
     });
     expect(tourListener).not.toHaveBeenCalled();
     expect(useUiMode.getState().mode).toBe("standard");
@@ -173,11 +177,12 @@ describe("OnboardingWizard", () => {
     await hydrateAndRender();
     fireEvent.keyDown(document, { key: "Escape" });
     await waitFor(() => {
-      expect(mockedInvoke).toHaveBeenCalledWith(        "settings_set",
+      expect(mockedInvoke).toHaveBeenCalledWith(
+        "settings_set",
         expect.objectContaining({
           settings: expect.objectContaining({ onboardingCompleted: true }),
         }),
-);
+      );
     });
     expect(tourListener).not.toHaveBeenCalled();
     window.removeEventListener("ide99:tour:start", tourListener);

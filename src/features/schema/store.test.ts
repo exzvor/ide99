@@ -25,7 +25,8 @@ const initial = useSchema.getState();
 
 function reset() {
   __testing.clearInFlight();
-  useSchema.setState(    {
+  useSchema.setState(
+    {
       ...initial,
       connection: { status: "idle" },
       cache: new Map(),
@@ -33,7 +34,7 @@ function reset() {
       filter: "",
     },
     true,
-);
+  );
 }
 
 const connectInfo: ConnectInfo = { serverVersion: "PostgreSQL 17", database: "myapp" };

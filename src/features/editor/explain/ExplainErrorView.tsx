@@ -37,11 +37,13 @@ export function ExplainErrorView({ state, sourceTabId }: ExplainErrorViewProps):
   // the user opened the plan from Recent Plans, not from a live editor tab.
   const canJump = code === "postgres_error" && state.line !== undefined && sourceTabId !== null;
 
-  return (    <div data-testid="explain-error" style={{ padding: 16 }}>
+  return (
+    <div data-testid="explain-error" style={{ padding: 16 }}>
       <p style={{ color: "var(--danger, var(--accent-danger, #f43f5e))", margin: 0 }}>
         {t(messageKey, { detail: state.detail ?? "" })}
       </p>
-      {canJump && sourceTabId !== null ? (        <button
+      {canJump && sourceTabId !== null ? (
+        <button
           type="button"
           className="btn btn-sm"
           style={{ marginTop: 12 }}
@@ -52,8 +54,9 @@ export function ExplainErrorView({ state, sourceTabId }: ExplainErrorViewProps):
         >
           {t("editor.explain.error.open_in_editor")}
         </button>
-) : null}
-      {code === "postgres_error" && state.detail ? (        <div style={{ marginTop: 12 }}>
+      ) : null}
+      {code === "postgres_error" && state.detail ? (
+        <div style={{ marginTop: 12 }}>
           <ErrorExplainButton
             sqlstate={state.sqlstate}
             message={state.detail}
@@ -61,7 +64,7 @@ export function ExplainErrorView({ state, sourceTabId }: ExplainErrorViewProps):
             variant="inline"
           />
         </div>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

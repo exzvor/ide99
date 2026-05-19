@@ -124,7 +124,7 @@ describe("SettingsMcp", () => {
     await user.click(toggle);
     await waitFor(() =>
       expect(invokeMock).toHaveBeenCalledWith("mcp_set_enabled", { enabled: false }),
-);
+    );
   });
 
   it("revoke removes the client row optimistically", async () => {

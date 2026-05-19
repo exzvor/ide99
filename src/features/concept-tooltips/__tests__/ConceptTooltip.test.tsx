@@ -36,10 +36,11 @@ describe("ConceptTooltip", () => {
   });
 
   it("renders children unchanged in Standard mode (no trigger span)", () => {
-    renderInProvider(      <ConceptTooltip id="schema">
+    renderInProvider(
+      <ConceptTooltip id="schema">
         <span data-testid="child">Schema</span>
       </ConceptTooltip>,
-);
+    );
     expect(screen.getByTestId("child")).toBeInTheDocument();
     // No trigger adornment / data-concept-id wrapper should be in the DOM.
     expect(screen.queryByTestId("concept-tooltip-trigger-schema")).not.toBeInTheDocument();
@@ -47,10 +48,11 @@ describe("ConceptTooltip", () => {
 
   it("wraps children in a trigger span in Easy mode", () => {
     act(() => useUiMode.getState().setMode("easy"));
-    renderInProvider(      <ConceptTooltip id="schema">
+    renderInProvider(
+      <ConceptTooltip id="schema">
         <span data-testid="child">Schema</span>
       </ConceptTooltip>,
-);
+    );
     const trigger = screen.getByTestId("concept-tooltip-trigger-schema");
     expect(trigger).toBeInTheDocument();
     // The original child is still rendered inside the trigger.
@@ -59,10 +61,11 @@ describe("ConceptTooltip", () => {
 
   it("renders the help icon by default and hides it when showHelpIcon=false", () => {
     act(() => useUiMode.getState().setMode("easy"));
-    const { unmount } = renderInProvider(      <ConceptTooltip id="schema">
+    const { unmount } = renderInProvider(
+      <ConceptTooltip id="schema">
         <span>Schema</span>
       </ConceptTooltip>,
-);
+    );
     // lucide HelpCircle renders an <svg/>; the trigger has gap=3 between
     // children and icon. We assert at least one <svg/> is present inside the
     // trigger when the default `showHelpIcon` is true.
@@ -70,10 +73,11 @@ describe("ConceptTooltip", () => {
     expect(trigger.querySelector("svg")).not.toBeNull();
     unmount();
 
-    renderInProvider(      <ConceptTooltip id="schema" showHelpIcon={false}>
+    renderInProvider(
+      <ConceptTooltip id="schema" showHelpIcon={false}>
         <span>Schema</span>
       </ConceptTooltip>,
-);
+    );
     const trigger2 = screen.getByTestId("concept-tooltip-trigger-schema");
     expect(trigger2.querySelector("svg")).toBeNull();
   });
@@ -81,13 +85,15 @@ describe("ConceptTooltip", () => {
   it("falls back to children + console.warn for an unknown id", () => {
     act(() => useUiMode.getState().setMode("easy"));
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    renderInProvider(      <ConceptTooltip id="not_a_real_concept_xyz">
+    renderInProvider(
+      <ConceptTooltip id="not_a_real_concept_xyz">
         <span data-testid="child">orphan</span>
       </ConceptTooltip>,
-);
+    );
     expect(screen.getByTestId("child")).toBeInTheDocument();
-    expect(      screen.queryByTestId("concept-tooltip-trigger-not_a_real_concept_xyz"),
-).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("concept-tooltip-trigger-not_a_real_concept_xyz"),
+    ).not.toBeInTheDocument();
     expect(warn).toHaveBeenCalledTimes(1);
     expect(warn.mock.calls[0]?.[0]).toContain("not_a_real_concept_xyz");
   });
@@ -95,7 +101,8 @@ describe("ConceptTooltip", () => {
   it("warns at most once per missing id (memoised)", () => {
     act(() => useUiMode.getState().setMode("easy"));
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    renderInProvider(      <>
+    renderInProvider(
+      <>
         <ConceptTooltip id="another_unknown_xyz">
           <span>a</span>
         </ConceptTooltip>
@@ -103,7 +110,7 @@ describe("ConceptTooltip", () => {
           <span>b</span>
         </ConceptTooltip>
       </>,
-);
+    );
     expect(warn).toHaveBeenCalledTimes(1);
   });
 });

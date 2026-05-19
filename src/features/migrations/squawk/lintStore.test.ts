@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * Zustand sub-store for Squawk lint findings. Frontend-only: backend is
  * accessed via Tauri commands inside MigrationsPanel and the store is

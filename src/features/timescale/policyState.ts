@@ -47,7 +47,8 @@ function parseConfig(raw: string | null): Record<string, unknown> {
   }
 }
 
-export async function loadCompressionPolicy(  connId: string,
+export async function loadCompressionPolicy(
+  connId: string,
   schema: string,
   table: string,
 ): Promise<CompressionPolicy | null> {
@@ -65,7 +66,8 @@ export async function loadCompressionPolicy(  connId: string,
   }
 }
 
-export async function loadRetentionPolicy(  connId: string,
+export async function loadRetentionPolicy(
+  connId: string,
   schema: string,
   table: string,
 ): Promise<RetentionPolicy | null> {
@@ -83,14 +85,16 @@ export async function loadRetentionPolicy(  connId: string,
   }
 }
 
-export async function loadRefreshPolicy(  connId: string,
+export async function loadRefreshPolicy(
+  connId: string,
   schema: string,
   view: string,
 ): Promise<RefreshPolicy | null> {
   try {
-    const result = await queryExecute(      connId,
+    const result = await queryExecute(
+      connId,
       buildJobsSql("policy_refresh_continuous_aggregate", schema, view),
-);
+    );
     const row = result.rows[0];
     if (!row) return null;
     const jobId = parseJobId(row[0] ?? null);

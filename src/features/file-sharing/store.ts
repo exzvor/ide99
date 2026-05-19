@@ -22,17 +22,19 @@ type State = {
   exportQuery: (tabId: string, path: string) => Promise<void>;
   exportNotebook: (notebookId: string, path: string) => Promise<void>;
   exportMigrationSet: (label: string, srcDir: string, path: string) => Promise<void>;
-  exportErdLayout: (    label: string,
+  exportErdLayout: (
+    label: string,
     schemasKey: string,
     positions: Array<{ nodeId: string; x: number; y: number }>,
     path: string,
-) => Promise<void>;
+  ) => Promise<void>;
   exportTheme: (name: string, tokens: Record<string, unknown>, path: string) => Promise<void>;
   exportKeymap: (name: string, bindings: unknown[], path: string) => Promise<void>;
-  exportHealthConfig: (    label: string,
+  exportHealthConfig: (
+    label: string,
     checks: Record<string, unknown>,
     path: string,
-) => Promise<void>;
+  ) => Promise<void>;
 
   // Preview / import.
   previewFile: (path: string) => Promise<ImportPreview>;

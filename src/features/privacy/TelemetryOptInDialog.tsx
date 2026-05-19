@@ -49,7 +49,8 @@ export function TelemetryOptInDialog(): JSX.Element | null {
       privacyChoiceMadeAt: new Date().toISOString(),
     });
 
-  return (    <>
+  return (
+    <>
       <Dialog
         open
         onOpenChange={() => {
@@ -106,5 +107,5 @@ export function TelemetryOptInDialog(): JSX.Element | null {
       </Dialog>
       <WhatWeCollectDialog open={whatOpen} onOpenChange={setWhatOpen} />
     </>
-);
+  );
 }

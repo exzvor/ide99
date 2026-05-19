@@ -21,7 +21,8 @@ export function RawJsonView({ plan }: RawJsonViewProps): JSX.Element {
 
   const html = useMemo(() => highlight(pretty), [pretty]);
 
-  return (    <div
+  return (
+    <div
       data-testid="raw-json-view"
       className="q-scroll"
       style={{
@@ -46,7 +47,7 @@ export function RawJsonView({ plan }: RawJsonViewProps): JSX.Element {
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </div>
-);
+  );
 }
 
 function escapeHtml(s: string): string {
@@ -63,7 +64,8 @@ function escapeHtml(s: string): string {
  */
 function highlight(jsonStr: string): string {
   const escaped = escapeHtml(jsonStr);
-  return escaped.replace(    /(&quot;[^&]*?&quot;)(\s*:)?|\b(true|false|null)\b|(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/g,
+  return escaped.replace(
+    /(&quot;[^&]*?&quot;)(\s*:)?|\b(true|false|null)\b|(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/g,
     (_, str, colon, bool, num) => {
       if (str !== undefined) {
         if (colon) {
@@ -79,5 +81,5 @@ function highlight(jsonStr: string): string {
       }
       return _;
     },
-);
+  );
 }

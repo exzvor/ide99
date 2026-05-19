@@ -75,8 +75,9 @@ function identText(t: Token | undefined): string | null {
 
 /** Pure: classify the LAST top-level statement in `sql`. */
 export function analyzeStatement(sql: string): StatementAnalysis {
-  const tokens = tokenize(sql).filter(    (t) => t.kind !== "ws" && t.kind !== "comment" && t.kind !== "eof",
-);
+  const tokens = tokenize(sql).filter(
+    (t) => t.kind !== "ws" && t.kind !== "comment" && t.kind !== "eof",
+  );
   if (tokens.length === 0) return { kind: "safe", isReadHeavy: true };
 
   // Find boundary of last top-level statement: walk backwards, last `;` outside parens.
@@ -161,14 +162,15 @@ export function analyzeStatement(sql: string): StatementAnalysis {
   }
 
   // INSERT / CREATE / ALTER / GRANT / SET / etc. — safe (creation/admin)
-  if (    tokenIs(stmt[0], "insert") ||
+  if (
+    tokenIs(stmt[0], "insert") ||
     tokenIs(stmt[0], "create") ||
     tokenIs(stmt[0], "alter") ||
     tokenIs(stmt[0], "grant") ||
     tokenIs(stmt[0], "revoke") ||
     tokenIs(stmt[0], "set") ||
     tokenIs(stmt[0], "comment")
-) {
+  ) {
     return { kind: "safe" };
   }
 
@@ -182,8 +184,9 @@ export function analyzeStatement(sql: string): StatementAnalysis {
  * round-tripping through `analyzeStatement`'s discriminator.
  */
 function lastStatementTokens(sql: string): Token[] {
-  const tokens = tokenize(sql).filter(    (t) => t.kind !== "ws" && t.kind !== "comment" && t.kind !== "eof",
-);
+  const tokens = tokenize(sql).filter(
+    (t) => t.kind !== "ws" && t.kind !== "comment" && t.kind !== "eof",
+  );
   if (tokens.length === 0) return [];
 
   let endIdx = tokens.length;
@@ -312,9 +315,10 @@ export function analyzeForEasyAdvisory(sql: string): EasyAdvisory | null {
       // to see, and JOIN keywords may stack (LEFT OUTER JOIN, …).
       continue;
     }
-    if (      (t.kind === "keyword" || t.kind === "ident") &&
+    if (
+      (t.kind === "keyword" || t.kind === "ident") &&
       FROM_TERMINATORS.has(t.text.toLowerCase())
-) {
+    ) {
       endOfFromList = j;
       break;
     }

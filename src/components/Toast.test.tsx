@@ -5,7 +5,8 @@ import { ToastProvider, useToast } from "./Toast";
 
 function ToastTrigger() {
   const toast = useToast();
-  return (    <div>
+  return (
+    <div>
       <button type="button" onClick={() => toast.success("Saved successfully")}>
         Trigger success
       </button>
@@ -13,7 +14,7 @@ function ToastTrigger() {
         Trigger error
       </button>
     </div>
-);
+  );
 }
 
 describe("Toast", () => {
@@ -26,10 +27,11 @@ describe("Toast", () => {
 
   it("success() dispatches a toast that becomes visible inside ToastProvider", async () => {
     const user = userEvent.setup();
-    render(      <ToastProvider>
+    render(
+      <ToastProvider>
         <ToastTrigger />
       </ToastProvider>,
-);
+    );
 
     await user.click(screen.getByRole("button", { name: "Trigger success" }));
 
@@ -39,10 +41,11 @@ describe("Toast", () => {
 
   it("error() dispatches a toast with the error variant marker", async () => {
     const user = userEvent.setup();
-    render(      <ToastProvider>
+    render(
+      <ToastProvider>
         <ToastTrigger />
       </ToastProvider>,
-);
+    );
 
     await user.click(screen.getByRole("button", { name: "Trigger error" }));
 

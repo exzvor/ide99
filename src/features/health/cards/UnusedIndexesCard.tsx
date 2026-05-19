@@ -21,21 +21,24 @@ export function UnusedIndexesCard({ connId, state }: CardProps): JSX.Element {
 
   const rows = state.card.data.rows;
   if (rows.length === 0) {
-    return (      <CardShell
+    return (
+      <CardShell
         cardId="unused_indexes"
         connId={connId}
         state={{ status: "empty", reason: "no_data" }}
       />
-);
+    );
   }
 
   const top3 = rows.slice(0, 3);
   const total = rows.reduce((acc, r) => acc + r.sizeBytes, 0);
   const tone: "ok" | "warn" = total > ONE_HUNDRED_MB ? "warn" : "ok";
 
-  const body = (    <table style={{ width: "100%", fontSize: 12, borderCollapse: "collapse" }}>
+  const body = (
+    <table style={{ width: "100%", fontSize: 12, borderCollapse: "collapse" }}>
       <tbody>
-        {top3.map((r) => (          <tr key={`${r.schema}.${r.index}`} data-testid="unused-index-row">
+        {top3.map((r) => (
+          <tr key={`${r.schema}.${r.index}`} data-testid="unused-index-row">
             <td style={{ padding: "2px 4px", fontFamily: "var(--font-mono)" }}>
               {t("health.card.unused_indexes.row", {
                 schema: r.schema,
@@ -58,17 +61,18 @@ export function UnusedIndexesCard({ connId, state }: CardProps): JSX.Element {
               />
             </td>
           </tr>
-))}
+        ))}
       </tbody>
     </table>
-);
+  );
 
-  return (    <CardShell
+  return (
+    <CardShell
       cardId="unused_indexes"
       connId={connId}
       state={state}
       body={body}
       status={{ tone, tooltip: t(`health.status.${tone}`) }}
     />
-);
+  );
 }

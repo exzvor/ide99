@@ -46,20 +46,22 @@ describe("Cell typed dispatch", () => {
 
   test("S27 — geometry value renders <GeometryCellSvg>", () => {
     // POINT(1, 2) SRID 4326 — well-formed EWKB hex from PostGIS.
-    render(      <Cell
+    render(
+      <Cell
         column={COL({ typeName: "geometry(Point,4326)" })}
         value="0101000020E6100000000000000000F03F0000000000000040"
       />,
-);
+    );
     expect(screen.getByTestId("geom-cell-svg")).toBeInTheDocument();
   });
 
   test("S27 — geography column also routes to <GeometryCellSvg>", () => {
-    render(      <Cell
+    render(
+      <Cell
         column={COL({ typeName: "geography(Polygon,4326)" })}
         value="0101000020E6100000000000000000F03F0000000000000040"
       />,
-);
+    );
     expect(screen.getByTestId("geom-cell-svg")).toBeInTheDocument();
   });
 });

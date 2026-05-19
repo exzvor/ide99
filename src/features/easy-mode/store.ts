@@ -34,7 +34,9 @@ export interface UiModeState {
 
 const STORAGE_KEY = "ide99:ui:mode-v1";
 
-export const useUiMode = create<UiModeState>()(  persist(    (set, get) => ({
+export const useUiMode = create<UiModeState>()(
+  persist(
+    (set, get) => ({
       mode: "standard",
       tourCompleted: false,
       setMode: (mode) => set({ mode }),
@@ -53,7 +55,7 @@ export const useUiMode = create<UiModeState>()(  persist(    (set, get) => ({
         }
       },
     },
-),
+  ),
 );
 
 /** True when the user is currently in Easy mode — used as a feature gate by

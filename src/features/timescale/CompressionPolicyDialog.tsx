@@ -100,7 +100,8 @@ export function CompressionPolicyDialog(props: CompressionPolicyDialogProps): JS
     onClose();
   };
 
-  return (    <RadixDialog.Root
+  return (
+    <RadixDialog.Root
       open={open}
       onOpenChange={(o) => {
         if (!o) onClose();
@@ -120,9 +121,12 @@ export function CompressionPolicyDialog(props: CompressionPolicyDialogProps): JS
             Manage TimescaleDB compression for older chunks of this hypertable.
           </RadixDialog.Description>
 
-          {loading ? (            <p style={{ fontSize: 12, color: "var(--ink-3)" }}>Loading current policy…</p>
-) : (            <>
-              {existing ? (                <p
+          {loading ? (
+            <p style={{ fontSize: 12, color: "var(--ink-3)" }}>Loading current policy…</p>
+          ) : (
+            <>
+              {existing ? (
+                <p
                   style={{
                     fontSize: 12,
                     color: "var(--ink-2)",
@@ -133,7 +137,7 @@ export function CompressionPolicyDialog(props: CompressionPolicyDialogProps): JS
                 >
                   {`Policy active: compress chunks older than ${existing.compressAfter}. Job ID ${existing.jobId}.`}
                 </p>
-) : null}
+              ) : null}
 
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 <label style={fieldLabel}>
@@ -175,7 +179,8 @@ export function CompressionPolicyDialog(props: CompressionPolicyDialogProps): JS
                 <button type="button" className="btn btn-ghost" onClick={onClose}>
                   Cancel
                 </button>
-                {existing ? (                  <button
+                {existing ? (
+                  <button
                     type="button"
                     className="btn btn-danger"
                     data-testid="compression-policy-dialog-drop"
@@ -183,7 +188,7 @@ export function CompressionPolicyDialog(props: CompressionPolicyDialogProps): JS
                   >
                     Drop policy
                   </button>
-) : null}
+                ) : null}
                 <button
                   type="button"
                   className="btn btn-primary"
@@ -194,9 +199,9 @@ export function CompressionPolicyDialog(props: CompressionPolicyDialogProps): JS
                 </button>
               </div>
             </>
-)}
+          )}
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
-);
+  );
 }

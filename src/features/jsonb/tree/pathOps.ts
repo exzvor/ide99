@@ -66,7 +66,8 @@ export function deleteAtPath(value: unknown, path: ReadonlyArray<string>): unkno
 }
 
 /** Move an array element from one index to another at the parent path. */
-export function moveArrayItem(  value: unknown,
+export function moveArrayItem(
+  value: unknown,
   parentPath: ReadonlyArray<string>,
   fromIdx: number,
   toIdx: number,

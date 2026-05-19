@@ -56,7 +56,8 @@ export function parseVariableRef(raw: string): VariableRef | null {
  * and refer to the *position* (not cell.id), matching the user's mental
  * model of «above this cell».
  */
-export function substituteVariables(  source: string,
+export function substituteVariables(
+  source: string,
   cells: Cell[],
   options: { mode?: "text" | "html" } = {},
 ): string {

@@ -113,11 +113,12 @@ export function FunctionEditor({ tab }: FunctionEditorProps): JSX.Element {
         // Overload signature is stuffed into `parentTable` by the toolbar;
         // empty string ⇒ zero-arg lookup.
         const fnArgs = tab.target.parentTable ?? "";
-        const def = await schemaGetFunctionDefinition(          tab.connectionId,
+        const def = await schemaGetFunctionDefinition(
+          tab.connectionId,
           tab.target.schema,
           tab.target.name ?? "",
           fnArgs,
-);
+        );
         if (cancelled) return;
         let form: FunctionForm;
         try {
@@ -155,11 +156,12 @@ export function FunctionEditor({ tab }: FunctionEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: FunctionForm) => FunctionForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: FunctionForm) => FunctionForm): void => {
       updateForm(tab.id, (s) => (s.kind === "function" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "function" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -177,16 +179,18 @@ export function FunctionEditor({ tab }: FunctionEditorProps): JSX.Element {
   const touched = useTouched(stableFormState?.form, stableFormState?.initial);
 
   if (loadError) {
-    return (      <div data-testid="function-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="function-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="function-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="function-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -234,7 +238,8 @@ export function FunctionEditor({ tab }: FunctionEditorProps): JSX.Element {
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="function-editor"
       style={{
         display: "grid",
@@ -273,7 +278,8 @@ export function FunctionEditor({ tab }: FunctionEditorProps): JSX.Element {
             onChange={(e) => onChange((f) => ({ ...f, name: e.target.value }))}
           />
         </div>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="fn-dirty-badge"
             aria-label={t("object_editor.common.dirty")}
             style={{
@@ -286,7 +292,7 @@ export function FunctionEditor({ tab }: FunctionEditorProps): JSX.Element {
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <div style={{ paddingBottom: 4 }}>
           <HelpLink topic="function" />
@@ -317,7 +323,8 @@ export function FunctionEditor({ tab }: FunctionEditorProps): JSX.Element {
               <option value="other">{t("object_editor.function.languages_other")}</option>
             </select>
           </div>
-          {form.language === "other" ? (            <div className="q-field" style={{ width: 220 }}>
+          {form.language === "other" ? (
+            <div className="q-field" style={{ width: 220 }}>
               <label htmlFor={`fn-language-other-${tab.id}`}>
                 {t("object_editor.function.languages_other")}
               </label>
@@ -330,7 +337,7 @@ export function FunctionEditor({ tab }: FunctionEditorProps): JSX.Element {
                 onChange={(e) => onChange((f) => ({ ...f, languageOther: e.target.value }))}
               />
             </div>
-) : null}
+          ) : null}
         </section>
 
         {/* Parameters */}
@@ -500,7 +507,7 @@ export function FunctionEditor({ tab }: FunctionEditorProps): JSX.Element {
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }
 
 // Re-export for tests / sub-component consumers.

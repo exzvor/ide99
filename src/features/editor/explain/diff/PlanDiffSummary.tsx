@@ -42,7 +42,8 @@ export function PlanDiffSummary({ diff }: PlanDiffSummaryProps): JSX.Element {
   const showNoShared = matched.length === 0 && addedRight.length > 0 && removedLeft.length > 0;
 
   if (showNoShared) {
-    return (      <div
+    return (
+      <div
         className="q-statusbar"
         data-testid="plan-diff-summary"
         style={{
@@ -56,7 +57,7 @@ export function PlanDiffSummary({ diff }: PlanDiffSummaryProps): JSX.Element {
           {t("editor.explain.diff.summary.no_shared")}
         </span>
       </div>
-);
+    );
   }
 
   const costLine = t("editor.explain.diff.summary.cost", {
@@ -78,7 +79,8 @@ export function PlanDiffSummary({ diff }: PlanDiffSummaryProps): JSX.Element {
   const costDelta = costDeltaInfo(summary.totalCostLeft, summary.totalCostRight);
   const timeDelta = timeDeltaInfo(summary.totalTimeLeft, summary.totalTimeRight);
 
-  return (    <div className="q-diff-headline" data-testid="plan-diff-summary">
+  return (
+    <div className="q-diff-headline" data-testid="plan-diff-summary">
       <div className="meta-block">
         <span className="lbl">ΔCost</span>
         <span className={`delta ${costDelta.tone}`} data-testid="plan-diff-summary-cost">
@@ -114,10 +116,11 @@ export function PlanDiffSummary({ diff }: PlanDiffSummaryProps): JSX.Element {
         <span data-testid="plan-diff-summary-shape-line">{shapeLine}</span>
       </span>
     </div>
-);
+  );
 }
 
-function costDeltaInfo(  l: number | null,
+function costDeltaInfo(
+  l: number | null,
   r: number | null,
 ): { text: string; tone: "ok" | "crit" | "" } {
   if (l === null || r === null) return { text: "n/a", tone: "" };
@@ -130,7 +133,8 @@ function costDeltaInfo(  l: number | null,
   };
 }
 
-function timeDeltaInfo(  l: number | null,
+function timeDeltaInfo(
+  l: number | null,
   r: number | null,
 ): { text: string; tone: "ok" | "crit" | "" } {
   if (l === null || r === null) return { text: "n/a", tone: "" };

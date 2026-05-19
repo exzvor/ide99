@@ -266,7 +266,8 @@ function fetchCard(cardId: CardId, connectionId: string): Promise<CardResult<unk
 }
 
 /** Settled→CardState; rejected promises map to a generic queryFailed error. */
-function settledToState<T>(  cardId: CardId,
+function settledToState<T>(
+  cardId: CardId,
   settled: PromiseSettledResult<CardResult<T>>,
 ): CardState {
   if (settled.status === "fulfilled") {
@@ -281,7 +282,8 @@ function copyByConn(byConn: Map<string, PerConnState>): Map<string, PerConnState
   return new Map(byConn);
 }
 
-function withSlice(  byConn: Map<string, PerConnState>,
+function withSlice(
+  byConn: Map<string, PerConnState>,
   connectionId: string,
   slice: PerConnState,
 ): Map<string, PerConnState> {

@@ -13,11 +13,12 @@ import type { JSX } from "react";
  * surface as a stacked second dialog (the bug the user observed).
  */
 export function JsonCell({ value }: { value: string }): JSX.Element {
-  return (    <span
+  return (
+    <span
       className="block w-full overflow-hidden text-ellipsis whitespace-nowrap font-mono"
       title={value}
     >
       {value}
     </span>
-);
+  );
 }

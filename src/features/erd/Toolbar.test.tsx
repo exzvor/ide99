@@ -122,13 +122,15 @@ function makeStub(): Stub {
   };
 }
 
-function renderToolbar(  props?: Partial<Stub & { selectedSchemas?: string[]; availableSchemas?: string[] }>,
+function renderToolbar(
+  props?: Partial<Stub & { selectedSchemas?: string[]; availableSchemas?: string[] }>,
 ) {
   const stub = makeStub();
   const { selectedSchemas, availableSchemas, ...rest } = props ?? {};
   return {
     stub,
-    ...render(      <Toolbar
+    ...render(
+      <Toolbar
         tabId="tab-1"
         graph={sampleGraph}
         availableSchemas={availableSchemas ?? ["auth", "public", "sales"]}
@@ -140,7 +142,7 @@ function renderToolbar(  props?: Partial<Stub & { selectedSchemas?: string[]; av
         onFit={rest.onFit ?? stub.onFit}
         getSvgEl={() => rest.svg ?? stub.svg}
       />,
-),
+    ),
   };
 }
 
@@ -196,7 +198,8 @@ describe("Toolbar", () => {
       fetchedInMs: 5,
     };
     const user = userEvent.setup();
-    render(      <Toolbar
+    render(
+      <Toolbar
         tabId="tab-1"
         graph={filteredGraph}
         availableSchemas={["auth", "perf", "public", "qa_s11", "sales"]}
@@ -208,7 +211,7 @@ describe("Toolbar", () => {
         onFit={() => {}}
         getSvgEl={() => makeFakeSvg()}
       />,
-);
+    );
     await user.click(screen.getByTestId("erd-schema-filter"));
     expect(screen.getByTestId("erd-schema-filter-option-public")).toBeInTheDocument();
     expect(screen.getByTestId("erd-schema-filter-option-sales")).toBeInTheDocument();

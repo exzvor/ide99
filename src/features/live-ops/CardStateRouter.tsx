@@ -17,27 +17,31 @@ export function CardStateRouter<T>({ state, renderReady, onRetry }: Props<T>): J
     case "ready":
       return <>{renderReady(state.data)}</>;
     case "unavailable":
-      return (        <div className="live-ops-shimmer">
+      return (
+        <div className="live-ops-shimmer">
           <strong>{t("live_ops.error.unavailable", { extension: state.extension })}</strong>
           <pre style={{ marginTop: 8 }}>{state.installSql}</pre>
         </div>
-);
+      );
     case "forbidden":
-      return (        <div className="live-ops-shimmer">
+      return (
+        <div className="live-ops-shimmer">
           <strong>{t("live_ops.error.forbidden", { role: state.requiredRole })}</strong>
           <pre style={{ marginTop: 8 }}>
             {t("live_ops.error.forbidden_grant", { role: state.requiredRole })}
           </pre>
         </div>
-);
+      );
     case "error":
-      return (        <div className="live-ops-shimmer">
+      return (
+        <div className="live-ops-shimmer">
           <strong>{t("live_ops.error.query_failed", { message: state.message })}</strong>
-          {onRetry && (            <button type="button" onClick={onRetry} style={{ marginTop: 8 }}>
+          {onRetry && (
+            <button type="button" onClick={onRetry} style={{ marginTop: 8 }}>
               {t("live_ops.error.retry")}
             </button>
-)}
+          )}
         </div>
-);
+      );
   }
 }

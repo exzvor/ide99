@@ -58,8 +58,9 @@ function enumDdl(initial: EnumTypeForm | null, current: EnumTypeForm): DdlResult
   // Diff by id. Detect reorder/rename → DROP+CREATE.
   const initialById = new Map(initial.values.map((v) => [v.id, v.value]));
   const reordered = isReordered(initial.values, current.values);
-  const renamed = current.values.some(    (v) => initialById.has(v.id) && initialById.get(v.id) !== v.value,
-);
+  const renamed = current.values.some(
+    (v) => initialById.has(v.id) && initialById.get(v.id) !== v.value,
+  );
   if (reordered || renamed) {
     const drop = `DROP TYPE ${fq} CASCADE;`;
     const create = enumDdl(null, current).sql;
@@ -105,9 +106,10 @@ function compositeDdl(initial: CompositeTypeForm | null, current: CompositeTypeF
   const fq = fqName(current.schema, current.name);
   if (!initial) {
     const cols = current.fields
-      .map(        (f) =>
+      .map(
+        (f) =>
           `${quoteIdent(f.fieldName)} ${f.typeText}${f.collation ? ` COLLATE ${quoteIdent(f.collation)}` : ""}`,
-)
+      )
       .join(", ");
     return { sql: `CREATE TYPE ${fq} AS (${cols});`, warnings: [], errors: [] };
   }
@@ -115,8 +117,9 @@ function compositeDdl(initial: CompositeTypeForm | null, current: CompositeTypeF
   const currentById = new Map(current.fields.map((f) => [f.id, f]));
   const stmts: string[] = [];
   if (initial.schema !== current.schema || initial.name !== current.name) {
-    stmts.push(      `ALTER TYPE ${fqName(initial.schema, initial.name)} RENAME TO ${quoteIdent(current.name)};`,
-);
+    stmts.push(
+      `ALTER TYPE ${fqName(initial.schema, initial.name)} RENAME TO ${quoteIdent(current.name)};`,
+    );
   }
   for (const f of current.fields) {
     const before = initialById.get(f.id);
@@ -124,12 +127,14 @@ function compositeDdl(initial: CompositeTypeForm | null, current: CompositeTypeF
       stmts.push(`ALTER TYPE ${fq} ADD ATTRIBUTE ${quoteIdent(f.fieldName)} ${f.typeText};`);
     } else {
       if (before.fieldName !== f.fieldName) {
-        stmts.push(          `ALTER TYPE ${fq} RENAME ATTRIBUTE ${quoteIdent(before.fieldName)} TO ${quoteIdent(f.fieldName)};`,
-);
+        stmts.push(
+          `ALTER TYPE ${fq} RENAME ATTRIBUTE ${quoteIdent(before.fieldName)} TO ${quoteIdent(f.fieldName)};`,
+        );
       }
       if (before.typeText !== f.typeText) {
-        stmts.push(          `ALTER TYPE ${fq} ALTER ATTRIBUTE ${quoteIdent(f.fieldName)} TYPE ${f.typeText};`,
-);
+        stmts.push(
+          `ALTER TYPE ${fq} ALTER ATTRIBUTE ${quoteIdent(f.fieldName)} TYPE ${f.typeText};`,
+        );
       }
     }
   }
@@ -162,10 +167,11 @@ function domainDdl(initial: DomainTypeForm | null, current: DomainTypeForm): Ddl
   }
   const stmts: string[] = [];
   if (initial.default !== current.default) {
-    stmts.push(      current.default !== undefined
+    stmts.push(
+      current.default !== undefined
         ? `ALTER DOMAIN ${fq} SET DEFAULT ${current.default};`
         : `ALTER DOMAIN ${fq} DROP DEFAULT;`,
-);
+    );
   }
   if (initial.notNull !== current.notNull) {
     stmts.push(`ALTER DOMAIN ${fq} ${current.notNull ? "SET NOT NULL" : "DROP NOT NULL"};`);
@@ -178,12 +184,14 @@ function domainDdl(initial: DomainTypeForm | null, current: DomainTypeForm): Ddl
       const namePart = c.constraintName ? `CONSTRAINT ${quoteIdent(c.constraintName)} ` : "";
       const notValid = c.notValid ? " NOT VALID" : "";
       stmts.push(`ALTER DOMAIN ${fq} ADD ${namePart}CHECK (${c.checkExpression})${notValid};`);
-    } else if (      before.constraintName !== c.constraintName &&
+    } else if (
+      before.constraintName !== c.constraintName &&
       before.constraintName &&
       c.constraintName
-) {
-      stmts.push(        `ALTER DOMAIN ${fq} RENAME CONSTRAINT ${quoteIdent(before.constraintName)} TO ${quoteIdent(c.constraintName)};`,
-);
+    ) {
+      stmts.push(
+        `ALTER DOMAIN ${fq} RENAME CONSTRAINT ${quoteIdent(before.constraintName)} TO ${quoteIdent(c.constraintName)};`,
+      );
     }
   }
   for (const c of initial.constraints) {
@@ -214,10 +222,11 @@ function rangeDdl(initial: RangeTypeForm | null, current: RangeTypeForm): DdlRes
       errors: [],
     };
   }
-  if (    initial.schema === current.schema &&
+  if (
+    initial.schema === current.schema &&
     initial.name !== current.name &&
     rangeBodyEqual(initial, current)
-) {
+  ) {
     return {
       sql: `ALTER TYPE ${fqName(initial.schema, initial.name)} RENAME TO ${quoteIdent(current.name)};`,
       warnings: [],
@@ -243,11 +252,12 @@ function rangeDdl(initial: RangeTypeForm | null, current: RangeTypeForm): DdlRes
 }
 
 function rangeBodyEqual(a: RangeTypeForm, b: RangeTypeForm): boolean {
-  return (    a.subtype === b.subtype &&
+  return (
+    a.subtype === b.subtype &&
     a.subtypeOpclass === b.subtypeOpclass &&
     a.collation === b.collation &&
     a.canonical === b.canonical &&
     a.subtypeDiff === b.subtypeDiff &&
     a.multirangeTypeName === b.multirangeTypeName
-);
+  );
 }

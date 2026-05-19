@@ -51,7 +51,8 @@ const COLUMNS = [
 
 describe("ContinuousAggregateWizard", () => {
   it("renders the form with required fields", () => {
-    render(      <ContinuousAggregateWizard
+    render(
+      <ContinuousAggregateWizard
         open={true}
         connId="conn-1"
         qualifiedTable={'"public"."metrics"'}
@@ -60,7 +61,7 @@ describe("ContinuousAggregateWizard", () => {
         columns={COLUMNS}
         onClose={() => {}}
       />,
-);
+    );
     expect(screen.getByTestId("continuous-aggregate-wizard")).toBeInTheDocument();
     expect(screen.getByTestId("continuous-aggregate-wizard-view-name")).toBeInTheDocument();
     expect(screen.getByTestId("continuous-aggregate-wizard-time-col")).toBeInTheDocument();
@@ -70,7 +71,8 @@ describe("ContinuousAggregateWizard", () => {
   it("emits SQL with quoted view name and WITH NO DATA by default on Apply", () => {
     openEditorTab.mockClear();
     const onClose = vi.fn();
-    render(      <ContinuousAggregateWizard
+    render(
+      <ContinuousAggregateWizard
         open={true}
         connId="conn-1"
         qualifiedTable={'"public"."metrics"'}
@@ -79,7 +81,7 @@ describe("ContinuousAggregateWizard", () => {
         columns={COLUMNS}
         onClose={onClose}
       />,
-);
+    );
     fireEvent.change(screen.getByTestId("continuous-aggregate-wizard-view-name"), {
       target: { value: "hourly_metrics" },
     });
@@ -100,7 +102,8 @@ describe("ContinuousAggregateWizard", () => {
 
   it("emits WITH DATA when the checkbox is enabled", () => {
     openEditorTab.mockClear();
-    render(      <ContinuousAggregateWizard
+    render(
+      <ContinuousAggregateWizard
         open={true}
         connId="conn-1"
         qualifiedTable={'"public"."metrics"'}
@@ -109,7 +112,7 @@ describe("ContinuousAggregateWizard", () => {
         columns={COLUMNS}
         onClose={() => {}}
       />,
-);
+    );
     fireEvent.change(screen.getByTestId("continuous-aggregate-wizard-view-name"), {
       target: { value: "hourly_metrics" },
     });
@@ -124,7 +127,8 @@ describe("ContinuousAggregateWizard", () => {
 
   it("uses custom raw view name when 'use custom qualified name' is enabled", () => {
     openEditorTab.mockClear();
-    render(      <ContinuousAggregateWizard
+    render(
+      <ContinuousAggregateWizard
         open={true}
         connId="conn-1"
         qualifiedTable={'"public"."metrics"'}
@@ -133,7 +137,7 @@ describe("ContinuousAggregateWizard", () => {
         columns={COLUMNS}
         onClose={() => {}}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("continuous-aggregate-wizard-custom-name"));
     fireEvent.change(screen.getByTestId("continuous-aggregate-wizard-view-name-raw"), {
       target: { value: "analytics.cagg_v1" },

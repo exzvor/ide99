@@ -199,7 +199,8 @@ export function QuietPlanCanvas({
   }, [highlight]);
 
   if (!layout || layout.placed.length === 0) {
-    return (      <div
+    return (
+      <div
         data-testid="quiet-plan-canvas-empty"
         style={{
           flex: 1,
@@ -212,10 +213,11 @@ export function QuietPlanCanvas({
       >
         Не удалось разобрать план
       </div>
-);
+    );
   }
 
-  return (    <div
+  return (
+    <div
       ref={scrollRef}
       data-testid="quiet-plan-canvas"
       className="q-plan-canvas q-scroll"
@@ -253,14 +255,16 @@ export function QuietPlanCanvas({
             </marker>
           </defs>
           <g stroke="var(--ink-5)" strokeWidth="1.2" fill="none" markerEnd="url(#quiet-plan-arrow)">
-            {layout.edges.map((e) => (              <path key={`${e.from}-${e.to}`} d={e.d} />
-))}
+            {layout.edges.map((e) => (
+              <path key={`${e.from}-${e.to}`} d={e.d} />
+            ))}
           </g>
         </svg>
         {layout.placed.map((n) => {
           const isActive = highlight === n.label;
           const sevClass = n.severity === "crit" ? "crit" : n.severity === "hot" ? "hot" : "";
-          return (            <button
+          return (
+            <button
               type="button"
               key={n.id}
               ref={isActive ? activeRef : undefined}
@@ -270,10 +274,11 @@ export function QuietPlanCanvas({
                 n.neverExecuted ? "never-exec" : ""
               }`}
               onClick={() =>
-                onSelect(                  isActive ? null : n.label,
+                onSelect(
+                  isActive ? null : n.label,
                   isActive ? null : n.node,
                   isActive ? null : n.idx,
-)
+                )
               }
               style={{
                 position: "absolute",
@@ -287,43 +292,48 @@ export function QuietPlanCanvas({
               <div className="pn-h">
                 <span className="idx">#{n.idx}</span>
                 <span className="ttl">{n.shortType}</span>
-                {n.parallelWorkers && n.parallelWorkers > 0 ? (                  <span className="badge" title={`${n.parallelWorkers} parallel workers`}>
+                {n.parallelWorkers && n.parallelWorkers > 0 ? (
+                  <span className="badge" title={`${n.parallelWorkers} parallel workers`}>
                     ‖{n.parallelWorkers}
                   </span>
-) : null}
-                {n.neverExecuted ? (                  <span className="badge muted" title="Never executed">
+                ) : null}
+                {n.neverExecuted ? (
+                  <span className="badge muted" title="Never executed">
                     ∅
                   </span>
-) : null}
+                ) : null}
               </div>
               {n.meta ? <div className="pn-meta">{n.meta}</div> : null}
               <div className="pn-stats">
-                {n.exclusiveMs != null ? (                  <span className="stat">
+                {n.exclusiveMs != null ? (
+                  <span className="stat">
                     <span className="v">{shortDuration(n.exclusiveMs)}</span>
                     <span className="l">time</span>
                   </span>
-) : null}
-                {n.rows != null ? (                  <span className="stat">
+                ) : null}
+                {n.rows != null ? (
+                  <span className="stat">
                     <span className="v">{shortNumber(n.rows)}</span>
                     <span className="l">rows</span>
                   </span>
-) : null}
+                ) : null}
                 <span className="stat">
                   <span className={`v ${n.severity === "crit" ? "crit" : ""}`}>
                     {n.cost.toFixed(0)}
                   </span>
                   <span className="l">cost</span>
                 </span>
-                {n.bufferRead != null && n.bufferRead > 0 ? (                  <span className="stat" title="Shared blocks (hit + read)">
+                {n.bufferRead != null && n.bufferRead > 0 ? (
+                  <span className="stat" title="Shared blocks (hit + read)">
                     <span className="v">{shortNumber(n.bufferRead)}</span>
                     <span className="l">buf</span>
                   </span>
-) : null}
+                ) : null}
               </div>
             </button>
-);
+          );
         })}
       </div>
     </div>
-);
+  );
 }

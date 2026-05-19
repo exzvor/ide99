@@ -33,8 +33,9 @@ describe("generateSequenceDdl — create mode", () => {
       ownedBy: { schema: "public", table: "items", column: "id" },
     });
     const result = generateSequenceDdl(null, seq);
-    expect(result.sql).toBe(      "CREATE SEQUENCE public.my_seq AS integer START 100 INCREMENT 5 CACHE 50 CYCLE OWNED BY public.items.id;",
-);
+    expect(result.sql).toBe(
+      "CREATE SEQUENCE public.my_seq AS integer START 100 INCREMENT 5 CACHE 50 CYCLE OWNED BY public.items.id;",
+    );
   });
 
   test("MINVALUE non-default emitted (≠ 1)", () => {

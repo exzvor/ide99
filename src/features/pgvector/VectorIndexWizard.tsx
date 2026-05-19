@@ -89,7 +89,8 @@ function WizardBody(props: {
     onApply({ method, withOptions: { ...params } });
   };
 
-  return (    <Dialog.Root
+  return (
+    <Dialog.Root
       open={true}
       onOpenChange={(o) => {
         if (!o) onCancel();
@@ -186,7 +187,8 @@ function WizardBody(props: {
             </label>
           </fieldset>
 
-          {method === "hnsw" ? (            <div style={{ display: "flex", gap: 12 }}>
+          {method === "hnsw" ? (
+            <div style={{ display: "flex", gap: 12 }}>
               <label style={{ display: "flex", flexDirection: "column", fontSize: 12 }}>
                 m
                 <input
@@ -210,7 +212,8 @@ function WizardBody(props: {
                 />
               </label>
             </div>
-) : (            <div style={{ display: "flex", gap: 12 }}>
+          ) : (
+            <div style={{ display: "flex", gap: 12 }}>
               <label style={{ display: "flex", flexDirection: "column", fontSize: 12 }}>
                 lists
                 <input
@@ -223,7 +226,7 @@ function WizardBody(props: {
                 />
               </label>
             </div>
-)}
+          )}
 
           <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 4 }}>
             <button
@@ -246,5 +249,5 @@ function WizardBody(props: {
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-);
+  );
 }

@@ -83,11 +83,12 @@ export function PublicationEditor({ tab }: PublicationEditorProps): JSX.Element 
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: PublicationForm) => PublicationForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: PublicationForm) => PublicationForm): void => {
       updateForm(tab.id, (s) => (s.kind === "publication" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "publication" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -102,16 +103,18 @@ export function PublicationEditor({ tab }: PublicationEditorProps): JSX.Element 
   const touched = useTouched(stableFormState?.form, stableFormState?.initial);
 
   if (loadError) {
-    return (      <div data-testid="publication-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="publication-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="publication-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="publication-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -156,7 +159,8 @@ export function PublicationEditor({ tab }: PublicationEditorProps): JSX.Element 
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="publication-editor"
       style={{
         display: "grid",
@@ -180,7 +184,8 @@ export function PublicationEditor({ tab }: PublicationEditorProps): JSX.Element 
             ? t("object_editor.publication.title_new")
             : t("object_editor.publication.title_edit")}
         </h2>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="pub-dirty-badge"
             style={{
               fontSize: 11,
@@ -191,7 +196,7 @@ export function PublicationEditor({ tab }: PublicationEditorProps): JSX.Element 
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
         <HelpLink topic="publication" />
       </div>
@@ -230,14 +235,16 @@ export function PublicationEditor({ tab }: PublicationEditorProps): JSX.Element 
             {t("object_editor.publication.mode_label")}
           </legend>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {(              [
+            {(
+              [
                 ["all_tables", "mode_all_tables"],
                 ["schemas", "mode_schemas"],
                 ["tables", "mode_tables"],
               ] as const
-).map(([value, key]) => {
+            ).map(([value, key]) => {
               const checked = form.mode === value;
-              return (                <label
+              return (
+                <label
                   key={value}
                   style={{
                     display: "inline-flex",
@@ -267,12 +274,13 @@ export function PublicationEditor({ tab }: PublicationEditorProps): JSX.Element 
                   />
                   {t(`object_editor.publication.${key}`)}
                 </label>
-);
+              );
             })}
           </div>
         </fieldset>
 
-        {form.mode === "tables" ? (          <section data-testid="pub-tables-section" style={{ display: "grid", gap: 6 }}>
+        {form.mode === "tables" ? (
+          <section data-testid="pub-tables-section" style={{ display: "grid", gap: 6 }}>
             <h4 style={{ margin: 0, fontSize: 13 }}>
               {t("object_editor.publication.tables_section")}
             </h4>
@@ -282,9 +290,10 @@ export function PublicationEditor({ tab }: PublicationEditorProps): JSX.Element 
               onChange={(tables) => onChange((g) => ({ ...g, tables }))}
             />
           </section>
-) : null}
+        ) : null}
 
-        {form.mode === "schemas" ? (          <section data-testid="pub-schemas-section" style={{ display: "grid", gap: 6 }}>
+        {form.mode === "schemas" ? (
+          <section data-testid="pub-schemas-section" style={{ display: "grid", gap: 6 }}>
             <h4 style={{ margin: 0, fontSize: 13 }}>
               {t("object_editor.publication.schemas_section")}
             </h4>
@@ -294,7 +303,7 @@ export function PublicationEditor({ tab }: PublicationEditorProps): JSX.Element 
               onChange={(schemas) => onChange((g) => ({ ...g, schemas }))}
             />
           </section>
-) : null}
+        ) : null}
 
         <fieldset
           data-testid="pub-ops-fieldset"
@@ -408,5 +417,5 @@ export function PublicationEditor({ tab }: PublicationEditorProps): JSX.Element 
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

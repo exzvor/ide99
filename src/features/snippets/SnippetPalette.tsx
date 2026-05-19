@@ -42,11 +42,12 @@ export function SnippetPalette() {
   const filtered = useMemo(() => {
     const q = filter.trim().toLowerCase();
     if (!q) return merged;
-    return merged.filter(      (s) =>
+    return merged.filter(
+      (s) =>
         s.label.toLowerCase().includes(q) ||
         s.prefixes.some((p) => p.toLowerCase().includes(q)) ||
         s.body.toLowerCase().includes(q),
-);
+    );
   }, [merged, filter]);
 
   const virtualizer = useVirtualizer({
@@ -108,7 +109,8 @@ export function SnippetPalette() {
   const isUserSnippet = (s: SnippetTemplate) => s.id.startsWith("user-");
   const userPrefixes = new Set(userSnippets.map((u) => u.prefix));
 
-  return (    <Dialog.Root open={open} onOpenChange={(o) => (o ? null : closePalette())}>
+  return (
+    <Dialog.Root open={open} onOpenChange={(o) => (o ? null : closePalette())}>
       <Dialog.Portal>
         <Dialog.Overlay className="snippet-palette-overlay" />
         <Dialog.Content className="snippet-palette-content" aria-describedby={undefined}>
@@ -131,7 +133,8 @@ export function SnippetPalette() {
                 const snip = filtered[vrow.index];
                 const builtinOverridden =
                   !isUserSnippet(snip) && snip.prefixes.some((p) => userPrefixes.has(p));
-                return (                  <button
+                return (
+                  <button
                     key={snip.id}
                     type="button"
                     onClick={() => insert(snip)}
@@ -153,12 +156,12 @@ export function SnippetPalette() {
                           : t("snippets.badge.builtin")}
                     </span>
                   </button>
-);
+                );
               })}
             </div>
           </div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-);
+  );
 }

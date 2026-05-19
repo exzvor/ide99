@@ -35,7 +35,8 @@ export function BackupCenter({ tab }: { tab: BackupTab }): JSX.Element {
     { id: "schedule", labelKey: "backup.section.schedule" },
   ];
 
-  return (    <div
+  return (
+    <div
       style={{
         display: "flex",
         flexDirection: "column",
@@ -54,7 +55,8 @@ export function BackupCenter({ tab }: { tab: BackupTab }): JSX.Element {
         }}
         aria-label={t("backup.section.nav_label")}
       >
-        {sections.map((s) => (          <button
+        {sections.map((s) => (
+          <button
             key={s.id}
             type="button"
             onClick={() => setSection(s.id)}
@@ -71,7 +73,7 @@ export function BackupCenter({ tab }: { tab: BackupTab }): JSX.Element {
           >
             {t(s.labelKey)}
           </button>
-))}
+        ))}
       </nav>
 
       <div style={{ flex: 1, minHeight: 0, padding: 16 }}>
@@ -81,5 +83,5 @@ export function BackupCenter({ tab }: { tab: BackupTab }): JSX.Element {
         {section === "schedule" ? <ScheduleManager connectionId={tab.connectionId} /> : null}
       </div>
     </div>
-);
+  );
 }

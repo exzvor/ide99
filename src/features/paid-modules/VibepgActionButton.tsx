@@ -54,7 +54,8 @@ export function VibepgActionButton({
       : `paid_modules.vibepg.${slot}.label`;
   const label = t(labelKey);
 
-  return (    <button
+  return (
+    <button
       type="button"
       onClick={onClick}
       data-testid={`vibepg-${slot}`}
@@ -76,5 +77,5 @@ export function VibepgActionButton({
       <Bot size={12} aria-hidden="true" />
       {label}
     </button>
-);
+  );
 }

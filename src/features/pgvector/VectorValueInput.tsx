@@ -57,7 +57,8 @@ export function VectorValueInput(props: VectorValueInputProps): JSX.Element {
   const literalText = value.mode === "literal" ? value.literal : "";
   const literalValid = value.mode === "literal" ? isValidVectorLiteral(literalText) : true;
 
-  return (    <div
+  return (
+    <div
       data-testid="vector-value-input"
       style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 12 }}
     >
@@ -81,7 +82,8 @@ export function VectorValueInput(props: VectorValueInputProps): JSX.Element {
         </button>
       </div>
 
-      {value.mode === "literal" ? (        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      {value.mode === "literal" ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <textarea
             data-testid="vector-input-literal"
             value={value.literal}
@@ -97,18 +99,21 @@ export function VectorValueInput(props: VectorValueInputProps): JSX.Element {
               padding: 4,
             }}
           />
-          {dimHint !== undefined ? (            <span style={{ fontSize: 11, color: "var(--ink-3)" }}>Expected dim: {dimHint}</span>
-) : null}
-          {!literalValid ? (            <span
+          {dimHint !== undefined ? (
+            <span style={{ fontSize: 11, color: "var(--ink-3)" }}>Expected dim: {dimHint}</span>
+          ) : null}
+          {!literalValid ? (
+            <span
               data-testid="vector-input-literal-error"
               role="alert"
               style={{ fontSize: 11, color: "var(--err, #d33)" }}
             >
               Invalid JSON array of numbers
             </span>
-) : null}
+          ) : null}
         </div>
-) : (        <input
+      ) : (
+        <input
           type="text"
           data-testid="vector-input-sqlfn"
           value={value.expr}
@@ -123,7 +128,7 @@ export function VectorValueInput(props: VectorValueInputProps): JSX.Element {
             padding: 4,
           }}
         />
-)}
+      )}
     </div>
-);
+  );
 }

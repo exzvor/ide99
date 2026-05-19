@@ -42,7 +42,8 @@ interface SortHeaderProps {
 }
 function SortHeader({ col, current, children, onClick }: SortHeaderProps): JSX.Element {
   const isCurrent = col === current;
-  return (    // biome-ignore lint/a11y/useKeyWithClickEvents: header sort click is mouse-only by design; keyboard users can still re-sort via context cycle
+  return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: header sort click is mouse-only by design; keyboard users can still re-sort via context cycle
     <th
       onClick={onClick}
       aria-sort={isCurrent ? "descending" : "none"}
@@ -54,7 +55,7 @@ function SortHeader({ col, current, children, onClick }: SortHeaderProps): JSX.E
         {isCurrent ? <ArrowDown size={10} aria-hidden="true" /> : null}
       </span>
     </th>
-);
+  );
 }
 
 export function SlowQueriesPane({ connId }: Props): JSX.Element | null {
@@ -75,7 +76,8 @@ export function SlowQueriesPane({ connId }: Props): JSX.Element | null {
     await editor.runExplain(tab.id, "explain");
   };
 
-  return (    <div className="live-ops-slow" data-testid="live-ops-slow">
+  return (
+    <div className="live-ops-slow" data-testid="live-ops-slow">
       <div className="live-ops-toolbar">
         <label className="live-ops-search">
           <Search size={13} aria-hidden="true" />
@@ -114,7 +116,8 @@ export function SlowQueriesPane({ connId }: Props): JSX.Element | null {
               return <div className="live-ops-shimmer">{t("live_ops.slow.empty_filtered")}</div>;
             }
             const maxMean = filtered.reduce((m, r) => Math.max(m, r.meanExecTimeMs), 0);
-            return (              <table className="live-ops-slow-table v2" data-testid="live-ops-slow-table">
+            return (
+              <table className="live-ops-slow-table v2" data-testid="live-ops-slow-table">
                 <thead>
                   <tr>
                     <SortHeader
@@ -152,7 +155,8 @@ export function SlowQueriesPane({ connId }: Props): JSX.Element | null {
                 <tbody>
                   {filtered.map((r, i) => {
                     const isHot = sortBy === "meanExecTime" && r.meanExecTimeMs === maxMean;
-                    return (                      // biome-ignore lint/a11y/useKeyWithClickEvents: row-click opens a new editor tab; keyboard users can use Cmd+E from the editor pane
+                    return (
+                      // biome-ignore lint/a11y/useKeyWithClickEvents: row-click opens a new editor tab; keyboard users can use Cmd+E from the editor pane
                       <tr
                         key={`${r.query}-${i}`}
                         onClick={() => onClickRow(r.query)}
@@ -182,19 +186,20 @@ export function SlowQueriesPane({ connId }: Props): JSX.Element | null {
                           </button>
                         </td>
                       </tr>
-);
+                    );
                   })}
                 </tbody>
               </table>
-);
+            );
           }}
         />
       </div>
     </div>
-);
+  );
 }
 
-function filterAndSort(  rows: readonly SlowQuery[],
+function filterAndSort(
+  rows: readonly SlowQuery[],
   search: string,
   sortBy: SlowSortBy,
 ): SlowQuery[] {
@@ -238,12 +243,13 @@ function SlowSummaryChip({ data, search }: SummaryProps): JSX.Element | null {
   if (!summary) return null;
   const label = pluralRu(summary.count, (s) =>
     t(`live_ops.slow.summary.queries_${s}`, { count: summary.count }),
-);
+  );
   const p99Label = t("live_ops.slow.summary.p99", {
     ms: Math.round(summary.p99).toLocaleString("ru-RU").replace(/ /g, " "),
   });
-  return (    <span className="live-ops-summary-chip has-blocked" data-testid="live-ops-slow-summary">
+  return (
+    <span className="live-ops-summary-chip has-blocked" data-testid="live-ops-slow-summary">
       {label} · <span className="num-strong">{p99Label}</span>
     </span>
-);
+  );
 }

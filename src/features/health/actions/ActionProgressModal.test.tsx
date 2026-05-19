@@ -82,7 +82,8 @@ describe("ActionProgressModal", () => {
     render(<ActionProgressModal />);
     // The fallback UI mentions "terminate" both in the body description
     // ("pg_terminate_backend") and in the confirm button label ("Terminate").
-    expect(      screen.getAllByText((t) => t.toLowerCase().includes("terminate")).length,
-).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText((t) => t.toLowerCase().includes("terminate")).length,
+    ).toBeGreaterThan(0);
   });
 });

@@ -29,7 +29,8 @@ export function ColumnsTab({ form, onChange }: ColumnsTabProps): JSX.Element {
     onChange((f) => ({ ...f, columns: [...f.columns, blankColumn()] }));
   };
 
-  return (    <div data-testid="columns-tab" style={{ padding: 12, overflow: "auto" }}>
+  return (
+    <div data-testid="columns-tab" style={{ padding: 12, overflow: "auto" }}>
       {/* `<colgroup>` + `table-layout: fixed` keeps the headers from merging
           when the panel narrows — without it long localized column names
           overlap each other. minWidth gives a horizontal scrollbar instead
@@ -76,7 +77,8 @@ export function ColumnsTab({ form, onChange }: ColumnsTabProps): JSX.Element {
           </tr>
         </thead>
         <tbody>
-          {form.columns.map((col) => (            <tr key={col.id} data-testid={`column-row-${col.id}`}>
+          {form.columns.map((col) => (
+            <tr key={col.id} data-testid={`column-row-${col.id}`}>
               <td style={{ padding: 4 }}>
                 <input
                   data-testid={`column-name-${col.id}`}
@@ -132,7 +134,8 @@ export function ColumnsTab({ form, onChange }: ColumnsTabProps): JSX.Element {
                     })
                   }
                 />
-                {col.generated !== null ? (                  <input
+                {col.generated !== null ? (
+                  <input
                     data-testid={`column-generated-expr-${col.id}`}
                     aria-label={t("object_editor.columns.generated_expr")}
                     value={col.generated.expression}
@@ -143,7 +146,7 @@ export function ColumnsTab({ form, onChange }: ColumnsTabProps): JSX.Element {
                     }
                     style={{ marginLeft: 4, width: "70%" }}
                   />
-) : null}
+                ) : null}
               </td>
               <td style={{ padding: 4 }}>
                 <input
@@ -170,7 +173,7 @@ export function ColumnsTab({ form, onChange }: ColumnsTabProps): JSX.Element {
                 </button>
               </td>
             </tr>
-))}
+          ))}
         </tbody>
       </table>
       <button
@@ -183,5 +186,5 @@ export function ColumnsTab({ form, onChange }: ColumnsTabProps): JSX.Element {
         + {t("object_editor.columns.add_column")}
       </button>
     </div>
-);
+  );
 }

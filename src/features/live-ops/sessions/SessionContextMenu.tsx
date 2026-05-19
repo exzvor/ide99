@@ -56,7 +56,8 @@ export function SessionContextMenu({ connId }: Props): JSX.Element | null {
       .openPreview({ kind: "killPid", pid: menu.pid, query: menu.query, terminate }, conn);
   };
 
-  return (    <div
+  return (
+    <div
       ref={ref}
       role="menu"
       className="q-popover"
@@ -77,5 +78,5 @@ export function SessionContextMenu({ connId }: Props): JSX.Element | null {
         {t("live_ops.sessions.terminate")}
       </button>
     </div>
-);
+  );
 }

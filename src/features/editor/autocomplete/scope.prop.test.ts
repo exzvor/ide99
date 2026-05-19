@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import { analyzeScope, tokenize } from "./scope";
 
 const sqlIdent = fc.stringMatching(/^[A-Za-z][A-Za-z0-9_]{0,11}$/);
-const sqlAtom = fc.oneof(  fc.constant("SELECT * FROM t"),
+const sqlAtom = fc.oneof(
+  fc.constant("SELECT * FROM t"),
   fc.constant("WITH x AS (SELECT 1) SELECT * FROM x"),
   fc.constant("INSERT INTO t (a) VALUES (1)"),
   fc.constant("UPDATE t SET a = 1"),
@@ -19,24 +20,27 @@ const noisyChars = fc.stringMatching(/^[ \t\n,;()."'$@*+=-]{0,40}$/);
 
 describe("analyzeScope — property tests", () => {
   it("never throws for any junk prefix", () => {
-    fc.assert(      fc.property(fc.string({ maxLength: 200 }), (s) => {
+    fc.assert(
+      fc.property(fc.string({ maxLength: 200 }), (s) => {
         expect(() => analyzeScope(s)).not.toThrow();
       }),
       { numRuns: 200 },
-);
+    );
   });
 
   it("never throws for atoms concatenated with noise", () => {
-    fc.assert(      fc.property(fc.array(fc.oneof(sqlAtom, noisyChars), { maxLength: 8 }), (parts) => {
+    fc.assert(
+      fc.property(fc.array(fc.oneof(sqlAtom, noisyChars), { maxLength: 8 }), (parts) => {
         const sql = parts.join(" ");
         expect(() => analyzeScope(sql)).not.toThrow();
       }),
       { numRuns: 200 },
-);
+    );
   });
 
   it("tokenize returns tokens whose start/end span the input contiguously", () => {
-    fc.assert(      fc.property(fc.string({ maxLength: 200 }), (s) => {
+    fc.assert(
+      fc.property(fc.string({ maxLength: 200 }), (s) => {
         const toks = tokenize(s);
         for (let i = 1; i < toks.length; i++) {
           if (toks[i - 1].end !== toks[i].start) return false;
@@ -44,11 +48,12 @@ describe("analyzeScope — property tests", () => {
         return true;
       }),
       { numRuns: 200 },
-);
+    );
   });
 
   it("never reports an alias the input does not contain", () => {
-    fc.assert(      fc.property(fc.array(sqlIdent, { minLength: 1, maxLength: 4 }), (idents) => {
+    fc.assert(
+      fc.property(fc.array(sqlIdent, { minLength: 1, maxLength: 4 }), (idents) => {
         const sql = `SELECT * FROM ${idents.join(", ")} WHERE `;
         const scope = analyzeScope(sql);
         for (const a of scope.fromAliases) {
@@ -57,7 +62,7 @@ describe("analyzeScope — property tests", () => {
         return true;
       }),
       { numRuns: 100 },
-);
+    );
   });
 
   it("appending one character only changes clause across documented transitions", () => {
@@ -73,7 +78,9 @@ describe("analyzeScope — property tests", () => {
       "values",
       "unknown",
     ]);
-    fc.assert(      fc.property(        fc.constantFrom("SELECT * ", "SELECT * FROM ", "SELECT * FROM t WHERE "),
+    fc.assert(
+      fc.property(
+        fc.constantFrom("SELECT * ", "SELECT * FROM ", "SELECT * FROM t WHERE "),
         fc.constantFrom("a", " ", ".", "FROM ", "WHERE ", "GROUP "),
         (base, addition) => {
           const before = analyzeScope(base);
@@ -82,8 +89,8 @@ describe("analyzeScope — property tests", () => {
           if (!allowed.has(before.clause)) return false;
           return true;
         },
-),
+      ),
       { numRuns: 80 },
-);
+    );
   });
 });

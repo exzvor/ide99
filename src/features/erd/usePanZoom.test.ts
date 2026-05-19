@@ -88,13 +88,14 @@ describe("usePanZoom", () => {
     const gy = (100 - before.py) / before.z;
 
     act(() => {
-      result.current.onWheel(        fakeWheelEvent({
+      result.current.onWheel(
+        fakeWheelEvent({
           clientX: 100,
           clientY: 100,
           deltaY: -100,
           rect: { left: 0, top: 0, width: 800, height: 600 },
         }),
-);
+      );
     });
 
     expect(result.current.zoom).toBeGreaterThan(before.z);
@@ -111,26 +112,28 @@ describe("usePanZoom", () => {
     // Spam wheel-up until we hit the ceiling.
     act(() => {
       for (let i = 0; i < 100; i++) {
-        result.current.onWheel(          fakeWheelEvent({
+        result.current.onWheel(
+          fakeWheelEvent({
             clientX: 0,
             clientY: 0,
             deltaY: -100,
             rect: { left: 0, top: 0, width: 100, height: 100 },
           }),
-);
+        );
       }
     });
     expect(result.current.zoom).toBeLessThanOrEqual(4);
 
     act(() => {
       for (let i = 0; i < 100; i++) {
-        result.current.onWheel(          fakeWheelEvent({
+        result.current.onWheel(
+          fakeWheelEvent({
             clientX: 0,
             clientY: 0,
             deltaY: 100,
             rect: { left: 0, top: 0, width: 100, height: 100 },
           }),
-);
+        );
       }
     });
     // post-QA: lowered MIN_ZOOM to 0.05 so 50+-table graphs

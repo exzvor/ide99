@@ -70,7 +70,8 @@ export function PlanInspector({
     }
   }
 
-  return (    <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
+  return (
+    <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
       <RadixDialog.Portal>
         <RadixDialog.Overlay className="q-backdrop" data-testid="plan-inspector-overlay" />
         <RadixDialog.Content
@@ -148,7 +149,8 @@ export function PlanInspector({
               background: "var(--bg)",
             }}
           >
-            {hasInsights ? (              <div
+            {hasInsights ? (
+              <div
                 style={{
                   width: INSIGHTS_RAIL_WIDTH,
                   flex: "0 0 auto",
@@ -166,7 +168,7 @@ export function PlanInspector({
                   onHighlight={(label) => onHighlight?.(label)}
                 />
               </div>
-) : null}
+            ) : null}
             <div
               style={{
                 flex: 1,
@@ -211,20 +213,23 @@ export function PlanInspector({
                 <span style={{ fontSize: 11, color: "var(--ink-4)" }}>
                   {t("editor.explain.inspector.duration_label", { ms: durationMs })}
                 </span>
-                {tab === "raw" ? (                  <button
+                {tab === "raw" ? (
+                  <button
                     type="button"
                     className="btn btn-sm"
                     onClick={() =>
-                      void copy(                        JSON.stringify(plan, null, 2),
+                      void copy(
+                        JSON.stringify(plan, null, 2),
                         t("editor.explain.inspector.toast.json_copied"),
-)
+                      )
                     }
                     data-testid="inspector-copy-json"
                   >
                     <Copy size={12} aria-hidden="true" /> {t("editor.explain.inspector.copy_json")}
                   </button>
-) : null}
-                {tab === "query" ? (                  <button
+                ) : null}
+                {tab === "query" ? (
+                  <button
                     type="button"
                     className="btn btn-sm"
                     onClick={() =>
@@ -234,17 +239,18 @@ export function PlanInspector({
                   >
                     <Copy size={12} aria-hidden="true" /> {t("editor.explain.inspector.copy_sql")}
                   </button>
-) : null}
+                ) : null}
               </div>
 
               {/* Tab body */}
               <div style={{ flex: 1, minHeight: 0, overflow: "hidden", display: "flex" }}>
-                {tab === "table" ? (                  <NodesTable
+                {tab === "table" ? (
+                  <NodesTable
                     plan={plan}
                     onSelectLabel={onHighlight}
                     highlight={highlight ?? null}
                   />
-) : null}
+                ) : null}
                 {tab === "raw" ? <RawJsonView plan={plan} /> : null}
                 {tab === "query" ? <QueryView sql={executedSql} /> : null}
               </div>
@@ -253,7 +259,7 @@ export function PlanInspector({
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
-);
+  );
 }
 
 interface TabBtnProps {
@@ -264,7 +270,8 @@ interface TabBtnProps {
 }
 
 function TabBtn({ label, active, onClick, testId }: TabBtnProps): JSX.Element {
-  return (    <button
+  return (
+    <button
       type="button"
       role="tab"
       aria-selected={active}
@@ -281,5 +288,5 @@ function TabBtn({ label, active, onClick, testId }: TabBtnProps): JSX.Element {
     >
       {label}
     </button>
-);
+  );
 }

@@ -53,7 +53,8 @@ export function PgvectorTablePanel(props: PgvectorTablePanelProps): JSX.Element 
   const projectionDisabled = vectorColumns.length === 0 || pk === null;
   const hybridDisabled = vectorColumns.length === 0 || textColumns.length === 0 || pk === null;
 
-  return (    <div
+  return (
+    <div
       data-testid="pgvector-table-panel"
       style={{
         background: "var(--surface, #fff)",
@@ -109,7 +110,8 @@ export function PgvectorTablePanel(props: PgvectorTablePanelProps): JSX.Element 
         }}
       />
 
-      {knnResultSql !== null ? (        <div
+      {knnResultSql !== null ? (
+        <div
           style={{
             position: "fixed",
             inset: 0,
@@ -140,9 +142,10 @@ export function PgvectorTablePanel(props: PgvectorTablePanelProps): JSX.Element 
             />
           </div>
         </div>
-) : null}
+      ) : null}
 
-      {projectionOpen && pk !== null ? (        <VectorProjectionView
+      {projectionOpen && pk !== null ? (
+        <VectorProjectionView
           connId={connId}
           qualifiedTable={qualifiedTable}
           pk={pk}
@@ -150,9 +153,10 @@ export function PgvectorTablePanel(props: PgvectorTablePanelProps): JSX.Element 
           rowCount={rowCount}
           onClose={() => setProjectionOpen(false)}
         />
-) : null}
+      ) : null}
 
-      {pk !== null ? (        <HybridSearchWizard
+      {pk !== null ? (
+        <HybridSearchWizard
           open={hybridOpen}
           connId={connId}
           qualifiedTable={qualifiedTable}
@@ -161,7 +165,7 @@ export function PgvectorTablePanel(props: PgvectorTablePanelProps): JSX.Element 
           textColumns={textColumns}
           onClose={() => setHybridOpen(false)}
         />
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

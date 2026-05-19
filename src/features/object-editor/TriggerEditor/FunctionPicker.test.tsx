@@ -28,13 +28,14 @@ describe("FunctionPicker", () => {
       { name: "audit_fn", args: "", returnKind: "trigger", returnType: null },
       { name: "log_fn", args: "", returnKind: "trigger", returnType: null },
     ]);
-    render(      <FunctionPicker
+    render(
+      <FunctionPicker
         value={{ schema: "public", name: "" }}
         onChange={() => {}}
         connId="c1"
         schema="public"
       />,
-);
+    );
     await waitFor(() => {
       expect(screen.getByTestId("trigger-fn-option-audit_fn")).toBeInTheDocument();
       expect(screen.getByTestId("trigger-fn-option-log_fn")).toBeInTheDocument();
@@ -47,16 +48,17 @@ describe("FunctionPicker", () => {
       { name: "audit_fn", args: "", returnKind: "trigger", returnType: null },
     ]);
     const onChange = vi.fn();
-    render(      <FunctionPicker
+    render(
+      <FunctionPicker
         value={{ schema: "public", name: "" }}
         onChange={onChange}
         connId="c1"
         schema="public"
       />,
-);
+    );
     await waitFor(() =>
       expect(screen.getByTestId("trigger-fn-option-audit_fn")).toBeInTheDocument(),
-);
+    );
     fireEvent.click(screen.getByTestId("trigger-fn-option-audit_fn"));
     expect(onChange).toHaveBeenCalledWith({ schema: "public", name: "audit_fn" });
   });
@@ -66,16 +68,17 @@ describe("FunctionPicker", () => {
       { name: "audit_fn", args: "", returnKind: "trigger", returnType: null },
       { name: "log_fn", args: "", returnKind: "trigger", returnType: null },
     ]);
-    render(      <FunctionPicker
+    render(
+      <FunctionPicker
         value={{ schema: "public", name: "" }}
         onChange={() => {}}
         connId="c1"
         schema="public"
       />,
-);
+    );
     await waitFor(() =>
       expect(screen.getByTestId("trigger-fn-option-audit_fn")).toBeInTheDocument(),
-);
+    );
     fireEvent.change(screen.getByTestId("trigger-fn-picker-search"), { target: { value: "log" } });
     expect(screen.queryByTestId("trigger-fn-option-audit_fn")).toBeNull();
     expect(screen.getByTestId("trigger-fn-option-log_fn")).toBeInTheDocument();

@@ -80,7 +80,8 @@ export function HybridSearchWizard(props: HybridSearchWizardProps): JSX.Element 
     gap: 2,
   };
 
-  return (    <RadixDialog.Root
+  return (
+    <RadixDialog.Root
       open={open}
       onOpenChange={(o) => {
         if (!o) onClose();
@@ -106,17 +107,19 @@ export function HybridSearchWizard(props: HybridSearchWizardProps): JSX.Element 
                 value={vectorCol}
                 onChange={(e) => setVectorCol(e.target.value)}
               >
-                {vectorColumns.map((c) => (                  <option key={c} value={c}>
+                {vectorColumns.map((c) => (
+                  <option key={c} value={c}>
                     {c}
                   </option>
-))}
+                ))}
               </select>
             </label>
 
             <fieldset style={{ border: "1px solid var(--hairline)", borderRadius: 4, padding: 6 }}>
               <legend style={{ fontSize: 11, color: "var(--ink-3)" }}>Distance op</legend>
               <div style={{ display: "flex", gap: 12 }}>
-                {DISTANCE_OPS.map(({ op, label }) => (                  <label key={op} style={{ fontSize: 12, display: "flex", gap: 4 }}>
+                {DISTANCE_OPS.map(({ op, label }) => (
+                  <label key={op} style={{ fontSize: 12, display: "flex", gap: 4 }}>
                     <input
                       type="radio"
                       name="hybrid-distance-op"
@@ -126,7 +129,7 @@ export function HybridSearchWizard(props: HybridSearchWizardProps): JSX.Element 
                     />
                     {label}
                   </label>
-))}
+                ))}
               </div>
             </fieldset>
 
@@ -142,10 +145,11 @@ export function HybridSearchWizard(props: HybridSearchWizardProps): JSX.Element 
                 value={textCol}
                 onChange={(e) => setTextCol(e.target.value)}
               >
-                {textColumns.map((c) => (                  <option key={c} value={c}>
+                {textColumns.map((c) => (
+                  <option key={c} value={c}>
                     {c}
                   </option>
-))}
+                ))}
               </select>
             </label>
 
@@ -220,5 +224,5 @@ export function HybridSearchWizard(props: HybridSearchWizardProps): JSX.Element 
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
-);
+  );
 }

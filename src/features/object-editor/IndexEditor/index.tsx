@@ -86,10 +86,11 @@ export function IndexEditor({ tab }: IndexEditorProps): JSX.Element {
     }
     void (async () => {
       try {
-        const def = await schemaGetIndexDefinition(          tab.connectionId,
+        const def = await schemaGetIndexDefinition(
+          tab.connectionId,
           tab.target.schema,
           tab.target.name ?? "",
-);
+        );
         if (cancelled) return;
         const form = indexFormFromDef(def);
         setForm(tab.id, { kind: "index", form, initial: form });
@@ -117,11 +118,12 @@ export function IndexEditor({ tab }: IndexEditorProps): JSX.Element {
     };
   }, [tab.id, clearTab]);
 
-  const onChange = useCallback(    (mutator: (f: IndexForm) => IndexForm): void => {
+  const onChange = useCallback(
+    (mutator: (f: IndexForm) => IndexForm): void => {
       updateForm(tab.id, (s) => (s.kind === "index" ? { ...s, form: mutator(s.form) } : s));
     },
     [tab.id, updateForm],
-);
+  );
 
   const stableFormState = formState && formState.kind === "index" ? formState : null;
   const deferredCurrent = useDeferredValue(stableFormState?.form ?? null);
@@ -136,16 +138,18 @@ export function IndexEditor({ tab }: IndexEditorProps): JSX.Element {
   const touched = useTouched(stableFormState?.form, stableFormState?.initial);
 
   if (loadError) {
-    return (      <div data-testid="index-editor-load-error" role="alert" style={{ padding: 16 }}>
+    return (
+      <div data-testid="index-editor-load-error" role="alert" style={{ padding: 16 }}>
         {t("object_editor.common.load_error")}: {loadError}
       </div>
-);
+    );
   }
   if (!stableFormState || !ddl) {
-    return (      <div data-testid="index-editor-loading" style={{ padding: 16 }}>
+    return (
+      <div data-testid="index-editor-loading" style={{ padding: 16 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
   const form = stableFormState.form;
@@ -200,7 +204,8 @@ export function IndexEditor({ tab }: IndexEditorProps): JSX.Element {
   const banner =
     apply && apply.phase === "error" ? { kind: "error" as const, message: apply.message } : null;
 
-  return (    <div
+  return (
+    <div
       data-testid="index-editor"
       style={{
         display: "grid",
@@ -229,7 +234,8 @@ export function IndexEditor({ tab }: IndexEditorProps): JSX.Element {
             onChange={(e) => onChange((f) => ({ ...f, schema: e.target.value }))}
           />
         </div>
-        {dirty ? (          <span
+        {dirty ? (
+          <span
             data-testid="index-dirty-badge"
             style={{
               fontSize: 11,
@@ -241,9 +247,10 @@ export function IndexEditor({ tab }: IndexEditorProps): JSX.Element {
           >
             ● {t("object_editor.common.dirty")}
           </span>
-) : null}
+        ) : null}
         <div style={{ flex: 1 }} />
-        {pgvectorAvailable === true ? (          <button
+        {pgvectorAvailable === true ? (
+          <button
             type="button"
             data-testid="index-vector-wizard-button"
             onClick={() => setWizardOpen(true)}
@@ -252,13 +259,14 @@ export function IndexEditor({ tab }: IndexEditorProps): JSX.Element {
           >
             Vector index wizard…
           </button>
-) : null}
+        ) : null}
         <div style={{ paddingBottom: 4 }}>
           <HelpLink topic="index" />
         </div>
       </div>
       <div style={{ overflow: "auto", padding: 12 }}>
-        {recreating ? (          <div
+        {recreating ? (
+          <div
             // biome-ignore lint/a11y/useSemanticElements: passive banner; not a form <output>.
             role="status"
             data-testid="index-recreate-warning"
@@ -273,7 +281,7 @@ export function IndexEditor({ tab }: IndexEditorProps): JSX.Element {
           >
             {t("object_editor.indexes.recreate_warning")}
           </div>
-) : null}
+        ) : null}
         <IndexFormPanel form={form} onChange={onChange} />
       </div>
       <div style={{ gridColumn: 2, gridRow: 2, minHeight: 0 }}>
@@ -305,5 +313,5 @@ export function IndexEditor({ tab }: IndexEditorProps): JSX.Element {
         }}
       />
     </div>
-);
+  );
 }

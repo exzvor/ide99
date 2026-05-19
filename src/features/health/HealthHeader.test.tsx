@@ -6,7 +6,8 @@ import { useConnections } from "../connections/store";
 import { HealthHeader } from "./HealthHeader";
 import { useHealth } from "./store";
 
-const fakeConn = (  id: string,
+const fakeConn = (
+  id: string,
   name: string,
   env: Connection["environment"] = "local",
 ): Connection => ({
@@ -49,13 +50,14 @@ describe("HealthHeader", () => {
       ...useConnections.getState(),
       connections: [fakeConn("c1", "dev-myapp")],
     });
-    render(      <HealthHeader
+    render(
+      <HealthHeader
         connId="c1"
         lastRefreshAt={null}
         refreshIntervalMs={null}
         refreshInProgress={false}
       />,
-);
+    );
     expect(screen.getByTestId("health-last-refreshed").textContent).toMatch(/Never/);
     expect(screen.getByTestId("health-header").textContent).toMatch(/dev-myapp/);
   });
@@ -65,50 +67,54 @@ describe("HealthHeader", () => {
       ...useConnections.getState(),
       connections: [fakeConn("c1", "dev-myapp")],
     });
-    render(      <HealthHeader
+    render(
+      <HealthHeader
         connId="c1"
         lastRefreshAt={Date.now() - 12_000}
         refreshIntervalMs={30_000}
         refreshInProgress={false}
       />,
-);
+    );
     const t = screen.getByTestId("health-last-refreshed").textContent ?? "";
     expect(t).toMatch(/seconds|sec/);
   });
 
   it("falls back to first 8 id chars when conn unknown", () => {
-    render(      <HealthHeader
+    render(
+      <HealthHeader
         connId="abcdef0123456789"
         lastRefreshAt={null}
         refreshIntervalMs={null}
         refreshInProgress={false}
       />,
-);
+    );
     expect(screen.getByTestId("health-header").textContent).toContain("abcdef01");
   });
 
   it("Refresh button calls refreshAll on the store", () => {
     const refreshAll = vi.fn().mockResolvedValue(undefined);
     useHealth.setState({ ...useHealth.getState(), refreshAll });
-    render(      <HealthHeader
+    render(
+      <HealthHeader
         connId="c1"
         lastRefreshAt={null}
         refreshIntervalMs={null}
         refreshInProgress={false}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("health-refresh-now"));
     expect(refreshAll).toHaveBeenCalledWith("c1");
   });
 
   it("shows spinning RefreshCw when refreshInProgress is true", () => {
-    render(      <HealthHeader
+    render(
+      <HealthHeader
         connId="c1"
         lastRefreshAt={null}
         refreshIntervalMs={null}
         refreshInProgress={true}
       />,
-);
+    );
     const button = screen.getByTestId("health-refresh-now");
     // animate-spin is applied to the inner svg
     expect(button.querySelector(".animate-spin")).toBeTruthy();
@@ -119,13 +125,14 @@ describe("HealthHeader", () => {
       ...useConnections.getState(),
       connections: [fakeConn("prod-1", "prod-db", "prod")],
     });
-    render(      <HealthHeader
+    render(
+      <HealthHeader
         connId="prod-1"
         lastRefreshAt={null}
         refreshIntervalMs={60_000}
         refreshInProgress={false}
       />,
-);
+    );
     const select = screen.getByTestId("health-auto-refresh-select") as HTMLSelectElement;
     const opts = Array.from(select.querySelectorAll("option"));
     const fiveS = opts.find((o) => o.value === "5000");
@@ -140,13 +147,14 @@ describe("HealthHeader", () => {
   it("auto-refresh select onChange persists via setRefreshInterval", () => {
     const setRefreshInterval = vi.fn();
     useHealth.setState({ ...useHealth.getState(), setRefreshInterval });
-    render(      <HealthHeader
+    render(
+      <HealthHeader
         connId="c1"
         lastRefreshAt={null}
         refreshIntervalMs={null}
         refreshInProgress={false}
       />,
-);
+    );
     fireEvent.change(screen.getByTestId("health-auto-refresh-select"), {
       target: { value: "30000" },
     });
@@ -156,13 +164,14 @@ describe("HealthHeader", () => {
   it("dropdown 'Off' option maps to null on change", () => {
     const setRefreshInterval = vi.fn();
     useHealth.setState({ ...useHealth.getState(), setRefreshInterval });
-    render(      <HealthHeader
+    render(
+      <HealthHeader
         connId="c1"
         lastRefreshAt={null}
         refreshIntervalMs={30_000}
         refreshInProgress={false}
       />,
-);
+    );
     fireEvent.change(screen.getByTestId("health-auto-refresh-select"), {
       target: { value: "off" },
     });

@@ -92,23 +92,28 @@ describe("validateOps", () => {
   });
 
   it("FK target column not PK/UNIQUE -> warning", () => {
-    const op = makeAddFkOp(      [{ table: { schema: "public", name: "users" }, column: "id" }],
+    const op = makeAddFkOp(
+      [{ table: { schema: "public", name: "users" }, column: "id" }],
       [{ table: { schema: "public", name: "users" }, column: "email" }], // email not PK
       "users_self_fkey",
-);
+    );
     const issues = validateOps(usersBase, [op]);
-    expect(      issues.some(        (i) => i.kind === "fk-target-not-unique" && i.opId === op.id && i.severity === "warning",
-),
-).toBe(true);
+    expect(
+      issues.some(
+        (i) => i.kind === "fk-target-not-unique" && i.opId === op.id && i.severity === "warning",
+      ),
+    ).toBe(true);
   });
 
   it("FK type mismatch -> warning", () => {
-    const op = makeAddFkOp(      [{ table: { schema: "public", name: "users" }, column: "email" }], // text
+    const op = makeAddFkOp(
+      [{ table: { schema: "public", name: "users" }, column: "email" }], // text
       [{ table: { schema: "public", name: "users" }, column: "id" }], // bigint
       "users_email_fkey",
-);
+    );
     const issues = validateOps(usersBase, [op]);
-    expect(issues.some((i) => i.kind === "fk-type-mismatch" && i.severity === "warning")).toBe(      true,
-);
+    expect(issues.some((i) => i.kind === "fk-type-mismatch" && i.severity === "warning")).toBe(
+      true,
+    );
   });
 });

@@ -140,7 +140,8 @@ export function RepackDialog(props: RepackDialogProps): JSX.Element | null {
     return Number.isFinite(n) ? n : undefined;
   }, [jobs]);
 
-  const generated = useMemo(    () =>
+  const generated = useMemo(
+    () =>
       buildRepackCommand({
         host,
         port: portNum,
@@ -152,7 +153,7 @@ export function RepackDialog(props: RepackDialogProps): JSX.Element | null {
         onlyIndexes,
       }),
     [host, portNum, db, schema, table, jobsNum, noSuperuserCheck, onlyIndexes],
-);
+  );
 
   if (!open) return null;
 
@@ -164,7 +165,8 @@ export function RepackDialog(props: RepackDialogProps): JSX.Element | null {
     alert(`Copied: ${truncated}`);
   };
 
-  return (    <RadixDialog.Root
+  return (
+    <RadixDialog.Root
       open={open}
       onOpenChange={(o) => {
         if (!o) onClose();
@@ -193,15 +195,18 @@ export function RepackDialog(props: RepackDialogProps): JSX.Element | null {
           {/* Section 1: Pre-flight check */}
           <section style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <div style={sectionTitle}>Pre-flight check</div>
-            {preflightLoading ? (              <p style={{ fontSize: 12, color: "var(--ink-3)" }}>Running pre-flight check…</p>
-) : preflight ? (              <>
+            {preflightLoading ? (
+              <p style={{ fontSize: 12, color: "var(--ink-3)" }}>Running pre-flight check…</p>
+            ) : preflight ? (
+              <>
                 <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, lineHeight: 1.6 }}>
                   <li>{`Has primary key: ${preflight.hasPk ? "✓" : "✗"}`}</li>
                   <li>{`Total size: ${preflight.tableSize}`}</li>
                   <li>{`Index count: ${preflight.indexCount}`}</li>
                   <li>{`Foreign-key count: ${preflight.fkCount}`}</li>
                 </ul>
-                {!preflight.hasPk ? (                  <div
+                {!preflight.hasPk ? (
+                  <div
                     role="alert"
                     style={{
                       padding: 8,
@@ -213,12 +218,13 @@ export function RepackDialog(props: RepackDialogProps): JSX.Element | null {
                   >
                     pg_repack requires a primary key — operation will fail without one.
                   </div>
-) : null}
+                ) : null}
               </>
-) : (              <p style={{ fontSize: 12, color: "var(--ink-3)" }}>
+            ) : (
+              <p style={{ fontSize: 12, color: "var(--ink-3)" }}>
                 Pre-flight check unavailable (permission denied or table missing).
               </p>
-)}
+            )}
           </section>
 
           {/* Section 2: Generate command */}
@@ -314,10 +320,14 @@ export function RepackDialog(props: RepackDialogProps): JSX.Element | null {
           {/* Section 3: Active jobs monitor */}
           <section style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <div style={sectionTitle}>Active jobs</div>
-            {jobsState.kind === "error" ? (              <p style={{ fontSize: 12, color: "var(--ink-3)" }}>No repack history available.</p>
-) : jobsState.kind === "loading" ? (              <p style={{ fontSize: 12, color: "var(--ink-3)" }}>Loading active jobs…</p>
-) : jobsState.jobs.length === 0 ? (              <p style={{ fontSize: 12, color: "var(--ink-3)" }}>No active repack jobs.</p>
-) : (              <table
+            {jobsState.kind === "error" ? (
+              <p style={{ fontSize: 12, color: "var(--ink-3)" }}>No repack history available.</p>
+            ) : jobsState.kind === "loading" ? (
+              <p style={{ fontSize: 12, color: "var(--ink-3)" }}>Loading active jobs…</p>
+            ) : jobsState.jobs.length === 0 ? (
+              <p style={{ fontSize: 12, color: "var(--ink-3)" }}>No active repack jobs.</p>
+            ) : (
+              <table
                 data-testid="repack-active-jobs"
                 style={{ fontSize: 12, borderCollapse: "collapse" }}
               >
@@ -329,15 +339,16 @@ export function RepackDialog(props: RepackDialogProps): JSX.Element | null {
                   </tr>
                 </thead>
                 <tbody>
-                  {jobsState.jobs.map((job, idx) => (                    <tr key={`${job.pid}-${idx}`}>
+                  {jobsState.jobs.map((job, idx) => (
+                    <tr key={`${job.pid}-${idx}`}>
                       <td style={{ padding: "2px 8px" }}>{job.startTime}</td>
                       <td style={{ padding: "2px 8px" }}>{job.pid}</td>
                       <td style={{ padding: "2px 8px" }}>{job.tableName}</td>
                     </tr>
-))}
+                  ))}
                 </tbody>
               </table>
-)}
+            )}
           </section>
 
           <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
@@ -348,5 +359,5 @@ export function RepackDialog(props: RepackDialogProps): JSX.Element | null {
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
-);
+  );
 }

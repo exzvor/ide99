@@ -8,14 +8,15 @@ describe("VectorIndexWizard", () => {
   it("HNSW path: small rowCount → applies recommended HNSW defaults", async () => {
     const onApply = vi.fn();
     const onCancel = vi.fn();
-    render(      <VectorIndexWizard
+    render(
+      <VectorIndexWizard
         open={true}
         rowCount={500}
         dim={768}
         onCancel={onCancel}
         onApply={onApply}
       />,
-);
+    );
 
     // Rationale reflects the small-table category.
     const rationale = screen.getByTestId("wizard-rationale");
@@ -32,14 +33,15 @@ describe("VectorIndexWizard", () => {
 
   it("IVFFlat path: large rowCount → applies recommended IVFFlat defaults", async () => {
     const onApply = vi.fn();
-    render(      <VectorIndexWizard
+    render(
+      <VectorIndexWizard
         open={true}
         rowCount={4_000_000}
         dim={768}
         onCancel={() => {}}
         onApply={onApply}
       />,
-);
+    );
 
     await userEvent.click(screen.getByTestId("wizard-apply"));
     expect(onApply).toHaveBeenCalledWith({
@@ -50,14 +52,15 @@ describe("VectorIndexWizard", () => {
 
   it("manual override: user toggles ivfflat radio + edits lists, then applies", async () => {
     const onApply = vi.fn();
-    render(      <VectorIndexWizard
+    render(
+      <VectorIndexWizard
         open={true}
         rowCount={500}
         dim={768}
         onCancel={() => {}}
         onApply={onApply}
       />,
-);
+    );
 
     // Toggle to IVFFlat.
     await userEvent.click(screen.getByTestId("wizard-method-ivfflat"));
@@ -76,27 +79,29 @@ describe("VectorIndexWizard", () => {
 
   it("clicking cancel calls onCancel", async () => {
     const onCancel = vi.fn();
-    render(      <VectorIndexWizard
+    render(
+      <VectorIndexWizard
         open={true}
         rowCount={500}
         dim={768}
         onCancel={onCancel}
         onApply={() => {}}
       />,
-);
+    );
     await userEvent.click(screen.getByTestId("wizard-cancel"));
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
 
   it("renders nothing when open=false", () => {
-    const { container } = render(      <VectorIndexWizard
+    const { container } = render(
+      <VectorIndexWizard
         open={false}
         rowCount={500}
         dim={768}
         onCancel={() => {}}
         onApply={() => {}}
       />,
-);
+    );
     expect(container.firstChild).toBeNull();
     expect(screen.queryByTestId("vector-index-wizard")).not.toBeInTheDocument();
   });

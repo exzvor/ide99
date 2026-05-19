@@ -220,7 +220,8 @@ describe("deriveOpsFromAst", () => {
   });
 
   it("addForeignKey resolves both sides", () => {
-    const r = deriveOpsFromAst(      {
+    const r = deriveOpsFromAst(
+      {
         ...usersBase,
         tables: [
           ...usersBase.tables,
@@ -260,7 +261,7 @@ describe("deriveOpsFromAst", () => {
           refColumns: ["id"],
         },
       ],
-);
+    );
     expect(r.ops[0].kind).toBe("addFk");
     if (r.ops[0].kind === "addFk") {
       expect(r.ops[0].constraintName).toBe("posts_user_fk");

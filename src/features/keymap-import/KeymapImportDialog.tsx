@@ -26,7 +26,8 @@ export function KeymapImportDialog(): JSX.Element {
     void parseFromText(format, raw);
   };
 
-  return (    <section
+  return (
+    <section
       data-testid="keymap-import-dialog"
       style={{ display: "flex", flexDirection: "column", gap: 12, padding: 16 }}
     >
@@ -79,12 +80,14 @@ export function KeymapImportDialog(): JSX.Element {
         </button>
       </div>
 
-      {error ? (        <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
+      {error ? (
+        <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
           {error}
         </div>
-) : null}
+      ) : null}
 
-      {parsed ? (        <section
+      {parsed ? (
+        <section
           data-testid="keymap-import-preview"
           style={{
             border: "1px solid var(--hairline)",
@@ -96,21 +99,29 @@ export function KeymapImportDialog(): JSX.Element {
           <h3 style={{ margin: 0, fontSize: 12, fontWeight: 600 }}>
             {t("keymap_import.preview.title", { count: parsed.bindings.length })}
           </h3>
-          {parsed.warnings.length > 0 ? (            <ul
+          {parsed.warnings.length > 0 ? (
+            <ul
               data-testid="keymap-import-warnings"
               style={{ marginTop: 8, paddingLeft: 16, color: "var(--ink-3)", fontSize: 11 }}
             >
-              {parsed.warnings.map((w, i) => (                // biome-ignore lint/suspicious/noArrayIndexKey: warnings list is ephemeral (re-parse rebuilds)
-                <li key={i}>
-                  {w.key ? t(w.key, { defaultValue: w.message, ...(w.params ?? {}) }) : w.message}
-                </li>
-))}
+              {parsed.warnings.map(
+                (
+                  w,
+                  i, // biome-ignore lint/suspicious/noArrayIndexKey: warnings list is ephemeral (re-parse rebuilds)
+                ) => (
+                  <li key={i}>
+                    {w.key ? t(w.key, { defaultValue: w.message, ...(w.params ?? {}) }) : w.message}
+                  </li>
+                ),
+              )}
             </ul>
-) : null}
-          {parsed.bindings.length === 0 ? (            <div style={{ color: "var(--ink-3)", fontSize: 12, marginTop: 8 }}>
+          ) : null}
+          {parsed.bindings.length === 0 ? (
+            <div style={{ color: "var(--ink-3)", fontSize: 12, marginTop: 8 }}>
               {t("keymap_import.preview.empty")}
             </div>
-) : (            <ul
+          ) : (
+            <ul
               style={{
                 marginTop: 8,
                 paddingLeft: 16,
@@ -118,14 +129,15 @@ export function KeymapImportDialog(): JSX.Element {
                 fontSize: 11,
               }}
             >
-              {parsed.bindings.map((b) => (                <li key={`${b.sequence}:${b.externalCommand}`}>
+              {parsed.bindings.map((b) => (
+                <li key={`${b.sequence}:${b.externalCommand}`}>
                   <code>{b.sequence}</code> → {b.externalCommand}
                 </li>
-))}
+              ))}
             </ul>
-)}
+          )}
         </section>
-) : null}
+      ) : null}
     </section>
-);
+  );
 }

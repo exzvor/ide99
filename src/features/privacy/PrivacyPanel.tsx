@@ -42,7 +42,8 @@ export function PrivacyPanel(): JSX.Element {
   const setEndpoint = (endpoint: TelemetryEndpoint) =>
     void setSettings({ ...settings, telemetryEndpoint: endpoint });
 
-  return (    <section
+  return (
+    <section
       data-testid="privacy-panel"
       style={{ display: "flex", flexDirection: "column", gap: 16, padding: 16, maxWidth: 640 }}
     >
@@ -130,13 +131,15 @@ export function PrivacyPanel(): JSX.Element {
         </button>
       </div>
 
-      {settings.deviceUuid ? (        <div style={{ fontSize: 11, color: "var(--ink-3)" }}>
+      {settings.deviceUuid ? (
+        <div style={{ fontSize: 11, color: "var(--ink-3)" }}>
           {t("privacy.device_uuid", { uuid: settings.deviceUuid })}
         </div>
-) : null}
+      ) : null}
 
       <WhatWeCollectDialog open={whatOpen} onOpenChange={setWhatOpen} />
-      {confirmClearOpen ? (        <TypingConfirmModal
+      {confirmClearOpen ? (
+        <TypingConfirmModal
           title={t("privacy.clear_all_confirm.title")}
           description={t("privacy.clear_all_confirm.body")}
           expectedToken={t("privacy.clear_all_confirm.expected_token")}
@@ -155,7 +158,7 @@ export function PrivacyPanel(): JSX.Element {
             }
           }}
         />
-) : null}
+      ) : null}
     </section>
-);
+  );
 }

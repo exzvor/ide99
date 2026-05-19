@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * Sticky banner mounted at the top of MigrationsPanel when the Squawk
  * binary is not on PATH. Shows a platform-aware install command and a
@@ -43,7 +43,8 @@ export function EmptyStateInstall(props: Props): JSX.Element {
     }
   };
 
-  return (    <div
+  return (
+    <div
       // biome-ignore lint/a11y/useSemanticElements: passive banner; not a form <output>.
       role="status"
       data-testid="squawk-install-banner"
@@ -94,5 +95,5 @@ export function EmptyStateInstall(props: Props): JSX.Element {
         ✕
       </button>
     </div>
-);
+  );
 }

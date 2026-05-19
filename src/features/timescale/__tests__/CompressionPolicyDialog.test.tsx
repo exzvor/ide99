@@ -48,7 +48,8 @@ describe("CompressionPolicyDialog", () => {
     loadCompressionPolicy.mockResolvedValueOnce(null);
     const onClose = vi.fn();
 
-    render(      <CompressionPolicyDialog
+    render(
+      <CompressionPolicyDialog
         open={true}
         connId="conn-1"
         qualifiedTable={'"public"."metrics"'}
@@ -57,11 +58,11 @@ describe("CompressionPolicyDialog", () => {
         columns={[{ name: "device_id", typeName: "int4" }]}
         onClose={onClose}
       />,
-);
+    );
 
     await waitFor(() =>
       expect(screen.getByTestId("compression-policy-dialog-apply")).toBeInTheDocument(),
-);
+    );
 
     // No existing policy → Drop button is hidden, "Policy active" banner absent.
     expect(screen.queryByTestId("compression-policy-dialog-drop")).not.toBeInTheDocument();
@@ -82,7 +83,8 @@ describe("CompressionPolicyDialog", () => {
     loadCompressionPolicy.mockResolvedValueOnce({ jobId: 1001, compressAfter: "30 days" });
     const onClose = vi.fn();
 
-    render(      <CompressionPolicyDialog
+    render(
+      <CompressionPolicyDialog
         open={true}
         connId="conn-1"
         qualifiedTable={'"public"."metrics"'}
@@ -91,7 +93,7 @@ describe("CompressionPolicyDialog", () => {
         columns={[]}
         onClose={onClose}
       />,
-);
+    );
 
     await waitFor(() => expect(screen.getByText(/Policy active/i)).toBeInTheDocument());
     expect(screen.getByText(/Policy active/i).textContent).toContain("30 days");

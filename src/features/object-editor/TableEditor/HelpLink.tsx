@@ -35,7 +35,8 @@ export interface HelpLinkProps {
 export function HelpLink({ topic, openExternal }: HelpLinkProps): JSX.Element {
   const { t } = useTranslation();
   const url = HELP_URLS[topic] ?? HELP_URLS.table;
-  return (    <button
+  return (
+    <button
       type="button"
       data-testid="object-editor-help-link"
       data-topic={topic}
@@ -67,5 +68,5 @@ export function HelpLink({ topic, openExternal }: HelpLinkProps): JSX.Element {
     >
       ↗ {t("object_editor.actions.help")}
     </button>
-);
+  );
 }

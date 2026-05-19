@@ -92,7 +92,8 @@ export function TestButton(props: TestButtonProps) {
       : t("connection.form.test.success_meta", { ms: result.durationMs })
     : null;
 
-  return (    <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
       <button
         type="button"
         onClick={run}
@@ -104,7 +105,8 @@ export function TestButton(props: TestButtonProps) {
         {running ? <Loader2 size={14} className="q-spin" aria-hidden="true" /> : null}
         <span>{label}</span>
       </button>
-      {result?.ok ? (        <output
+      {result?.ok ? (
+        <output
           aria-live="polite"
           style={{
             display: "inline-flex",
@@ -121,11 +123,13 @@ export function TestButton(props: TestButtonProps) {
           <span data-testid="test-success-badge" style={{ fontWeight: 500 }}>
             {t("connection.form.test.success")}
           </span>
-          {successMeta ? (            <span style={{ color: "var(--ink-4)", fontWeight: 400 }}>· {successMeta}</span>
-) : null}
+          {successMeta ? (
+            <span style={{ color: "var(--ink-4)", fontWeight: 400 }}>· {successMeta}</span>
+          ) : null}
         </output>
-) : null}
-      {result && !result.ok ? (        <output
+      ) : null}
+      {result && !result.ok ? (
+        <output
           aria-live="polite"
           style={{
             display: "inline-flex",
@@ -142,7 +146,7 @@ export function TestButton(props: TestButtonProps) {
           <XCircle size={14} aria-hidden="true" />
           <span data-testid="test-failure-badge">{t("connection.form.test.failure")}</span>
         </output>
-) : null}
+      ) : null}
     </span>
-);
+  );
 }

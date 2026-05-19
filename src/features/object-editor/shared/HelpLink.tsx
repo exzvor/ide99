@@ -50,7 +50,8 @@ export function HelpLink({ topic }: Props): JSX.Element {
     });
   };
 
-  return (    <button
+  return (
+    <button
       type="button"
       aria-label={t("object_editor.actions.help")}
       onClick={open}
@@ -72,5 +73,5 @@ export function HelpLink({ topic }: Props): JSX.Element {
       <ExternalLink size={14} aria-hidden="true" />
       {t("object_editor.actions.help")}
     </button>
-);
+  );
 }

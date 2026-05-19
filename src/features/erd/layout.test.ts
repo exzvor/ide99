@@ -11,7 +11,8 @@ function boxesOverlap(a: LaidErdNode, b: LaidErdNode): boolean {
   return true;
 }
 
-function makeColumn(  name: string,
+function makeColumn(
+  name: string,
   ordinal: number,
   overrides: Partial<{
     isPrimaryKey: boolean;

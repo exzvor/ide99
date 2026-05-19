@@ -6,8 +6,9 @@ import { type PlanDiffTab, __testing, useEditor } from "../../store";
 import { PlanDiffPane } from "./PlanDiffPane";
 
 vi.mock("../Pev2Bridge", () => ({
-  Pev2Bridge: ({ plan }: { plan: unknown }) => (    <div data-testid="pev2-host">{JSON.stringify(plan)}</div>
-),
+  Pev2Bridge: ({ plan }: { plan: unknown }) => (
+    <div data-testid="pev2-host">{JSON.stringify(plan)}</div>
+  ),
 }));
 
 vi.mock("../../../../hooks/useTheme", () => ({
@@ -101,7 +102,7 @@ describe("PlanDiffPane", () => {
     const { recentPlansGet } = await import("../../../../lib/tauri");
     vi.mocked(recentPlansGet).mockImplementation(async (id: string) =>
       id === "rA" ? fakeRow("rA", samplePlanA) : fakeRow("rB", samplePlanB),
-);
+    );
 
     render(<PlanDiffPane tabId={tab.id} />);
     // — pev2 was replaced with QuietPlanCanvas on both sides.
@@ -118,7 +119,7 @@ describe("PlanDiffPane", () => {
     const { recentPlansGet } = await import("../../../../lib/tauri");
     vi.mocked(recentPlansGet).mockImplementation(async (id: string) =>
       id === "rA" ? null : fakeRow("rB", samplePlanB),
-);
+    );
 
     render(<PlanDiffPane tabId={tab.id} />);
     await waitFor(() => {

@@ -36,26 +36,28 @@ afterEach(() => vi.clearAllMocks());
 
 describe("RecentPlansPickerModal", () => {
   it("does not render when open=false", () => {
-    const { container } = render(      <RecentPlansPickerModal
+    const { container } = render(
+      <RecentPlansPickerModal
         open={false}
         defaultConnectionId={null}
         onPick={() => {}}
         onCancel={() => {}}
       />,
-);
+    );
     expect(container.firstChild).toBeNull();
   });
 
   it("mounts list of rows on open and renders an empty state when none", async () => {
     const { recentPlansSearch } = await import("../../../lib/tauri");
     vi.mocked(recentPlansSearch).mockResolvedValueOnce({ rows: [], total: 0 });
-    render(      <RecentPlansPickerModal
+    render(
+      <RecentPlansPickerModal
         open={true}
         defaultConnectionId="c1"
         onPick={() => {}}
         onCancel={() => {}}
       />,
-);
+    );
     await waitFor(() => {
       expect(screen.getByTestId("picker-empty")).toBeTruthy();
     });
@@ -68,13 +70,14 @@ describe("RecentPlansPickerModal", () => {
       total: 2,
     });
     const onPick = vi.fn();
-    render(      <RecentPlansPickerModal
+    render(
+      <RecentPlansPickerModal
         open={true}
         defaultConnectionId="c1"
         onPick={onPick}
         onCancel={() => {}}
       />,
-);
+    );
     await waitFor(() => {
       expect(screen.getByTestId("picker-row-p1")).toBeTruthy();
     });
@@ -86,13 +89,14 @@ describe("RecentPlansPickerModal", () => {
     const { recentPlansSearch } = await import("../../../lib/tauri");
     const mock = vi.mocked(recentPlansSearch);
     mock.mockResolvedValue({ rows: [], total: 0 });
-    render(      <RecentPlansPickerModal
+    render(
+      <RecentPlansPickerModal
         open={true}
         defaultConnectionId="c1"
         onPick={() => {}}
         onCancel={() => {}}
       />,
-);
+    );
     // Initially scope=current → connectionId=c1
     await waitFor(() => {
       expect(mock).toHaveBeenCalled();
@@ -115,13 +119,14 @@ describe("RecentPlansPickerModal", () => {
     const { recentPlansSearch } = await import("../../../lib/tauri");
     vi.mocked(recentPlansSearch).mockResolvedValue({ rows: [], total: 0 });
     const onCancel = vi.fn();
-    render(      <RecentPlansPickerModal
+    render(
+      <RecentPlansPickerModal
         open={true}
         defaultConnectionId="c1"
         onPick={() => {}}
         onCancel={onCancel}
       />,
-);
+    );
     // The Cancel button is in the modal footer.
     const cancelBtns = screen.getAllByRole("button", { name: /cancel/i });
     fireEvent.click(cancelBtns[cancelBtns.length - 1]);

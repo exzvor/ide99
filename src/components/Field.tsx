@@ -81,15 +81,18 @@ export const Field = forwardRef<HTMLInputElement, FieldProps>((props, ref) => {
     });
   }
 
-  return (    <div className={`q-field ${props.className ?? ""}`.trim()}>
+  return (
+    <div className={`q-field ${props.className ?? ""}`.trim()}>
       <label htmlFor={id}>
         {props.label}
-        {props.required ? (          <span aria-hidden="true" className="req" style={{ marginLeft: 4 }}>
+        {props.required ? (
+          <span aria-hidden="true" className="req" style={{ marginLeft: 4 }}>
             *
           </span>
-) : null}
+        ) : null}
       </label>
-      {isRhf ? (        <input
+      {isRhf ? (
+        <input
           id={id}
           ref={ref}
           type={(props as FieldRhfProps).type ?? "text"}
@@ -101,18 +104,21 @@ export const Field = forwardRef<HTMLInputElement, FieldProps>((props, ref) => {
           {...(props as FieldRhfProps).inputProps}
           {...registerProps}
         />
-) : (        (props as FieldChildrenProps).children
-)}
-      {props.hint && !errorMsg ? (        <p id={hintId} style={{ fontSize: 11, color: "var(--ink-4)", margin: 0 }}>
+      ) : (
+        (props as FieldChildrenProps).children
+      )}
+      {props.hint && !errorMsg ? (
+        <p id={hintId} style={{ fontSize: 11, color: "var(--ink-4)", margin: 0 }}>
           {props.hint}
         </p>
-) : null}
-      {errorMsg ? (        <p id={errorId} role="alert" style={{ fontSize: 11, color: "var(--danger-q)", margin: 0 }}>
+      ) : null}
+      {errorMsg ? (
+        <p id={errorId} role="alert" style={{ fontSize: 11, color: "var(--danger-q)", margin: 0 }}>
           {errorMsg}
         </p>
-) : null}
+      ) : null}
     </div>
-);
+  );
 });
 
 Field.displayName = "Field";

@@ -29,7 +29,8 @@ export function intervalToSqlLiteral(v: IntervalValue): string {
 
 export function IntervalInput(props: IntervalInputProps): JSX.Element {
   const { value, onChange, idSuffix } = props;
-  return (    <span data-testid={`interval-input-${idSuffix}`} style={{ display: "inline-flex", gap: 4 }}>
+  return (
+    <span data-testid={`interval-input-${idSuffix}`} style={{ display: "inline-flex", gap: 4 }}>
       <input
         type="number"
         min="1"
@@ -44,11 +45,12 @@ export function IntervalInput(props: IntervalInputProps): JSX.Element {
         value={value.unit}
         onChange={(e) => onChange({ count: value.count, unit: e.target.value as IntervalUnit })}
       >
-        {UNITS.map((u) => (          <option key={u} value={u}>
+        {UNITS.map((u) => (
+          <option key={u} value={u}>
             {u}
           </option>
-))}
+        ))}
       </select>
     </span>
-);
+  );
 }

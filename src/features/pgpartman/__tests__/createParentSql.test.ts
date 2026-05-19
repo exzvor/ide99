@@ -45,8 +45,9 @@ describe("buildCreateParentSql", () => {
   });
 
   it("escapes single quotes in parent_table and other string literals", () => {
-    const sql = buildCreateParentSql(      baseForm({ parentTable: "public.events's data", retention: "6 months" }),
-);
+    const sql = buildCreateParentSql(
+      baseForm({ parentTable: "public.events's data", retention: "6 months" }),
+    );
     // First occurrence in create_parent.
     expect(sql).toContain("p_parent_table => 'public.events''s data'");
     // Same escape inside the retention UPDATE.

@@ -114,7 +114,8 @@ export function UpdateChecker(): JSX.Element {
 
   const progressLabel = useMemo(() => formatProgress(progress, t), [progress, t]);
 
-  return (    <section
+  return (
+    <section
       data-testid="update-checker"
       style={{
         display: "flex",
@@ -164,13 +165,16 @@ export function UpdateChecker(): JSX.Element {
         </select>
       </label>
 
-      {lastResult ? (        <div data-testid={`updater-result-${lastResult.kind}`} style={{ fontSize: 12 }}>
-          {lastResult.kind === "upToDate" ? (            <span style={{ color: "var(--ok, #2a7)" }}>
+      {lastResult ? (
+        <div data-testid={`updater-result-${lastResult.kind}`} style={{ fontSize: 12 }}>
+          {lastResult.kind === "upToDate" ? (
+            <span style={{ color: "var(--ok, #2a7)" }}>
               {t("updater.up_to_date", { version: lastResult.currentVersion })}
             </span>
-) : null}
+          ) : null}
 
-          {lastResult.kind === "available" ? (            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {lastResult.kind === "available" ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <span style={{ color: "var(--accent, #6366f1)", fontWeight: 600 }}>
                 {t("updater.available", {
                   from: lastResult.currentVersion,
@@ -178,7 +182,8 @@ export function UpdateChecker(): JSX.Element {
                 })}
               </span>
 
-              {lastResult.manifest.notes ? (                <details data-testid="updater-release-notes" open>
+              {lastResult.manifest.notes ? (
+                <details data-testid="updater-release-notes" open>
                   <summary style={{ cursor: "pointer", fontSize: 12 }}>
                     {t("updater.release_notes")}
                   </summary>
@@ -199,19 +204,22 @@ export function UpdateChecker(): JSX.Element {
                     {lastResult.manifest.notes}
                   </pre>
                 </details>
-) : null}
+              ) : null}
 
-              {decision === "approved" || installing ? (                <div data-testid="updater-progress" style={{ fontSize: 12 }}>
+              {decision === "approved" || installing ? (
+                <div data-testid="updater-progress" style={{ fontSize: 12 }}>
                   <ProgressBar
                     bytesDownloaded={progress?.bytesDownloaded ?? 0}
                     bytesTotal={progress?.bytesTotal ?? null}
                   />
                   <div style={{ marginTop: 4, color: "var(--ink-2)" }}>{progressLabel}</div>
                 </div>
-) : decision === "deferred" ? (                <div data-testid="updater-deferred" style={{ color: "var(--ink-3)" }}>
+              ) : decision === "deferred" ? (
+                <div data-testid="updater-deferred" style={{ color: "var(--ink-3)" }}>
                   {t("updater.deferred")}
                 </div>
-) : (                <div style={{ display: "flex", gap: 8 }}>
+              ) : (
+                <div style={{ display: "flex", gap: 8 }}>
                   <button
                     type="button"
                     data-testid="updater-approve"
@@ -224,27 +232,29 @@ export function UpdateChecker(): JSX.Element {
                     {t("updater.defer")}
                   </button>
                 </div>
-)}
+              )}
             </div>
-) : null}
+          ) : null}
 
-          {lastResult.kind === "error" ? (            <span role="alert" style={{ color: "var(--err, #d33)" }}>
+          {lastResult.kind === "error" ? (
+            <span role="alert" style={{ color: "var(--err, #d33)" }}>
               {t("updater.error", { message: lastResult.message })}
             </span>
-) : null}
+          ) : null}
         </div>
-) : null}
+      ) : null}
 
-      {error ? (        <div
+      {error ? (
+        <div
           role="alert"
           data-testid="updater-error"
           style={{ color: "var(--err, #d33)", fontSize: 12 }}
         >
           {error}
         </div>
-) : null}
+      ) : null}
     </section>
-);
+  );
 }
 
 function ProgressBar({
@@ -258,7 +268,8 @@ function ProgressBar({
     bytesTotal && bytesTotal > 0
       ? Math.min(100, Math.round((bytesDownloaded / bytesTotal) * 100))
       : null;
-  return (    <div
+  return (
+    <div
       role="progressbar"
       aria-valuemin={0}
       aria-valuemax={100}
@@ -281,10 +292,11 @@ function ProgressBar({
         }}
       />
     </div>
-);
+  );
 }
 
-function formatProgress(  progress: ProgressEvent | null,
+function formatProgress(
+  progress: ProgressEvent | null,
   t: (key: string, opts?: Record<string, unknown>) => string,
 ): string {
   if (!progress) return t("updater.progress.started");
@@ -293,9 +305,10 @@ function formatProgress(  progress: ProgressEvent | null,
       return t("updater.progress.started");
     case "downloading":
       if (progress.bytesTotal && progress.bytesTotal > 0) {
-        const percent = Math.min(          100,
+        const percent = Math.min(
+          100,
           Math.round((progress.bytesDownloaded / progress.bytesTotal) * 100),
-);
+        );
         return t("updater.progress.downloading", { percent });
       }
       return t("updater.progress.downloading_unknown", {

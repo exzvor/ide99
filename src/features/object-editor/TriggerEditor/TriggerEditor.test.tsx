@@ -22,9 +22,10 @@ vi.mock("../../editor/store", async () => {
   const closeTab = vi.fn().mockResolvedValue(true);
   return {
     ...actual,
-    useEditor: Object.assign(      (selector: (s: { closeTab: typeof closeTab }) => unknown) => selector({ closeTab }),
+    useEditor: Object.assign(
+      (selector: (s: { closeTab: typeof closeTab }) => unknown) => selector({ closeTab }),
       { getState: () => ({ closeTab }) },
-),
+    ),
   };
 });
 
@@ -107,7 +108,7 @@ describe("TriggerEditor", () => {
         s.kind === "trigger"
           ? { ...s, form: { ...s.form, functionRef: { schema: "public", name: "fn1" } } }
           : s,
-);
+      );
     await waitFor(() => {
       const sql = screen.getByTestId("object-editor-ddl-preview-sql").textContent ?? "";
       expect(sql).toContain("INSERT");
@@ -130,7 +131,7 @@ describe("TriggerEditor", () => {
         s.kind === "trigger"
           ? { ...s, form: { ...s.form, functionRef: { schema: "public", name: "fn1" } } }
           : s,
-);
+      );
     await waitFor(() => {
       const sql = screen.getByTestId("object-editor-ddl-preview-sql").textContent ?? "";
       expect(sql).toMatch(/UPDATE OF col1, col2/);
@@ -152,7 +153,7 @@ describe("TriggerEditor", () => {
         s.kind === "trigger"
           ? { ...s, form: { ...s.form, functionRef: { schema: "public", name: "fn1" } } }
           : s,
-);
+      );
     await waitFor(() => {
       const sql = screen.getByTestId("object-editor-ddl-preview-sql").textContent ?? "";
       expect(sql).toContain("WHEN (NEW.id IS NOT NULL)");
@@ -180,10 +181,11 @@ describe("TriggerEditor", () => {
         s.kind === "trigger"
           ? { ...s, form: { ...s.form, functionRef: { schema: "public", name: "fn1" } } }
           : s,
-);
+      );
     await waitFor(() => {
-      expect(screen.getByTestId("object-editor-ddl-errors").textContent ?? "").toMatch(        /FOR EACH ROW/i,
-);
+      expect(screen.getByTestId("object-editor-ddl-errors").textContent ?? "").toMatch(
+        /FOR EACH ROW/i,
+      );
     });
   });
 
@@ -206,8 +208,9 @@ describe("TriggerEditor", () => {
 
   it("enabled toggle in edit mode emits ALTER TABLE DISABLE TRIGGER chunk", async () => {
     mockedGet.mockResolvedValue(SAMPLE_TRG);
-    render(      <TriggerEditor tab={createTab({ mode: "edit", name: "trg_audit", parentTable: "users" })} />,
-);
+    render(
+      <TriggerEditor tab={createTab({ mode: "edit", name: "trg_audit", parentTable: "users" })} />,
+    );
     await waitFor(() => expect(screen.getByTestId("trigger-editor")).toBeInTheDocument());
     fireEvent.click(screen.getByTestId("trigger-enabled"));
     await waitFor(() => {
@@ -218,8 +221,9 @@ describe("TriggerEditor", () => {
 
   it("signature change in edit mode emits DROP + CREATE + warning", async () => {
     mockedGet.mockResolvedValue(SAMPLE_TRG);
-    render(      <TriggerEditor tab={createTab({ mode: "edit", name: "trg_audit", parentTable: "users" })} />,
-);
+    render(
+      <TriggerEditor tab={createTab({ mode: "edit", name: "trg_audit", parentTable: "users" })} />,
+    );
     await waitFor(() => expect(screen.getByTestId("trigger-editor")).toBeInTheDocument());
     fireEvent.click(screen.getByTestId("trigger-event-update"));
     await waitFor(() => {
@@ -227,8 +231,9 @@ describe("TriggerEditor", () => {
       expect(sql).toMatch(/DROP TRIGGER trg_audit/);
       expect(sql).toMatch(/CREATE TRIGGER trg_audit/);
     });
-    expect(screen.getByTestId("object-editor-ddl-warnings").textContent ?? "").toMatch(      /recreate|ALTER TRIGGER/i,
-);
+    expect(screen.getByTestId("object-editor-ddl-warnings").textContent ?? "").toMatch(
+      /recreate|ALTER TRIGGER/i,
+    );
   });
 
   it("HelpLink is rendered with topic=trigger", () => {

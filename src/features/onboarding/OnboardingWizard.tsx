@@ -46,7 +46,7 @@ export function OnboardingWizard(): JSX.Element | null {
     if (!settings) void hydrate();
   }, [settings, hydrate]);
 
-  // €” wait until the user has made a privacy choice. Otherwise the
+  // wait until the user has made a privacy choice. Otherwise the
   // privacy opt-in modal and the onboarding wizard render simultaneously and
   // the coach mark behind them is also visible. Sequence is strict:
   // privacy â†’ onboarding â†’ coach marks.
@@ -67,8 +67,9 @@ export function OnboardingWizard(): JSX.Element | null {
       if (e.key !== "Tab") return;
       const root = containerRef.current;
       if (!root) return;
-      const focusables = root.querySelectorAll<HTMLElement>(        'button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])',
-);
+      const focusables = root.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
       if (focusables.length === 0) return;
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
@@ -85,7 +86,8 @@ export function OnboardingWizard(): JSX.Element | null {
     return () => document.removeEventListener("keydown", handler);
   }, [visible]);
 
-  const finish = useCallback(    async (pick: "standard" | "easy" | "skip") => {
+  const finish = useCallback(
+    async (pick: "standard" | "easy" | "skip") => {
       if (!settings) return;
       await setSettings({ ...settings, onboardingCompleted: true });
       if (pick === "easy") {
@@ -99,7 +101,7 @@ export function OnboardingWizard(): JSX.Element | null {
       reset();
     },
     [settings, setSettings, setMode, reset],
-);
+  );
 
   // ESC = skip (no mode change, no tour). Capture-phase so we win over
   // any nested handler.
@@ -117,7 +119,8 @@ export function OnboardingWizard(): JSX.Element | null {
 
   if (!visible || !settings) return null;
 
-  return (    // biome-ignore lint/a11y/useSemanticElements: native <dialog> can't host our focus-trap + non-portal overlay; we keep div+role parity with other v1.0 modals.
+  return (
+    // biome-ignore lint/a11y/useSemanticElements: native <dialog> can't host our focus-trap + non-portal overlay; we keep div+role parity with other v1.0 modals.
     <div
       role="dialog"
       aria-modal="true"
@@ -213,7 +216,7 @@ export function OnboardingWizard(): JSX.Element | null {
         </div>
       </div>
     </div>
-);
+  );
 }
 
 interface ModeCardProps {
@@ -225,7 +228,8 @@ interface ModeCardProps {
 }
 
 function ModeCard({ testId, title, desc, onClick, recommended }: ModeCardProps): JSX.Element {
-  return (    <button
+  return (
+    <button
       type="button"
       data-testid={testId}
       onClick={onClick}
@@ -246,5 +250,5 @@ function ModeCard({ testId, title, desc, onClick, recommended }: ModeCardProps):
       <span style={{ fontWeight: 600, fontSize: 13 }}>{title}</span>
       <span style={{ fontSize: 12, color: "var(--ink-3)", lineHeight: 1.4 }}>{desc}</span>
     </button>
-);
+  );
 }

@@ -14,10 +14,11 @@ interface Props {
  */
 export function EnvironmentBadge({ environment, className }: Props) {
   const { t } = useTranslation();
-  return (    <span
+  return (
+    <span
       className={`env-badge ${environment}${className ? ` ${className}` : ""}`}
       role="img"
       aria-label={t(`env.label.${environment}`)}
     />
-);
+  );
 }

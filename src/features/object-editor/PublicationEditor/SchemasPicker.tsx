@@ -39,19 +39,22 @@ export function SchemasPicker({ connId, selected, onChange }: SchemasPickerProps
   };
 
   if (error) {
-    return (      <div data-testid="pub-schemas-error" role="alert" style={{ fontSize: 12 }}>
+    return (
+      <div data-testid="pub-schemas-error" role="alert" style={{ fontSize: 12 }}>
         {error}
       </div>
-);
+    );
   }
   if (available === null) {
-    return (      <div data-testid="pub-schemas-loading" style={{ fontSize: 12 }}>
+    return (
+      <div data-testid="pub-schemas-loading" style={{ fontSize: 12 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
 
-  return (    <div
+  return (
+    <div
       data-testid="pub-schemas-picker"
       style={{
         maxHeight: 200,
@@ -61,7 +64,8 @@ export function SchemasPicker({ connId, selected, onChange }: SchemasPickerProps
         padding: 6,
       }}
     >
-      {available.map((name) => (        <label key={name} style={{ display: "flex", gap: 6, fontSize: 12, alignItems: "center" }}>
+      {available.map((name) => (
+        <label key={name} style={{ display: "flex", gap: 6, fontSize: 12, alignItems: "center" }}>
           <input
             type="checkbox"
             data-testid={`pub-schema-${name}`}
@@ -70,7 +74,7 @@ export function SchemasPicker({ connId, selected, onChange }: SchemasPickerProps
           />
           <span>{name}</span>
         </label>
-))}
+      ))}
     </div>
-);
+  );
 }

@@ -96,7 +96,8 @@ export function JsonbQueryBuilderModal(props: JsonbQueryBuilderModalProps): JSX.
       const callId = ++latestCallId.current;
       setPreviewLoading(true);
 
-      jsonbBuilderPreview(req as unknown as BuilderRequest).then(        (result) => {
+      jsonbBuilderPreview(req as unknown as BuilderRequest).then(
+        (result) => {
           if (callId !== latestCallId.current) return;
           setPreview(result);
           setPreviewError(null);
@@ -108,7 +109,7 @@ export function JsonbQueryBuilderModal(props: JsonbQueryBuilderModalProps): JSX.
           setPreviewError(message);
           setPreviewLoading(false);
         },
-);
+      );
     }, 150);
   }, [connId, fqn, state]);
 
@@ -175,7 +176,8 @@ export function JsonbQueryBuilderModal(props: JsonbQueryBuilderModalProps): JSX.
     dispatch({ type: "SET_PATH", path });
   };
 
-  return (    // biome-ignore lint/a11y/useSemanticElements: real focus-trap modal
+  return (
+    // biome-ignore lint/a11y/useSemanticElements: real focus-trap modal
     <div
       role="dialog"
       aria-modal="true"
@@ -285,8 +287,10 @@ export function JsonbQueryBuilderModal(props: JsonbQueryBuilderModalProps): JSX.
             <OperatorForm connId={connId} fqn={fqn} state={state} dispatch={dispatch} />
 
             {/* Warnings from backend */}
-            {preview && preview.warnings.length > 0 && (              <div>
-                {preview.warnings.map((w, i) => (                  <div
+            {preview && preview.warnings.length > 0 && (
+              <div>
+                {preview.warnings.map((w, i) => (
+                  <div
                     // biome-ignore lint/suspicious/noArrayIndexKey: stable warning list
                     key={i}
                     role="note"
@@ -296,9 +300,9 @@ export function JsonbQueryBuilderModal(props: JsonbQueryBuilderModalProps): JSX.
                       ? t("jsonb.builder.warning.pathTooDeep", { limit: w.limit })
                       : t("jsonb.builder.warning.existenceTopLevel")}
                   </div>
-))}
+                ))}
               </div>
-)}
+            )}
 
             {/* SQL preview */}
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -355,5 +359,5 @@ export function JsonbQueryBuilderModal(props: JsonbQueryBuilderModalProps): JSX.
         </div>
       </div>
     </div>
-);
+  );
 }

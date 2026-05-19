@@ -42,7 +42,8 @@ describe("RepackDialog", () => {
       fkCount: 1,
     });
 
-    render(      <RepackDialog
+    render(
+      <RepackDialog
         open={true}
         connId="conn-1"
         database="mydb"
@@ -50,7 +51,7 @@ describe("RepackDialog", () => {
         table="metrics"
         onClose={vi.fn()}
       />,
-);
+    );
 
     await waitFor(() => expect(screen.getByText(/Has primary key/i)).toBeInTheDocument());
 
@@ -71,7 +72,8 @@ describe("RepackDialog", () => {
       fkCount: 0,
     });
 
-    render(      <RepackDialog
+    render(
+      <RepackDialog
         open={true}
         connId="conn-1"
         database="mydb"
@@ -79,7 +81,7 @@ describe("RepackDialog", () => {
         table="no_pk"
         onClose={vi.fn()}
       />,
-);
+    );
 
     await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
     expect(screen.getByRole("alert").textContent).toMatch(/primary key/i);
@@ -99,7 +101,8 @@ describe("RepackDialog", () => {
       clipboard: { writeText },
     });
 
-    render(      <RepackDialog
+    render(
+      <RepackDialog
         open={true}
         connId="conn-1"
         database="mydb"
@@ -107,7 +110,7 @@ describe("RepackDialog", () => {
         table="metrics"
         onClose={vi.fn()}
       />,
-);
+    );
 
     await waitFor(() => expect(screen.getByText(/Has primary key/i)).toBeInTheDocument());
 
@@ -130,7 +133,8 @@ describe("RepackDialog", () => {
     });
     vi.useFakeTimers({ shouldAdvanceTime: true });
 
-    const { rerender } = render(      <RepackDialog
+    const { rerender } = render(
+      <RepackDialog
         open={true}
         connId="conn-1"
         database="mydb"
@@ -138,7 +142,7 @@ describe("RepackDialog", () => {
         table="metrics"
         onClose={vi.fn()}
       />,
-);
+    );
 
     // Mount fires an initial fetch.
     await waitFor(() => expect(queryExecuteMock).toHaveBeenCalledTimes(1));
@@ -148,7 +152,8 @@ describe("RepackDialog", () => {
     });
     expect(queryExecuteMock).toHaveBeenCalledTimes(2);
 
-    rerender(      <RepackDialog
+    rerender(
+      <RepackDialog
         open={false}
         connId="conn-1"
         database="mydb"
@@ -156,7 +161,7 @@ describe("RepackDialog", () => {
         table="metrics"
         onClose={vi.fn()}
       />,
-);
+    );
 
     const callsAfterClose = queryExecuteMock.mock.calls.length;
     await act(async () => {
@@ -175,7 +180,8 @@ describe("RepackDialog", () => {
     queryExecuteMock.mockReset();
     queryExecuteMock.mockRejectedValue(new Error("permission denied"));
 
-    render(      <RepackDialog
+    render(
+      <RepackDialog
         open={true}
         connId="conn-1"
         database="mydb"
@@ -183,10 +189,10 @@ describe("RepackDialog", () => {
         table="metrics"
         onClose={vi.fn()}
       />,
-);
+    );
 
     await waitFor(() =>
       expect(screen.getByText(/No repack history available/i)).toBeInTheDocument(),
-);
+    );
   });
 });

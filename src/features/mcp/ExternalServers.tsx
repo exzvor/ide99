@@ -120,7 +120,8 @@ export function ExternalServers(): JSX.Element {
     return <div className="mcp-loading">{t("settings.mcp.external.loading")}</div>;
   }
 
-  return (    <div className="mcp-external">
+  return (
+    <div className="mcp-external">
       <header className="mcp-external-header">
         <h3>{t("settings.mcp.external.title")}</h3>
         <p className="mcp-description">{t("settings.mcp.external.description")}</p>
@@ -135,19 +136,23 @@ export function ExternalServers(): JSX.Element {
         >
           {t("settings.mcp.external.reload")}
         </button>
-        {configPath ? (          <span className="mcp-external-config-path" title={configPath}>
+        {configPath ? (
+          <span className="mcp-external-config-path" title={configPath}>
             {t("settings.mcp.external.configPath", { path: configPath })}
           </span>
-) : null}
+        ) : null}
       </div>
 
-      {items.length === 0 ? (        <p className="mcp-empty">{t("settings.mcp.external.empty")}</p>
-) : (        <ul className="mcp-external-list">
+      {items.length === 0 ? (
+        <p className="mcp-empty">{t("settings.mcp.external.empty")}</p>
+      ) : (
+        <ul className="mcp-external-list">
           {items.map((item) => {
             const { config, status } = item;
             const connected = status.kind === "connected";
             const busyHere = busy === config.name;
-            return (              <li key={config.name} className="mcp-external-row">
+            return (
+              <li key={config.name} className="mcp-external-row">
                 <div className="mcp-external-name">
                   <strong>{config.name}</strong>
                   <span className="mcp-external-transport">{config.transport}</span>
@@ -155,7 +160,8 @@ export function ExternalServers(): JSX.Element {
                 <div className="mcp-external-target">{config.displayTarget}</div>
                 <div className="mcp-external-status" data-status={status.kind}>
                   {statusBadge(status, t)}
-                  {status.kind === "connected" ? (                    <span className="mcp-external-counts">
+                  {status.kind === "connected" ? (
+                    <span className="mcp-external-counts">
                       {t("settings.mcp.external.toolsCount", {
                         count: status.tools.length,
                       })}
@@ -164,14 +170,16 @@ export function ExternalServers(): JSX.Element {
                         count: status.resources.length,
                       })}
                     </span>
-) : null}
-                  {status.kind === "error" ? (                    <span className="mcp-external-error" title={status.message}>
+                  ) : null}
+                  {status.kind === "error" ? (
+                    <span className="mcp-external-error" title={status.message}>
                       {status.message}
                     </span>
-) : null}
+                  ) : null}
                 </div>
                 <div className="mcp-external-actions">
-                  {connected ? (                    <button
+                  {connected ? (
+                    <button
                       type="button"
                       className="btn btn-sm"
                       disabled={busyHere}
@@ -180,7 +188,8 @@ export function ExternalServers(): JSX.Element {
                     >
                       {t("settings.mcp.external.disconnect")}
                     </button>
-) : (                    <button
+                  ) : (
+                    <button
                       type="button"
                       className="btn btn-sm btn-primary"
                       disabled={busyHere || status.kind === "connecting"}
@@ -189,13 +198,13 @@ export function ExternalServers(): JSX.Element {
                     >
                       {t("settings.mcp.external.connect")}
                     </button>
-)}
+                  )}
                 </div>
               </li>
-);
+            );
           })}
         </ul>
-)}
+      )}
     </div>
-);
+  );
 }

@@ -35,23 +35,26 @@ describe("ResultFooter", () => {
   });
 
   test("prefetching: uses prefetching template", () => {
-    render(      <ResultFooter
+    render(
+      <ResultFooter
         run={{ ...baseStreaming, status: "streaming", loadedCount: 5000, prefetching: true }}
       />,
-);
+    );
     expect(screen.getByText(/editor\.result\.rows_prefetching.*5000/)).toBeInTheDocument();
   });
 
   test("exhausted: uses done template", () => {
-    render(      <ResultFooter
+    render(
+      <ResultFooter
         run={{ ...baseStreaming, status: "streaming", loadedCount: 12438, exhausted: true }}
       />,
-);
+    );
     expect(screen.getByText(/editor\.result\.rows_done.*12438/)).toBeInTheDocument();
   });
 
   test("affected: DML uses affected template", () => {
-    render(      <ResultFooter
+    render(
+      <ResultFooter
         run={{
           ...baseStreaming,
           status: "streaming",
@@ -60,12 +63,13 @@ describe("ResultFooter", () => {
           affectedRows: 5,
         }}
       />,
-);
+    );
     expect(screen.getByText(/editor\.result\.rows_affected.*5/)).toBeInTheDocument();
   });
 
   test("sort indicator: shows column name + dir when sort is set", () => {
-    render(      <ResultFooter
+    render(
+      <ResultFooter
         run={{
           ...baseStreaming,
           status: "streaming",
@@ -75,7 +79,7 @@ describe("ResultFooter", () => {
           sort: { columnIdx: 0, dir: "desc" },
         }}
       />,
-);
+    );
     const sortChip = screen.getByTestId("result-footer-sort");
     expect(sortChip.textContent).toMatch(/created_at/);
     expect(sortChip.textContent).toMatch(/desc/);

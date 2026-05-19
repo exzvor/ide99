@@ -9,8 +9,9 @@ describe("buildRetentionPolicySql", () => {
       dropAfter: "30 days",
       mode: "create",
     };
-    expect(buildRetentionPolicySql(form)).toBe(      "SELECT add_retention_policy('\"public\".\"metrics\"', INTERVAL '30 days');",
-);
+    expect(buildRetentionPolicySql(form)).toBe(
+      "SELECT add_retention_policy('\"public\".\"metrics\"', INTERVAL '30 days');",
+    );
   });
 
   it("drop-mode emits remove_retention_policy", () => {
@@ -19,7 +20,8 @@ describe("buildRetentionPolicySql", () => {
       dropAfter: "ignored",
       mode: "drop",
     };
-    expect(buildRetentionPolicySql(form)).toBe(      'SELECT remove_retention_policy(\'"public"."metrics"\');',
-);
+    expect(buildRetentionPolicySql(form)).toBe(
+      'SELECT remove_retention_policy(\'"public"."metrics"\');',
+    );
   });
 });

@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * Zustand store for the Migrations panel.
  *

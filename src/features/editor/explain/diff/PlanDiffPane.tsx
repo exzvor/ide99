@@ -31,7 +31,7 @@ export function PlanDiffPane({ tabId }: PlanDiffPaneProps): JSX.Element {
   const { t } = useTranslation();
   const tab = useEditor((s) =>
     s.tabs.find((x): x is PlanDiffTab => x.id === tabId && x.kind === "plan-diff"),
-);
+  );
 
   const [leftState, setLeftState] = useState<SideState>(INITIAL_SIDE);
   const [rightState, setRightState] = useState<SideState>(INITIAL_SIDE);
@@ -106,7 +106,8 @@ export function PlanDiffPane({ tabId }: PlanDiffPaneProps): JSX.Element {
   // — resolve picked-row paths into per-side canonical labels
   // (using the same buildNodeLabel that QuietPlanCanvas matches against)
   // so highlight wires up regardless of node-type changes.
-  const onPickDiff = useCallback<React.ComponentProps<typeof PlanDiffPanel>["onPick"]>(    (pick) => {
+  const onPickDiff = useCallback<React.ComponentProps<typeof PlanDiffPanel>["onPick"]>(
+    (pick) => {
       const leftPlan = leftState.loaded?.planJson ?? null;
       const rightPlan = rightState.loaded?.planJson ?? null;
       if (pick.kind === "matched") {
@@ -137,7 +138,7 @@ export function PlanDiffPane({ tabId }: PlanDiffPaneProps): JSX.Element {
       }
     },
     [leftState, rightState, activePickKey],
-);
+  );
 
   if (!tab) {
     return <div data-testid="plan-diff-pane-missing" />;
@@ -152,7 +153,8 @@ export function PlanDiffPane({ tabId }: PlanDiffPaneProps): JSX.Element {
       leftState.status === "parse_error" || rightState.status === "parse_error"
         ? "editor.explain.diff.placeholder.parse_error"
         : "editor.explain.diff.placeholder.both_gone";
-    return (      <div
+    return (
+      <div
         data-testid="plan-diff-pane"
         style={{ display: "flex", flexDirection: "column", height: "100%", padding: 16 }}
       >
@@ -168,10 +170,11 @@ export function PlanDiffPane({ tabId }: PlanDiffPaneProps): JSX.Element {
           {t("editor.explain.diff.placeholder.close")}
         </button>
       </div>
-);
+    );
   }
 
-  return (    <div
+  return (
+    <div
       data-testid="plan-diff-pane"
       style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0 }}
     >
@@ -195,23 +198,27 @@ export function PlanDiffPane({ tabId }: PlanDiffPaneProps): JSX.Element {
           }}
           data-testid="plan-diff-left"
         >
-          {leftState.status === "loaded" && leftState.loaded ? (            <QuietPlanCanvas
+          {leftState.status === "loaded" && leftState.loaded ? (
+            <QuietPlanCanvas
               plan={leftState.loaded.planJson}
               highlight={hlLeft}
               onSelect={(label) => setHlLeft(label)}
             />
-) : leftState.status === "gone" ? (            <SidePlaceholder
+          ) : leftState.status === "gone" ? (
+            <SidePlaceholder
               testId="plan-diff-left-gone"
               text={t("editor.explain.diff.placeholder.left_gone")}
               onClose={() => void useEditor.getState().closeTab(tabId)}
               closeText={t("editor.explain.diff.placeholder.close")}
             />
-) : leftState.status === "parse_error" ? (            <SidePlaceholder
+          ) : leftState.status === "parse_error" ? (
+            <SidePlaceholder
               testId="plan-diff-left-parse-error"
               text={t("editor.explain.diff.placeholder.parse_error")}
             />
-) : (            <SkeletonSide />
-)}
+          ) : (
+            <SkeletonSide />
+          )}
         </div>
         <div
           style={{
@@ -223,42 +230,48 @@ export function PlanDiffPane({ tabId }: PlanDiffPaneProps): JSX.Element {
           }}
           data-testid="plan-diff-right"
         >
-          {rightState.status === "loaded" && rightState.loaded ? (            <QuietPlanCanvas
+          {rightState.status === "loaded" && rightState.loaded ? (
+            <QuietPlanCanvas
               plan={rightState.loaded.planJson}
               highlight={hlRight}
               onSelect={(label) => setHlRight(label)}
             />
-) : rightState.status === "gone" ? (            <SidePlaceholder
+          ) : rightState.status === "gone" ? (
+            <SidePlaceholder
               testId="plan-diff-right-gone"
               text={t("editor.explain.diff.placeholder.right_gone")}
               onClose={() => void useEditor.getState().closeTab(tabId)}
               closeText={t("editor.explain.diff.placeholder.close")}
             />
-) : rightState.status === "parse_error" ? (            <SidePlaceholder
+          ) : rightState.status === "parse_error" ? (
+            <SidePlaceholder
               testId="plan-diff-right-parse-error"
               text={t("editor.explain.diff.placeholder.parse_error")}
             />
-) : (            <SkeletonSide />
-)}
+          ) : (
+            <SkeletonSide />
+          )}
         </div>
       </div>
-      {diff ? (        <PlanDiffPanel
+      {diff ? (
+        <PlanDiffPanel
           diff={diff}
           activeKey={activePickKey}
           onPick={onPickDiff}
           leftPlan={leftState.loaded?.planJson}
           rightPlan={rightState.loaded?.planJson}
         />
-) : null}
+      ) : null}
     </div>
-);
+  );
 }
 
 function SkeletonSide(): JSX.Element {
-  return (    <div data-testid="plan-diff-side-loading" style={{ flex: 1, padding: 16, opacity: 0.5 }}>
+  return (
+    <div data-testid="plan-diff-side-loading" style={{ flex: 1, padding: 16, opacity: 0.5 }}>
       …
     </div>
-);
+  );
 }
 
 function SidePlaceholder({
@@ -272,7 +285,8 @@ function SidePlaceholder({
   onClose?: () => void;
   closeText?: string;
 }): JSX.Element {
-  return (    <div
+  return (
+    <div
       data-testid={testId}
       style={{
         flex: 1,
@@ -284,7 +298,8 @@ function SidePlaceholder({
       }}
     >
       <span>{text}</span>
-      {onClose && closeText ? (        <button
+      {onClose && closeText ? (
+        <button
           type="button"
           className="btn btn-sm"
           onClick={onClose}
@@ -292,7 +307,7 @@ function SidePlaceholder({
         >
           {closeText}
         </button>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

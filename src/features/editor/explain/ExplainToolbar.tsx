@@ -69,7 +69,8 @@ export function ExplainToolbar({ tab, isRunning }: ExplainToolbarProps): JSX.Ele
     };
   }
 
-  return (    <div className="q-runbar" data-testid="explain-toolbar">
+  return (
+    <div className="q-runbar" data-testid="explain-toolbar">
       <span className={isAnalyze ? "q-pill ok" : "q-pill"} data-testid="explain-mode-badge">
         {isAnalyze
           ? t("editor.explain.toolbar.mode_analyze")
@@ -81,7 +82,8 @@ export function ExplainToolbar({ tab, isRunning }: ExplainToolbarProps): JSX.Ele
           const enabled = key === "verbose" || isAnalyze;
           const checked = tab.options[key];
           const disabled = !enabled || isCached;
-          return (            <label
+          return (
+            <label
               key={key}
               className={`q-pill ${checked ? "ok" : ""}`}
               data-testid={`explain-toggle-${key}`}
@@ -104,12 +106,13 @@ export function ExplainToolbar({ tab, isRunning }: ExplainToolbarProps): JSX.Ele
               />
               <span>{t(`editor.explain.toolbar.option_${key}`)}</span>
             </label>
-);
+          );
         })}
       </div>
 
       <div style={{ marginLeft: "auto", display: "flex", gap: 6 }}>
-        {isRunning ? (          <button
+        {isRunning ? (
+          <button
             type="button"
             className="btn btn-sm"
             onClick={() => useEditor.getState().cancelExplain(tab.id)}
@@ -117,7 +120,8 @@ export function ExplainToolbar({ tab, isRunning }: ExplainToolbarProps): JSX.Ele
           >
             {t("editor.explain.toolbar.cancel")}
           </button>
-) : (          <>
+        ) : (
+          <>
             <button
               type="button"
               className="btn btn-accent btn-sm"
@@ -128,7 +132,8 @@ export function ExplainToolbar({ tab, isRunning }: ExplainToolbarProps): JSX.Ele
             >
               ↻ {t("editor.explain.toolbar.rerun")}
             </button>
-            {isCached && (              <button
+            {isCached && (
+              <button
                 type="button"
                 className="btn btn-sm"
                 onClick={() =>
@@ -139,8 +144,9 @@ export function ExplainToolbar({ tab, isRunning }: ExplainToolbarProps): JSX.Ele
               >
                 📝 {t("editor.explain.toolbar.open_sql")}
               </button>
-)}
-            {isReady && (              <button
+            )}
+            {isReady && (
+              <button
                 type="button"
                 className="btn btn-sm"
                 onClick={() => {
@@ -150,9 +156,9 @@ export function ExplainToolbar({ tab, isRunning }: ExplainToolbarProps): JSX.Ele
               >
                 {t("editor.explain.toolbar.diff_with")}
               </button>
-)}
+            )}
           </>
-)}
+        )}
       </div>
 
       <RecentPlansPickerModal
@@ -168,5 +174,5 @@ export function ExplainToolbar({ tab, isRunning }: ExplainToolbarProps): JSX.Ele
         onCancel={() => setPickerOpen(false)}
       />
     </div>
-);
+  );
 }

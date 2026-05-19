@@ -56,17 +56,19 @@
 [data-mode="easy"] .q-titlebar {
   /* Subtle warm gradient overlay — wide and short, low opacity. Does not
    * replace the existing top-down gradient, just layers on top. */
-  background: linear-gradient(      to bottom,
+  background: linear-gradient(
+      to bottom,
       color-mix(in srgb, var(--easy-accent) 6%, transparent),
       transparent 60%
-), linear-gradient(to bottom, rgba(255, 255, 255, 0.04), transparent);
+    ), linear-gradient(to bottom, rgba(255, 255, 255, 0.04), transparent);
 }
 
 [data-theme="dark"][data-mode="easy"] .q-titlebar {
-  background: linear-gradient(      to bottom,
+  background: linear-gradient(
+      to bottom,
       color-mix(in srgb, var(--easy-accent) 8%, transparent),
       transparent 60%
-), linear-gradient(to bottom, rgba(255, 255, 255, 0.02), transparent);
+    ), linear-gradient(to bottom, rgba(255, 255, 255, 0.02), transparent);
 }
 
 /* ── Bidirectional SQL panel ───────────────────────────────────────────── */

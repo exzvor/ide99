@@ -130,11 +130,12 @@ describe("MonacoEditor autocomplete (integration via buildProvider)", () => {
     });
     const fn = provider.provideCompletionItems;
     if (!fn) throw new Error("provider missing provideCompletionItems");
-    const result = await fn(      fakeModel(sql, cursor),
+    const result = await fn(
+      fakeModel(sql, cursor),
       { lineNumber: 1, column: cursor + 1 } as Parameters<typeof fn>[1],
       {} as never,
       {} as never,
-);
+    );
     const list = result && "suggestions" in result ? result.suggestions : (result ?? []);
     const labels = list.map((s) => String(s.label));
     expect(labels).toContain("id");
@@ -142,15 +143,17 @@ describe("MonacoEditor autocomplete (integration via buildProvider)", () => {
   });
 
   it("subquery alias-dot suggests projected columns", async () => {
-    const labels = await suggestionsFor(      "SELECT * FROM (SELECT id, name FROM users) sub WHERE sub.",
-);
+    const labels = await suggestionsFor(
+      "SELECT * FROM (SELECT id, name FROM users) sub WHERE sub.",
+    );
     expect(labels).toContain("id");
     expect(labels).toContain("name");
   });
 
   it("LATERAL alias-dot suggests LATERAL projection", async () => {
-    const labels = await suggestionsFor(      "SELECT * FROM users u, LATERAL (SELECT max(u.id) AS m FROM users) lt WHERE lt.",
-);
+    const labels = await suggestionsFor(
+      "SELECT * FROM users u, LATERAL (SELECT max(u.id) AS m FROM users) lt WHERE lt.",
+    );
     expect(labels).toContain("m");
   });
 

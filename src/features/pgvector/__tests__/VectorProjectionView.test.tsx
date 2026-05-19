@@ -96,7 +96,8 @@ afterEach(() => {
 
 describe("VectorProjectionView", () => {
   it("calls queryExecute on mount and renders the canvas after PCA finishes", async () => {
-    render(      <VectorProjectionView
+    render(
+      <VectorProjectionView
         connId="conn-1"
         qualifiedTable="public.items"
         pk="id"
@@ -104,7 +105,7 @@ describe("VectorProjectionView", () => {
         rowCount={1000}
         onClose={() => {}}
       />,
-);
+    );
 
     await waitFor(() => expect(queryExecuteMock).toHaveBeenCalledTimes(1));
     const sql = queryExecuteMock.mock.calls[0][1] as string;
@@ -116,7 +117,8 @@ describe("VectorProjectionView", () => {
   });
 
   it("uses TABLESAMPLE for large tables and shows the banner", async () => {
-    render(      <VectorProjectionView
+    render(
+      <VectorProjectionView
         connId="conn-1"
         qualifiedTable="public.huge"
         pk="id"
@@ -124,7 +126,7 @@ describe("VectorProjectionView", () => {
         rowCount={1_000_000}
         onClose={() => {}}
       />,
-);
+    );
     await waitFor(() => expect(queryExecuteMock).toHaveBeenCalledTimes(1));
     const sql = queryExecuteMock.mock.calls[0][1] as string;
     expect(sql).toContain("TABLESAMPLE BERNOULLI");
@@ -132,7 +134,8 @@ describe("VectorProjectionView", () => {
   });
 
   it("shows loading state and clears it once the worker reports done", async () => {
-    render(      <VectorProjectionView
+    render(
+      <VectorProjectionView
         connId="conn-1"
         qualifiedTable="public.items"
         pk="id"
@@ -140,7 +143,7 @@ describe("VectorProjectionView", () => {
         rowCount={1000}
         onClose={() => {}}
       />,
-);
+    );
     await screen.findByTestId("vector-projection-canvas");
 
     FakeWorker.options = { respond: "done" };
@@ -155,7 +158,8 @@ describe("VectorProjectionView", () => {
   });
 
   it("renders error text when the worker posts an error", async () => {
-    render(      <VectorProjectionView
+    render(
+      <VectorProjectionView
         connId="conn-1"
         qualifiedTable="public.items"
         pk="id"
@@ -163,7 +167,7 @@ describe("VectorProjectionView", () => {
         rowCount={1000}
         onClose={() => {}}
       />,
-);
+    );
     await screen.findByTestId("vector-projection-canvas");
 
     FakeWorker.options = { respond: "error" };

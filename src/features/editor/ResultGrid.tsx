@@ -123,13 +123,15 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
   // S26 — kNN context-menu wiring. Auto-detects vector columns from the run's
   // typeName metadata; menu only appears when at least one vector column is
   // present in the result.
-  const vectorCols = useMemo(    () => detectVectorColumns(run.columns.map((c) => ({ name: c.name, typeName: c.typeName }))),
+  const vectorCols = useMemo(
+    () => detectVectorColumns(run.columns.map((c) => ({ name: c.name, typeName: c.typeName }))),
     [run.columns],
-);
+  );
   // S27 — PostGIS Map View button: gated on geometry/geography column presence.
-  const geometryCols = useMemo(    () => detectGeometryColumns(run.columns.map((c) => ({ name: c.name, typeName: c.typeName }))),
+  const geometryCols = useMemo(
+    () => detectGeometryColumns(run.columns.map((c) => ({ name: c.name, typeName: c.typeName }))),
     [run.columns],
-);
+  );
   const openMapViewTab = useEditor((s) => s.openMapViewTab);
   const [knnMenu, setKnnMenu] = useState<{ x: number; y: number } | null>(null);
   const [knnDialog, setKnnDialog] = useState<{ vectorColumn: string } | null>(null);
@@ -164,7 +166,7 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
       window.removeEventListener("keydown", close);
     };
   }, [knnMenu]);
-  // �� modal opens at the grid level so Enter / double-click work even
+  // modal opens at the grid level so Enter / double-click work even
   // when the keyboard focus didn't make it down to the per-cell <span> (Cell
   // renderers don't tabIndex themselves, so prior to this their onDoubleClick
   // worked but Enter went to the still-focused Monaco editor).
@@ -211,7 +213,8 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
     return run.columnWidths.get(srcIdx) ?? DEFAULT_COL_WIDTH;
   }
 
-  return (    // ARIA-roles biome rules are disabled for this file in biome.json — the
+  return (
+    // ARIA-roles biome rules are disabled for this file in biome.json — the
     // virtualized grid intentionally uses divs+roles rather than <table>/<tr>/<th>
     // because TanStack Virtual's fixed-row-height + absolute-positioning model
     // doesn't compose with semantic table markup.
@@ -250,7 +253,8 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
           if (!col) return null;
           const isSorted = run.sort?.columnIdx === srcIdx;
           const sortMark = isSorted ? (run.sort?.dir === "asc" ? " ▲" : " ▼") : "";
-          return (            <div
+          return (
+            <div
               key={srcIdx}
               style={{
                 position: "relative",
@@ -299,13 +303,14 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
                   if (!isSorted) (e.currentTarget as HTMLElement).style.background = "transparent";
                 }}
               >
-                {JSON_TYPES.has(col.typeName) ? (                  // — Easy mode hover-explanation for json/jsonb
+                {JSON_TYPES.has(col.typeName) ? ( // — Easy mode hover-explanation for json/jsonb
                   // columns. No-op in Standard mode.
                   <ConceptTooltip id="jsonb" showHelpIcon={false}>
                     <span>{col.name}</span>
                   </ConceptTooltip>
-) : (                  col.name
-)}
+                ) : (
+                  col.name
+                )}
                 {sortMark}
               </button>
               <ResizeHandle
@@ -313,7 +318,8 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
                 initialWidth={colWidth(srcIdx)}
                 onResize={(w) => setColumnWidth(tabId, srcIdx, w)}
               />
-              {filtersActive && (                <button
+              {filtersActive && (
+                <button
                   type="button"
                   data-testid={`filter-icon-${srcIdx}`}
                   aria-label={t("filter.column_button_aria", { column: col.name })}
@@ -343,8 +349,9 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
                 >
                   ⛀
                 </button>
-)}
-              {filtersActive && openFilterIdx === srcIdx && (                <div
+              )}
+              {filtersActive && openFilterIdx === srcIdx && (
+                <div
                   data-testid={`filter-dropdown-host-${srcIdx}`}
                   style={{
                     position: "absolute",
@@ -366,9 +373,9 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
                     onClose={() => setOpenFilterIdx(null)}
                   />
                 </div>
-)}
+              )}
             </div>
-);
+          );
         })}
       </div>
 
@@ -376,7 +383,8 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
         {items.map((vi) => {
           const row = run.rows[vi.index];
           if (!row) return null;
-          return (            <div
+          return (
+            <div
               key={vi.key}
               role="row"
               style={{
@@ -392,14 +400,15 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
                 const col = run.columns[srcIdx];
                 if (!col) return null;
                 const isSelected = selected?.row === vi.index && selected?.col === displayIdx;
-                return (                  <div
+                return (
+                  <div
                     key={srcIdx}
                     role="gridcell"
                     aria-selected={isSelected}
                     data-testid={`cell-${vi.index}-${displayIdx}`}
                     onClick={() => {
                       setSelected({ row: vi.index, col: displayIdx });
-                      // �� bring keyboard focus to the grid container
+                      // bring keyboard focus to the grid container
                       // so Enter / Cmd+C / arrow keys land here instead of
                       // sliding back to whatever held focus before (typically
                       // the Monaco editor, which then ate Enter as a newline).
@@ -441,10 +450,10 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
                   >
                     <Cell column={col} value={row[srcIdx]} />
                   </div>
-);
+                );
               })}
             </div>
-);
+          );
         })}
       </div>
       <ValueModal
@@ -453,7 +462,8 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
         value={preview?.value ?? ""}
         language={preview?.language ?? "text"}
       />
-      {geometryCols.length > 0 ? (        <button
+      {geometryCols.length > 0 ? (
+        <button
           type="button"
           data-testid="result-grid-open-map-view"
           onClick={() =>
@@ -479,8 +489,9 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
         >
           Open Map View
         </button>
-) : null}
-      {knnMenu && vectorCols.vectorColumns.length > 0 ? (        <ul
+      ) : null}
+      {knnMenu && vectorCols.vectorColumns.length > 0 ? (
+        <ul
           role="menu"
           data-testid="knn-context-menu"
           style={{
@@ -499,7 +510,8 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
           }}
           onMouseDown={(e) => e.stopPropagation()}
         >
-          {vectorCols.vectorColumns.map((vc) => (            <li key={vc.name}>
+          {vectorCols.vectorColumns.map((vc) => (
+            <li key={vc.name}>
               <button
                 type="button"
                 role="menuitem"
@@ -519,10 +531,11 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
                 Find nearest by {vc.name}
               </button>
             </li>
-))}
+          ))}
         </ul>
-) : null}
-      {knnDialog && tabConnId !== null ? (        <KnnBrowseDialog
+      ) : null}
+      {knnDialog && tabConnId !== null ? (
+        <KnnBrowseDialog
           open={true}
           connId={tabConnId}
           qualifiedTable={inferredTable}
@@ -533,8 +546,9 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
             setKnnResult(req);
           }}
         />
-) : null}
-      {knnResult && tabConnId !== null ? (        <div
+      ) : null}
+      {knnResult && tabConnId !== null ? (
+        <div
           style={{
             position: "fixed",
             inset: 0,
@@ -566,9 +580,9 @@ export function ResultGrid({ tabId, run }: { tabId: string; run: Streaming }): J
             />
           </div>
         </div>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }
 
 /** Right-edge drag handle that resizes a single column. */
@@ -599,7 +613,8 @@ function ResizeHandle({
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup", onUp);
   }
-  return (    // biome-ignore lint/a11y/useKeyWithMouseEvents: 4px column-resize handle is a pointer-only drag affordance — keyboard column resize is intentionally surfaced via the column header sort/resize action menu (S5+) and would be dead code here.
+  return (
+    // biome-ignore lint/a11y/useKeyWithMouseEvents: 4px column-resize handle is a pointer-only drag affordance — keyboard column resize is intentionally surfaced via the column header sort/resize action menu (S5+) and would be dead code here.
     <div
       data-testid={`col-resize-${srcIdx}`}
       onMouseDown={handleMouseDown}
@@ -619,5 +634,5 @@ function ResizeHandle({
         (e.currentTarget as HTMLElement).style.background = "transparent";
       }}
     />
-);
+  );
 }

@@ -20,9 +20,10 @@ vi.mock("../../editor/store", async () => {
   const closeTab = vi.fn().mockResolvedValue(true);
   return {
     ...actual,
-    useEditor: Object.assign(      (selector: (s: { closeTab: typeof closeTab }) => unknown) => selector({ closeTab }),
+    useEditor: Object.assign(
+      (selector: (s: { closeTab: typeof closeTab }) => unknown) => selector({ closeTab }),
       { getState: () => ({ closeTab }) },
-),
+    ),
   };
 });
 

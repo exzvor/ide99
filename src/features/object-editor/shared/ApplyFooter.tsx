@@ -28,7 +28,7 @@ interface Props {
   isDirty: boolean;
   errors: DdlError[];
   onSuccess: () => void;
-  /** €” Cancel resets the form to its `initial` state and
+  /** Cancel resets the form to its `initial` state and
    * KEEPS the editor tab open. Previously Cancel closed the tab. */
   onCancel?: () => void;
 }
@@ -95,7 +95,8 @@ export function ApplyFooter({
     onCancelProp?.();
   }, [onCancelProp]);
 
-  return (    <div
+  return (
+    <div
       data-testid="apply-footer"
       style={{
         display: "flex",
@@ -106,7 +107,8 @@ export function ApplyFooter({
         background: "var(--bg-2, #1e1e1e)",
       }}
     >
-      {applyError && (        <div
+      {applyError && (
+        <div
           data-testid="apply-footer-error"
           role="alert"
           style={{
@@ -119,7 +121,7 @@ export function ApplyFooter({
         >
           {applyError.pgErrorCode}: {applyError.pgMessage}
         </div>
-)}
+      )}
       <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
         <button
           type="button"
@@ -160,5 +162,5 @@ export function ApplyFooter({
         onCancel={() => setConfirmOpen(false)}
       />
     </div>
-);
+  );
 }

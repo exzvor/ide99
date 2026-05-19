@@ -21,7 +21,8 @@ export function ProgressCard({ job, onCancel }: Props): JSX.Element | null {
     : null;
 
   if (job.status === "running") {
-    return (      <section
+    return (
+      <section
         data-testid="backup-progress-card"
         // biome-ignore lint/a11y/useSemanticElements: passive status banner
         role="status"
@@ -51,7 +52,8 @@ export function ProgressCard({ job, onCancel }: Props): JSX.Element | null {
             {t("backup.run.cancel")}
           </button>
         </div>
-        {job.percent != null ? (          <div
+        {job.percent != null ? (
+          <div
             role="progressbar"
             tabIndex={-1}
             aria-valuemin={0}
@@ -76,13 +78,14 @@ export function ProgressCard({ job, onCancel }: Props): JSX.Element | null {
               data-testid="backup-progress-bar"
             />
           </div>
-) : null}
+        ) : null}
       </section>
-);
+    );
   }
 
   if (job.status === "cancelled") {
-    return (      <section
+    return (
+      <section
         data-testid="backup-progress-card"
         role="alert"
         style={{
@@ -93,11 +96,12 @@ export function ProgressCard({ job, onCancel }: Props): JSX.Element | null {
       >
         {t("backup.run.cancelled")}
       </section>
-);
+    );
   }
 
   if (job.status === "done") {
-    return (      <section
+    return (
+      <section
         data-testid="backup-progress-card"
         // biome-ignore lint/a11y/useSemanticElements: passive status banner
         role="status"
@@ -110,16 +114,18 @@ export function ProgressCard({ job, onCancel }: Props): JSX.Element | null {
         }}
       >
         <strong>{t("backup.run.success")}</strong>
-        {job.outputPath ? (          <div style={{ marginTop: 4, fontSize: 12, color: "var(--ink-3)" }}>
+        {job.outputPath ? (
+          <div style={{ marginTop: 4, fontSize: 12, color: "var(--ink-3)" }}>
             {t("backup.run.output_path", { path: job.outputPath })}
           </div>
-) : null}
+        ) : null}
       </section>
-);
+    );
   }
 
   // failed
-  return (    <section
+  return (
+    <section
       data-testid="backup-progress-card"
       role="alert"
       style={{
@@ -131,7 +137,8 @@ export function ProgressCard({ job, onCancel }: Props): JSX.Element | null {
       }}
     >
       <strong>{t("backup.run.failure")}</strong>
-      {job.stderrTail ? (        <pre
+      {job.stderrTail ? (
+        <pre
           style={{
             marginTop: 6,
             fontFamily: "var(--font-mono-q, monospace)",
@@ -144,7 +151,7 @@ export function ProgressCard({ job, onCancel }: Props): JSX.Element | null {
         >
           {job.stderrTail}
         </pre>
-) : null}
+      ) : null}
     </section>
-);
+  );
 }

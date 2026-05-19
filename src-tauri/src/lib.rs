@@ -61,7 +61,7 @@ pub struct AppState {
     pub inference_state: Arc<crate::query::jsonb::inference::InferenceState>,
     /// â€” per-connection filesystem watchers for migration directories.
     pub migration_watchers: crate::migrations::types::WatcherMap,
-    /// €” per-connection cancellation senders for an
+    /// per-connection cancellation senders for an
     /// in-flight `migrations_dryrun`. Sending on the oneshot tells the
     /// command to short-circuit; testcontainers `Drop` then cleans up the
     /// ephemeral container immediately when the user closes the dialog.

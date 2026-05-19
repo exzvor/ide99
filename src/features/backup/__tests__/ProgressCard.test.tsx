@@ -11,9 +11,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, vars?: Record<string, unknown>) => {
       if (!vars) return key;
-      return Object.entries(vars).reduce<string>(        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
+      return Object.entries(vars).reduce<string>(
+        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
         key,
-);
+      );
     },
   }),
 }));
@@ -47,11 +48,12 @@ describe("ProgressCard", () => {
 
   it("running state shows phase + cancel button", async () => {
     const onCancel = vi.fn();
-    render(      <ProgressCard
+    render(
+      <ProgressCard
         job={job({ status: "running", phase: "dumping", detail: "public.users" })}
         onCancel={onCancel}
       />,
-);
+    );
     expect(screen.getByTestId("backup-progress-card")).toHaveTextContent(/dumping/);
     expect(screen.getByTestId("backup-progress-card")).toHaveTextContent(/public\.users/);
     await userEvent.setup().click(screen.getByTestId("backup-cancel"));
@@ -65,8 +67,9 @@ describe("ProgressCard", () => {
   });
 
   it("done state renders success banner referring to the output path", () => {
-    render(      <ProgressCard job={job({ status: "done", outputPath: "/tmp/x.dump" })} onCancel={() => {}} />,
-);
+    render(
+      <ProgressCard job={job({ status: "done", outputPath: "/tmp/x.dump" })} onCancel={() => {}} />,
+    );
     const card = screen.getByTestId("backup-progress-card");
     expect(card).toHaveTextContent(/run\.success/);
     // The output_path key receives a `{path}` interpolation which the t-mock
@@ -75,11 +78,12 @@ describe("ProgressCard", () => {
   });
 
   it("failed state renders alert with stderr tail", () => {
-    render(      <ProgressCard
+    render(
+      <ProgressCard
         job={job({ status: "failed", stderrTail: "pg_dump: connection refused" })}
         onCancel={() => {}}
       />,
-);
+    );
     const card = screen.getByTestId("backup-progress-card");
     expect(card).toHaveAttribute("role", "alert");
     expect(card).toHaveTextContent(/connection refused/);

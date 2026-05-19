@@ -118,8 +118,9 @@ describe("JsonbIndexSuggestionsCard", () => {
   describe("loading state", () => {
     it("renders skeleton shimmer", () => {
       render(<JsonbIndexSuggestionsCard connId="c1" state={{ status: "loading" }} />);
-      expect(        screen.getByTestId("health-card-jsonb_index_suggestions-skeleton"),
-).toBeInTheDocument();
+      expect(
+        screen.getByTestId("health-card-jsonb_index_suggestions-skeleton"),
+      ).toBeInTheDocument();
     });
   });
 
@@ -149,20 +150,22 @@ describe("JsonbIndexSuggestionsCard", () => {
       fireEvent.click(viewBtns[1]); // users.profile
       await waitFor(() => expect(screen.getByTestId("suggester-modal")).toBeInTheDocument());
       // Check that it called jsonbSuggesterRun with the right column scope
-      expect(mockJsonbSuggesterRun).toHaveBeenCalledWith(        "c1",
+      expect(mockJsonbSuggesterRun).toHaveBeenCalledWith(
+        "c1",
         expect.objectContaining({
           kind: "column",
           schema: "public",
           table: "users",
           column: "profile",
         }),
-);
+      );
     });
 
     it("auto-refresh (re-render with new state) keeps modal open", async () => {
       mockJsonbSuggesterRun.mockReturnValue(new Promise(() => {}));
-      const { rerender } = render(        <JsonbIndexSuggestionsCard connId="c1" state={makeReadyState(SAMPLE_ROWS)} />,
-);
+      const { rerender } = render(
+        <JsonbIndexSuggestionsCard connId="c1" state={makeReadyState(SAMPLE_ROWS)} />,
+      );
       const viewBtns = screen.getAllByTestId("jsonb-row-view-btn");
       fireEvent.click(viewBtns[0]);
       await waitFor(() => expect(screen.getByTestId("suggester-modal")).toBeInTheDocument());
@@ -179,15 +182,17 @@ describe("JsonbIndexSuggestionsCard", () => {
 
   describe("empty state (rows=[], pg_stat_statements available)", () => {
     it("renders CardShell empty state", () => {
-      render(        <JsonbIndexSuggestionsCard connId="c1" state={{ status: "empty", reason: "no_data" }} />,
-);
+      render(
+        <JsonbIndexSuggestionsCard connId="c1" state={{ status: "empty", reason: "no_data" }} />,
+      );
       expect(screen.getByTestId("health-card-jsonb_index_suggestions-empty")).toBeInTheDocument();
     });
   });
 
   describe("unavailable state (pg_stat_statements missing)", () => {
     it("renders unavailable block with install SQL", () => {
-      render(        <JsonbIndexSuggestionsCard
+      render(
+        <JsonbIndexSuggestionsCard
           connId="c1"
           state={{
             status: "unavailable",
@@ -195,9 +200,10 @@ describe("JsonbIndexSuggestionsCard", () => {
             installSql: "CREATE EXTENSION pg_stat_statements;",
           }}
         />,
-);
-      expect(        screen.getByTestId("health-card-jsonb_index_suggestions-unavailable"),
-).toBeInTheDocument();
+      );
+      expect(
+        screen.getByTestId("health-card-jsonb_index_suggestions-unavailable"),
+      ).toBeInTheDocument();
       const unavailBlock = screen.getByTestId("health-card-jsonb_index_suggestions-unavailable");
       expect(unavailBlock.textContent).toContain("pg_stat_statements");
     });
@@ -205,11 +211,12 @@ describe("JsonbIndexSuggestionsCard", () => {
 
   describe("error state", () => {
     it("renders error block with retry button", () => {
-      render(        <JsonbIndexSuggestionsCard
+      render(
+        <JsonbIndexSuggestionsCard
           connId="c1"
           state={{ status: "error", message: "connection refused" }}
         />,
-);
+      );
       expect(screen.getByTestId("health-card-jsonb_index_suggestions-error")).toBeInTheDocument();
       expect(screen.getByTestId("health-card-jsonb_index_suggestions-retry")).toBeInTheDocument();
     });

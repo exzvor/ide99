@@ -73,7 +73,8 @@ export function ConceptTooltip({
   const explanation = pickLocale(concept.explanation, lang);
   const example = concept.example ? pickLocale(concept.example, lang) : null;
 
-  return (    <Tooltip.Root>
+  return (
+    <Tooltip.Root>
       <Tooltip.Trigger asChild>
         <span
           className="concept-tooltip-trigger"
@@ -82,12 +83,13 @@ export function ConceptTooltip({
           style={{ display: "inline-flex", alignItems: "center", gap: 3, cursor: "help" }}
         >
           {children}
-          {showHelpIcon ? (            <HelpCircle
+          {showHelpIcon ? (
+            <HelpCircle
               size={11}
               aria-hidden="true"
               style={{ color: "var(--ink-4, #888)", flexShrink: 0 }}
             />
-) : null}
+          ) : null}
         </span>
       </Tooltip.Trigger>
       <Tooltip.Portal>
@@ -124,7 +126,8 @@ export function ConceptTooltip({
             {t("conceptTooltip.trigger")}
           </div>
           <p style={{ margin: "0 0 8px 0" }}>{explanation}</p>
-          {example !== null ? (            <pre
+          {example !== null ? (
+            <pre
               style={{
                 margin: 0,
                 padding: "6px 8px",
@@ -138,10 +141,10 @@ export function ConceptTooltip({
             >
               {example}
             </pre>
-) : null}
+          ) : null}
           <Tooltip.Arrow style={{ fill: "var(--bg-1, #1f1f1f)" }} />
         </Tooltip.Content>
       </Tooltip.Portal>
     </Tooltip.Root>
-);
+  );
 }

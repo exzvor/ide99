@@ -21,9 +21,10 @@ vi.mock("../../editor/store", async () => {
   const closeTab = vi.fn().mockResolvedValue(true);
   return {
     ...actual,
-    useEditor: Object.assign(      (selector: (s: { closeTab: typeof closeTab }) => unknown) => selector({ closeTab }),
+    useEditor: Object.assign(
+      (selector: (s: { closeTab: typeof closeTab }) => unknown) => selector({ closeTab }),
       { getState: () => ({ closeTab }) },
-),
+    ),
   };
 });
 
@@ -86,10 +87,11 @@ describe("ProcedureEditor", () => {
 
   it("signature change in edit mode emits DROP + CREATE + warning", async () => {
     mockedGet.mockResolvedValue(SAMPLE_PROC);
-    render(      <ProcedureEditor
+    render(
+      <ProcedureEditor
         tab={createTab({ mode: "edit", name: "do_thing", parentTable: "integer" })}
       />,
-);
+    );
     await waitFor(() => expect(screen.getByTestId("procedure-editor")).toBeInTheDocument());
     // Change parameter type to trigger signature change.
     const typeInput = screen.getAllByTestId(/^proc-param-type-/)[0] as HTMLInputElement;
@@ -99,8 +101,9 @@ describe("ProcedureEditor", () => {
       expect(sql).toMatch(/DROP PROCEDURE/);
       expect(sql).toMatch(/CREATE OR REPLACE PROCEDURE/);
     });
-    expect(screen.getByTestId("object-editor-ddl-warnings").textContent ?? "").toMatch(      /signature/i,
-);
+    expect(screen.getByTestId("object-editor-ddl-warnings").textContent ?? "").toMatch(
+      /signature/i,
+    );
   });
 
   it("HelpLink is rendered with topic=procedure", () => {

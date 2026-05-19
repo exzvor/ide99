@@ -19,8 +19,9 @@ export interface PositionsApi {
 }
 
 export function useErdPositions(connId: string, schemasKey: string): PositionsApi {
-  const [positions, setPositions] = useState<Map<string, { x: number; y: number }>>(    () => new Map(),
-);
+  const [positions, setPositions] = useState<Map<string, { x: number; y: number }>>(
+    () => new Map(),
+  );
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latestRef = useRef<Map<string, { x: number; y: number }>>(positions);
   latestRef.current = positions;

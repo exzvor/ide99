@@ -10,8 +10,9 @@ import { type Token, tokenize } from "./scope";
  * wins — that mirrors PG's effective state at end-of-batch.
  */
 export function parseSearchPathFromSql(sql: string): string[] | null {
-  const tokens = tokenize(sql).filter(    (t) => t.kind !== "ws" && t.kind !== "comment" && t.kind !== "eof",
-);
+  const tokens = tokenize(sql).filter(
+    (t) => t.kind !== "ws" && t.kind !== "comment" && t.kind !== "eof",
+  );
   let last: string[] | null = null;
 
   for (let i = 0; i < tokens.length; i++) {
@@ -23,9 +24,10 @@ export function parseSearchPathFromSql(sql: string): string[] | null {
     if (!isIdent(tokens[j], "search_path")) continue;
     j++;
     // expect TO or =
-    if (      !isKeyword(tokens[j], "to") &&
+    if (
+      !isKeyword(tokens[j], "to") &&
       !(tokens[j]?.kind === "operator" && tokens[j]?.text === "=")
-) {
+    ) {
       continue;
     }
     j++;

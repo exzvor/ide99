@@ -31,9 +31,10 @@ export function BackupOptionsForm(props: Props): JSX.Element {
   const { value, onChange, idPrefix = "bk" } = props;
   const { t } = useTranslation();
 
-  const update = useCallback(    (patch: Partial<BackupOptions>) => onChange({ ...value, ...patch }),
+  const update = useCallback(
+    (patch: Partial<BackupOptions>) => onChange({ ...value, ...patch }),
     [value, onChange],
-);
+  );
 
   // ── Schema / table lookup ──────────────────────────────────────────────────
   const [schemas, setSchemas] = useState<string[] | null>(null);
@@ -57,7 +58,8 @@ export function BackupOptionsForm(props: Props): JSX.Element {
     };
   }, [value.connectionId]);
 
-  const ensureTables = useCallback(    async (schema: string) => {
+  const ensureTables = useCallback(
+    async (schema: string) => {
       if (tablesBySchema[schema]) return;
       try {
         const list = await invoke<TableInfo[]>("schema_list_tables", {
@@ -70,7 +72,7 @@ export function BackupOptionsForm(props: Props): JSX.Element {
       }
     },
     [value.connectionId, tablesBySchema],
-);
+  );
 
   const includeSchemas = value.includeSchemas ?? [];
   const includeTables = value.includeTables ?? [];
@@ -133,7 +135,8 @@ export function BackupOptionsForm(props: Props): JSX.Element {
     }
   };
 
-  return (    <div
+  return (
+    <div
       data-testid="backup-options-form"
       style={{ display: "flex", flexDirection: "column", gap: 12 }}
     >
@@ -182,10 +185,11 @@ export function BackupOptionsForm(props: Props): JSX.Element {
         <legend style={{ fontSize: 12, fontWeight: 600, padding: "0 4px" }}>
           {t("backup.field.include_schemas")}
         </legend>
-        {schemaError ? (          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
+        {schemaError ? (
+          <div role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
             {schemaError}
           </div>
-) : null}
+        ) : null}
         <label style={{ display: "inline-flex", gap: 6, alignItems: "center", fontSize: 12 }}>
           <input
             type="checkbox"
@@ -197,7 +201,8 @@ export function BackupOptionsForm(props: Props): JSX.Element {
           />
           <span>{t("backup.field.all_schemas")}</span>
         </label>
-        {schemas?.map((s) => (          <label
+        {schemas?.map((s) => (
+          <label
             key={s}
             style={{ display: "inline-flex", gap: 6, alignItems: "center", fontSize: 12 }}
           >
@@ -209,11 +214,12 @@ export function BackupOptionsForm(props: Props): JSX.Element {
             />
             <span>{s}</span>
           </label>
-))}
+        ))}
       </fieldset>
 
       {/* Table picker — only shown when at least one schema is selected */}
-      {includeSchemas.length > 0 ? (        <fieldset
+      {includeSchemas.length > 0 ? (
+        <fieldset
           style={{
             border: "1px solid var(--hairline)",
             borderRadius: 4,
@@ -230,11 +236,13 @@ export function BackupOptionsForm(props: Props): JSX.Element {
           <span style={{ fontSize: 11, color: "var(--ink-3)" }}>
             {t("backup.field.all_tables_hint")}
           </span>
-          {includeSchemas.map((schema) => (            <div key={schema} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+          {includeSchemas.map((schema) => (
+            <div key={schema} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               <span style={{ fontSize: 11, fontWeight: 600 }}>{schema}</span>
               {(tablesBySchema[schema] ?? []).map((tbl) => {
                 const qualified = `${schema}.${tbl}`;
-                return (                  <label
+                return (
+                  <label
                     key={qualified}
                     style={{
                       display: "inline-flex",
@@ -252,12 +260,12 @@ export function BackupOptionsForm(props: Props): JSX.Element {
                     />
                     <span>{tbl}</span>
                   </label>
-);
+                );
               })}
             </div>
-))}
+          ))}
         </fieldset>
-) : null}
+      ) : null}
 
       <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         <span>{t("backup.field.output_path")}</span>
@@ -290,17 +298,20 @@ export function BackupOptionsForm(props: Props): JSX.Element {
         >
           {estimating ? t("backup.field.estimating") : t("backup.field.estimate")}
         </button>
-        {estimate ? (          <span data-testid={`${idPrefix}-estimate-value`} style={{ fontSize: 12 }}>
+        {estimate ? (
+          <span data-testid={`${idPrefix}-estimate-value`} style={{ fontSize: 12 }}>
             ≈ {estimate}
           </span>
-) : null}
-        {estimateError ? (          <span role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
+        ) : null}
+        {estimateError ? (
+          <span role="alert" style={{ color: "var(--err, #d33)", fontSize: 12 }}>
             {estimateError}
           </span>
-) : null}
+        ) : null}
       </div>
 
-      {value.format === "custom" ? (        <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      {value.format === "custom" ? (
+        <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           <span>
             {t("backup.field.compress_level")} ({value.compressLevel})
           </span>
@@ -314,9 +325,10 @@ export function BackupOptionsForm(props: Props): JSX.Element {
             aria-label={t("backup.field.compress_level")}
           />
         </label>
-) : null}
+      ) : null}
 
-      {value.format === "directory" ? (        <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      {value.format === "directory" ? (
+        <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           <span>{t("backup.field.parallel_jobs")}</span>
           <input
             type="number"
@@ -331,7 +343,7 @@ export function BackupOptionsForm(props: Props): JSX.Element {
             aria-label={t("backup.field.parallel_jobs")}
           />
         </label>
-) : null}
+      ) : null}
 
       <label style={{ display: "inline-flex", gap: 6, alignItems: "center", fontSize: 12 }}>
         <input
@@ -353,7 +365,7 @@ export function BackupOptionsForm(props: Props): JSX.Element {
         <span>{t("backup.field.no_owner")}</span>
       </label>
     </div>
-);
+  );
 }
 
 function humanBytes(bytes: number): string {

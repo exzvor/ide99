@@ -46,10 +46,11 @@ describe("preflightBatch", () => {
   });
 
   it("blocks first write on read-only connection", async () => {
-    const r = await preflightBatch(      baseConn({ readOnly: true }),
+    const r = await preflightBatch(
+      baseConn({ readOnly: true }),
       ["SELECT 1", "INSERT INTO foo VALUES(1)", "SELECT 2"],
       () => {},
-);
+    );
     expect(r.outcome).toBe("blocked");
     if (r.outcome === "blocked") {
       expect(r.offendingIndex).toBe(1);
@@ -64,15 +65,17 @@ describe("preflightBatch", () => {
       }
     });
 
-    const r = await preflightBatch(      baseConn({ environment: "prod" }),
+    const r = await preflightBatch(
+      baseConn({ environment: "prod" }),
       ["SELECT 1", "DROP TABLE x", "TRUNCATE y"],
       setSpy,
-);
+    );
 
-    expect(setSpy).toHaveBeenCalledWith(      expect.objectContaining({
+    expect(setSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
         safetyModal: expect.objectContaining({ kind: "batchConfirm" }),
       }),
-);
+    );
     expect(r.outcome).toBe("ok");
   });
 
@@ -86,10 +89,11 @@ describe("preflightBatch", () => {
 
     // Use N>1 to hit the consolidated modal path (N=1 delegates to
     // legacy preflightSafety — see the next test).
-    const r = await preflightBatch(      baseConn({ environment: "prod" }),
+    const r = await preflightBatch(
+      baseConn({ environment: "prod" }),
       ["DROP TABLE x", "DROP TABLE y"],
       setSpy,
-);
+    );
     expect(r.outcome).toBe("cancelled");
   });
 
@@ -104,24 +108,27 @@ describe("preflightBatch", () => {
     });
 
     const r = await preflightBatch(baseConn({ environment: "prod" }), ["DROP TABLE x"], setSpy);
-    expect(setSpy).toHaveBeenCalledWith(      expect.objectContaining({
+    expect(setSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
         safetyModal: expect.objectContaining({ kind: "confirm" }),
       }),
-);
+    );
     expect(r.outcome).toBe("ok");
   });
 
   it("skips slow-query warning for batches >1", async () => {
     const setSpy = vi.fn();
-    const r = await preflightBatch(      baseConn({ slowQueryWarning: true }),
+    const r = await preflightBatch(
+      baseConn({ slowQueryWarning: true }),
       ["SELECT * FROM huge_table_a", "SELECT * FROM huge_table_b"],
       setSpy,
-);
+    );
     // No `slow` modal opened.
-    expect(setSpy).not.toHaveBeenCalledWith(      expect.objectContaining({
+    expect(setSpy).not.toHaveBeenCalledWith(
+      expect.objectContaining({
         safetyModal: expect.objectContaining({ kind: "slow" }),
       }),
-);
+    );
     expect(r.outcome).toBe("ok");
   });
 });

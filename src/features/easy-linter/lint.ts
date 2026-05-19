@@ -49,7 +49,8 @@ function ruleById(id: string): EasyLintRule {
   return rule;
 }
 
-function pushFinding(  out: LintFinding[],
+function pushFinding(
+  out: LintFinding[],
   text: string,
   ruleId: string,
   offset: number,
@@ -60,16 +61,18 @@ function pushFinding(  out: LintFinding[],
 }
 
 /** Run a /g regex; for every match, push a finding at `match.index` with `length`. */
-function runRegex(  out: LintFinding[],
+function runRegex(
+  out: LintFinding[],
   text: string,
   ruleId: string,
   pattern: RegExp,
   lengthOf?: (m: RegExpExecArray) => number,
 ): void {
   // Defensive copy so callers can pass a literal /flag pattern without lastIndex bleed.
-  const re = new RegExp(    pattern.source,
+  const re = new RegExp(
+    pattern.source,
     pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`,
-);
+  );
   for (let m = re.exec(text); m !== null; m = re.exec(text)) {
     const length = lengthOf ? lengthOf(m) : m[0].length;
     pushFinding(out, text, ruleId, m.index, Math.max(1, length));

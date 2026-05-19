@@ -13,7 +13,8 @@ export type PreflightResult = {
   fkCount: number;
 };
 
-export async function runPreflightCheck(  connId: string,
+export async function runPreflightCheck(
+  connId: string,
   schema: string,
   table: string,
 ): Promise<PreflightResult | null> {

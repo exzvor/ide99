@@ -7,10 +7,11 @@ import App from "./App";
 
 const root = document.getElementById("root");
 if (root) {
-  createRoot(root).render(    <StrictMode>
+  createRoot(root).render(
+    <StrictMode>
       <App />
     </StrictMode>,
-);
+  );
 
   // Hide the boot/loading overlay (defined inline in index.html) once the
   // React tree has actually painted. Min-show 600ms so very fast machines

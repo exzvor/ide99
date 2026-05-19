@@ -122,7 +122,8 @@ export const useErdStore = create<ErdStoreState>((set, get) => ({
  * clearing the entry and calling `loadGraph` again — useful for the
  * error branch's "Retry" button in `ErdPane`.
  */
-export function useErdGraph(  connId: string,
+export function useErdGraph(
+  connId: string,
   schemas: string[] | undefined,
 ): { state: ErdLoadState; retry: () => void } {
   const key = cacheKey(connId, schemas);

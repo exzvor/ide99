@@ -9,7 +9,8 @@ export type DetectedVectors = { vectorColumns: DetectedVectorColumn[] };
 
 const VECTOR_TYPE_RE = /^(vector|halfvec|sparsevec)(\((\d+)\))?$/i;
 
-export function detectVectorColumns(  columns: { name: string; typeName: string }[],
+export function detectVectorColumns(
+  columns: { name: string; typeName: string }[],
 ): DetectedVectors {
   const out: DetectedVectorColumn[] = [];
   for (const col of columns) {

@@ -36,7 +36,8 @@ function Harness({
   onChange?: (v: string) => void;
 }) {
   const [value, setValue] = useState(initial);
-  return (    <Select
+  return (
+    <Select
       value={value}
       onValueChange={(v) => {
         setValue(v);
@@ -45,7 +46,7 @@ function Harness({
       options={OPTIONS}
       ariaLabel="SSL mode"
     />
-);
+  );
 }
 
 describe("Select", () => {

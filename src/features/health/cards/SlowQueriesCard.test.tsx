@@ -27,7 +27,8 @@ describe("SlowQueriesCard", () => {
   });
 
   it("unavailable extension → install SQL block", () => {
-    render(      <SlowQueriesCard
+    render(
+      <SlowQueriesCard
         connId="c1"
         state={{
           status: "unavailable",
@@ -35,7 +36,7 @@ describe("SlowQueriesCard", () => {
           installSql: "CREATE EXTENSION pg_stat_statements;",
         }}
       />,
-);
+    );
     expect(screen.getByTestId("health-card-slow_queries-unavailable")).toBeTruthy();
   });
 
@@ -52,13 +53,15 @@ describe("SlowQueriesCard", () => {
       { query: "SELECT 2", meanTimeMs: 80, totalTimeMs: 200, calls: 3 },
       { query: "SELECT 3", meanTimeMs: 90, totalTimeMs: 300, calls: 4 },
     ];
-    render(      <SlowQueriesCard
+    render(
+      <SlowQueriesCard
         connId="c1"
         state={{ status: "ready", card: { id: "slow_queries", data: { rows } } }}
       />,
-);
+    );
     expect(screen.getAllByTestId("slow-row")).toHaveLength(3);
-    expect(screen.getByTestId("health-card-slow_queries-status").getAttribute("data-tone")).toBe(      "danger",
-);
+    expect(screen.getByTestId("health-card-slow_queries-status").getAttribute("data-tone")).toBe(
+      "danger",
+    );
   });
 });

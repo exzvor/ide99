@@ -59,11 +59,12 @@ type BackupState = {
   runRestore: (jobId: string, opts: RestoreOptions) => Promise<void>;
   runBaseBackup: (jobId: string, opts: BaseBackupOptions) => Promise<void>;
   cancelJob: (jobId: string) => Promise<void>;
-  upsertSchedule: (    id: string,
+  upsertSchedule: (
+    id: string,
     label: string,
     cron: string,
     backup: BackupOptions,
-) => Promise<ScheduleEntry>;
+  ) => Promise<ScheduleEntry>;
   removeSchedule: (id: string) => Promise<void>;
   installSchedule: (id: string) => Promise<void>;
   uninstallSchedule: (id: string) => Promise<void>;

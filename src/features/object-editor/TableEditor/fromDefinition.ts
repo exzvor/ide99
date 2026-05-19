@@ -44,8 +44,9 @@ export function tableFormFromDefinition(def: TableDefinition): TableForm {
       name: idx.name,
       schema: idx.schema,
       table: idx.table,
-      method: ((        ["btree", "hash", "gin", "gist", "brin", "spgist", "hnsw", "ivfflat"] as const
-).find((m) => m === idx.method) ?? "btree") as IndexForm["method"],
+      method: ((
+        ["btree", "hash", "gin", "gist", "brin", "spgist", "hnsw", "ivfflat"] as const
+      ).find((m) => m === idx.method) ?? "btree") as IndexForm["method"],
       unique: idx.unique,
       columns: idx.columns.map((expr) => ({ expr })),
       include: idx.include,

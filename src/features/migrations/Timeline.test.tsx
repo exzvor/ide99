@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * Timeline.tsx is a vertical scroll list. Each row carries:
  * - the status icon (✔ / ⏸ / ⚠ / 🚫) with a colored badge,
@@ -38,9 +38,10 @@ vi.mock("react-i18next", () => ({
     t: (key: string, vars?: Record<string, unknown>) => {
       const template = FAKE_DICT[key] ?? key;
       if (!vars) return template;
-      return Object.entries(vars).reduce<string>(        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
+      return Object.entries(vars).reduce<string>(
+        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
         template,
-);
+      );
     },
   }),
 }));
@@ -75,7 +76,8 @@ function migration(overrides: Partial<Migration> = {}): Migration {
 
 describe("Timeline", () => {
   it("renders applied badge for applied migrations", () => {
-    render(      <Timeline
+    render(
+      <Timeline
         migrations={[
           migration({
             version: "0001",
@@ -87,43 +89,46 @@ describe("Timeline", () => {
         selectedVersion={null}
         onSelect={() => {}}
       />,
-);
+    );
     const row = screen.getByTestId("migration-row-0001");
     expect(row).toHaveAttribute("data-status", "applied");
     expect(row.textContent).toContain("applied");
   });
 
   it("renders pending badge for pending migrations", () => {
-    render(      <Timeline
+    render(
+      <Timeline
         migrations={[migration({ version: "0002", status: "pending" })]}
         selectedVersion={null}
         onSelect={() => {}}
       />,
-);
+    );
     const row = screen.getByTestId("migration-row-0002");
     expect(row).toHaveAttribute("data-status", "pending");
     expect(row.textContent).toContain("pending");
   });
 
   it("renders dirty badge with yellow indicator when status=dirty", () => {
-    render(      <Timeline
+    render(
+      <Timeline
         migrations={[migration({ version: "0003", status: "dirty" })]}
         selectedVersion={null}
         onSelect={() => {}}
       />,
-);
+    );
     const row = screen.getByTestId("migration-row-0003");
     expect(row).toHaveAttribute("data-status", "dirty");
     expect(row.textContent).toContain("dirty");
   });
 
   it("renders 'no rollback file' tooltip when downPath=null", () => {
-    render(      <Timeline
+    render(
+      <Timeline
         migrations={[migration({ version: "0004", downPath: null })]}
         selectedVersion={null}
         onSelect={() => {}}
       />,
-);
+    );
     const noRollback = screen.getByTestId("migration-row-0004-no-rollback");
     expect(noRollback).toBeInTheDocument();
     expect(noRollback).toHaveAttribute("title", "No rollback file");
@@ -132,19 +137,21 @@ describe("Timeline", () => {
   it("clicking a row calls onSelect with version", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    render(      <Timeline
+    render(
+      <Timeline
         migrations={[migration({ version: "0005" }), migration({ version: "0006" })]}
         selectedVersion={null}
         onSelect={onSelect}
       />,
-);
+    );
     await user.click(screen.getByTestId("migration-row-0006"));
     expect(onSelect).toHaveBeenCalledWith("0006");
   });
 
   it("ArrowDown / ArrowUp moves selection", () => {
     const onSelect = vi.fn();
-    render(      <Timeline
+    render(
+      <Timeline
         migrations={[
           migration({ version: "0001" }),
           migration({ version: "0002" }),
@@ -153,7 +160,7 @@ describe("Timeline", () => {
         selectedVersion="0002"
         onSelect={onSelect}
       />,
-);
+    );
     const list = screen.getByTestId("migrations-timeline");
     list.focus();
     fireEvent.keyDown(list, { key: "ArrowDown" });
@@ -165,7 +172,8 @@ describe("Timeline", () => {
 
 describe("Timeline file-missing rendering ()", () => {
   it("renders red 🚫 + 'file missing' badge for applied row whose .up.sql was deleted", () => {
-    render(      <Timeline
+    render(
+      <Timeline
         migrations={[
           migration({
             version: "0007",
@@ -178,7 +186,7 @@ describe("Timeline file-missing rendering ()", () => {
         selectedVersion={null}
         onSelect={() => {}}
       />,
-);
+    );
     const row = screen.getByTestId("migration-row-0007");
     // Glyph cell holds 🚫 (not the green ✔).
     expect(row.textContent).toContain("🚫");
@@ -199,12 +207,13 @@ describe("Timeline lint badge (S22)", () => {
       { rule: "a", severity: "warning", file: "f", line: 1, column: 1, message: "" },
       { rule: "b", severity: "warning", file: "f", line: 2, column: 1, message: "" },
     ]);
-    render(      <Timeline
+    render(
+      <Timeline
         migrations={[migration({ version: "0001" })]}
         selectedVersion={null}
         onSelect={() => {}}
       />,
-);
+    );
     expect(screen.getByTestId("squawk-badge-0001")).toHaveTextContent("⚠ 2");
   });
 
@@ -219,23 +228,25 @@ describe("Timeline lint badge (S22)", () => {
         message: "",
       },
     ]);
-    render(      <Timeline
+    render(
+      <Timeline
         migrations={[migration({ version: "0001" })]}
         selectedVersion={null}
         onSelect={() => {}}
       />,
-);
+    );
     const badge = screen.getByTestId("squawk-badge-0001");
     expect(badge.title).toContain("prefer-text-field");
   });
 
   it("absent when 0 findings", () => {
-    render(      <Timeline
+    render(
+      <Timeline
         migrations={[migration({ version: "0001" })]}
         selectedVersion={null}
         onSelect={() => {}}
       />,
-);
+    );
     expect(screen.queryByTestId("squawk-badge-0001")).not.toBeInTheDocument();
   });
 });

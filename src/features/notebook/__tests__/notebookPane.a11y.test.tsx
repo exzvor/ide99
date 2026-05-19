@@ -20,13 +20,14 @@ vi.mock("@monaco-editor/react", () => ({
   }: {
     value: string;
     onChange?: (next: string | undefined) => void;
-  }) => (    <textarea
+  }) => (
+    <textarea
       data-testid="monaco-stub"
       aria-label="SQL editor"
       value={value ?? ""}
       onChange={(e) => onChange?.(e.target.value)}
     />
-),
+  ),
 }));
 
 vi.mock("monaco-sql-languages", () => ({
@@ -53,9 +54,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, opts?: Record<string, unknown>) => {
       if (opts && typeof opts === "object") {
-        return Object.entries(opts).reduce<string>(          (acc, [k, v]) => acc.replace(`{{${k}}}`, String(v)),
+        return Object.entries(opts).reduce<string>(
+          (acc, [k, v]) => acc.replace(`{{${k}}}`, String(v)),
           key,
-);
+        );
       }
       return key;
     },

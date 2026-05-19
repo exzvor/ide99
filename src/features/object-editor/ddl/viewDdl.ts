@@ -7,17 +7,19 @@ export function generateViewDdl(initial: ViewForm | null, current: ViewForm): Dd
   if (initial === null) {
     return { sql: createOrReplace(current), warnings: [], errors: [] };
   }
-  if (    initial.body === current.body &&
+  if (
+    initial.body === current.body &&
     initial.name === current.name &&
     initial.schema === current.schema
-) {
+  ) {
     return { sql: "", warnings: [], errors: [] };
   }
   const chunks: string[] = [];
   // Rename first so subsequent CREATE OR REPLACE uses the new name.
   if (initial.name !== current.name) {
-    chunks.push(      `ALTER VIEW ${qualifiedName(initial.schema, initial.name)} RENAME TO ${quoteIdent(current.name)};`,
-);
+    chunks.push(
+      `ALTER VIEW ${qualifiedName(initial.schema, initial.name)} RENAME TO ${quoteIdent(current.name)};`,
+    );
   }
   chunks.push(createOrReplace(current));
   return { sql: chunks.join("\n"), warnings: [], errors: [] };

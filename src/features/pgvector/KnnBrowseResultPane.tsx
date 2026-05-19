@@ -39,12 +39,15 @@ export function KnnBrowseResultPane(props: KnnBrowseResultPaneProps): JSX.Elemen
     };
   }, [connId, sql]);
 
-  return (    <div data-testid="knn-result-pane" style={{ padding: 12 }}>
-      {state.kind === "loading" && (        <div data-testid="knn-result-loading">
+  return (
+    <div data-testid="knn-result-pane" style={{ padding: 12 }}>
+      {state.kind === "loading" && (
+        <div data-testid="knn-result-loading">
           <span className="q-spinner" /> Running…
         </div>
-)}
-      {state.kind === "err" && (        <div
+      )}
+      {state.kind === "err" && (
+        <div
           data-testid="knn-result-error"
           style={{
             color: "var(--danger)",
@@ -55,7 +58,7 @@ export function KnnBrowseResultPane(props: KnnBrowseResultPaneProps): JSX.Elemen
         >
           {state.message}
         </div>
-)}
+      )}
       {state.kind === "ok" && <ResultTable result={state.result} />}
       <div style={{ marginTop: 12, display: "flex", justifyContent: "flex-end" }}>
         <button type="button" className="btn btn-ghost" onClick={onClose}>
@@ -63,15 +66,17 @@ export function KnnBrowseResultPane(props: KnnBrowseResultPaneProps): JSX.Elemen
         </button>
       </div>
     </div>
-);
+  );
 }
 
 function ResultTable({ result }: { result: QueryResult }): JSX.Element {
   const lastIdx = result.columns.length - 1;
-  return (    <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 12.5 }}>
+  return (
+    <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 12.5 }}>
       <thead>
         <tr>
-          {result.columns.map((c, i) => (            <th
+          {result.columns.map((c, i) => (
+            <th
               key={c.name}
               style={{
                 textAlign: i === lastIdx ? "right" : "left",
@@ -82,28 +87,34 @@ function ResultTable({ result }: { result: QueryResult }): JSX.Element {
             >
               {c.name}
             </th>
-))}
+          ))}
         </tr>
       </thead>
       <tbody>
-        {result.rows.map((row, ri) => (          // biome-ignore lint/suspicious/noArrayIndexKey: rows are ephemeral & non-reordered
-          <tr key={ri}>
-            {row.map((cell, ci) => (              <td
-                // biome-ignore lint/suspicious/noArrayIndexKey: row cells map 1:1 to columns
-                key={ci}
-                style={{
-                  textAlign: ci === lastIdx ? "right" : "left",
-                  fontFamily: ci === lastIdx ? "monospace" : undefined,
-                  padding: "4px 8px",
-                  borderBottom: "1px solid var(--ink-6, #eee)",
-                }}
-              >
-                {cell ?? <span style={{ color: "var(--ink-3)" }}>NULL</span>}
-              </td>
-))}
-          </tr>
-))}
+        {result.rows.map(
+          (
+            row,
+            ri, // biome-ignore lint/suspicious/noArrayIndexKey: rows are ephemeral & non-reordered
+          ) => (
+            <tr key={ri}>
+              {row.map((cell, ci) => (
+                <td
+                  // biome-ignore lint/suspicious/noArrayIndexKey: row cells map 1:1 to columns
+                  key={ci}
+                  style={{
+                    textAlign: ci === lastIdx ? "right" : "left",
+                    fontFamily: ci === lastIdx ? "monospace" : undefined,
+                    padding: "4px 8px",
+                    borderBottom: "1px solid var(--ink-6, #eee)",
+                  }}
+                >
+                  {cell ?? <span style={{ color: "var(--ink-3)" }}>NULL</span>}
+                </td>
+              ))}
+            </tr>
+          ),
+        )}
       </tbody>
     </table>
-);
+  );
 }

@@ -32,8 +32,9 @@ describe("generateProcedureDdl", () => {
     });
     const result = generateProcedureDdl(null, proc);
     expect(result.errors).toEqual([]);
-    expect(result.sql).toBe(      "CREATE OR REPLACE PROCEDURE public.do_thing(\n    x IN integer\n) AS $procedure$\nBEGIN PERFORM x; END;\n$procedure$ LANGUAGE plpgsql;",
-);
+    expect(result.sql).toBe(
+      "CREATE OR REPLACE PROCEDURE public.do_thing(\n    x IN integer\n) AS $procedure$\nBEGIN PERFORM x; END;\n$procedure$ LANGUAGE plpgsql;",
+    );
   });
 
   test("body change → CREATE OR REPLACE (single statement)", () => {

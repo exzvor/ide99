@@ -27,7 +27,8 @@ export function PgRepackTablePanel(props: PgRepackTablePanelProps): JSX.Element 
   const { connId, database, schema, table } = props;
   const [open, setOpen] = useState(false);
 
-  return (    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
       <div style={sectionTitle}>pg_repack</div>
       <div>
         <button
@@ -48,5 +49,5 @@ export function PgRepackTablePanel(props: PgRepackTablePanelProps): JSX.Element 
         onClose={() => setOpen(false)}
       />
     </div>
-);
+  );
 }

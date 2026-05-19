@@ -32,7 +32,7 @@ export function isCappedFor(env: Environment, ms: number | null): boolean {
 /**
  * Default polling interval per environment.
  *
- * €” design screen calls for `Off` on first open so the user
+ * design screen calls for `Off` on first open so the user
  * explicitly opts into polling (no surprise background load on a fresh
  * Health tab, especially on prod). The env-cap below still applies to
  * any subsequent user choice.

@@ -36,7 +36,8 @@ export function PgPartmanTablePanel(props: PgPartmanTablePanelProps): JSX.Elemen
       }, premake ${partmanInfo.premakeCount}`
     : "";
 
-  return (    <div
+  return (
+    <div
       data-testid="pg-partman-table-panel"
       className="ts-panel rounded-lg border border-slate-200 bg-slate-50/50 p-3 dark:border-slate-800 dark:bg-slate-900/40"
     >
@@ -45,7 +46,8 @@ export function PgPartmanTablePanel(props: PgPartmanTablePanelProps): JSX.Elemen
         <span>pg_partman</span>
       </div>
 
-      {isPartmanParent && partmanInfo ? (        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      {isPartmanParent && partmanInfo ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <p
             data-testid="pg-partman-panel-summary"
             style={{ margin: 0, fontSize: 12, color: "var(--ink-2)" }}
@@ -63,7 +65,8 @@ export function PgPartmanTablePanel(props: PgPartmanTablePanelProps): JSX.Elemen
             </button>
           </div>
         </div>
-) : (        <div className="ts-panel-actions flex flex-wrap gap-2">
+      ) : (
+        <div className="ts-panel-actions flex flex-wrap gap-2">
           <button
             type="button"
             data-testid="pg-partman-panel-create"
@@ -73,9 +76,10 @@ export function PgPartmanTablePanel(props: PgPartmanTablePanelProps): JSX.Elemen
             Create Partition Set…
           </button>
         </div>
-)}
+      )}
 
-      {dialog === "create" ? (        <CreateParentWizard
+      {dialog === "create" ? (
+        <CreateParentWizard
           open={true}
           connId={connId}
           schema={schema}
@@ -84,15 +88,16 @@ export function PgPartmanTablePanel(props: PgPartmanTablePanelProps): JSX.Elemen
           columns={columns}
           onClose={close}
         />
-) : null}
-      {partmanInfo ? (        <ConfigViewerDialog
+      ) : null}
+      {partmanInfo ? (
+        <ConfigViewerDialog
           open={dialog === "config"}
           connId={connId}
           qualifiedTable={partmanQualified}
           partmanInfo={partmanInfo}
           onClose={close}
         />
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

@@ -38,7 +38,8 @@ function SuggestionRow({ row, onView }: RowViewProps): JSX.Element {
   const sqlPreview =
     row.recommendedSql.length > 70 ? `${row.recommendedSql.slice(0, 70)}…` : row.recommendedSql;
 
-  return (    <li
+  return (
+    <li
       data-testid="jsonb-suggestion-row"
       style={{
         marginBottom: 10,
@@ -91,7 +92,7 @@ function SuggestionRow({ row, onView }: RowViewProps): JSX.Element {
         → {sqlPreview}
       </div>
     </li>
-);
+  );
 }
 
 export function JsonbIndexSuggestionsCard({ connId, state }: Props): JSX.Element {
@@ -114,27 +115,30 @@ export function JsonbIndexSuggestionsCard({ connId, state }: Props): JSX.Element
   const statusTooltipKey = tone === "warn" ? "health.status.warn" : "health.status.ok";
 
   const body =
-    top3.length > 0 ? (      <ul
+    top3.length > 0 ? (
+      <ul
         style={{ margin: 0, padding: 0, listStyle: "none", fontSize: 12 }}
         data-testid="jsonb-suggestions-list"
       >
-        {top3.map((row) => (          <SuggestionRow
+        {top3.map((row) => (
+          <SuggestionRow
             key={`${row.schema}.${row.table}.${row.column}`}
             row={row}
             onView={(r) => setViewFqn({ schema: r.schema, table: r.table, column: r.column })}
           />
-))}
-      </ul>
-) : (      // S17-specific empty copy when pg_stat_statements IS available but no ops seen
+        ))}
+      </ul> // S17-specific empty copy when pg_stat_statements IS available but no ops seen
+    ) : (
       <div
         style={{ fontSize: 12, opacity: 0.7, marginTop: 8 }}
         data-testid="jsonb-suggestions-empty-body"
       >
         {t("health.card.jsonb_index_suggestions.empty")}
       </div>
-);
+    );
 
-  return (    <>
+  return (
+    <>
       <CardShell
         cardId="jsonb_index_suggestions"
         connId={connId}
@@ -142,13 +146,14 @@ export function JsonbIndexSuggestionsCard({ connId, state }: Props): JSX.Element
         body={body}
         status={{ tone, tooltip: t(statusTooltipKey) }}
       />
-      {viewFqn !== null ? (        <SuggesterModal
+      {viewFqn !== null ? (
+        <SuggesterModal
           open={viewFqn !== null}
           connId={connId}
           fqn={viewFqn}
           onClose={() => setViewFqn(null)}
         />
-) : null}
+      ) : null}
     </>
-);
+  );
 }

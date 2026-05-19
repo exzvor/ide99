@@ -47,7 +47,8 @@ function makeLaid(nodes: LaidErdNode[]): LaidErd {
 describe("Canvas editable mode", () => {
   test("mode=edit propagates editable=true to TableCard", () => {
     const laid = makeLaid([makeNode("public.a")]);
-    const { container } = render(      <Canvas
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={() => {}}
@@ -56,7 +57,7 @@ describe("Canvas editable mode", () => {
         zoom={1}
         mode="edit"
       />,
-);
+    );
     // Editable TableCard uses `erd-card-${id}` testid; read-mode uses `erd-table-card`.
     expect(container.querySelector("[data-testid='erd-card-public.a']")).not.toBeNull();
     expect(container.querySelector("[data-testid='erd-table-card']")).toBeNull();
@@ -64,7 +65,8 @@ describe("Canvas editable mode", () => {
 
   test("mode=read keeps existing TableCard testid", () => {
     const laid = makeLaid([makeNode("public.a")]);
-    const { container } = render(      <Canvas
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={() => {}}
@@ -73,7 +75,7 @@ describe("Canvas editable mode", () => {
         zoom={1}
         mode="read"
       />,
-);
+    );
     expect(container.querySelector("[data-testid='erd-table-card']")).not.toBeNull();
   });
 
@@ -81,7 +83,8 @@ describe("Canvas editable mode", () => {
     const onTableDragMove = vi.fn();
     const onTableDragEnd = vi.fn();
     const laid = makeLaid([makeNode("public.a", 0, 0)]);
-    const { container } = render(      <Canvas
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={() => {}}
@@ -92,7 +95,7 @@ describe("Canvas editable mode", () => {
         onTableDragMove={onTableDragMove}
         onTableDragEnd={onTableDragEnd}
       />,
-);
+    );
     const card = container.querySelector("[data-testid='erd-card-public.a']");
     if (!card) throw new Error("missing card");
     fireEvent.mouseDown(card, { clientX: 50, clientY: 50, button: 0 });
@@ -110,7 +113,8 @@ describe("Canvas editable mode", () => {
     const onFkDragStart = vi.fn();
     const onFkDragEnd = vi.fn();
     const laid = makeLaid([makeNode("public.a"), makeNode("public.b", 300)]);
-    const { container } = render(      <Canvas
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={() => {}}
@@ -121,7 +125,7 @@ describe("Canvas editable mode", () => {
         onFkDragStart={onFkDragStart}
         onFkDragEnd={onFkDragEnd}
       />,
-);
+    );
     const handles = container.querySelectorAll("[data-testid='table-card-fk-handle']");
     expect(handles.length).toBe(2);
     fireEvent.mouseDown(handles[0]);
@@ -135,7 +139,8 @@ describe("Canvas editable mode", () => {
   test("does not start table-drag in read mode", () => {
     const onTableDragMove = vi.fn();
     const laid = makeLaid([makeNode("public.a")]);
-    const { container } = render(      <Canvas
+    const { container } = render(
+      <Canvas
         laid={laid}
         highlight={{ nodeId: null, edgeId: null }}
         onNodeFocus={() => {}}
@@ -145,7 +150,7 @@ describe("Canvas editable mode", () => {
         mode="read"
         onTableDragMove={onTableDragMove}
       />,
-);
+    );
     const card = container.querySelector("[data-testid='erd-table-card']");
     if (!card) throw new Error("missing card");
     fireEvent.mouseDown(card, { clientX: 50, clientY: 50, button: 0 });

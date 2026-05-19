@@ -51,11 +51,12 @@ afterEach(() => {
 
 describe("loadPgPartmanParents", () => {
   it("maps part_config rows into a PartmanMap and updates usePgPartman", async () => {
-    queryExecuteMock.mockResolvedValueOnce(      fakeResult([
+    queryExecuteMock.mockResolvedValueOnce(
+      fakeResult([
         ["public.events", "created_at", "1 day", "6 months", "4"],
         ["app.metrics", "ts", "1 hour", null, "8"],
       ]),
-);
+    );
 
     const map = await loadPgPartmanParents("conn-1");
 
@@ -83,8 +84,9 @@ describe("loadPgPartmanParents", () => {
   });
 
   it("splits parent_table on the FIRST dot only", async () => {
-    queryExecuteMock.mockResolvedValueOnce(      fakeResult([["my_schema.my.table", "id", "1 day", null, "4"]]),
-);
+    queryExecuteMock.mockResolvedValueOnce(
+      fakeResult([["my_schema.my.table", "id", "1 day", null, "4"]]),
+    );
 
     const map = await loadPgPartmanParents("conn-1");
     // First "." separates schema from table; rest stays with table.
@@ -126,8 +128,9 @@ describe("loadPgPartmanParents", () => {
 
 describe("isPartmanParent", () => {
   it("reads synchronously from usePgPartman after a load", async () => {
-    queryExecuteMock.mockResolvedValueOnce(      fakeResult([["public.events", "created_at", "1 day", null, "4"]]),
-);
+    queryExecuteMock.mockResolvedValueOnce(
+      fakeResult([["public.events", "created_at", "1 day", null, "4"]]),
+    );
     await loadPgPartmanParents("conn-1");
 
     expect(isPartmanParent("conn-1", "public", "events")).toBe(true);
@@ -138,8 +141,9 @@ describe("isPartmanParent", () => {
 
 describe("invalidatePgPartmanCache", () => {
   it("clears the entry for the given connId", async () => {
-    queryExecuteMock.mockResolvedValueOnce(      fakeResult([["public.events", "created_at", "1 day", null, "4"]]),
-);
+    queryExecuteMock.mockResolvedValueOnce(
+      fakeResult([["public.events", "created_at", "1 day", null, "4"]]),
+    );
     await loadPgPartmanParents("conn-1");
     expect(usePgPartman.getState().parents.get("conn-1")?.size).toBeGreaterThan(0);
 

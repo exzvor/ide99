@@ -73,38 +73,44 @@ describe("generateDdl", () => {
     const t2 = makeAddTableOp("public", "payments");
     const c2 = makeAddColumnOp({ _new: t2.id }, "order_id", "BIGINT", false, false);
     const t1seed = t1.seedColumns[0];
-    const fk = makeAddFkOp(      [{ table: { _new: t2.id }, _newCol: c2.id }],
+    const fk = makeAddFkOp(
+      [{ table: { _new: t2.id }, _newCol: c2.id }],
       [{ table: { _new: t1.id }, _newCol: t1seed.opId }],
       "payments_order_id_fkey",
-);
+    );
     const out = generateDdl(empty, [t1, c1, t2, c2, fk]);
     expect(out.sql).toContain('CREATE TABLE "public"."orders"');
     expect(out.sql).toContain('"id" BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY');
     expect(out.sql).toContain('"user_id" BIGINT NOT NULL');
     expect(out.sql).toContain('CREATE TABLE "public"."payments"');
     expect(out.sql).toContain('"order_id" BIGINT NOT NULL');
-    expect(out.sql).toContain(      'CONSTRAINT "payments_order_id_fkey" FOREIGN KEY ("order_id") REFERENCES "public"."orders" ("id")',
-);
+    expect(out.sql).toContain(
+      'CONSTRAINT "payments_order_id_fkey" FOREIGN KEY ("order_id") REFERENCES "public"."orders" ("id")',
+    );
     // Self-contained FK lives inline in CREATE TABLE, not as separate ALTER.
     expect(out.sql).not.toContain('ALTER TABLE "public"."payments" ADD CONSTRAINT');
   });
 
   it("Add column + rename + FK to existing table (Spec §5.4 Example 2)", () => {
     const c1 = makeAddColumnOp({ schema: "public", name: "users" }, "email", "TEXT", false, false);
-    const r1 = makeRenameColumnOp(      { table: { schema: "public", name: "users" }, _newCol: c1.id },
+    const r1 = makeRenameColumnOp(
+      { table: { schema: "public", name: "users" }, _newCol: c1.id },
       "email_address",
-);
-    const fk = makeAddFkOp(      [{ table: { schema: "public", name: "orders" }, column: "user_id" }],
+    );
+    const fk = makeAddFkOp(
+      [{ table: { schema: "public", name: "orders" }, column: "user_id" }],
       [{ table: { schema: "public", name: "users" }, column: "id" }],
       "orders_user_id_fkey",
-);
+    );
     const out = generateDdl(usersOrders, [c1, r1, fk]);
     // Add+rename of new col coalesces to single ADD with final name.
-    expect(out.sql).toContain(      'ALTER TABLE "public"."users" ADD COLUMN "email_address" TEXT NOT NULL',
-);
+    expect(out.sql).toContain(
+      'ALTER TABLE "public"."users" ADD COLUMN "email_address" TEXT NOT NULL',
+    );
     expect(out.sql).not.toContain("RENAME COLUMN");
-    expect(out.sql).toContain(      'ALTER TABLE "public"."orders" ADD CONSTRAINT "orders_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users" ("id")',
-);
+    expect(out.sql).toContain(
+      'ALTER TABLE "public"."orders" ADD CONSTRAINT "orders_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users" ("id")',
+    );
   });
 
   it("renameTable on existing -> ALTER TABLE RENAME TO", () => {
@@ -114,25 +120,28 @@ describe("generateDdl", () => {
   });
 
   it("renameColumn on existing -> ALTER TABLE RENAME COLUMN", () => {
-    const r = makeRenameColumnOp(      { table: { schema: "public", name: "users" }, column: "id" },
+    const r = makeRenameColumnOp(
+      { table: { schema: "public", name: "users" }, column: "id" },
       "user_id",
-);
+    );
     const out = generateDdl(usersOrders, [r]);
     expect(out.sql).toContain('ALTER TABLE "public"."users" RENAME COLUMN "id" TO "user_id"');
   });
 
   it("retypeColumn on existing -> ALTER TABLE ALTER COLUMN TYPE + nullability", () => {
-    const r = makeRetypeColumnOp(      { table: { schema: "public", name: "orders" }, column: "user_id" },
+    const r = makeRetypeColumnOp(
+      { table: { schema: "public", name: "orders" }, column: "user_id" },
       "INTEGER",
       true,
-);
+    );
     const out = generateDdl(usersOrders, [r]);
     expect(out.sql).toContain('ALTER TABLE "public"."orders" ALTER COLUMN "user_id" TYPE INTEGER');
     expect(out.sql).toContain('ALTER TABLE "public"."orders" ALTER COLUMN "user_id" DROP NOT NULL');
   });
 
   it("composite FK on existing tables", () => {
-    const fk = makeAddFkOp(      [
+    const fk = makeAddFkOp(
+      [
         { table: { schema: "public", name: "orders" }, column: "user_id" },
         { table: { schema: "public", name: "orders" }, column: "id" },
       ],
@@ -141,24 +150,27 @@ describe("generateDdl", () => {
         { table: { schema: "public", name: "users" }, column: "id" },
       ],
       "orders_composite_fkey",
-);
+    );
     const out = generateDdl(usersOrders, [fk]);
-    expect(out.sql).toContain(      'FOREIGN KEY ("user_id", "id") REFERENCES "public"."users" ("id", "id")',
-);
+    expect(out.sql).toContain(
+      'FOREIGN KEY ("user_id", "id") REFERENCES "public"."users" ("id", "id")',
+    );
   });
 
   it("statements array emit-order: CREATE → ALTER → FK", () => {
     const t1 = makeAddTableOp("public", "events");
-    const c1 = makeAddColumnOp(      { schema: "public", name: "users" },
+    const c1 = makeAddColumnOp(
+      { schema: "public", name: "users" },
       "tenant_id",
       "BIGINT",
       false,
       false,
-);
-    const fk = makeAddFkOp(      [{ table: { _new: t1.id }, column: "id" }], // points to events.id (seed)
+    );
+    const fk = makeAddFkOp(
+      [{ table: { _new: t1.id }, column: "id" }], // points to events.id (seed)
       [{ table: { schema: "public", name: "users" }, column: "id" }],
       "events_id_fkey",
-);
+    );
     const out = generateDdl(usersOrders, [c1, t1, fk]);
     const sqls = out.statements.map((s) => s.sql);
     const createIdx = sqls.findIndex((s) => s.startsWith("CREATE TABLE"));
@@ -197,17 +209,19 @@ describe("generateDdl", () => {
   });
 
   it("setColumnNullable false → SET NOT NULL", () => {
-    const op = makeSetColumnNullableOp(      { table: { schema: "public", name: "users" }, column: "id" },
+    const op = makeSetColumnNullableOp(
+      { table: { schema: "public", name: "users" }, column: "id" },
       false,
-);
+    );
     const out = generateDdl(usersOrders, [op]);
     expect(out.sql).toContain('ALTER TABLE "public"."users" ALTER COLUMN "id" SET NOT NULL');
   });
 
   it("setColumnNullable true → DROP NOT NULL", () => {
-    const op = makeSetColumnNullableOp(      { table: { schema: "public", name: "users" }, column: "id" },
+    const op = makeSetColumnNullableOp(
+      { table: { schema: "public", name: "users" }, column: "id" },
       true,
-);
+    );
     const out = generateDdl(usersOrders, [op]);
     expect(out.sql).toContain('ALTER TABLE "public"."users" ALTER COLUMN "id" DROP NOT NULL');
   });

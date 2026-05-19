@@ -35,9 +35,10 @@ export interface PanZoomState {
   onMouseDown(e: React.MouseEvent<SVGSVGElement>): void;
   onMouseMove(e: React.MouseEvent<SVGSVGElement>): void;
   onMouseUp(e: React.MouseEvent<SVGSVGElement>): void;
-  fitToScreen(    box: { width: number; height: number },
+  fitToScreen(
+    box: { width: number; height: number },
     viewport: { width: number; height: number },
-): void;
+  ): void;
   zoomIn(viewportCenter?: { x: number; y: number }): void;
   zoomOut(viewportCenter?: { x: number; y: number }): void;
   reset(): void;
@@ -75,7 +76,8 @@ export function usePanZoom(): PanZoomState {
     });
   }, []);
 
-  const onWheel = useCallback<PanZoomState["onWheel"]>(    (e) => {
+  const onWheel = useCallback<PanZoomState["onWheel"]>(
+    (e) => {
       const rect = e.currentTarget.getBoundingClientRect();
       const cursorX = e.clientX - rect.left;
       const cursorY = e.clientY - rect.top;
@@ -83,7 +85,7 @@ export function usePanZoom(): PanZoomState {
       zoomAt(cursorX, cursorY, factor);
     },
     [zoomAt],
-);
+  );
 
   const onMouseDown = useCallback<PanZoomState["onMouseDown"]>((e) => {
     if (e.button !== 0) return;
@@ -110,10 +112,11 @@ export function usePanZoom(): PanZoomState {
       setZoom(1);
       return;
     }
-    const fitZoom = clamp(      Math.min(viewport.width / box.width, viewport.height / box.height) * FIT_PADDING,
+    const fitZoom = clamp(
+      Math.min(viewport.width / box.width, viewport.height / box.height) * FIT_PADDING,
       MIN_ZOOM,
       MAX_ZOOM,
-);
+    );
     // Center the box inside the viewport.
     const newPanX = (viewport.width - box.width * fitZoom) / 2;
     const newPanY = (viewport.height - box.height * fitZoom) / 2;
@@ -122,17 +125,19 @@ export function usePanZoom(): PanZoomState {
     setPanY(newPanY);
   }, []);
 
-  const zoomIn = useCallback<PanZoomState["zoomIn"]>(    (center) => {
+  const zoomIn = useCallback<PanZoomState["zoomIn"]>(
+    (center) => {
       zoomAt(center?.x ?? 0, center?.y ?? 0, BUTTON_FACTOR);
     },
     [zoomAt],
-);
+  );
 
-  const zoomOut = useCallback<PanZoomState["zoomOut"]>(    (center) => {
+  const zoomOut = useCallback<PanZoomState["zoomOut"]>(
+    (center) => {
       zoomAt(center?.x ?? 0, center?.y ?? 0, 1 / BUTTON_FACTOR);
     },
     [zoomAt],
-);
+  );
 
   const reset = useCallback<PanZoomState["reset"]>(() => {
     setPanX(0);

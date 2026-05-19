@@ -46,7 +46,8 @@ export function VibepgAgentModeToggle({ mode, onModeChange }: Props): JSX.Elemen
     }
   };
 
-  return (    <div
+  return (
+    <div
       // biome-ignore lint/a11y/useSemanticElements: <fieldset> would force a visual border / legend; this is a 2-button toolbar group, not a form field set.
       role="group"
       aria-label={t("paid_modules.vibepg.agent_mode_toggle.aria_label")}
@@ -116,5 +117,5 @@ export function VibepgAgentModeToggle({ mode, onModeChange }: Props): JSX.Elemen
         {t("paid_modules.vibepg.agent_mode_toggle.agent")}
       </button>
     </div>
-);
+  );
 }

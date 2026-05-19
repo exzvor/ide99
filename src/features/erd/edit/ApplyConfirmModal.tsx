@@ -19,7 +19,8 @@ export function ApplyConfirmModal({
 }: Props): JSX.Element | null {
   const { t } = useTranslation();
   if (!open) return null;
-  return (    <div
+  return (
+    <div
       data-testid="apply-confirm-modal"
       role="dialog"
       aria-modal="true"
@@ -84,5 +85,5 @@ export function ApplyConfirmModal({
         </div>
       </div>
     </div>
-);
+  );
 }

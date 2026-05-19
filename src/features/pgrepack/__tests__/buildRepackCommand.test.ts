@@ -69,8 +69,9 @@ describe("buildRepackCommand", () => {
       noSuperuserCheck: true,
       onlyIndexes: true,
     });
-    expect(cmd).toBe(      "pg_repack -h db.example.com -p 6543 -d warehouse -t analytics.events --jobs 2 --no-superuser-check --only-indexes",
-);
+    expect(cmd).toBe(
+      "pg_repack -h db.example.com -p 6543 -d warehouse -t analytics.events --jobs 2 --no-superuser-check --only-indexes",
+    );
   });
 
   test("omits flags when their toggles are false / undefined", () => {

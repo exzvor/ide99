@@ -42,7 +42,8 @@ export function buildTree(schema: InferredSchema): Tree {
   return { children: root.children };
 }
 
-function attach(  parent: TreeNode,
+function attach(
+  parent: TreeNode,
   path: PathSegment[],
   node: { kind: unknown; freq: number; samples: unknown[] },
 ): void {

@@ -60,22 +60,25 @@ export function TablesPicker({ connId, selected, onChange }: TablesPickerProps):
   };
 
   if (error) {
-    return (      <div data-testid="pub-tables-error" role="alert" style={{ fontSize: 12 }}>
+    return (
+      <div data-testid="pub-tables-error" role="alert" style={{ fontSize: 12 }}>
         {error}
       </div>
-);
+    );
   }
   if (available === null) {
-    return (      <div data-testid="pub-tables-loading" style={{ fontSize: 12 }}>
+    return (
+      <div data-testid="pub-tables-loading" style={{ fontSize: 12 }}>
         {t("object_editor.common.loading")}
       </div>
-);
+    );
   }
   if (available.length === 0) {
-    return (      <div data-testid="pub-tables-empty" style={{ fontSize: 12 }}>
+    return (
+      <div data-testid="pub-tables-empty" style={{ fontSize: 12 }}>
         {t("object_editor.publication.no_publishable_tables")}
       </div>
-);
+    );
   }
 
   // Group tables by schema for rendering. Keys preserve first-seen order
@@ -87,7 +90,8 @@ export function TablesPicker({ connId, selected, onChange }: TablesPickerProps):
     else grouped.set(q.schema, [q]);
   }
 
-  return (    <div
+  return (
+    <div
       data-testid="pub-tables-picker"
       style={{
         maxHeight: 240,
@@ -97,7 +101,8 @@ export function TablesPicker({ connId, selected, onChange }: TablesPickerProps):
         padding: 6,
       }}
     >
-      {Array.from(grouped.entries()).map(([schema, tables]) => (        <div key={schema} data-testid={`pub-tables-group-${schema}`}>
+      {Array.from(grouped.entries()).map(([schema, tables]) => (
+        <div key={schema} data-testid={`pub-tables-group-${schema}`}>
           <div
             data-testid={`pub-tables-group-header-${schema}`}
             style={{
@@ -117,7 +122,8 @@ export function TablesPicker({ connId, selected, onChange }: TablesPickerProps):
           </div>
           {tables.map((q) => {
             const k = key(q);
-            return (              <label
+            return (
+              <label
                 key={k}
                 data-testid={`pub-table-row-${q.schema}-${q.name}`}
                 style={{
@@ -136,10 +142,10 @@ export function TablesPicker({ connId, selected, onChange }: TablesPickerProps):
                 />
                 <span>{q.name}</span>
               </label>
-);
+            );
           })}
         </div>
-))}
+      ))}
     </div>
-);
+  );
 }

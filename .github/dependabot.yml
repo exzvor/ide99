@@ -1,14 +1,10 @@
 version: 2
 updates:
-  # Cargo (Rust) — workspace at repo root pulls in src-tauri/Cargo.toml too.
   - package-ecosystem: "cargo"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "04:00"
-      timezone: "Etc/UTC"
-    open-pull-requests-limit: 5
+      interval: "monthly"
+    open-pull-requests-limit: 2
     labels: ["dependencies", "rust"]
     commit-message:
       prefix: "chore(deps)"
@@ -16,19 +12,13 @@ updates:
     groups:
       cargo-minor-and-patch:
         applies-to: version-updates
-        update-types:
-          - "minor"
-          - "patch"
+        update-types: ["minor", "patch"]
 
-  # npm (frontend).
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "04:00"
-      timezone: "Etc/UTC"
-    open-pull-requests-limit: 5
+      interval: "monthly"
+    open-pull-requests-limit: 2
     labels: ["dependencies", "npm"]
     commit-message:
       prefix: "chore(deps)"
@@ -36,19 +26,13 @@ updates:
     groups:
       npm-minor-and-patch:
         applies-to: version-updates
-        update-types:
-          - "minor"
-          - "patch"
+        update-types: ["minor", "patch"]
 
-  # GitHub Actions used in workflows.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "04:00"
-      timezone: "Etc/UTC"
-    open-pull-requests-limit: 5
+      interval: "monthly"
+    open-pull-requests-limit: 2
     labels: ["dependencies", "github-actions"]
     commit-message:
       prefix: "chore(deps)"
@@ -56,6 +40,4 @@ updates:
     groups:
       actions-minor-and-patch:
         applies-to: version-updates
-        update-types:
-          - "minor"
-          - "patch"
+        update-types: ["minor", "patch"]

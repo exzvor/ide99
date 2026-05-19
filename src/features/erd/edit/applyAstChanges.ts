@@ -93,13 +93,15 @@ export function deriveOpsFromAst(base: ErdSchemaGraph, changes: DdlChange[]): Ap
           });
           break;
         }
-        ops.push(          makeAddColumnOp(            ref,
+        ops.push(
+          makeAddColumnOp(
+            ref,
             c.column.name,
             c.column.dataType,
             c.column.nullable,
             c.column.isPrimaryKey,
-),
-);
+          ),
+        );
         break;
       }
       case "dropColumn": {
@@ -194,9 +196,10 @@ export function deriveOpsFromAst(base: ErdSchemaGraph, changes: DdlChange[]): Ap
         // ERD only knows about FKs by name. If the constraint is not a known
         // FK, surface a warning — DDL still applies on Apply, ERD just doesn't
         // reflect the drop.
-        const isFk = base.foreignKeys.some(          (fk) =>
+        const isFk = base.foreignKeys.some(
+          (fk) =>
             fk.name === c.constraint && fk.sourceSchema === c.schema && fk.sourceTable === c.table,
-);
+        );
         if (isFk) {
           ops.push(makeDropFkOp(ref, c.constraint));
         } else {
@@ -219,7 +222,8 @@ function findExistingTable(base: ErdSchemaGraph, schema: string, name: string) {
   return base.tables.find((t) => t.schema === schema && t.name === name);
 }
 
-function resolveTable(  base: ErdSchemaGraph,
+function resolveTable(
+  base: ErdSchemaGraph,
   newTables: Map<string, string>,
   schema: string,
   name: string,

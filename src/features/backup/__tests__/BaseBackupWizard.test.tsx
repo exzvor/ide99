@@ -39,9 +39,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, vars?: Record<string, unknown>) => {
       if (!vars) return key;
-      return Object.entries(vars).reduce<string>(        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
+      return Object.entries(vars).reduce<string>(
+        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
         key,
-);
+      );
     },
   }),
 }));
@@ -134,8 +135,9 @@ describe("BaseBackupWizard", () => {
     await waitFor(() => screen.getByTestId("basebackup-browse-dir"));
     await user.click(screen.getByTestId("basebackup-browse-dir"));
     await waitFor(() => {
-      expect((screen.getByTestId("basebackup-output-dir") as HTMLInputElement).value).toBe(        "/picked/dir",
-);
+      expect((screen.getByTestId("basebackup-output-dir") as HTMLInputElement).value).toBe(
+        "/picked/dir",
+      );
     });
     // Verify the dialog was called with directory:true
     expect(openDialogMock).toHaveBeenCalledWith(expect.objectContaining({ directory: true }));

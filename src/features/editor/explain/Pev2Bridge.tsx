@@ -48,7 +48,8 @@ export function Pev2Bridge({ plan, theme, highlightQuery }: Pev2BridgeProps): JS
     win.postMessage({ type: "render", plan, theme, planQuery: highlightQuery ?? "" }, "*");
   }, [plan, theme, highlightQuery, ready]);
 
-  return (    <iframe
+  return (
+    <iframe
       ref={iframeRef}
       src={ISLAND_URL}
       title={t("editor.explain.iframe_title")}
@@ -62,5 +63,5 @@ export function Pev2Bridge({ plan, theme, highlightQuery }: Pev2BridgeProps): JS
         display: "block",
       }}
     />
-);
+  );
 }

@@ -19,7 +19,8 @@ const TIME_TYPES = new Set<string>([
   "smallint",
 ]);
 
-export function detectTimeColumns(  columns: { name: string; typeName: string }[],
+export function detectTimeColumns(
+  columns: { name: string; typeName: string }[],
 ): TimeColumnCandidate[] {
   const out: TimeColumnCandidate[] = [];
   for (const col of columns) {

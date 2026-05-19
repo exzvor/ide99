@@ -14,7 +14,8 @@ export interface PublicationsPickerProps {
 export function PublicationsPicker({ value, onChange }: PublicationsPickerProps): JSX.Element {
   const { t } = useTranslation();
   const text = value.join(", ");
-  return (    <div className="q-field">
+  return (
+    <div className="q-field">
       <label htmlFor="sub-publications-input">
         {t("object_editor.subscription.publications_label")}
       </label>
@@ -32,5 +33,5 @@ export function PublicationsPicker({ value, onChange }: PublicationsPickerProps)
         }}
       />
     </div>
-);
+  );
 }

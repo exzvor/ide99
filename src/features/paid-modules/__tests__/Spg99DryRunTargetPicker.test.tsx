@@ -71,10 +71,11 @@ describe("Spg99DryRunTargetPicker", () => {
       await Promise.resolve();
     });
 
-    expect(openSpy).toHaveBeenCalledWith(      "https://spg99.ru/instant-db",
+    expect(openSpy).toHaveBeenCalledWith(
+      "https://spg99.ru/instant-db",
       "_blank",
       "noopener,noreferrer",
-);
+    );
     expect(invokeMock).toHaveBeenCalledWith("telemetry_send_event", {
       name: "feature_used",
       props: { feature_id: "paid_modules.spg99.dry_run.upgrade_click" },

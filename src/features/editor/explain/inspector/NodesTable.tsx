@@ -168,7 +168,8 @@ export function NodesTable({ plan, onSelectLabel, highlight }: NodesTableProps):
   }
 
   if (rows.length === 0) {
-    return (      <div
+    return (
+      <div
         data-testid="nodes-table-empty"
         style={{
           flex: 1,
@@ -181,10 +182,11 @@ export function NodesTable({ plan, onSelectLabel, highlight }: NodesTableProps):
       >
         План пуст
       </div>
-);
+    );
   }
 
-  return (    <div
+  return (
+    <div
       data-testid="nodes-table"
       className="q-scroll"
       style={{ flex: 1, minHeight: 0, overflow: "auto" }}
@@ -260,7 +262,8 @@ export function NodesTable({ plan, onSelectLabel, highlight }: NodesTableProps):
                   ? "var(--warn-q)"
                   : null;
             const isOpen = expanded.has(r.idx);
-            return (              <NodeRow
+            return (
+              <NodeRow
                 key={`${r.idx}-${r.label}`}
                 r={r}
                 isOpen={isOpen}
@@ -276,12 +279,12 @@ export function NodesTable({ plan, onSelectLabel, highlight }: NodesTableProps):
                   onSelectLabel?.(highlight === r.label ? null : r.label);
                 }}
               />
-);
+            );
           })}
         </tbody>
       </table>
     </div>
-);
+  );
 }
 
 interface NodeRowProps {
@@ -304,7 +307,8 @@ function NodeRow({
   onHighlight,
 }: NodeRowProps): JSX.Element {
   const { t } = useTranslation();
-  return (    <>
+  return (
+    <>
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: row-click toggles expand; the chevron column gives keyboard users a focusable button */}
       <tr
         data-testid={`nodes-table-row-${r.idx}`}
@@ -356,7 +360,8 @@ function NodeRow({
         </td>
         <td>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            {sevTone ? (              <span
+            {sevTone ? (
+              <span
                 aria-hidden="true"
                 style={{
                   width: 6,
@@ -366,12 +371,14 @@ function NodeRow({
                   flex: "0 0 6px",
                 }}
               />
-) : (              <span style={{ width: 6, flex: "0 0 6px" }} />
-)}
+            ) : (
+              <span style={{ width: 6, flex: "0 0 6px" }} />
+            )}
             <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
               <span style={{ color: "var(--ink)", fontWeight: 500 }}>
                 {r.nodeType}
-                {r.relation ? (                  <span
+                {r.relation ? (
+                  <span
                     style={{
                       color: "var(--ink-4)",
                       marginLeft: 6,
@@ -381,9 +388,10 @@ function NodeRow({
                   >
                     on {r.relation}
                   </span>
-) : null}
+                ) : null}
               </span>
-              {r.meta ? (                <span
+              {r.meta ? (
+                <span
                   style={{
                     color: "var(--ink-4)",
                     fontSize: 11,
@@ -396,7 +404,7 @@ function NodeRow({
                 >
                   {r.meta}
                 </span>
-) : null}
+              ) : null}
             </div>
           </div>
         </td>
@@ -410,7 +418,8 @@ function NodeRow({
             {" / "}
             {r.rowsPlanned != null ? shortNumber(r.rowsPlanned) : "—"}
           </span>
-          {ratio ? (            <span
+          {ratio ? (
+            <span
               style={{
                 marginLeft: 6,
                 fontSize: 10,
@@ -422,7 +431,7 @@ function NodeRow({
             >
               {ratio.label}
             </span>
-) : null}
+          ) : null}
         </td>
         <td
           className="num"
@@ -434,7 +443,8 @@ function NodeRow({
           {r.buffers != null ? shortNumber(r.buffers) : "—"}
         </td>
       </tr>
-      {isOpen ? (        <tr data-testid={`nodes-table-row-${r.idx}-detail`}>
+      {isOpen ? (
+        <tr data-testid={`nodes-table-row-${r.idx}-detail`}>
           <td
             colSpan={COL_COUNT}
             style={{
@@ -446,9 +456,9 @@ function NodeRow({
             <NodeDetailRow node={r.node} isHighlighted={isHighlighted} onHighlight={onHighlight} />
           </td>
         </tr>
-) : null}
+      ) : null}
     </>
-);
+  );
 }
 
 function NodeDetailRow({
@@ -488,7 +498,8 @@ function NodeDetailRow({
   const heapFetches = asNumber(node["Heap Fetches"]);
   const neverExec = actualLoops === 0;
 
-  return (    <div
+  return (
+    <div
       style={{
         padding: "12px 16px 14px 40px",
         display: "grid",
@@ -496,18 +507,20 @@ function NodeDetailRow({
         gap: "16px 24px",
       }}
     >
-      {neverExec ? (        <DetailGroup title="status">
+      {neverExec ? (
+        <DetailGroup title="status">
           <Kv label="">∅ Never executed</Kv>
         </DetailGroup>
-) : null}
+      ) : null}
 
-      {relation ? (        <DetailGroup title="relation">
+      {relation ? (
+        <DetailGroup title="relation">
           {schema ? <Kv label="schema">{schema}</Kv> : null}
           <Kv label="table">{relation}</Kv>
           {alias && alias !== relation ? <Kv label="alias">{alias}</Kv> : null}
           {indexName ? <Kv label="index">{indexName}</Kv> : null}
         </DetailGroup>
-) : null}
+      ) : null}
 
       <DetailGroup title="timing">
         {actualTotal != null ? <Kv label="total">{actualTotal.toFixed(3)} ms</Kv> : null}
@@ -527,44 +540,52 @@ function NodeDetailRow({
         {startupCost != null ? <Kv label="startup">{startupCost.toFixed(2)}</Kv> : null}
       </DetailGroup>
 
-      {buffers ? (        <DetailGroup title="buffers">
-          {buffers.hit > 0 ? (            <Kv label="hit">
+      {buffers ? (
+        <DetailGroup title="buffers">
+          {buffers.hit > 0 ? (
+            <Kv label="hit">
               {buffers.hit.toLocaleString()} ({prettyBytes(blocksToBytes(buffers.hit))})
             </Kv>
-) : null}
-          {buffers.read > 0 ? (            <Kv label="read">
+          ) : null}
+          {buffers.read > 0 ? (
+            <Kv label="read">
               {buffers.read.toLocaleString()} ({prettyBytes(blocksToBytes(buffers.read))})
             </Kv>
-) : null}
+          ) : null}
           {buffers.dirtied > 0 ? <Kv label="dirtied">{buffers.dirtied.toLocaleString()}</Kv> : null}
           {buffers.written > 0 ? <Kv label="written">{buffers.written.toLocaleString()}</Kv> : null}
           {heapFetches != null ? <Kv label="heap">{heapFetches.toLocaleString()}</Kv> : null}
         </DetailGroup>
-) : null}
+      ) : null}
 
-      {indexCond || hashCond || joinFilter || filter ? (        <DetailGroup title="conditions" wide>
+      {indexCond || hashCond || joinFilter || filter ? (
+        <DetailGroup title="conditions" wide>
           {indexCond ? <Kv label="index cond">{indexCond}</Kv> : null}
           {hashCond ? <Kv label="hash cond">{hashCond}</Kv> : null}
           {joinFilter ? <Kv label="join filter">{joinFilter}</Kv> : null}
           {filter ? <Kv label="filter">{filter}</Kv> : null}
         </DetailGroup>
-) : null}
+      ) : null}
 
-      {sortMethod || (Array.isArray(sortKey) && sortKey.length > 0) ? (        <DetailGroup title="sort">
-          {Array.isArray(sortKey) && sortKey.length > 0 ? (            <Kv label="key">{sortKey.join(", ")}</Kv>
-) : null}
+      {sortMethod || (Array.isArray(sortKey) && sortKey.length > 0) ? (
+        <DetailGroup title="sort">
+          {Array.isArray(sortKey) && sortKey.length > 0 ? (
+            <Kv label="key">{sortKey.join(", ")}</Kv>
+          ) : null}
           {sortMethod ? <Kv label="method">{sortMethod}</Kv> : null}
           {sortSpaceUsed != null ? <Kv label="memory">{sortSpaceUsed} kB</Kv> : null}
         </DetailGroup>
-) : null}
+      ) : null}
 
-      {workersLaunched != null || workersPlanned != null ? (        <DetailGroup title="parallel">
+      {workersLaunched != null || workersPlanned != null ? (
+        <DetailGroup title="parallel">
           {workersPlanned != null ? <Kv label="planned">{workersPlanned}</Kv> : null}
           {workersLaunched != null ? <Kv label="launched">{workersLaunched}</Kv> : null}
         </DetailGroup>
-) : null}
+      ) : null}
 
-      {Array.isArray(output) && output.length > 0 ? (        <DetailGroup title="output" wide>
+      {Array.isArray(output) && output.length > 0 ? (
+        <DetailGroup title="output" wide>
           <div
             style={{
               fontFamily: "var(--font-mono-q)",
@@ -577,7 +598,7 @@ function NodeDetailRow({
             {(output as unknown[]).map((c) => String(c)).join(", ")}
           </div>
         </DetailGroup>
-) : null}
+      ) : null}
 
       <div
         style={{
@@ -606,7 +627,7 @@ function NodeDetailRow({
         </button>
       </div>
     </div>
-);
+  );
 }
 
 function DetailGroup({
@@ -618,7 +639,8 @@ function DetailGroup({
   children: React.ReactNode;
   wide?: boolean;
 }): JSX.Element {
-  return (    <div style={{ minWidth: 0, gridColumn: wide ? "1 / -1" : undefined }}>
+  return (
+    <div style={{ minWidth: 0, gridColumn: wide ? "1 / -1" : undefined }}>
       <div
         style={{
           fontSize: 10.5,
@@ -632,11 +654,12 @@ function DetailGroup({
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>{children}</div>
     </div>
-);
+  );
 }
 
 function Kv({ label, children }: { label: string; children: React.ReactNode }): JSX.Element {
-  return (    <div
+  return (
+    <div
       style={{
         display: "grid",
         gridTemplateColumns: "100px 1fr",
@@ -657,7 +680,7 @@ function Kv({ label, children }: { label: string; children: React.ReactNode }): 
         {children}
       </span>
     </div>
-);
+  );
 }
 
 interface SortHeaderProps {
@@ -680,7 +703,8 @@ function SortHeader({
   width,
 }: SortHeaderProps): JSX.Element {
   const isCurrent = k === sortBy;
-  return (    // biome-ignore lint/a11y/useKeyWithClickEvents: header sort is mouse-only by design
+  return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: header sort is mouse-only by design
     <th
       onClick={() => onClick(k)}
       style={{
@@ -696,10 +720,11 @@ function SortHeader({
       {children}
       {isCurrent ? (sortDir === "asc" ? " ▲" : " ▼") : ""}
     </th>
-);
+  );
 }
 
-function ratioOf(  actual: number | null,
+function ratioOf(
+  actual: number | null,
   planned: number | null,
 ): { label: string; tone: "warn" | "crit" } | null {
   if (actual == null || planned == null) return null;

@@ -77,8 +77,9 @@ export function validateOps(base: ErdSchemaGraph, ops: Op[]): ValidationIssue[] 
         // full applyOps; basic existing check covers the common bug)
         if (!("_new" in op.table)) {
           const tableRef = op.table;
-          const t = base.tables.find(            (t) => t.schema === tableRef.schema && t.name === tableRef.name,
-);
+          const t = base.tables.find(
+            (t) => t.schema === tableRef.schema && t.name === tableRef.name,
+          );
           if (t?.columns.some((c) => c.name === op.name)) {
             issues.push({
               kind: "duplicate-column",

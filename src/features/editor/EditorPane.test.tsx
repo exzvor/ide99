@@ -5,9 +5,10 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 const { translation } = vi.hoisted(() => {
   const t = (key: string, opts?: Record<string, unknown>) => {
     if (opts && typeof opts === "object") {
-      return Object.entries(opts).reduce<string>(        (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
+      return Object.entries(opts).reduce<string>(
+        (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
         key,
-);
+      );
     }
     return key;
   };
@@ -46,8 +47,9 @@ vi.mock("./RunToolbar", () => ({
 }));
 
 vi.mock("../schema/ObjectDetails", () => ({
-  ObjectDetails: ({ node }: { node: string }) => (    <div data-testid="object-details-mock">{node}</div>
-),
+  ObjectDetails: ({ node }: { node: string }) => (
+    <div data-testid="object-details-mock">{node}</div>
+  ),
 }));
 
 vi.mock("../history/HistoryTab", () => ({

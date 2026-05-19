@@ -31,10 +31,11 @@ describe("i18n S25 keys present in both locales", () => {
   const get = (obj: unknown, path: string): unknown =>
     path
       .split(".")
-      .reduce<unknown>(        (acc, k) =>
+      .reduce<unknown>(
+        (acc, k) =>
           acc && typeof acc === "object" ? (acc as Record<string, unknown>)[k] : undefined,
         obj,
-);
+      );
   for (const key of expected) {
     it(`${key} exists in en`, () => {
       expect(typeof get(en, key)).toBe("string");

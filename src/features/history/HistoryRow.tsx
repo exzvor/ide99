@@ -123,7 +123,8 @@ export function HistoryRow({ row, style }: HistoryRowProps): JSX.Element {
     },
   ];
 
-  return (    <>
+  return (
+    <>
       <div
         data-testid={`history-row-${row.id}`}
         style={{
@@ -226,5 +227,5 @@ export function HistoryRow({ row, style }: HistoryRowProps): JSX.Element {
         }
       />
     </>
-);
+  );
 }

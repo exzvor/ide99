@@ -24,26 +24,28 @@ const PARENT_INFO: PartmanParent = {
 
 describe("ConfigViewerDialog", () => {
   it("returns null when closed", () => {
-    render(      <ConfigViewerDialog
+    render(
+      <ConfigViewerDialog
         open={false}
         connId="conn-1"
         qualifiedTable="public.events"
         partmanInfo={PARENT_INFO}
         onClose={() => {}}
       />,
-);
+    );
     expect(screen.queryByTestId("pg-partman-config-viewer")).not.toBeInTheDocument();
   });
 
   it("renders the partman info as a description list", () => {
-    render(      <ConfigViewerDialog
+    render(
+      <ConfigViewerDialog
         open={true}
         connId="conn-1"
         qualifiedTable="public.events"
         partmanInfo={PARENT_INFO}
         onClose={() => {}}
       />,
-);
+    );
     expect(screen.getByTestId("pg-partman-config-viewer")).toBeInTheDocument();
     // Spot-check the rendered values.
     expect(screen.getByText("created_at")).toBeInTheDocument();
@@ -53,28 +55,30 @@ describe("ConfigViewerDialog", () => {
   });
 
   it("renders — when retention is null", () => {
-    render(      <ConfigViewerDialog
+    render(
+      <ConfigViewerDialog
         open={true}
         connId="conn-1"
         qualifiedTable="public.events"
         partmanInfo={{ ...PARENT_INFO, retentionText: null }}
         onClose={() => {}}
       />,
-);
+    );
     expect(screen.getByTestId("pg-partman-config-retention")).toHaveTextContent("—");
   });
 
   it("Run Maintenance emits the run_maintenance_proc SQL and closes", () => {
     openEditorTab.mockClear();
     const onClose = vi.fn();
-    render(      <ConfigViewerDialog
+    render(
+      <ConfigViewerDialog
         open={true}
         connId="conn-1"
         qualifiedTable="public.events"
         partmanInfo={PARENT_INFO}
         onClose={onClose}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("pg-partman-run-maintenance"));
 
     expect(openEditorTab).toHaveBeenCalledTimes(1);
@@ -87,14 +91,15 @@ describe("ConfigViewerDialog", () => {
   it("Drop (keep data) emits undo_partition with p_keep_table => true and closes", () => {
     openEditorTab.mockClear();
     const onClose = vi.fn();
-    render(      <ConfigViewerDialog
+    render(
+      <ConfigViewerDialog
         open={true}
         connId="conn-1"
         qualifiedTable="public.events"
         partmanInfo={PARENT_INFO}
         onClose={onClose}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("pg-partman-drop-keep-data"));
 
     expect(openEditorTab).toHaveBeenCalledTimes(1);
@@ -109,14 +114,15 @@ describe("ConfigViewerDialog", () => {
   it("Drop (drop data) requires typing the qualified table name to confirm", () => {
     openEditorTab.mockClear();
     const onClose = vi.fn();
-    render(      <ConfigViewerDialog
+    render(
+      <ConfigViewerDialog
         open={true}
         connId="conn-1"
         qualifiedTable="public.events"
         partmanInfo={PARENT_INFO}
         onClose={onClose}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("pg-partman-drop-drop-data"));
 
     // The typing-confirm modal opens; its confirm button is disabled until

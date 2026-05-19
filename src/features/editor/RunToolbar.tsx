@@ -112,7 +112,8 @@ export function RunToolbar({ tabId }: RunToolbarProps): JSX.Element {
     },
   ];
 
-  return (    <div className="q-runbar" data-testid="run-toolbar">
+  return (
+    <div className="q-runbar" data-testid="run-toolbar">
       <button
         type="button"
         onClick={onRun}
@@ -121,7 +122,8 @@ export function RunToolbar({ tabId }: RunToolbarProps): JSX.Element {
         title={formatHotkey("Enter")}
         className="btn btn-accent btn-sm"
       >
-        {isRunning ? (          <>
+        {isRunning ? (
+          <>
             <span
               aria-hidden="true"
               style={{
@@ -137,12 +139,14 @@ export function RunToolbar({ tabId }: RunToolbarProps): JSX.Element {
             />
             <span>{t("editor.run.spinner")}</span>
           </>
-) : (          <span>{t("editor.run.button")}</span>
-)}
+        ) : (
+          <span>{t("editor.run.button")}</span>
+        )}
       </button>
 
       {(runState.status === "opening" ||
-        (runState.status === "streaming" && runState.prefetching)) && (        <button
+        (runState.status === "streaming" && runState.prefetching)) && (
+        <button
           type="button"
           onClick={() => useEditor.getState().cancelRun(tabId)}
           aria-label={t("editor.run.cancel")}
@@ -151,7 +155,7 @@ export function RunToolbar({ tabId }: RunToolbarProps): JSX.Element {
         >
           {t("editor.run.cancel")}
         </button>
-)}
+      )}
 
       <RunCaption tabId={tabId} />
 
@@ -172,7 +176,7 @@ export function RunToolbar({ tabId }: RunToolbarProps): JSX.Element {
         items={dropdownItems}
       />
     </div>
-);
+  );
 }
 
 function RunCaption({ tabId }: { tabId: string }): JSX.Element | null {
@@ -191,14 +195,16 @@ function RunCaption({ tabId }: { tabId: string }): JSX.Element | null {
   if (sel && sel.trim().length > 0) {
     const stmtCount = splitStatements(sel).length;
     if (stmtCount >= 2) {
-      return (        <span className="q-runbar-caption" title={text} data-testid="run-toolbar-caption">
+      return (
+        <span className="q-runbar-caption" title={text} data-testid="run-toolbar-caption">
           {t("editor.run.caption_run_n", { snippet, count: stmtCount })}
         </span>
-);
+      );
     }
   }
-  return (    <span className="q-runbar-caption" title={text} data-testid="run-toolbar-caption">
+  return (
+    <span className="q-runbar-caption" title={text} data-testid="run-toolbar-caption">
       {t("editor.run.caption_run_one", { snippet })}
     </span>
-);
+  );
 }

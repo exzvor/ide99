@@ -7,7 +7,8 @@
 import { quoteIdent, quoteString } from "./helpers";
 import type { DdlResult, DdlWarning, FdwServerForm, KvOptionForm } from "./types";
 
-export function generateFdwServerDdl(  initial: FdwServerForm | null,
+export function generateFdwServerDdl(
+  initial: FdwServerForm | null,
   current: FdwServerForm,
 ): DdlResult {
   if (!initial) {
@@ -58,10 +59,11 @@ function alterDdl(initial: FdwServerForm, current: FdwServerForm): DdlResult {
     stmts.push(`ALTER SERVER ${quoteIdent(initial.name)} RENAME TO ${quoteIdent(current.name)};`);
   }
   if (initial.version !== current.version) {
-    stmts.push(      `ALTER SERVER ${quoteIdent(current.name)} VERSION ${
+    stmts.push(
+      `ALTER SERVER ${quoteIdent(current.name)} VERSION ${
         current.version ? quoteString(current.version) : "NULL"
       };`,
-);
+    );
   }
 
   const optionDiff = diffKv(initial.options, current.options);
@@ -82,15 +84,17 @@ function alterDdl(initial: FdwServerForm, current: FdwServerForm): DdlResult {
     } else {
       const diff = diffKv(before.options, m.options);
       if (diff.length > 0) {
-        stmts.push(          `ALTER USER MAPPING FOR ${formatRole(m.roleName)} SERVER ${quoteIdent(current.name)} OPTIONS (${diff.join(", ")});`,
-);
+        stmts.push(
+          `ALTER USER MAPPING FOR ${formatRole(m.roleName)} SERVER ${quoteIdent(current.name)} OPTIONS (${diff.join(", ")});`,
+        );
       }
     }
   }
   for (const m of initial.userMappings) {
     if (!currentByRole.has(m.roleName)) {
-      stmts.push(        `DROP USER MAPPING FOR ${formatRole(m.roleName)} SERVER ${quoteIdent(current.name)};`,
-);
+      stmts.push(
+        `DROP USER MAPPING FOR ${formatRole(m.roleName)} SERVER ${quoteIdent(current.name)};`,
+      );
     }
   }
 

@@ -23,8 +23,9 @@ export function buildContinuousAggregateSql(form: ContinuousAggregateForm): stri
   lines.push(`CREATE MATERIALIZED VIEW ${form.viewName}`);
   lines.push("WITH (timescaledb.continuous) AS");
   lines.push("SELECT");
-  lines.push(    `  time_bucket(INTERVAL '${escSql(form.bucketInterval)}', ${form.timeColumn}) AS bucket,`,
-);
+  lines.push(
+    `  time_bucket(INTERVAL '${escSql(form.bucketInterval)}', ${form.timeColumn}) AS bucket,`,
+  );
   if (hasExtra) {
     lines.push(`  ${form.groupByExtra},`);
   }

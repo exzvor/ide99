@@ -29,12 +29,14 @@ export function ActionProgressModal(): JSX.Element | null {
     const showBar = phase.target.kind === "vacuum" || phase.target.kind === "reindexTable";
     const percent = phase.progress?.percent ?? null;
     const phaseLabel = phase.progress?.phase ?? "starting";
-    return (      <Dialog.Root open onOpenChange={() => undefined}>
+    return (
+      <Dialog.Root open onOpenChange={() => undefined}>
         <Dialog.Portal>
           <Dialog.Overlay className="confirm-overlay" />
           <Dialog.Content className="confirm-content" data-testid="action-progress-modal">
             <Dialog.Title>{t(`health.actions.running.${phase.target.kind}`)}</Dialog.Title>
-            {showBar ? (              <div className="progress-block">
+            {showBar ? (
+              <div className="progress-block">
                 <div className="progress-bar-track">
                   <div
                     className="progress-bar-fill"
@@ -54,12 +56,14 @@ export function ActionProgressModal(): JSX.Element | null {
                   {percent !== null && <span>{percent.toFixed(0)}%</span>}
                 </div>
               </div>
-) : (              <div className="indeterminate-spinner">
+            ) : (
+              <div className="indeterminate-spinner">
                 <RefreshCw size={16} className="animate-spin" aria-hidden="true" />
                 <span>{t("health.actions.running.indeterminate")}</span>
               </div>
-)}
-            {showBar && phase.pid !== null && (              <div className="confirm-actions">
+            )}
+            {showBar && phase.pid !== null && (
+              <div className="confirm-actions">
                 <button
                   type="button"
                   className="btn btn-ghost"
@@ -68,16 +72,17 @@ export function ActionProgressModal(): JSX.Element | null {
                   {t("common.cancel")}
                 </button>
               </div>
-)}
+            )}
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
-);
+    );
   }
 
   if (phase.kind === "kill_fallback") {
     const ok = typedPid === String(phase.pid);
-    return (      <Dialog.Root open onOpenChange={(o) => (o ? null : useHealthActions.getState().cancel())}>
+    return (
+      <Dialog.Root open onOpenChange={(o) => (o ? null : useHealthActions.getState().cancel())}>
         <Dialog.Portal>
           <Dialog.Overlay className="confirm-overlay" />
           <Dialog.Content className="confirm-content" data-testid="action-fallback-modal">
@@ -109,7 +114,7 @@ export function ActionProgressModal(): JSX.Element | null {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
-);
+    );
   }
 
   return null;

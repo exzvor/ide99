@@ -38,7 +38,8 @@ type SetPartial = (partial: Partial<EditorState>) => void;
 
 const isWriteRegex = /^(insert|update|delete|create|alter|drop|truncate|grant|revoke)\b/i;
 
-export async function preflightBatch(  conn: Connection | undefined,
+export async function preflightBatch(
+  conn: Connection | undefined,
   statements: readonly string[],
   set: SetPartial,
 ): Promise<BatchPreflight> {

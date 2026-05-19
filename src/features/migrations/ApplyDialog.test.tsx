@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * ApplyDialog renders three radio modes (Single / Range / All-pending)
  * with a read-only Monaco preview built from concatenated `.up.sql`
@@ -97,9 +97,10 @@ vi.mock("react-i18next", () => ({
         template = FAKE_DICT[otherKey] ?? template;
       }
       if (!vars) return template;
-      return Object.entries(vars).reduce<string>(        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
+      return Object.entries(vars).reduce<string>(
+        (acc, [k, v]) => acc.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), String(v)),
         template,
-);
+      );
     },
   }),
 }));
@@ -107,9 +108,10 @@ vi.mock("react-i18next", () => ({
 vi.mock("@monaco-editor/react", () => ({
   Editor: (props: {
     value?: string;
-    onMount?: (      editor: { getModel: () => { id: string } },
+    onMount?: (
+      editor: { getModel: () => { id: string } },
       monaco: { editor: { setModelMarkers: (...a: unknown[]) => void } },
-) => void;
+    ) => void;
   }) => {
     // Invoke onMount synchronously on first render so the dialog's
     // marker-application code path runs.
@@ -187,7 +189,8 @@ afterEach(() => {
 describe("ApplyDialog", () => {
   it("radio Single: selecting a version enables Apply", async () => {
     const user = userEvent.setup();
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -196,7 +199,7 @@ describe("ApplyDialog", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     await user.click(screen.getByLabelText("Single"));
     const apply = screen.getByTestId("apply-dialog-confirm");
     expect(apply).toBeDisabled();
@@ -212,7 +215,8 @@ describe("ApplyDialog", () => {
       migration({ version: "0002", status: "applied" }),
       migration({ version: "0003", status: "pending" }),
     ];
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -221,7 +225,7 @@ describe("ApplyDialog", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     await user.click(screen.getByLabelText("Range"));
     await user.selectOptions(screen.getByTestId("apply-dialog-range-from"), "0001");
     await user.selectOptions(screen.getByTestId("apply-dialog-range-to"), "0003");
@@ -231,7 +235,8 @@ describe("ApplyDialog", () => {
 
   it("radio AllPending: shows count of pending migrations", async () => {
     const user = userEvent.setup();
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -240,14 +245,15 @@ describe("ApplyDialog", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     await user.click(screen.getByLabelText("All pending"));
     expect(screen.getByTestId("apply-dialog-pending-count").textContent).toMatch(/3/);
   });
 
   it("displays concatenated .up.sql in read-only Monaco", async () => {
     const user = userEvent.setup();
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -256,7 +262,7 @@ describe("ApplyDialog", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     await user.click(screen.getByLabelText("All pending"));
     await waitFor(() => {
       const textarea = screen.getByTestId("apply-monaco-mock") as HTMLTextAreaElement;
@@ -268,7 +274,8 @@ describe("ApplyDialog", () => {
 
   it("on prod connection: shows banner 'Applying N migrations on production' but no typed-confirm", async () => {
     const user = userEvent.setup();
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="payments"
@@ -277,10 +284,11 @@ describe("ApplyDialog", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     await user.click(screen.getByLabelText("All pending"));
-    expect(screen.getByTestId("apply-dialog-prod-banner")).toHaveTextContent(      /Applying 3 migrations on production «payments»/,
-);
+    expect(screen.getByTestId("apply-dialog-prod-banner")).toHaveTextContent(
+      /Applying 3 migrations on production «payments»/,
+    );
     expect(screen.queryByLabelText(/Type connection name/i)).not.toBeInTheDocument();
     expect(screen.getByTestId("apply-dialog-confirm")).not.toBeDisabled();
   });
@@ -288,7 +296,8 @@ describe("ApplyDialog", () => {
 
 describe("ApplyDialog dry-run + lint (S22)", () => {
   it("checkbox initial state is OFF when no localStorage entry", () => {
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -297,14 +306,15 @@ describe("ApplyDialog dry-run + lint (S22)", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     const cb = screen.getByTestId("apply-dialog-dryrun-checkbox") as HTMLInputElement;
     expect(cb.checked).toBe(false);
   });
 
   it("toggling checkbox persists to localStorage keyed by connId", async () => {
     const user = userEvent.setup();
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -313,7 +323,7 @@ describe("ApplyDialog dry-run + lint (S22)", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     await user.click(screen.getByTestId("apply-dialog-dryrun-checkbox"));
     expect(localStorage.getItem("migrations.dryRun.enabled.c1")).toBe("true");
     await user.click(screen.getByTestId("apply-dialog-dryrun-checkbox"));
@@ -322,7 +332,8 @@ describe("ApplyDialog dry-run + lint (S22)", () => {
 
   it("clicking Apply with checkbox ON invokes migrations_dryrun, not migrations_apply", async () => {
     const user = userEvent.setup();
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -331,27 +342,30 @@ describe("ApplyDialog dry-run + lint (S22)", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     await user.click(screen.getByLabelText("All pending"));
     await waitFor(() => {
-      expect(invokeMock).toHaveBeenCalledWith(        "migrations_preview_up",
+      expect(invokeMock).toHaveBeenCalledWith(
+        "migrations_preview_up",
         expect.objectContaining({ version: "0002" }),
-);
+      );
     });
     await user.click(screen.getByTestId("apply-dialog-dryrun-checkbox"));
     invokeMock.mockClear();
     await user.click(screen.getByTestId("apply-dialog-confirm"));
     await waitFor(() => {
-      expect(invokeMock).toHaveBeenCalledWith(        "migrations_dryrun",
+      expect(invokeMock).toHaveBeenCalledWith(
+        "migrations_dryrun",
         expect.objectContaining({ connId: "c1" }),
-);
+      );
     });
     expect(invokeMock).not.toHaveBeenCalledWith("migrations_apply", expect.anything());
   });
 
   it("dryrun success → Apply-for-real button rendered", async () => {
     const user = userEvent.setup();
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -360,7 +374,7 @@ describe("ApplyDialog dry-run + lint (S22)", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     await user.click(screen.getByLabelText("All pending"));
     await user.click(screen.getByTestId("apply-dialog-dryrun-checkbox"));
     await user.click(screen.getByTestId("apply-dialog-confirm"));
@@ -388,7 +402,8 @@ describe("ApplyDialog dry-run + lint (S22)", () => {
       return null;
     });
     const user = userEvent.setup();
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -397,7 +412,7 @@ describe("ApplyDialog dry-run + lint (S22)", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     await user.click(screen.getByLabelText("All pending"));
     await user.click(screen.getByTestId("apply-dialog-dryrun-checkbox"));
     await user.click(screen.getByTestId("apply-dialog-confirm"));
@@ -419,7 +434,8 @@ describe("ApplyDialog dry-run + lint (S22)", () => {
       },
     ]);
     const user = userEvent.setup();
-    render(      <ApplyDialog
+    render(
+      <ApplyDialog
         open
         connectionId="c1"
         connectionName="local"
@@ -428,7 +444,7 @@ describe("ApplyDialog dry-run + lint (S22)", () => {
         onClose={() => {}}
         onApplied={() => {}}
       />,
-);
+    );
     await user.click(screen.getByLabelText("All pending"));
     // Markers application happens in a useEffect after the preview resolves.
     await waitFor(() => {

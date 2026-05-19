@@ -30,7 +30,8 @@ export function ErrorExplainButton({
 }: ErrorExplainButtonProps): JSX.Element {
   const { t } = useTranslation();
   const cls = ["error-explain-button", variant, className].filter(Boolean).join(" ");
-  return (    <button
+  return (
+    <button
       type="button"
       className={cls}
       data-testid={testId ?? "error-explain-button"}
@@ -38,5 +39,5 @@ export function ErrorExplainButton({
     >
       {label ?? t("errorExplain.button")}
     </button>
-);
+  );
 }

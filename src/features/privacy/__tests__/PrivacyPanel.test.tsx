@@ -94,11 +94,12 @@ describe("PrivacyPanel", () => {
     render(<PrivacyPanel />);
     await user.click(screen.getByTestId("privacy-telemetry-toggle"));
     await waitFor(() => {
-      expect(invokeMock).toHaveBeenCalledWith(        "settings_set",
+      expect(invokeMock).toHaveBeenCalledWith(
+        "settings_set",
         expect.objectContaining({
           settings: expect.objectContaining({ telemetryEnabled: false }) as Partial<AppSettings>,
         }),
-);
+      );
     });
   });
 
@@ -107,11 +108,12 @@ describe("PrivacyPanel", () => {
     render(<PrivacyPanel />);
     await user.click(screen.getByTestId("privacy-crash-toggle"));
     await waitFor(() => {
-      expect(invokeMock).toHaveBeenCalledWith(        "settings_set",
+      expect(invokeMock).toHaveBeenCalledWith(
+        "settings_set",
         expect.objectContaining({
           settings: expect.objectContaining({ crashReportsEnabled: false }) as Partial<AppSettings>,
         }),
-);
+      );
     });
   });
 
@@ -120,11 +122,12 @@ describe("PrivacyPanel", () => {
     render(<PrivacyPanel />);
     await user.selectOptions(screen.getByTestId("privacy-endpoint"), "ru");
     await waitFor(() => {
-      expect(invokeMock).toHaveBeenCalledWith(        "settings_set",
+      expect(invokeMock).toHaveBeenCalledWith(
+        "settings_set",
         expect.objectContaining({
           settings: expect.objectContaining({ telemetryEndpoint: "ru" }) as Partial<AppSettings>,
         }),
-);
+      );
     });
   });
 
@@ -156,7 +159,7 @@ describe("PrivacyPanel", () => {
     await user.click(screen.getByTestId("privacy-what-we-collect"));
     await waitFor(() =>
       expect(invokeMock).toHaveBeenCalledWith("telemetry_known_events", undefined),
-);
+    );
     await screen.findByTestId("event-app_launched");
   });
 });

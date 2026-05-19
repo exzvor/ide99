@@ -15,13 +15,14 @@ function ratioTone(ratio: number): "ok" | "warn" | "danger" {
 }
 
 /**
- * €” `pg_stat_activity.state` ships the raw English token
+ * `pg_stat_activity.state` ships the raw English token
  * ("active", "idle in transaction", â€¦); without translation the chip on
  * an RU UI reads `active: 3` and breaks the localized look. We map the
  * known tokens to i18n keys; unknown values fall through verbatim so a
  * future PG version that adds a state still renders something useful.
  */
-function localizeState(  t: (key: string, options?: { defaultValue: string }) => string,
+function localizeState(
+  t: (key: string, options?: { defaultValue: string }) => string,
   raw: string,
 ): string {
   const slug = raw
@@ -43,7 +44,8 @@ export function ActiveConnectionsCard({ connId, state }: CardProps): JSX.Element
   const ratio = data.max > 0 ? data.current / data.max : 0;
   const tone = ratioTone(ratio);
 
-  const body = (    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+  const body = (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <div style={{ fontSize: 22, fontWeight: 600 }} data-testid="active-conn-current">
         {t("health.card.active_connections.current", {
           current: data.current,
@@ -51,7 +53,8 @@ export function ActiveConnectionsCard({ connId, state }: CardProps): JSX.Element
         })}
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-        {Object.entries(data.byState).map(([s, count]) => (          <span
+        {Object.entries(data.byState).map(([s, count]) => (
+          <span
             key={s}
             data-testid="active-conn-state-chip"
             style={{
@@ -68,17 +71,18 @@ export function ActiveConnectionsCard({ connId, state }: CardProps): JSX.Element
               count,
             })}
           </span>
-))}
+        ))}
       </div>
     </div>
-);
+  );
 
-  return (    <CardShell
+  return (
+    <CardShell
       cardId="active_connections"
       connId={connId}
       state={state}
       body={body}
       status={{ tone, tooltip: t(`health.status.${tone}`) }}
     />
-);
+  );
 }

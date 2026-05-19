@@ -27,11 +27,12 @@ import { useSnippets } from "./store";
 
 function formatBackendError(err: unknown): string {
   if (err instanceof Error) return err.message;
-  if (    err &&
+  if (
+    err &&
     typeof err === "object" &&
     "message" in err &&
     typeof (err as { message: unknown }).message === "string"
-) {
+  ) {
     return (err as { message: string }).message;
   }
   return String(err);
@@ -104,7 +105,8 @@ export function SnippetEditor({ open, editing, onClose }: Props) {
     }
   });
 
-  return (    <Dialog.Root open={open} onOpenChange={(o) => (o ? null : onClose())}>
+  return (
+    <Dialog.Root open={open} onOpenChange={(o) => (o ? null : onClose())}>
       <Dialog.Portal>
         <Dialog.Overlay className="snippet-editor-overlay" />
         <Dialog.Content className="snippet-editor-content" aria-describedby={undefined}>
@@ -144,5 +146,5 @@ export function SnippetEditor({ open, editing, onClose }: Props) {
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-);
+  );
 }

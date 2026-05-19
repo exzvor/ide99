@@ -16,7 +16,8 @@ interface FkEdgeProps {
 export function FkEdge({ edge, highlighted }: FkEdgeProps): JSX.Element {
   const stroke = highlighted ? "var(--accent)" : "var(--hairline)";
   const strokeWidth = highlighted ? 1.5 : 1;
-  return (    <g data-testid="erd-fk-edge" data-edge-id={edge.id}>
+  return (
+    <g data-testid="erd-fk-edge" data-edge-id={edge.id}>
       <path
         d={edge.d}
         fill="none"
@@ -25,5 +26,5 @@ export function FkEdge({ edge, highlighted }: FkEdgeProps): JSX.Element {
         markerEnd="url(#erd-arrow)"
       />
     </g>
-);
+  );
 }

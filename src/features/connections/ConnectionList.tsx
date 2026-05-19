@@ -74,29 +74,33 @@ export function ConnectionList(): JSX.Element {
     return () => document.removeEventListener("keydown", onKey);
   }, [confirmTargetId]);
 
-  const onRowClick = useCallback(    (id: string) => {
+  const onRowClick = useCallback(
+    (id: string) => {
       select(id);
     },
     [select],
-);
+  );
 
-  const onContextMenu = useCallback(    (event: MouseEvent<HTMLDivElement>, id: string) => {
+  const onContextMenu = useCallback(
+    (event: MouseEvent<HTMLDivElement>, id: string) => {
       event.preventDefault();
       event.stopPropagation();
       select(id);
       setMenuTargetId(id);
     },
     [select],
-);
+  );
 
-  const onEdit = useCallback(    (id: string) => {
+  const onEdit = useCallback(
+    (id: string) => {
       setMenuTargetId(null);
       openEditForm(id);
     },
     [openEditForm],
-);
+  );
 
-  const onDuplicate = useCallback(    async (conn: Connection) => {
+  const onDuplicate = useCallback(
+    async (conn: Connection) => {
       setMenuTargetId(null);
       try {
         // Server-side duplicate copies the password from the OS keychain
@@ -111,7 +115,7 @@ export function ConnectionList(): JSX.Element {
       }
     },
     [upsertLocal, toast, t],
-);
+  );
 
   const openDelete = useCallback((id: string) => {
     setMenuTargetId(null);
@@ -159,7 +163,8 @@ export function ConnectionList(): JSX.Element {
     }
   }, [confirmTargetId, removeLocal, toast, t]);
 
-  const onListKeyDown = useCallback(    (event: KeyboardEvent<HTMLDivElement>) => {
+  const onListKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
       const visible = filteredConnections;
       if (visible.length === 0) return;
       const currentIdx = visible.findIndex((c) => c.id === selectedId);
@@ -184,7 +189,7 @@ export function ConnectionList(): JSX.Element {
       }
     },
     [filteredConnections, selectedId, select, openEditForm, openDelete],
-);
+  );
 
   const confirmRow = confirmTargetId
     ? connections.find((c) => c.id === confirmTargetId)
@@ -194,8 +199,10 @@ export function ConnectionList(): JSX.Element {
   const showSearch = connections.length > 0;
   const noMatches = showSearch && filteredConnections.length === 0 && query.trim().length > 0;
 
-  return (    <>
-      {showSearch ? (        <div style={{ padding: "4px 0 8px" }}>
+  return (
+    <>
+      {showSearch ? (
+        <div style={{ padding: "4px 0 8px" }}>
           <input
             type="search"
             value={query}
@@ -207,7 +214,7 @@ export function ConnectionList(): JSX.Element {
             style={{ width: "100%", padding: "6px 8px", fontSize: 12 }}
           />
         </div>
-) : null}
+      ) : null}
       <div
         // biome-ignore lint/a11y/useSemanticElements: native <select> would not allow our compound row structure (name + host:port subtitle)
         role="listbox"
@@ -218,16 +225,18 @@ export function ConnectionList(): JSX.Element {
         data-testid="connection-list"
         style={{ display: "flex", flexDirection: "column", gap: 4, paddingTop: 4 }}
       >
-        {noMatches ? (          <div
+        {noMatches ? (
+          <div
             data-testid="connection-list-empty"
             style={{ padding: "8px 6px", color: "var(--ink-3)", fontSize: 12 }}
           >
             {t("connection.list.search_no_results")}
           </div>
-) : null}
+        ) : null}
         {filteredConnections.map((conn) => {
           const isSelected = conn.id === selectedId;
-          return (            <div
+          return (
+            <div
               key={conn.id}
               id={`conn-row-${conn.id}`}
               // biome-ignore lint/a11y/useSemanticElements: <option> only valid inside <select>; this is a custom listbox row
@@ -252,11 +261,12 @@ export function ConnectionList(): JSX.Element {
                 {conn.host}:{conn.port}
               </span>
             </div>
-);
+          );
         })}
       </div>
 
-      {menuRow ? (        <div
+      {menuRow ? (
+        <div
           role="menu"
           className="q-popover"
           style={{ left: 14, marginTop: 4, width: 200 }}
@@ -289,9 +299,9 @@ export function ConnectionList(): JSX.Element {
             {t("connection.list.context.delete")}
           </button>
         </div>
-) : null}
+      ) : null}
 
-      {confirmRow ? (        // biome-ignore lint/a11y/useSemanticElements: <dialog> element lacks the styling/positioning hooks we need; aria role is sufficient
+      {confirmRow ? ( // biome-ignore lint/a11y/useSemanticElements: <dialog> element lacks the styling/positioning hooks we need; aria role is sufficient
         <div
           role="dialog"
           aria-modal="true"
@@ -378,7 +388,7 @@ export function ConnectionList(): JSX.Element {
             </div>
           </div>
         </div>
-) : null}
+      ) : null}
     </>
-);
+  );
 }

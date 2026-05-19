@@ -21,9 +21,10 @@ beforeAll(() => {
 const { translation } = vi.hoisted(() => {
   const t = (key: string, opts?: Record<string, unknown>) => {
     if (opts && typeof opts === "object") {
-      return Object.entries(opts).reduce<string>(        (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
+      return Object.entries(opts).reduce<string>(
+        (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
         key,
-);
+      );
     }
     return key;
   };
@@ -111,7 +112,8 @@ beforeEach(() => {
   historySetPinnedMock.mockResolvedValue(undefined);
   historyDeleteMock.mockResolvedValue(undefined);
   tabsSaveMock.mockResolvedValue(undefined);
-  useEditor.setState(    {
+  useEditor.setState(
+    {
       ...initialEditorState,
       tabs: [],
       activeTabId: null,
@@ -120,8 +122,9 @@ beforeEach(() => {
       hydrated: true,
     },
     true,
-);
-  useConnections.setState(    {
+  );
+  useConnections.setState(
+    {
       ...initialConnState,
       connections: [],
       selectedId: null,
@@ -130,8 +133,9 @@ beforeEach(() => {
       error: null,
     },
     true,
-);
-  useHistory.setState(    {
+  );
+  useHistory.setState(
+    {
       ...initialHistoryState,
       filters: { ...initialHistoryState.filters },
       rows: [],
@@ -141,14 +145,15 @@ beforeEach(() => {
       lastFetchOffset: 0,
     },
     true,
-);
+  );
 });
 
 function renderRow(row: HistoryRowData) {
-  return render(    <ToastProvider>
+  return render(
+    <ToastProvider>
       <HistoryRow row={row} />
     </ToastProvider>,
-);
+  );
 }
 
 describe("HistoryRow", () => {
@@ -157,8 +162,9 @@ describe("HistoryRow", () => {
     renderRow(row);
     expect(screen.getByText("SELECT * FROM users")).toBeInTheDocument();
     expect(screen.getByText("42ms")).toBeInTheDocument();
-    expect(screen.getByTestId(`history-row-status-${row.id}`)).toHaveTextContent(      "history.filter.status.ok",
-);
+    expect(screen.getByTestId(`history-row-status-${row.id}`)).toHaveTextContent(
+      "history.filter.status.ok",
+    );
   });
 
   test("pinned row renders a star with currentColor fill", () => {

@@ -48,7 +48,8 @@ export function Spg99DryRunTargetPicker({
     }
   };
 
-  return (    <fieldset
+  return (
+    <fieldset
       data-testid="spg99-dryrun-target-picker"
       style={{
         border: "1px solid var(--hairline)",
@@ -90,7 +91,8 @@ export function Spg99DryRunTargetPicker({
           data-testid="spg99-dryrun-target-spg99"
         />
         <span>{t("paid_modules.spg99.dry_run.target_spg99")}</span>
-        {!subscribed ? (          <button
+        {!subscribed ? (
+          <button
             type="button"
             onClick={handleUpgrade}
             className="link"
@@ -108,7 +110,7 @@ export function Spg99DryRunTargetPicker({
           >
             {t("paid_modules.spg99.dry_run.upgrade_hint")}
           </button>
-) : null}
+        ) : null}
       </label>
 
       <label
@@ -131,5 +133,5 @@ export function Spg99DryRunTargetPicker({
         <span>{t("paid_modules.spg99.dry_run.target_docker")}</span>
       </label>
     </fieldset>
-);
+  );
 }

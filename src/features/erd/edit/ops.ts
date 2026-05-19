@@ -145,7 +145,8 @@ export type Op = z.infer<typeof opSchema>;
 
 // ---- factories ----
 
-export function makeAddTableOp(  schema: string,
+export function makeAddTableOp(
+  schema: string,
   name: string,
   seedColumns?: SeedColumn[],
 ): z.infer<typeof addTableOpSchema> {
@@ -168,7 +169,8 @@ export function makeAddTableOp(  schema: string,
   };
 }
 
-export function makeAddColumnOp(  table: AnyTableRef,
+export function makeAddColumnOp(
+  table: AnyTableRef,
   name: string,
   dataType: string,
   nullable: boolean,
@@ -177,33 +179,38 @@ export function makeAddColumnOp(  table: AnyTableRef,
   return { kind: "addColumn", id: newOpId(), table, name, dataType, nullable, isPrimaryKey };
 }
 
-export function makeRenameTableOp(  table: TableRef | NewTableRef,
+export function makeRenameTableOp(
+  table: TableRef | NewTableRef,
   newName: string,
 ): z.infer<typeof renameTableOpSchema> {
   return { kind: "renameTable", id: newOpId(), table, newName };
 }
 
-export function makeRenameColumnOp(  column: ColumnRef,
+export function makeRenameColumnOp(
+  column: ColumnRef,
   newName: string,
 ): z.infer<typeof renameColumnOpSchema> {
   return { kind: "renameColumn", id: newOpId(), column, newName };
 }
 
-export function makeRetypeColumnOp(  column: ColumnRef,
+export function makeRetypeColumnOp(
+  column: ColumnRef,
   newDataType: string,
   newNullable: boolean,
 ): z.infer<typeof retypeColumnOpSchema> {
   return { kind: "retypeColumn", id: newOpId(), column, newDataType, newNullable };
 }
 
-export function makeAddFkOp(  sourceColumns: ColumnRef[],
+export function makeAddFkOp(
+  sourceColumns: ColumnRef[],
   targetColumns: ColumnRef[],
   constraintName: string,
 ): z.infer<typeof addFkOpSchema> {
   return { kind: "addFk", id: newOpId(), sourceColumns, targetColumns, constraintName };
 }
 
-export function makeMoveTableOp(  table: AnyTableRef,
+export function makeMoveTableOp(
+  table: AnyTableRef,
   x: number,
   y: number,
 ): z.infer<typeof moveTableOpSchema> {
@@ -218,19 +225,22 @@ export function makeDropColumnOp(column: ColumnRef): z.infer<typeof dropColumnOp
   return { kind: "dropColumn", id: newOpId(), column };
 }
 
-export function makeDropFkOp(  table: AnyTableRef,
+export function makeDropFkOp(
+  table: AnyTableRef,
   constraintName: string,
 ): z.infer<typeof dropFkOpSchema> {
   return { kind: "dropFk", id: newOpId(), table, constraintName };
 }
 
-export function makeSetColumnNullableOp(  column: ColumnRef,
+export function makeSetColumnNullableOp(
+  column: ColumnRef,
   nullable: boolean,
 ): z.infer<typeof setColumnNullableOpSchema> {
   return { kind: "setColumnNullable", id: newOpId(), column, nullable };
 }
 
-export function makeAddPrimaryKeyOp(  table: AnyTableRef,
+export function makeAddPrimaryKeyOp(
+  table: AnyTableRef,
   columns: string[],
 ): z.infer<typeof addPrimaryKeyOpSchema> {
   return { kind: "addPrimaryKey", id: newOpId(), table, columns };

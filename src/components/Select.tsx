@@ -42,7 +42,8 @@ export function Select({
   disabled,
   id,
 }: SelectProps) {
-  return (    <RadixSelect.Root value={value} onValueChange={onValueChange} disabled={disabled}>
+  return (
+    <RadixSelect.Root value={value} onValueChange={onValueChange} disabled={disabled}>
       <RadixSelect.Trigger
         id={id}
         aria-label={ariaLabel}
@@ -60,7 +61,8 @@ export function Select({
           className="z-[var(--z-popover)] overflow-hidden rounded-[var(--radius-md)] border border-[var(--gray-200)] bg-[var(--gray-0)] shadow-[var(--shadow-md)]"
         >
           <RadixSelect.Viewport className="p-[var(--space-1)]">
-            {options.map((option) => (              <RadixSelect.Item
+            {options.map((option) => (
+              <RadixSelect.Item
                 key={option.value}
                 value={option.value}
                 className="relative flex cursor-pointer select-none items-center rounded-[var(--radius-sm)] py-[var(--space-2)] pl-[var(--space-6)] pr-[var(--space-3)] text-[var(--text-sm)] leading-[var(--text-sm-lh)] text-[var(--gray-900)] outline-none data-[highlighted]:bg-[var(--gray-100)] data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
@@ -70,10 +72,10 @@ export function Select({
                 </RadixSelect.ItemIndicator>
                 <RadixSelect.ItemText>{option.label}</RadixSelect.ItemText>
               </RadixSelect.Item>
-))}
+            ))}
           </RadixSelect.Viewport>
         </RadixSelect.Content>
       </RadixSelect.Portal>
     </RadixSelect.Root>
-);
+  );
 }

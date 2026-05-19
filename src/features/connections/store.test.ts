@@ -45,7 +45,8 @@ beforeEach(() => {
   listConnectionsMock.mockReset();
   connectionSetExcludeFromHistoryMock.mockReset();
   connectionSetExcludeFromHistoryMock.mockResolvedValue(undefined);
-  useConnections.setState(    {
+  useConnections.setState(
+    {
       ...initialState,
       connections: [],
       selectedId: null,
@@ -54,7 +55,7 @@ beforeEach(() => {
       error: null,
     },
     true,
-);
+  );
 });
 
 describe("useConnections store", () => {
@@ -180,8 +181,9 @@ describe("useConnections store", () => {
     useConnections.setState({ connections: [a] });
     connectionSetExcludeFromHistoryMock.mockRejectedValueOnce(new Error("boom"));
 
-    await expect(useConnections.getState().setExcludeFromHistory("a", true)).rejects.toThrow(      "boom",
-);
+    await expect(useConnections.getState().setExcludeFromHistory("a", true)).rejects.toThrow(
+      "boom",
+    );
 
     const list = useConnections.getState().connections;
     expect(list.find((c) => c.id === "a")?.excludeFromHistory).toBe(false);

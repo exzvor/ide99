@@ -18,7 +18,8 @@ const ENVIRONMENTS: Environment[] = ["local", "dev", "stage", "prod"];
  */
 export function EnvironmentSelect({ value, onChange, ariaLabel }: Props) {
   const { t } = useTranslation();
-  return (    <Select.Root value={value} onValueChange={(v) => onChange(v as Environment)}>
+  return (
+    <Select.Root value={value} onValueChange={(v) => onChange(v as Environment)}>
       <Select.Trigger className="env-select-trigger" aria-label={ariaLabel}>
         <EnvironmentBadge environment={value} />
         <Select.Value />
@@ -26,14 +27,15 @@ export function EnvironmentSelect({ value, onChange, ariaLabel }: Props) {
       <Select.Portal>
         <Select.Content className="env-select-content">
           <Select.Viewport>
-            {ENVIRONMENTS.map((env) => (              <Select.Item key={env} value={env} className="env-select-item">
+            {ENVIRONMENTS.map((env) => (
+              <Select.Item key={env} value={env} className="env-select-item">
                 <EnvironmentBadge environment={env} />
                 <Select.ItemText>{t(`env.label.${env}`)}</Select.ItemText>
               </Select.Item>
-))}
+            ))}
           </Select.Viewport>
         </Select.Content>
       </Select.Portal>
     </Select.Root>
-);
+  );
 }

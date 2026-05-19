@@ -18,7 +18,8 @@ describe("buildContinuousAggregateSql", () => {
       withData: false,
     };
     const sql = buildContinuousAggregateSql(form);
-    expect(sql).toBe(      'CREATE MATERIALIZED VIEW "public"."hourly_metrics"\n' +
+    expect(sql).toBe(
+      'CREATE MATERIALIZED VIEW "public"."hourly_metrics"\n' +
         "WITH (timescaledb.continuous) AS\n" +
         "SELECT\n" +
         "  time_bucket(INTERVAL '1 hour', ts) AS bucket,\n" +
@@ -26,7 +27,7 @@ describe("buildContinuousAggregateSql", () => {
         'FROM "public"."metrics"\n' +
         "GROUP BY bucket\n" +
         "WITH NO DATA;",
-);
+    );
   });
 
   it("appends groupByExtra to both SELECT and GROUP BY", () => {
@@ -40,7 +41,8 @@ describe("buildContinuousAggregateSql", () => {
       withData: false,
     };
     const sql = buildContinuousAggregateSql(form);
-    expect(sql).toBe(      'CREATE MATERIALIZED VIEW "public"."hourly_metrics"\n' +
+    expect(sql).toBe(
+      'CREATE MATERIALIZED VIEW "public"."hourly_metrics"\n' +
         "WITH (timescaledb.continuous) AS\n" +
         "SELECT\n" +
         "  time_bucket(INTERVAL '1 hour', ts) AS bucket,\n" +
@@ -49,7 +51,7 @@ describe("buildContinuousAggregateSql", () => {
         'FROM "public"."metrics"\n' +
         "GROUP BY bucket, device_id\n" +
         "WITH NO DATA;",
-);
+    );
   });
 
   it("emits WITH DATA when withData=true", () => {
@@ -63,7 +65,8 @@ describe("buildContinuousAggregateSql", () => {
       withData: true,
     };
     const sql = buildContinuousAggregateSql(form);
-    expect(sql).toBe(      'CREATE MATERIALIZED VIEW "public"."hourly_metrics"\n' +
+    expect(sql).toBe(
+      'CREATE MATERIALIZED VIEW "public"."hourly_metrics"\n' +
         "WITH (timescaledb.continuous) AS\n" +
         "SELECT\n" +
         "  time_bucket(INTERVAL '1 hour', ts) AS bucket,\n" +
@@ -71,6 +74,6 @@ describe("buildContinuousAggregateSql", () => {
         'FROM "public"."metrics"\n' +
         "GROUP BY bucket\n" +
         "WITH DATA;",
-);
+    );
   });
 });

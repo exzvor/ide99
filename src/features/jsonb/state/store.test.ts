@@ -70,7 +70,7 @@ beforeEach(() => {
     runStates: next,
     tabs: editor.tabs.map((t) =>
       t.id === tab.id && t.kind === "editor" ? { ...t, connectionId: "c1" } : t,
-),
+    ),
   });
   useConnections.setState({
     connections: [fakeConn("c1", "local")],

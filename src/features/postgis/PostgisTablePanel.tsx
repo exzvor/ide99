@@ -50,7 +50,7 @@ export function PostgisTablePanel(props: PostgisTablePanelProps): JSX.Element | 
       // viewer treats missing geometry the same way.
       const rowsSnapshot: string[][] = result.rows.map((row) =>
         row.map((cell) => (cell === null ? "" : cell)),
-);
+      );
       useEditor.getState().openMapViewTab({
         connectionId: connId,
         rowsSnapshot,
@@ -65,7 +65,8 @@ export function PostgisTablePanel(props: PostgisTablePanelProps): JSX.Element | 
     }
   }
 
-  return (    <div
+  return (
+    <div
       data-testid="postgis-table-panel"
       style={{
         background: "var(--surface, #fff)",
@@ -92,13 +93,14 @@ export function PostgisTablePanel(props: PostgisTablePanelProps): JSX.Element | 
           {loading ? "Loading…" : "Open Map View…"}
         </button>
       </div>
-      {error !== null ? (        <div
+      {error !== null ? (
+        <div
           data-testid="postgis-panel-error"
           style={{ fontSize: 11, color: "var(--danger, #c0392b)" }}
         >
           {error}
         </div>
-) : null}
+      ) : null}
     </div>
-);
+  );
 }

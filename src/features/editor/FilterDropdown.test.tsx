@@ -38,14 +38,15 @@ describe("<FilterDropdown />", () => {
   it("calls onApply with parsed numeric filter on Apply click", () => {
     const onApply = vi.fn();
     const onClose = vi.fn();
-    render(      <FilterDropdown
+    render(
+      <FilterDropdown
         current={null}
         columnName="id"
         dataType="integer"
         onApply={onApply}
         onClose={onClose}
       />,
-);
+    );
     fireEvent.change(screen.getByRole("combobox"), {
       target: { value: "gt" },
     });
@@ -62,14 +63,15 @@ describe("<FilterDropdown />", () => {
   });
 
   it("hides value input for IS NULL", () => {
-    render(      <FilterDropdown
+    render(
+      <FilterDropdown
         current={null}
         columnName="x"
         dataType="text"
         onApply={() => {}}
         onClose={() => {}}
       />,
-);
+    );
     fireEvent.change(screen.getByRole("combobox"), {
       target: { value: "isNull" },
     });
@@ -79,14 +81,15 @@ describe("<FilterDropdown />", () => {
   it("Clear emits null and closes", () => {
     const onApply = vi.fn();
     const onClose = vi.fn();
-    render(      <FilterDropdown
+    render(
+      <FilterDropdown
         current={{ column: "id", op: "eq", value: 5 }}
         columnName="id"
         dataType="integer"
         onApply={onApply}
         onClose={onClose}
       />,
-);
+    );
     fireEvent.click(screen.getByText("Clear"));
     expect(onApply).toHaveBeenCalledWith(null);
     expect(onClose).toHaveBeenCalled();

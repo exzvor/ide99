@@ -9,8 +9,9 @@ import { ExplainPane, countNodes } from "./ExplainPane";
 // mock for any transitive imports so jsdom doesn't try to boot the real
 // Vue island.
 vi.mock("./Pev2Bridge", () => ({
-  Pev2Bridge: ({ plan }: { plan: unknown }) => (    <div data-testid="pev2-host">{JSON.stringify(plan)}</div>
-),
+  Pev2Bridge: ({ plan }: { plan: unknown }) => (
+    <div data-testid="pev2-host">{JSON.stringify(plan)}</div>
+  ),
 }));
 
 vi.mock("../../../lib/tauri", async () => {

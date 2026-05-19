@@ -39,7 +39,8 @@ interface HostProps {
 function Host({ initial }: HostProps): JSX.Element {
   const [n, setN] = useState<Notebook>(initial);
   const a = useAutosave(n, { delayMs: 500 });
-  return (    <div>
+  return (
+    <div>
       <span data-testid="status">{a.status}</span>
       <button
         type="button"
@@ -49,7 +50,7 @@ function Host({ initial }: HostProps): JSX.Element {
         Rename
       </button>
     </div>
-);
+  );
 }
 
 beforeEach(() => {
@@ -89,11 +90,12 @@ describe("useAutosave", () => {
       await Promise.resolve();
       await Promise.resolve();
     });
-    expect(invokeMock).toHaveBeenCalledWith(      "notebook_save",
+    expect(invokeMock).toHaveBeenCalledWith(
+      "notebook_save",
       expect.objectContaining({
         input: expect.objectContaining({ name: "Test!" }),
       }),
-);
+    );
     expect(screen.getByTestId("status")).toHaveTextContent("saved");
   });
 

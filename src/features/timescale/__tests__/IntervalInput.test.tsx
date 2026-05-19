@@ -22,8 +22,9 @@ describe("intervalToSqlLiteral", () => {
 
 describe("IntervalInput", () => {
   it("renders the count and unit from props", () => {
-    render(      <IntervalInput idSuffix="chunk" value={{ count: 7, unit: "day" }} onChange={() => {}} />,
-);
+    render(
+      <IntervalInput idSuffix="chunk" value={{ count: 7, unit: "day" }} onChange={() => {}} />,
+    );
     const root = screen.getByTestId("interval-input-chunk");
     const numberInput = root.querySelector("input[type='number']") as HTMLInputElement;
     const select = root.querySelector("select") as HTMLSelectElement;
@@ -33,8 +34,9 @@ describe("IntervalInput", () => {
 
   it("calls onChange when the count changes", () => {
     const onChange = vi.fn();
-    render(      <IntervalInput idSuffix="chunk" value={{ count: 7, unit: "day" }} onChange={onChange} />,
-);
+    render(
+      <IntervalInput idSuffix="chunk" value={{ count: 7, unit: "day" }} onChange={onChange} />,
+    );
     const root = screen.getByTestId("interval-input-chunk");
     const numberInput = root.querySelector("input[type='number']") as HTMLInputElement;
     fireEvent.change(numberInput, { target: { value: "14" } });
@@ -43,8 +45,9 @@ describe("IntervalInput", () => {
 
   it("calls onChange when the unit changes", () => {
     const onChange = vi.fn();
-    render(      <IntervalInput idSuffix="chunk" value={{ count: 7, unit: "day" }} onChange={onChange} />,
-);
+    render(
+      <IntervalInput idSuffix="chunk" value={{ count: 7, unit: "day" }} onChange={onChange} />,
+    );
     const root = screen.getByTestId("interval-input-chunk");
     const select = root.querySelector("select") as HTMLSelectElement;
     fireEvent.change(select, { target: { value: "month" } });

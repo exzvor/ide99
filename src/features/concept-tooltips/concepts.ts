@@ -176,5 +176,6 @@ export const CONCEPTS: ConceptEntry[] = [
 ];
 
 /** Index by id for O(1) lookup at render time. */
-export const CONCEPTS_BY_ID: ReadonlyMap<string, ConceptEntry> = new Map(  CONCEPTS.map((c) => [c.id, c]),
+export const CONCEPTS_BY_ID: ReadonlyMap<string, ConceptEntry> = new Map(
+  CONCEPTS.map((c) => [c.id, c]),
 );

@@ -109,7 +109,8 @@ function activeConnId(state: SchemaState): string | null {
 }
 
 /** Splits a NodeKey into its semantic components. */
-function parseKey(  key: NodeKey,
+function parseKey(
+  key: NodeKey,
 ):
   | { kind: "schemas" }
   | { kind: "schema"; schema: string }
@@ -340,8 +341,9 @@ export const useSchema = create<SchemaStore>((set, get) => ({
     // Snapshot the *real* parents (skip synthetic schema:NAME entries —
     // those resolve without a fetch and are reproduced as soon as their
     // parent reloads).
-    const previouslyCached = Array.from(state.cache.keys()).filter(      (key) => parseKey(key).kind !== "schema",
-);
+    const previouslyCached = Array.from(state.cache.keys()).filter(
+      (key) => parseKey(key).kind !== "schema",
+    );
 
     inFlight.clear();
     set({ cache: new Map() });
@@ -377,7 +379,8 @@ export const useSchema = create<SchemaStore>((set, get) => ({
       // and each group fetches the actual table/view list. Run all backend
       // calls in parallel and tolerate per-schema failures so a single bad
       // permissions error doesn't block the rest of the tree from indexing.
-      await Promise.allSettled(        schemas.flatMap((schema) => {
+      await Promise.allSettled(
+        schemas.flatMap((schema) => {
           const tablesKey = `${schema.id}/tables`;
           const viewsKey = `${schema.id}/views`;
           return [
@@ -386,7 +389,7 @@ export const useSchema = create<SchemaStore>((set, get) => ({
             get().loadChildren(viewsKey),
           ];
         }),
-);
+      );
     } finally {
       set({ searchPreloading: false });
     }

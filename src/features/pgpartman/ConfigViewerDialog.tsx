@@ -76,7 +76,8 @@ export function ConfigViewerDialog(props: ConfigViewerDialogProps): JSX.Element 
     setConfirmDropOpen(false);
   };
 
-  return (    <RadixDialog.Root
+  return (
+    <RadixDialog.Root
       open={open}
       onOpenChange={(o) => {
         if (!o) onClose();
@@ -110,7 +111,8 @@ export function ConfigViewerDialog(props: ConfigViewerDialogProps): JSX.Element 
             </dd>
           </dl>
 
-          {confirmDropOpen ? (            <div
+          {confirmDropOpen ? (
+            <div
               data-testid="pg-partman-drop-drop-data-confirm-block"
               style={{
                 marginTop: 4,
@@ -159,7 +161,8 @@ export function ConfigViewerDialog(props: ConfigViewerDialogProps): JSX.Element 
                 </button>
               </div>
             </div>
-) : (            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          ) : (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               <button
                 type="button"
                 className="btn"
@@ -185,7 +188,7 @@ export function ConfigViewerDialog(props: ConfigViewerDialogProps): JSX.Element 
                 Drop Partition Set (drop data)
               </button>
             </div>
-)}
+          )}
 
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <button type="button" className="btn btn-ghost" onClick={onClose}>
@@ -195,5 +198,5 @@ export function ConfigViewerDialog(props: ConfigViewerDialogProps): JSX.Element 
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
-);
+  );
 }

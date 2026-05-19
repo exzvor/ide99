@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * Zustand sub-store for Squawk lint findings. Frontend-only: backend
  * commands (`lint_check_install`, `lint_list_rules`, `lint_file`) are

@@ -42,7 +42,8 @@ function flatten(value: unknown, expanded: ReadonlySet<string>): VisibleNode[] {
     return p.join("");
   }
 
-  function visit(    val: unknown,
+  function visit(
+    val: unknown,
     path: string[],
     keyOrIndex: string,
     level: number,
@@ -50,7 +51,7 @@ function flatten(value: unknown, expanded: ReadonlySet<string>): VisibleNode[] {
     setSize: number,
     posInSet: number,
     isRoot: boolean,
-): void {
+  ): void {
     const container = isContainer(val);
     const hasKids =
       container &&
@@ -179,7 +180,8 @@ export function TreeView({ value, onChange, readOnly, isJsonbType }: TreeViewPro
   }
 
   function renderNode(node: VisibleNode): JSX.Element {
-    return (      <Node
+    return (
+      <Node
         key={node.path.join("") || "(root)"}
         path={node.path}
         keyOrIndex={node.keyOrIndex}
@@ -197,10 +199,11 @@ export function TreeView({ value, onChange, readOnly, isJsonbType }: TreeViewPro
         onDelete={remove}
         onAddChild={addChild}
       />
-);
+    );
   }
 
-  return (    <div
+  return (
+    <div
       style={{
         display: "flex",
         flexDirection: "column",
@@ -209,7 +212,8 @@ export function TreeView({ value, onChange, readOnly, isJsonbType }: TreeViewPro
       }}
       data-testid="jsonb-tree-view"
     >
-      {isJsonbType && !noteDismissed ? (        <div
+      {isJsonbType && !noteDismissed ? (
+        <div
           role="note"
           data-testid="jsonb-tree-canonical-note"
           style={{
@@ -241,7 +245,7 @@ export function TreeView({ value, onChange, readOnly, isJsonbType }: TreeViewPro
             ×
           </button>
         </div>
-) : null}
+      ) : null}
 
       <div
         ref={containerRef}
@@ -255,7 +259,8 @@ export function TreeView({ value, onChange, readOnly, isJsonbType }: TreeViewPro
           position: "relative",
         }}
       >
-        {virtualize ? (          <div
+        {virtualize ? (
+          <div
             style={{
               height: virtualizer.getTotalSize(),
               position: "relative",
@@ -265,7 +270,8 @@ export function TreeView({ value, onChange, readOnly, isJsonbType }: TreeViewPro
             {virtualizer.getVirtualItems().map((vi) => {
               const node = nodes[vi.index];
               if (!node) return null;
-              return (                <div
+              return (
+                <div
                   key={vi.key}
                   data-testid="jsonb-tree-virtual-row"
                   style={{
@@ -278,14 +284,15 @@ export function TreeView({ value, onChange, readOnly, isJsonbType }: TreeViewPro
                 >
                   {renderNode(node)}
                 </div>
-);
+              );
             })}
           </div>
-) : (          nodes.map((node) => renderNode(node))
-)}
+        ) : (
+          nodes.map((node) => renderNode(node))
+        )}
       </div>
     </div>
-);
+  );
 }
 
 function readAtPath(value: unknown, path: ReadonlyArray<string>): unknown {

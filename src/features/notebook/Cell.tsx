@@ -67,7 +67,8 @@ export function Cell(props: CellProps): JSX.Element {
     }
   };
 
-  return (    <article
+  return (
+    <article
       data-testid={`cell-${cell.id}`}
       data-cell-kind={cell.kind}
       data-cell-index={index}
@@ -138,7 +139,8 @@ export function Cell(props: CellProps): JSX.Element {
         >
           {t("notebook.action.duplicate")}
         </button>
-        {cell.kind === "sql" ? (          <button
+        {cell.kind === "sql" ? (
+          <button
             type="button"
             data-testid={`cell-${cell.id}-run-from`}
             onClick={onRunFromHere}
@@ -147,7 +149,7 @@ export function Cell(props: CellProps): JSX.Element {
           >
             {t("notebook.action.run_from")}
           </button>
-) : null}
+        ) : null}
         <button
           type="button"
           data-testid={`cell-${cell.id}-delete`}
@@ -160,20 +162,23 @@ export function Cell(props: CellProps): JSX.Element {
         </button>
       </header>
 
-      {cell.kind === "sql" ? (        <SqlCell
+      {cell.kind === "sql" ? (
+        <SqlCell
           cell={cell}
           index={index}
           notebook={notebook}
           connectionId={connectionId}
           onChange={(next) => onChange(next)}
         />
-) : cell.kind === "markdown" ? (        <MarkdownCell
+      ) : cell.kind === "markdown" ? (
+        <MarkdownCell
           cell={cell}
           notebookCells={notebook.cells}
           onChange={(next) => onChange(next)}
         />
-) : (        <ResultCell result={cell.result} cellId={cell.id} />
-)}
+      ) : (
+        <ResultCell result={cell.result} cellId={cell.id} />
+      )}
     </article>
-);
+  );
 }

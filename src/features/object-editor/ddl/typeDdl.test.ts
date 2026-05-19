@@ -184,8 +184,9 @@ describe("generateTypeDdl — domain", () => {
       }),
     });
     expect(r.sql).toContain("CREATE DOMAIN public.email AS TEXT DEFAULT '' NOT NULL;");
-    expect(r.sql).toContain(      "ALTER DOMAIN public.email ADD CONSTRAINT email_check CHECK (VALUE ~ '@');",
-);
+    expect(r.sql).toContain(
+      "ALTER DOMAIN public.email ADD CONSTRAINT email_check CHECK (VALUE ~ '@');",
+    );
   });
 
   it("default change emits SET DEFAULT", () => {
@@ -223,8 +224,9 @@ describe("generateTypeDdl — domain", () => {
       ],
     });
     const r = generateTypeDdl({ kind: "domain", initial: init, form: cur });
-    expect(r.sql).toBe(      "ALTER DOMAIN public.email ADD CONSTRAINT len_check CHECK (length(VALUE) > 0);",
-);
+    expect(r.sql).toBe(
+      "ALTER DOMAIN public.email ADD CONSTRAINT len_check CHECK (length(VALUE) > 0);",
+    );
   });
 
   it("drop constraint emits ALTER DOMAIN DROP CONSTRAINT", () => {

@@ -87,7 +87,8 @@ export function McpAuthorizeDialog(): JSX.Element | null {
 
   if (!pending) return null;
 
-  return (    <Dialog
+  return (
+    <Dialog
       open
       onOpenChange={(open) => {
         if (!open) void deny();
@@ -127,12 +128,13 @@ export function McpAuthorizeDialog(): JSX.Element | null {
       <div className="mcp-authorize-body">
         <h4>{t("settings.mcp.authorize.scopesHeading")}</h4>
         <ul className="mcp-authorize-scopes">
-          {pending.requestedScopes.map((s) => (            <li key={s}>
+          {pending.requestedScopes.map((s) => (
+            <li key={s}>
               <code>{s}</code>
             </li>
-))}
+          ))}
         </ul>
       </div>
     </Dialog>
-);
+  );
 }

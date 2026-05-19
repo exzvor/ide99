@@ -29,7 +29,8 @@ export function CrashReportDialog({
 }: CrashReportDialogProps): JSX.Element | null {
   const { t } = useTranslation();
   if (!report) return null;
-  return (    <Dialog
+  return (
+    <Dialog
       open={open}
       onOpenChange={(next) => {
         if (!next) onCancel();
@@ -121,5 +122,5 @@ export function CrashReportDialog({
         </p>
       </div>
     </Dialog>
-);
+  );
 }

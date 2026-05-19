@@ -45,18 +45,20 @@ describe("S17 zod schemas", () => {
   });
 
   it("parses HypoPgEstimate computed and unavailable variants", () => {
-    expect(      hypoPgEstimateSchema.parse({
+    expect(
+      hypoPgEstimateSchema.parse({
         kind: "computed",
         baselineCost: 12450,
         hypotheticalCost: 380,
         reductionPct: 96.95,
       }).kind,
-).toBe("computed");
+    ).toBe("computed");
 
-    expect(      hypoPgEstimateSchema.parse({
+    expect(
+      hypoPgEstimateSchema.parse({
         kind: "unavailable",
         reason: { kind: "extensionMissing" },
       }).kind,
-).toBe("unavailable");
+    ).toBe("unavailable");
   });
 });

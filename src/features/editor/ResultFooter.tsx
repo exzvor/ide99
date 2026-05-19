@@ -47,7 +47,8 @@ export function ResultFooter({ run }: { run: Streaming }): JSX.Element {
       })
     : null;
 
-  return (    <div
+  return (
+    <div
       aria-live="polite"
       style={{
         height: 26,
@@ -71,5 +72,5 @@ export function ResultFooter({ run }: { run: Streaming }): JSX.Element {
         </span>
       </span>
     </div>
-);
+  );
 }

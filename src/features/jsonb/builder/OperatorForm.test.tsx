@@ -39,8 +39,9 @@ const fqn = { schema: "public", table: "events", column: "data" };
 function renderForm(overrides?: Partial<BuilderFormState>) {
   const state: BuilderFormState = { ...initialState(), ...overrides };
   const dispatch = vi.fn();
-  const { rerender, ...rest } = render(    <OperatorForm connId="c1" fqn={fqn} state={state} dispatch={dispatch} />,
-);
+  const { rerender, ...rest } = render(
+    <OperatorForm connId="c1" fqn={fqn} state={state} dispatch={dispatch} />,
+  );
   return { state, dispatch, rerender, ...rest };
 }
 
@@ -227,8 +228,9 @@ describe("OperatorForm — containment type-aware", () => {
     // Typing "abc" should not dispatch
     fireEvent.change(input, { target: { value: "abc" } });
     // dispatch should not have been called (non-numeric rejected)
-    expect(dispatch).not.toHaveBeenCalledWith(      expect.objectContaining({ value: { kind: "number", value: "abc" } }),
-);
+    expect(dispatch).not.toHaveBeenCalledWith(
+      expect.objectContaining({ value: { kind: "number", value: "abc" } }),
+    );
     // Valid number
     fireEvent.change(input, { target: { value: "42" } });
     expect(dispatch).toHaveBeenCalledWith({

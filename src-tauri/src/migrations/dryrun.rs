@@ -68,7 +68,7 @@ pub enum DryRunError {
     LedgerSeedFailed { error: String },
     #[error("Internal error: {error}")]
     Internal { error: String },
-    /// €” user closed the Apply dialog mid-flight.
+    /// user closed the Apply dialog mid-flight.
     #[error("Dry-run cancelled")]
     Cancelled,
 }
@@ -271,7 +271,7 @@ pub async fn run_dryrun_against(    host: String,
     }
 }
 
-/// €” Tauri command that signals an in-flight `migrations_dryrun`
+/// Tauri command that signals an in-flight `migrations_dryrun`
 /// to abort. Frontend invokes this when the Apply dialog closes mid-flight
 /// so the testcontainer is dropped immediately instead of waiting for the
 /// natural end of the run (which can be minutes for image pulls).
@@ -299,7 +299,7 @@ pub async fn migrations_dryrun(    app: AppHandle,
     use testcontainers::runners::AsyncRunner;
     use testcontainers_modules::postgres::Postgres;
 
-    // €” register a cancellation oneshot keyed by connection.
+    // register a cancellation oneshot keyed by connection.
     // We replace any prior entry to handle a "user retried" sequence.
     let (cancel_tx, mut cancel_rx) = tokio::sync::oneshot::channel::<()>();
     {

@@ -76,7 +76,8 @@ export function RecentPlansPickerModal({
 
   if (!open) return null;
 
-  return (    <Dialog
+  return (
+    <Dialog
       open={open}
       onOpenChange={(next) => {
         if (!next) onCancel();
@@ -123,11 +124,13 @@ export function RecentPlansPickerModal({
           data-testid="picker-search"
         />
         <div style={{ maxHeight: 320, overflowY: "auto", borderTop: "1px solid var(--hairline)" }}>
-          {!loading && rows.length === 0 ? (            <div data-testid="picker-empty" style={{ padding: 12, opacity: 0.6 }}>
+          {!loading && rows.length === 0 ? (
+            <div data-testid="picker-empty" style={{ padding: 12, opacity: 0.6 }}>
               {t("editor.explain.diff.picker.empty")}
             </div>
-) : null}
-          {rows.map((row) => (            <button
+          ) : null}
+          {rows.map((row) => (
+            <button
               type="button"
               key={row.id}
               data-testid={`picker-row-${row.id}`}
@@ -154,9 +157,9 @@ export function RecentPlansPickerModal({
                 <span>{row.durationMs}ms</span>
               </div>
             </button>
-))}
+          ))}
         </div>
       </div>
     </Dialog>
-);
+  );
 }

@@ -15,7 +15,8 @@ describe("ReplicationLagCard — 3 state branches", () => {
   });
 
   it("streaming with healthy lag <10MB → ok tone, slot list", () => {
-    render(      <ReplicationLagCard
+    render(
+      <ReplicationLagCard
         connId="c1"
         state={{
           status: "ready",
@@ -28,14 +29,16 @@ describe("ReplicationLagCard — 3 state branches", () => {
           },
         }}
       />,
-);
+    );
     expect(screen.getAllByTestId("replication-slot-row")).toHaveLength(1);
-    expect(screen.getByTestId("health-card-replication_lag-status").getAttribute("data-tone")).toBe(      "ok",
-);
+    expect(screen.getByTestId("health-card-replication_lag-status").getAttribute("data-tone")).toBe(
+      "ok",
+    );
   });
 
   it("streaming with lag 10–100MB → warn", () => {
-    render(      <ReplicationLagCard
+    render(
+      <ReplicationLagCard
         connId="c1"
         state={{
           status: "ready",
@@ -55,13 +58,15 @@ describe("ReplicationLagCard — 3 state branches", () => {
           },
         }}
       />,
-);
-    expect(screen.getByTestId("health-card-replication_lag-status").getAttribute("data-tone")).toBe(      "warn",
-);
+    );
+    expect(screen.getByTestId("health-card-replication_lag-status").getAttribute("data-tone")).toBe(
+      "warn",
+    );
   });
 
   it("lagging branch → red badge with pretty bytes", () => {
-    render(      <ReplicationLagCard
+    render(
+      <ReplicationLagCard
         connId="c1"
         state={{
           status: "ready",
@@ -81,10 +86,11 @@ describe("ReplicationLagCard — 3 state branches", () => {
           },
         }}
       />,
-);
+    );
     const badge = screen.getByTestId("replication-lag-badge");
     expect(badge.textContent).toMatch(/200 MB/);
-    expect(screen.getByTestId("health-card-replication_lag-status").getAttribute("data-tone")).toBe(      "danger",
-);
+    expect(screen.getByTestId("health-card-replication_lag-status").getAttribute("data-tone")).toBe(
+      "danger",
+    );
   });
 });

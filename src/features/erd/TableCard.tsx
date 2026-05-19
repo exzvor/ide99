@@ -76,7 +76,8 @@ export function TableCard({
   // to pass while the new tests can address the card directly.
   const cardTestId = editable ? `erd-card-${node.id}` : "erd-table-card";
 
-  return (    // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: SVG <g> needs role="group" + tabIndex per sprint 18 a11y contract.
+  return (
+    // biome-ignore lint/a11y/noInteractiveElementToNoninteractiveRole: SVG <g> needs role="group" + tabIndex per sprint 18 a11y contract.
     <g
       data-testid={cardTestId}
       data-table-id={node.id}
@@ -104,7 +105,8 @@ export function TableCard({
       <text x={10} y={13} fontSize={9.5} fontStyle="italic" fill="var(--ink-4)">
         {node.schema}
       </text>
-      {editable ? (        <foreignObject x={6} y={14} width={node.width - 30} height={ROW_H + 4}>
+      {editable ? (
+        <foreignObject x={6} y={14} width={node.width - 30} height={ROW_H + 4}>
           <div
             style={{
               font: "600 12px/1 var(--font-sans, sans-serif)",
@@ -119,11 +121,13 @@ export function TableCard({
             />
           </div>
         </foreignObject>
-) : (        <text x={10} y={25} fontSize={12} fontWeight={600} fill="var(--ink)">
+      ) : (
+        <text x={10} y={25} fontSize={12} fontWeight={600} fill="var(--ink)">
           {node.name}
         </text>
-)}
-      {editable && (        <foreignObject x={node.width - 22} y={4} width={20} height={20}>
+      )}
+      {editable && (
+        <foreignObject x={node.width - 22} y={4} width={20} height={20}>
           <button
             type="button"
             data-testid="table-card-fk-handle"
@@ -149,11 +153,12 @@ export function TableCard({
             🔗
           </button>
         </foreignObject>
-)}
-      {newThisSession && (        <text x={node.width - 44} y={13} fontSize={9} fill="var(--accent)" textAnchor="end">
+      )}
+      {newThisSession && (
+        <text x={node.width - 44} y={13} fontSize={9} fill="var(--accent)" textAnchor="end">
           NEW
         </text>
-)}
+      )}
       <line
         x1={0}
         y1={HEADER_H}
@@ -162,7 +167,8 @@ export function TableCard({
         stroke="var(--hairline)"
         strokeWidth={1}
       />
-      {visible.map((column, index) => (        <ColumnRow
+      {visible.map((column, index) => (
+        <ColumnRow
           key={`${column.ordinal}-${column.name}`}
           column={column}
           index={index}
@@ -172,8 +178,9 @@ export function TableCard({
           editable={editable}
           onRenameColumn={onRenameColumn}
         />
-))}
-      {hidden > 0 ? (        <text
+      ))}
+      {hidden > 0 ? (
+        <text
           data-testid="erd-column-overflow"
           x={10}
           y={HEADER_H + visible.length * ROW_H + 12}
@@ -182,8 +189,9 @@ export function TableCard({
         >
           {t("erd.node.more_columns", { count: hidden })}
         </text>
-) : null}
-      {editable && (        <foreignObject
+      ) : null}
+      {editable && (
+        <foreignObject
           x={4}
           y={HEADER_H + visible.length * ROW_H + (hidden > 0 ? ROW_H : 0)}
           width={node.width - 8}
@@ -211,9 +219,9 @@ export function TableCard({
             {t("erd.edit.add_column")}
           </button>
         </foreignObject>
-)}
+      )}
     </g>
-);
+  );
 }
 
 interface ColumnRowProps {
@@ -245,8 +253,10 @@ function ColumnRow({
   const isKey = column.isPrimaryKey || column.isForeignKey;
   const markerLabel = column.isPrimaryKey ? pkLabel : fkLabel;
   const markerTestId = column.isPrimaryKey ? "erd-pk-badge" : "erd-fk-badge";
-  return (    <g data-testid="erd-column-row" data-column-name={column.name}>
-      {isKey ? (        <text
+  return (
+    <g data-testid="erd-column-row" data-column-name={column.name}>
+      {isKey ? (
+        <text
           data-testid={markerTestId}
           x={10}
           y={baseline}
@@ -257,11 +267,13 @@ function ColumnRow({
         >
           {column.isPrimaryKey ? "◆" : "◇"}
         </text>
-) : (        <text x={10} y={baseline} fontSize={11} fill="var(--ink-4)">
+      ) : (
+        <text x={10} y={baseline} fontSize={11} fill="var(--ink-4)">
           •
         </text>
-)}
-      {editable ? (        <foreignObject x={22} y={HEADER_H + index * ROW_H + 1} width={width / 2} height={ROW_H}>
+      )}
+      {editable ? (
+        <foreignObject x={22} y={HEADER_H + index * ROW_H + 1} width={width / 2} height={ROW_H}>
           <div
             style={{
               font: "11px/1 var(--font-sans, sans-serif)",
@@ -274,13 +286,14 @@ function ColumnRow({
             />
           </div>
         </foreignObject>
-) : (        <text x={24} y={baseline} fontSize={11} fill="var(--ink-2)">
+      ) : (
+        <text x={24} y={baseline} fontSize={11} fill="var(--ink-2)">
           {column.name}
         </text>
-)}
+      )}
       <text x={width - 10} y={baseline} fontSize={10.5} fill="var(--ink-4)" textAnchor="end">
         {column.dataType}
       </text>
     </g>
-);
+  );
 }

@@ -10,7 +10,8 @@ interface QueryViewProps {
  * `executedSql` in the ExplainRunState).
  */
 export function QueryView({ sql }: QueryViewProps): JSX.Element {
-  return (    <div
+  return (
+    <div
       data-testid="query-view"
       className="q-scroll"
       style={{
@@ -35,5 +36,5 @@ export function QueryView({ sql }: QueryViewProps): JSX.Element {
         {sql || "(пусто)"}
       </pre>
     </div>
-);
+  );
 }

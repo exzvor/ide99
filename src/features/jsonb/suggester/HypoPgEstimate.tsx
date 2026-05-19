@@ -30,19 +30,21 @@ export function HypoPgEstimate({ state }: HypoPgEstimateProps): JSX.Element {
   const { t } = useTranslation();
 
   if (state.kind === "loading") {
-    return (      <span data-testid="hypopg-loading">
+    return (
+      <span data-testid="hypopg-loading">
         <style>{"@keyframes hypopg-spin { to { transform: rotate(360deg); } }"}</style>
         <span style={SPINNER_STYLE} aria-hidden="true" />
         {t("jsonb.suggester.speedupComputing")}
       </span>
-);
+    );
   }
 
   if (state.kind === "computed") {
     const { baselineCost, hypotheticalCost, reductionPct } = state;
     const pctStr = reductionPct.toFixed(1);
     const isImprovement = reductionPct > 0;
-    return (      <span data-testid="hypopg-computed">
+    return (
+      <span data-testid="hypopg-computed">
         {t("jsonb.suggester.speedupComputed", {
           baseline: baselineCost.toFixed(2),
           hypothetical: hypotheticalCost.toFixed(2),
@@ -58,14 +60,15 @@ export function HypoPgEstimate({ state }: HypoPgEstimateProps): JSX.Element {
           {pctStr}%
         </span>
       </span>
-);
+    );
   }
 
   // state.kind === "unavailable"
   const { reason } = state;
 
   if (reason.kind === "extensionMissing") {
-    return (      <span data-testid="hypopg-unavailable-extensionMissing">
+    return (
+      <span data-testid="hypopg-unavailable-extensionMissing">
         {t("jsonb.suggester.speedupUnavailable.hypopgMissing")}{" "}
         <code
           style={{
@@ -81,30 +84,33 @@ export function HypoPgEstimate({ state }: HypoPgEstimateProps): JSX.Element {
           {t("jsonb.suggester.speedupUnavailable.hypopgInstallSql")}
         </code>
       </span>
-);
+    );
   }
 
   if (reason.kind === "pgVersionTooOld") {
-    return (      <span data-testid="hypopg-unavailable-pgTooOld">
+    return (
+      <span data-testid="hypopg-unavailable-pgTooOld">
         {t("jsonb.suggester.speedupUnavailable.pgTooOld", {
           actual: reason.actual,
         })}
       </span>
-);
+    );
   }
 
   if (reason.kind === "noRepresentativeQuery") {
-    return (      <span data-testid="hypopg-unavailable-noRepresentativeQuery">
+    return (
+      <span data-testid="hypopg-unavailable-noRepresentativeQuery">
         {t("jsonb.suggester.speedupUnavailable.noRepresentativeQuery")}
       </span>
-);
+    );
   }
 
   // reason.kind === "plannerError"
-  return (    <span data-testid="hypopg-unavailable-plannerError">
+  return (
+    <span data-testid="hypopg-unavailable-plannerError">
       {t("jsonb.suggester.speedupUnavailable.plannerError", {
         message: reason.message,
       })}
     </span>
-);
+  );
 }

@@ -45,8 +45,10 @@ export function ParametersList({
 
   const gridCols = "minmax(0, 1.4fr) 130px minmax(0, 1.4fr) minmax(0, 1fr) 32px";
   const hasRows = parameters.length > 0;
-  return (    <div data-testid={`${testIdPrefix}-list`} style={{ display: "grid", gap: 8 }}>
-      {hasRows ? (        <div
+  return (
+    <div data-testid={`${testIdPrefix}-list`} style={{ display: "grid", gap: 8 }}>
+      {hasRows ? (
+        <div
           style={{
             display: "grid",
             gridTemplateColumns: gridCols,
@@ -63,8 +65,9 @@ export function ParametersList({
           <span>{t("object_editor.function.param_default")}</span>
           <span />
         </div>
-) : null}
-      {parameters.map((p, i) => (        <div
+      ) : null}
+      {parameters.map((p, i) => (
+        <div
           key={p.id}
           data-testid={`${testIdPrefix}-row-${p.id}`}
           style={{
@@ -120,7 +123,7 @@ export function ParametersList({
             ×
           </button>
         </div>
-))}
+      ))}
       <button
         type="button"
         data-testid={`${testIdPrefix}-add`}
@@ -131,5 +134,5 @@ export function ParametersList({
         + {t("object_editor.function.add_parameter")}
       </button>
     </div>
-);
+  );
 }

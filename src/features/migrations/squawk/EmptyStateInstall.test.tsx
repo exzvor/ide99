@@ -1,5 +1,5 @@
 /**
- * — 
+ * —
  *
  * EmptyStateInstall renders a banner with a platform-aware install
  * command and a Copy button. Translations are stubbed; clipboard is

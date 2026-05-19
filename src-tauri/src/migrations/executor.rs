@@ -48,7 +48,7 @@ fn select_targets<'m>(    all: &'m [Migration],
                 .iter()
                 .find(|m| &m.version == version)
                 .ok_or_else(|| MigrationsError::NotFound(version.clone()))?;
-            // €” Single must refuse rows that discovery
+            // Single must refuse rows that discovery
             // flagged with a parse_error (duplicate version / orphan rollback
             // file / file missing). Range/AllPending already filter these out
             // via the `parse_error.is_none()` guard below, but Single goes
@@ -455,7 +455,7 @@ mod tests {
         assert_eq!(row.get::<_, i64>("c"), 1);
     }
 
-    /// €” `Single` apply must refuse a row that
+    /// `Single` apply must refuse a row that
     /// `discovery` flagged with a `parse_error` (duplicate version, orphan
     /// rollback, file missing). Pure unit test â€” no PG container needed
     /// since `select_targets` is checked before any DB calls.

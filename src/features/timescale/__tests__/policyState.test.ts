@@ -35,10 +35,11 @@ afterEach(() => {
 
 describe("loadCompressionPolicy", () => {
   it("parses compress_after from the config JSON", async () => {
-    queryExecuteMock.mockResolvedValueOnce(      jobsResult([
+    queryExecuteMock.mockResolvedValueOnce(
+      jobsResult([
         ["1001", JSON.stringify({ hypertable_id: 5, compress_after: "7 days" }), "12:00:00"],
       ]),
-);
+    );
     const policy = await loadCompressionPolicy("conn-1", "public", "metrics");
     expect(policy).toEqual({ jobId: 1001, compressAfter: "7 days" });
 
@@ -50,8 +51,9 @@ describe("loadCompressionPolicy", () => {
   });
 
   it("strips the leading '@ ' Postgres interval prefix", async () => {
-    queryExecuteMock.mockResolvedValueOnce(      jobsResult([["42", JSON.stringify({ compress_after: "@ 14 days" }), "12:00:00"]]),
-);
+    queryExecuteMock.mockResolvedValueOnce(
+      jobsResult([["42", JSON.stringify({ compress_after: "@ 14 days" }), "12:00:00"]]),
+    );
     const policy = await loadCompressionPolicy("conn-1", "public", "metrics");
     expect(policy).toEqual({ jobId: 42, compressAfter: "14 days" });
   });
@@ -74,8 +76,9 @@ describe("loadCompressionPolicy", () => {
 
 describe("loadRetentionPolicy", () => {
   it("parses drop_after from the config JSON", async () => {
-    queryExecuteMock.mockResolvedValueOnce(      jobsResult([["2002", JSON.stringify({ drop_after: "30 days" }), "1 day"]]),
-);
+    queryExecuteMock.mockResolvedValueOnce(
+      jobsResult([["2002", JSON.stringify({ drop_after: "30 days" }), "1 day"]]),
+    );
     const policy = await loadRetentionPolicy("conn-1", "public", "metrics");
     expect(policy).toEqual({ jobId: 2002, dropAfter: "30 days" });
 
@@ -91,10 +94,11 @@ describe("loadRetentionPolicy", () => {
 
 describe("loadRefreshPolicy", () => {
   it("parses start_offset / end_offset from config and schedule_interval from its column", async () => {
-    queryExecuteMock.mockResolvedValueOnce(      jobsResult([
+    queryExecuteMock.mockResolvedValueOnce(
+      jobsResult([
         ["3003", JSON.stringify({ start_offset: "30 days", end_offset: "1 hour" }), "1 hour"],
       ]),
-);
+    );
     const policy = await loadRefreshPolicy("conn-1", "public", "hourly_metrics");
     expect(policy).toEqual({
       jobId: 3003,
@@ -109,10 +113,11 @@ describe("loadRefreshPolicy", () => {
   });
 
   it("strips '@ ' from each interval-shaped field independently", async () => {
-    queryExecuteMock.mockResolvedValueOnce(      jobsResult([
+    queryExecuteMock.mockResolvedValueOnce(
+      jobsResult([
         ["4", JSON.stringify({ start_offset: "@ 30 days", end_offset: "@ 1 hour" }), "@ 1 hour"],
       ]),
-);
+    );
     const policy = await loadRefreshPolicy("conn-1", "public", "hourly");
     expect(policy).toEqual({
       jobId: 4,

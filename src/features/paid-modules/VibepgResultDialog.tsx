@@ -67,14 +67,16 @@ export function VibepgResultDialog({ open, onOpenChange, preview, onApply }: Pro
     onOpenChange(false);
   };
 
-  return (    <Dialog
+  return (
+    <Dialog
       open={open}
       onOpenChange={onOpenChange}
       title={t("paid_modules.vibepg.result_dialog.title")}
       size="lg"
       closeAriaLabel={t("paid_modules.vibepg.result_dialog.close")}
       footer={
-        isStub ? (          <button
+        isStub ? (
+          <button
             type="button"
             className="btn btn-ghost"
             data-testid="vibepg-result-cancel"
@@ -82,7 +84,8 @@ export function VibepgResultDialog({ open, onOpenChange, preview, onApply }: Pro
           >
             {t("paid_modules.vibepg.result_dialog.cancel")}
           </button>
-) : (          <>
+        ) : (
+          <>
             <button
               type="button"
               className="btn btn-ghost"
@@ -102,10 +105,11 @@ export function VibepgResultDialog({ open, onOpenChange, preview, onApply }: Pro
               {t("paid_modules.vibepg.result_dialog.apply")}
             </button>
           </>
-)
+        )
       }
     >
-      {isStub ? (        <div
+      {isStub ? (
+        <div
           data-testid="vibepg-result-stub"
           // biome-ignore lint/a11y/useSemanticElements: passive status banner
           role="status"
@@ -131,7 +135,8 @@ export function VibepgResultDialog({ open, onOpenChange, preview, onApply }: Pro
             {t("paid_modules.vibepg.result_dialog.v1_1_note")}
           </div>
         </div>
-) : (        <div
+      ) : (
+        <div
           data-testid="vibepg-result-content"
           style={{ display: "flex", flexDirection: "column", gap: 14 }}
         >
@@ -149,13 +154,14 @@ export function VibepgResultDialog({ open, onOpenChange, preview, onApply }: Pro
               lineHeight: 1.7,
             }}
           >
-            {STEPS.map((s, i) => (              <li key={s} data-testid={`vibepg-step-${s}`}>
+            {STEPS.map((s, i) => (
+              <li key={s} data-testid={`vibepg-step-${s}`}>
                 {i < STEPS.length - 1
                   ? t(`paid_modules.vibepg.result_dialog.${s}`)
                   : t(`paid_modules.vibepg.result_dialog.${s}`)}
                 {i < STEPS.length - 1 ? " →" : null}
               </li>
-))}
+            ))}
           </ol>
 
           <dl
@@ -201,7 +207,8 @@ export function VibepgResultDialog({ open, onOpenChange, preview, onApply }: Pro
               {preview.speedup}
             </dd>
 
-            {preview.indexSize ? (              <>
+            {preview.indexSize ? (
+              <>
                 <dt style={{ color: "var(--ink-3)" }}>
                   {t("paid_modules.vibepg.result_dialog.field_index_size")}
                 </dt>
@@ -209,7 +216,7 @@ export function VibepgResultDialog({ open, onOpenChange, preview, onApply }: Pro
                   {preview.indexSize}
                 </dd>
               </>
-) : null}
+            ) : null}
 
             <dt style={{ color: "var(--ink-3)" }}>
               {t("paid_modules.vibepg.result_dialog.field_recommendation")}
@@ -221,7 +228,7 @@ export function VibepgResultDialog({ open, onOpenChange, preview, onApply }: Pro
             </dd>
           </dl>
         </div>
-)}
+      )}
     </Dialog>
-);
+  );
 }

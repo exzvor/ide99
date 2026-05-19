@@ -28,7 +28,8 @@ export interface OperatorFormProps {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Get leaf probable-type for the current selectedPath from the inferred schema. */
-function useLeafKind(  connId: string,
+function useLeafKind(
+  connId: string,
   fqn: { schema: string; table: string; column: string },
   path: PathSegment[],
 ): { kind: string; values?: string[] } | null {
@@ -75,18 +76,20 @@ interface ComparatorSelectProps {
 function ComparatorSelect({ value, onChange, labelledBy }: ComparatorSelectProps): JSX.Element {
   const { t } = useTranslation();
   const comparators: Comparator[] = ["eq", "ne", "gt", "lt", "ge", "le", "likeRegex"];
-  return (    <select
+  return (
+    <select
       value={value}
       aria-labelledby={labelledBy}
       onChange={(e) => onChange(e.target.value as Comparator)}
       style={{ width: "100%" }}
     >
-      {comparators.map((c) => (        <option key={c} value={c}>
+      {comparators.map((c) => (
+        <option key={c} value={c}>
           {t(`jsonb.builder.comparator.${c}`)}
         </option>
-))}
+      ))}
     </select>
-);
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -121,7 +124,8 @@ function TypeAwareValueControl({
       value.kind === "string" && !leafKind.values.includes(value.value) && value.value !== "";
     const selectVal = value.kind === "string" ? (isOther ? "__other__" : value.value) : "";
 
-    return (      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         <select
           aria-labelledby={labelId}
           value={selectVal}
@@ -135,30 +139,34 @@ function TypeAwareValueControl({
           style={{ width: "100%" }}
         >
           <option value="">—</option>
-          {leafKind.values.map((v) => (            <option key={v} value={v}>
+          {leafKind.values.map((v) => (
+            <option key={v} value={v}>
               {v}
             </option>
-))}
+          ))}
           <option value="__other__">{t("jsonb.builder.valueLabel")} (other…)</option>
         </select>
-        {(selectVal === "__other__" || isOther) && (          <input
+        {(selectVal === "__other__" || isOther) && (
+          <input
             type="text"
             aria-label={`${t("jsonb.builder.valueLabel")} (custom)`}
             value={currentText}
             onChange={(e) => onChange({ kind: "string", value: e.target.value })}
             style={{ width: "100%" }}
           />
-)}
+        )}
       </div>
-);
+    );
   }
 
   // Primitive: Boolean
-  if (    leafKind?.kind === "primitive" &&
+  if (
+    leafKind?.kind === "primitive" &&
     (leafKind as { kind: string; value?: string }).value === "boolean"
-) {
+  ) {
     const boolVal = value.kind === "bool" ? String(value.value) : "true";
-    return (      <select
+    return (
+      <select
         aria-labelledby={labelId}
         value={boolVal}
         onChange={(e) => onChange({ kind: "bool", value: e.target.value === "true" })}
@@ -167,15 +175,17 @@ function TypeAwareValueControl({
         <option value="true">true</option>
         <option value="false">false</option>
       </select>
-);
+    );
   }
 
   // Primitive: Number
-  if (    leafKind?.kind === "primitive" &&
+  if (
+    leafKind?.kind === "primitive" &&
     (leafKind as { kind: string; value?: string }).value === "number"
-) {
+  ) {
     const numVal = value.kind === "number" ? value.value : "";
-    return (      <input
+    return (
+      <input
         type="text"
         aria-labelledby={labelId}
         value={numVal}
@@ -190,45 +200,49 @@ function TypeAwareValueControl({
         }}
         style={{ width: "100%" }}
       />
-);
+    );
   }
 
   // Primitive: Null
-  if (    leafKind?.kind === "primitive" &&
+  if (
+    leafKind?.kind === "primitive" &&
     (leafKind as { kind: string; value?: string }).value === "null"
-) {
+  ) {
     const jsonText = value.kind === "jsonLiteral" ? value.value : "";
-    return (      <JsonTextarea
+    return (
+      <JsonTextarea
         labelId={labelId}
         value={jsonText}
         onChange={(v) => onChange({ kind: "jsonLiteral", value: v })}
         placeholder="null"
       />
-);
+    );
   }
 
   // Object / Array or unknown → JSON textarea
   if (leafKind?.kind === "object" || leafKind?.kind === "array" || leafKind === null) {
     const jsonText = value.kind === "jsonLiteral" ? value.value : "";
-    return (      <JsonTextarea
+    return (
+      <JsonTextarea
         labelId={labelId}
         value={jsonText}
         onChange={(v) => onChange({ kind: "jsonLiteral", value: v })}
         placeholder='{"key": "value"}'
       />
-);
+    );
   }
 
   // Primitive: String (default)
   const strVal = value.kind === "string" ? value.value : "";
-  return (    <input
+  return (
+    <input
       type="text"
       aria-labelledby={labelId}
       value={strVal}
       onChange={(e) => onChange({ kind: "string", value: e.target.value })}
       style={{ width: "100%" }}
     />
-);
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -254,7 +268,8 @@ function JsonTextarea({ labelId, value, onChange, placeholder }: JsonTextareaPro
     }
   }
 
-  return (    <div>
+  return (
+    <div>
       <textarea
         aria-labelledby={labelId}
         value={value}
@@ -265,16 +280,17 @@ function JsonTextarea({ labelId, value, onChange, placeholder }: JsonTextareaPro
         aria-invalid={parseError !== null ? "true" : undefined}
         aria-describedby={parseError !== null ? `${labelId}-json-error` : undefined}
       />
-      {parseError !== null && (        <div
+      {parseError !== null && (
+        <div
           id={`${labelId}-json-error`}
           role="alert"
           style={{ color: "var(--accent-strong-danger)", fontSize: 11, marginTop: 2 }}
         >
           {t("jsonb.builder.error.invalidJson", { message: parseError })}
         </div>
-)}
+      )}
     </div>
-);
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -301,7 +317,8 @@ function ExistenceForm({ state, dispatch }: ExistenceFormProps): JSX.Element {
   // preview.warnings — do NOT render it here to avoid duplication.
   const keyVal = state.value.kind === "string" ? state.value.value : "";
 
-  return (    <div>
+  return (
+    <div>
       <label
         htmlFor="builder-existence-key"
         style={{ display: "block", marginBottom: 4, fontSize: 12 }}
@@ -319,7 +336,7 @@ function ExistenceForm({ state, dispatch }: ExistenceFormProps): JSX.Element {
         style={{ width: "100%" }}
       />
     </div>
-);
+  );
 }
 
 interface ContainmentFormProps {
@@ -333,7 +350,8 @@ function ContainmentForm({ connId, fqn, state, dispatch }: ContainmentFormProps)
   const { t } = useTranslation();
   const leafKind = useLeafKind(connId, fqn, state.selectedPath);
 
-  return (    <div>
+  return (
+    <div>
       <span
         id="builder-containment-value-label"
         style={{ display: "block", marginBottom: 4, fontSize: 12 }}
@@ -347,7 +365,7 @@ function ContainmentForm({ connId, fqn, state, dispatch }: ContainmentFormProps)
         labelId="builder-containment-value-label"
       />
     </div>
-);
+  );
 }
 
 interface PathExtractFormProps {
@@ -362,7 +380,8 @@ function PathExtractForm({ connId, fqn, state, dispatch }: PathExtractFormProps)
   const leafKind = useLeafKind(connId, fqn, state.selectedPath);
   const isComparison = state.extractMode.kind === "comparison";
 
-  return (    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
       <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
         <legend style={{ fontSize: 12, marginBottom: 4 }}>
           {t("jsonb.builder.extractMode.projection")}
@@ -399,7 +418,8 @@ function PathExtractForm({ connId, fqn, state, dispatch }: PathExtractFormProps)
           {t("jsonb.builder.extractMode.comparison")}
         </label>
       </fieldset>
-      {isComparison && (        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      {isComparison && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           {/* UI: PathExtract Comparison only supports =; label makes this explicit */}
           <span id="builder-extract-compare-label" style={{ fontSize: 12 }}>
             {t("jsonb.builder.comparator.eq")} {t("jsonb.builder.valueLabel")}
@@ -411,9 +431,9 @@ function PathExtractForm({ connId, fqn, state, dispatch }: PathExtractFormProps)
             labelId="builder-extract-compare-label"
           />
         </div>
-)}
+      )}
     </div>
-);
+  );
 }
 
 interface PathPredicateFormProps {
@@ -427,7 +447,8 @@ function PathPredicateForm({ connId, fqn, state, dispatch }: PathPredicateFormPr
   const { t } = useTranslation();
   const leafKind = useLeafKind(connId, fqn, state.selectedPath);
 
-  return (    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
       <div>
         <span
           id="builder-predicate-comparator-label"
@@ -456,7 +477,7 @@ function PathPredicateForm({ connId, fqn, state, dispatch }: PathPredicateFormPr
         />
       </div>
     </div>
-);
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -472,18 +493,20 @@ interface OperatorDropdownProps {
 
 function OperatorDropdown({ value, onChange }: OperatorDropdownProps): JSX.Element {
   const { t } = useTranslation();
-  return (    <select
+  return (
+    <select
       id="builder-operator-select"
       value={value}
       onChange={(e) => onChange(e.target.value as OpKind)}
       style={{ width: "100%" }}
     >
-      {OP_KINDS.map((k) => (        <option key={k} value={k}>
+      {OP_KINDS.map((k) => (
+        <option key={k} value={k}>
           {t(`jsonb.builder.operator.${k}`)}
         </option>
-))}
+      ))}
     </select>
-);
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -494,7 +517,8 @@ export function OperatorForm({ connId, fqn, state, dispatch }: OperatorFormProps
   const { t } = useTranslation();
   const pathDisplay = pathToDisplayString(state.selectedPath);
 
-  return (    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {/* Operator selector */}
       <div>
         <label
@@ -510,7 +534,8 @@ export function OperatorForm({ connId, fqn, state, dispatch }: OperatorFormProps
       </div>
 
       {/* Path display */}
-      {state.selectedPath.length > 0 ? (        <div>
+      {state.selectedPath.length > 0 ? (
+        <div>
           <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 2 }}>
             {t("jsonb.builder.pathLabel")}
           </div>
@@ -528,19 +553,23 @@ export function OperatorForm({ connId, fqn, state, dispatch }: OperatorFormProps
             {pathDisplay}
           </div>
         </div>
-) : (        <div style={{ fontSize: 12, color: "var(--ink-3)", fontStyle: "italic" }}>
+      ) : (
+        <div style={{ fontSize: 12, color: "var(--ink-3)", fontStyle: "italic" }}>
           {t("jsonb.builder.pathPlaceholder")}
         </div>
-)}
+      )}
 
       {/* Operator-specific fields */}
       {state.opKind === "existence" && <ExistenceForm state={state} dispatch={dispatch} />}
-      {state.opKind === "containment" && (        <ContainmentForm connId={connId} fqn={fqn} state={state} dispatch={dispatch} />
-)}
-      {state.opKind === "pathExtract" && (        <PathExtractForm connId={connId} fqn={fqn} state={state} dispatch={dispatch} />
-)}
-      {state.opKind === "pathPredicate" && (        <PathPredicateForm connId={connId} fqn={fqn} state={state} dispatch={dispatch} />
-)}
+      {state.opKind === "containment" && (
+        <ContainmentForm connId={connId} fqn={fqn} state={state} dispatch={dispatch} />
+      )}
+      {state.opKind === "pathExtract" && (
+        <PathExtractForm connId={connId} fqn={fqn} state={state} dispatch={dispatch} />
+      )}
+      {state.opKind === "pathPredicate" && (
+        <PathPredicateForm connId={connId} fqn={fqn} state={state} dispatch={dispatch} />
+      )}
     </div>
-);
+  );
 }

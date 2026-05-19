@@ -72,8 +72,9 @@ if (!i18n.isInitialized) {
     missingKeyHandler: (lngs, _ns, key, fallbackValue) => {
       if (import.meta.env.DEV) {
         // eslint-disable-next-line no-console
-        console.warn(          `[i18n] missing key "${key}" for locale(s) ${lngs.join(",")} (fallback: ${fallbackValue ?? "<none>"})`,
-);
+        console.warn(
+          `[i18n] missing key "${key}" for locale(s) ${lngs.join(",")} (fallback: ${fallbackValue ?? "<none>"})`,
+        );
       }
     },
   });

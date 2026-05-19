@@ -1850,30 +1850,34 @@ body {
 /* ── Plan canvas (DAG) — used by EXPLAIN graph + diff sides ────────────── */
 .q-plan-canvas {
   position: relative;
-  background: linear-gradient(      to bottom,
+  background: linear-gradient(
+      to bottom,
       transparent 0,
       transparent calc(100% - 1px),
       var(--hairline) 100%
-),
-    repeating-linear-gradient(      0deg,
+    ),
+    repeating-linear-gradient(
+      0deg,
       transparent 0,
       transparent 39px,
       rgba(15, 17, 21, 0.025) 39px,
       rgba(15, 17, 21, 0.025) 40px
-);
+    );
 }
 [data-theme="dark"] .q-plan-canvas {
-  background: linear-gradient(      to bottom,
+  background: linear-gradient(
+      to bottom,
       transparent 0,
       transparent calc(100% - 1px),
       var(--hairline) 100%
-),
-    repeating-linear-gradient(      0deg,
+    ),
+    repeating-linear-gradient(
+      0deg,
       transparent 0,
       transparent 39px,
       rgba(255, 255, 255, 0.025) 39px,
       rgba(255, 255, 255, 0.025) 40px
-);
+    );
 }
 
 /*
@@ -1898,22 +1902,24 @@ body {
 .q-editor-rules {
   --editor-line-h: 22px;
   --editor-pad-top: 10px;
-  background-image: repeating-linear-gradient(    to bottom,
+  background-image: repeating-linear-gradient(
+    to bottom,
     transparent 0,
     transparent calc(var(--editor-line-h) - 1px),
     rgba(15, 17, 21, 0.04) calc(var(--editor-line-h) - 1px),
     rgba(15, 17, 21, 0.04) var(--editor-line-h)
-);
+  );
   background-position: 0 var(--editor-pad-top);
   background-repeat: repeat;
 }
 [data-theme="dark"] .q-editor-rules {
-  background-image: repeating-linear-gradient(    to bottom,
+  background-image: repeating-linear-gradient(
+    to bottom,
     transparent 0,
     transparent calc(var(--editor-line-h) - 1px),
     rgba(255, 255, 255, 0.035) calc(var(--editor-line-h) - 1px),
     rgba(255, 255, 255, 0.035) var(--editor-line-h)
-);
+  );
 }
 
 /* When applied directly to a <textarea> (object editors' SQL body fields,
@@ -2201,20 +2207,22 @@ textarea.q-editor-rules {
 .q-dag-canvas {
   position: relative;
   flex: 1;
-  background: repeating-linear-gradient(    0deg,
+  background: repeating-linear-gradient(
+    0deg,
     transparent 0,
     transparent 23px,
     rgba(15, 17, 21, 0.03) 23px,
     rgba(15, 17, 21, 0.03) 24px
-);
+  );
 }
 [data-theme="dark"] .q-dag-canvas {
-  background: repeating-linear-gradient(    0deg,
+  background: repeating-linear-gradient(
+    0deg,
     transparent 0,
     transparent 23px,
     rgba(255, 255, 255, 0.025) 23px,
     rgba(255, 255, 255, 0.025) 24px
-);
+  );
 }
 
 /* ── Slow queries quiet table ──────────────────────────────────────────── */

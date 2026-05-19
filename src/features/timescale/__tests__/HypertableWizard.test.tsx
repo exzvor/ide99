@@ -52,26 +52,28 @@ const COLUMNS = [
 
 describe("HypertableWizard", () => {
   it("returns null when closed", () => {
-    render(      <HypertableWizard
+    render(
+      <HypertableWizard
         open={false}
         connId="conn-1"
         qualifiedTable={'"public"."metrics"'}
         columns={COLUMNS}
         onClose={() => {}}
       />,
-);
+    );
     expect(screen.queryByTestId("hypertable-wizard")).not.toBeInTheDocument();
   });
 
   it("renders the Basic section visible and Advanced section hidden by default", () => {
-    render(      <HypertableWizard
+    render(
+      <HypertableWizard
         open={true}
         connId="conn-1"
         qualifiedTable={'"public"."metrics"'}
         columns={COLUMNS}
         onClose={() => {}}
       />,
-);
+    );
     expect(screen.getByTestId("hypertable-wizard")).toBeInTheDocument();
     // Time column select is part of Basic.
     expect(screen.getByTestId("hypertable-wizard-time-col")).toBeInTheDocument();
@@ -82,14 +84,15 @@ describe("HypertableWizard", () => {
   });
 
   it("expands the Advanced section when the disclosure toggle is clicked", () => {
-    render(      <HypertableWizard
+    render(
+      <HypertableWizard
         open={true}
         connId="conn-1"
         qualifiedTable={'"public"."metrics"'}
         columns={COLUMNS}
         onClose={() => {}}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("hypertable-wizard-advanced-toggle"));
     expect(screen.getByTestId("hypertable-wizard-partitioning-col")).toBeInTheDocument();
     expect(screen.getByTestId("hypertable-wizard-migrate-data")).toBeInTheDocument();
@@ -100,14 +103,15 @@ describe("HypertableWizard", () => {
   it("emits SQL via openEditorTab when Apply is clicked with default values", () => {
     openEditorTab.mockClear();
     const onClose = vi.fn();
-    render(      <HypertableWizard
+    render(
+      <HypertableWizard
         open={true}
         connId="conn-1"
         qualifiedTable={'"public"."metrics"'}
         columns={COLUMNS}
         onClose={onClose}
       />,
-);
+    );
     fireEvent.click(screen.getByTestId("hypertable-wizard-apply"));
     expect(openEditorTab).toHaveBeenCalledTimes(1);
     const [connArg, opts] = openEditorTab.mock.calls[0];

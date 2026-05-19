@@ -32,11 +32,12 @@ vi.mock("../components/ThemeSwitcher", () => ({
 }));
 
 vi.mock("../features/connections/ConnectionList", () => ({
-  ConnectionList: () => (    <div data-testid="connection-list">
+  ConnectionList: () => (
+    <div data-testid="connection-list">
       connection-list
       <input data-testid="connection-list-search" aria-label="search" />
     </div>
-),
+  ),
 }));
 
 vi.mock("../features/connections/ConnectionDetails", () => ({
@@ -68,10 +69,11 @@ vi.mock("../components/quiet/Titlebar", () => ({
 }));
 
 vi.mock("../components/quiet/Wordmark", () => ({
-  Wordmark: () => (    <span data-testid="wordmark" aria-label="ide99">
+  Wordmark: () => (
+    <span data-testid="wordmark" aria-label="ide99">
       ide99
     </span>
-),
+  ),
 }));
 
 const openHistoryTabMock = vi.fn();
@@ -137,7 +139,8 @@ function makeConnection(overrides: Partial<Connection> = {}): Connection {
 }
 
 beforeEach(() => {
-  useConnections.setState(    {
+  useConnections.setState(
+    {
       ...initialState,
       connections: [makeConnection({ id: "a", name: "alpha" })],
       selectedId: "a",
@@ -146,7 +149,7 @@ beforeEach(() => {
       error: null,
     },
     true,
-);
+  );
 });
 
 describe("Workspace", () => {

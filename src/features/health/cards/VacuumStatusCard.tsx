@@ -31,19 +31,22 @@ export function VacuumStatusCard({ connId, state }: CardProps): JSX.Element {
 
   const rows = state.card.data.rows;
   if (rows.length === 0) {
-    return (      <CardShell
+    return (
+      <CardShell
         cardId="vacuum_status"
         connId={connId}
         state={{ status: "empty", reason: "no_data" }}
       />
-);
+    );
   }
 
   const tone = vacuumTone(rows);
 
-  const body = (    <table style={{ width: "100%", fontSize: 11, borderCollapse: "collapse" }}>
+  const body = (
+    <table style={{ width: "100%", fontSize: 11, borderCollapse: "collapse" }}>
       <tbody>
-        {rows.slice(0, 5).map((r) => (          <tr key={`${r.schema}.${r.table}`} data-testid="vacuum-row">
+        {rows.slice(0, 5).map((r) => (
+          <tr key={`${r.schema}.${r.table}`} data-testid="vacuum-row">
             <td style={{ padding: "2px 4px", fontFamily: "var(--font-mono)" }}>
               {r.daysSince === null
                 ? t("health.card.vacuum_status.row_never", {
@@ -69,17 +72,18 @@ export function VacuumStatusCard({ connId, state }: CardProps): JSX.Element {
               />
             </td>
           </tr>
-))}
+        ))}
       </tbody>
     </table>
-);
+  );
 
-  return (    <CardShell
+  return (
+    <CardShell
       cardId="vacuum_status"
       connId={connId}
       state={state}
       body={body}
       status={{ tone, tooltip: t(`health.status.${tone}`) }}
     />
-);
+  );
 }

@@ -32,7 +32,8 @@ export function EditModeToggle({ tabId }: EditModeToggleProps): JSX.Element {
   const { t } = useTranslation();
   const mode = useEditStore((s) => s.tabs.get(tabId)?.mode ?? "read");
   const toggleMode = useEditStore((s) => s.toggleMode);
-  return (    <button
+  return (
+    <button
       type="button"
       data-testid="edit-toggle"
       aria-pressed={mode === "edit"}
@@ -44,7 +45,7 @@ export function EditModeToggle({ tabId }: EditModeToggleProps): JSX.Element {
       <Pencil size={13} aria-hidden />
       <span style={{ fontSize: 11 }}>{t("erd.edit.toggle.label")}</span>
     </button>
-);
+  );
 }
 
 export interface EditActionsBarProps {
@@ -79,7 +80,8 @@ export function EditActionsBar({
   const undo = useEditStore((s) => s.undo);
   const redo = useEditStore((s) => s.redo);
 
-  return (    <div
+  return (
+    <div
       role="toolbar"
       aria-label={t("erd.edit.toggle.label")}
       data-testid="edit-actions-bar"
@@ -121,7 +123,8 @@ export function EditActionsBar({
         <Redo2 size={14} aria-hidden />
       </button>
       <span style={{ flex: 1 }} />
-      {canResetLayout && (        <button
+      {canResetLayout && (
+        <button
           type="button"
           data-testid="edit-reset-layout"
           onClick={onResetLayout}
@@ -132,7 +135,7 @@ export function EditActionsBar({
           <RotateCcw size={14} aria-hidden />
           <span style={{ marginLeft: 4 }}>{t("erd.edit.reset_layout")}</span>
         </button>
-)}
+      )}
       <button
         type="button"
         data-testid="edit-discard"
@@ -155,7 +158,7 @@ export function EditActionsBar({
         <span style={{ marginLeft: 4 }}>{t("erd.edit.apply")}</span>
       </button>
     </div>
-);
+  );
 }
 
 // ── Backward-compat aggregate ──────────────────────────────────────────────
@@ -170,9 +173,10 @@ export interface EditToolbarProps extends EditActionsBarProps {}
 
 export function EditToolbar(props: EditToolbarProps): JSX.Element {
   const mode = useEditStore((s) => s.tabs.get(props.tabId)?.mode ?? "read");
-  return (    <div data-testid="edit-toolbar-legacy" style={{ display: "contents" }}>
+  return (
+    <div data-testid="edit-toolbar-legacy" style={{ display: "contents" }}>
       <EditModeToggle tabId={props.tabId} />
       {mode === "edit" && <EditActionsBar {...props} />}
     </div>
-);
+  );
 }

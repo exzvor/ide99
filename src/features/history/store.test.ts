@@ -57,7 +57,8 @@ beforeEach(() => {
   historySetPinnedMock.mockResolvedValue(undefined);
   historyDeleteMock.mockResolvedValue(undefined);
   historyClearForConnectionMock.mockResolvedValue(0);
-  useHistory.setState(    {
+  useHistory.setState(
+    {
       ...initialState,
       filters: { ...DEFAULT_FILTERS },
       rows: [],
@@ -67,7 +68,7 @@ beforeEach(() => {
       lastFetchOffset: 0,
     },
     true,
-);
+  );
 });
 
 afterEach(() => {

@@ -58,7 +58,8 @@ export function KnnBrowseDialog(props: KnnBrowseDialogProps): JSX.Element | null
     onClose();
   };
 
-  return (    <RadixDialog.Root open={open} onOpenChange={(o) => !o && onClose()}>
+  return (
+    <RadixDialog.Root open={open} onOpenChange={(o) => !o && onClose()}>
       <RadixDialog.Portal>
         <RadixDialog.Overlay className="q-backdrop" />
         <RadixDialog.Content
@@ -155,5 +156,5 @@ export function KnnBrowseDialog(props: KnnBrowseDialogProps): JSX.Element | null
         </RadixDialog.Content>
       </RadixDialog.Portal>
     </RadixDialog.Root>
-);
+  );
 }

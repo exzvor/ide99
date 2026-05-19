@@ -6,9 +6,10 @@ vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, opts?: Record<string, unknown>) => {
       if (opts && typeof opts === "object") {
-        return Object.entries(opts).reduce<string>(          (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
+        return Object.entries(opts).reduce<string>(
+          (acc, [k, v]) => acc.replaceAll(`{{${k}}}`, String(v)),
           key,
-);
+        );
       }
       return key;
     },
@@ -73,21 +74,23 @@ function setRunState(tabId: string, state: RunState): void {
 }
 
 beforeEach(() => {
-  useEditor.setState(    {
+  useEditor.setState(
+    {
       ...initialEditorState,
       tabs: [makeTab()],
       activeTabId: "tab-1",
       runStates: new Map(),
     },
     true,
-);
-  useConnections.setState(    {
+  );
+  useConnections.setState(
+    {
       ...initialConnectionsState,
       connections: [],
       selectedId: null,
     },
     true,
-);
+  );
 });
 
 describe("ResultPanel", () => {
@@ -123,8 +126,9 @@ describe("ResultPanel", () => {
   });
 
   describe("streaming state", () => {
-    function streamingState(      overrides: Partial<Extract<RunState, { status: "streaming" }>> = {},
-): RunState {
+    function streamingState(
+      overrides: Partial<Extract<RunState, { status: "streaming" }>> = {},
+    ): RunState {
       const cols = overrides.columns ?? [
         { name: "id", typeName: "int4", isNumeric: true },
         { name: "name", typeName: "text", isNumeric: false },
@@ -170,7 +174,8 @@ describe("ResultPanel", () => {
     });
 
     test("affected rows banner appears when no rows + affectedRows non-null", () => {
-      setRunState(        "tab-1",
+      setRunState(
+        "tab-1",
         streamingState({
           rows: [],
           loadedCount: 0,
@@ -179,13 +184,14 @@ describe("ResultPanel", () => {
           affectedRows: 7,
           statusMessage: "UPDATE 7",
         }),
-);
+      );
       render(<ResultPanel tabId="tab-1" />);
       expect(screen.getByText("editor.result.affected", { exact: false })).toBeInTheDocument();
     });
 
     test("empty banner appears when no rows + affectedRows null", () => {
-      setRunState(        "tab-1",
+      setRunState(
+        "tab-1",
         streamingState({
           rows: [],
           loadedCount: 0,
@@ -193,7 +199,7 @@ describe("ResultPanel", () => {
           columnOrder: [],
           affectedRows: null,
         }),
-);
+      );
       render(<ResultPanel tabId="tab-1" />);
       expect(screen.getByText("editor.result.empty")).toBeInTheDocument();
     });

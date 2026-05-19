@@ -41,15 +41,17 @@ export function Cell({ column, value }: CellProps): JSX.Element {
     return <span>{value}</span>;
   }
   if (column.isNumeric) {
-    return (      <span className="cell-numeric block w-full text-right font-mono tabular-nums">{value}</span>
-);
+    return (
+      <span className="cell-numeric block w-full text-right font-mono tabular-nums">{value}</span>
+    );
   }
   return <PlainCell value={value} />;
 }
 
 function PlainCell({ value }: { value: string }): JSX.Element {
   const [open, setOpen] = useState(false);
-  return (    <>
+  return (
+    <>
       <span
         className="block w-full overflow-hidden text-ellipsis whitespace-nowrap"
         title={value}
@@ -59,5 +61,5 @@ function PlainCell({ value }: { value: string }): JSX.Element {
       </span>
       <ValueModal open={open} onClose={() => setOpen(false)} value={value} language="text" />
     </>
-);
+  );
 }

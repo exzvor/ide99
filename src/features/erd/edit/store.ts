@@ -67,7 +67,7 @@ interface EditStoreState {
   replaceOpsFromAst(tabId: string, ops: Op[], warnings: AstWarning[], sourceText: string): void;
   setAstParseError(tabId: string, err: AstParseError | null): void;
   clearAstWarnings(tabId: string): void;
-  /** S20 €” the readers used by ErdPane / DdlPreviewPanel. */
+  /** S20 the readers used by ErdPane / DdlPreviewPanel. */
   getLastChangeBy(tabId: string): "visual" | "text" | null;
   getLastReverseText(tabId: string): string | null;
 }
@@ -99,10 +99,11 @@ export const useEditStore = create<EditStoreState>((set, get) => ({
     const lastOp = cur.ops[cur.ops.length - 1];
     let nextOps: Op[];
     let nextPast: Op[][];
-    if (      op.kind === "moveTable" &&
+    if (
+      op.kind === "moveTable" &&
       lastOp?.kind === "moveTable" &&
       sameTableRef(op.table, lastOp.table)
-) {
+    ) {
       nextOps = [...cur.ops.slice(0, -1), op];
       nextPast = cur.past; // do not extend undo history for coalesced moves
     } else {
@@ -231,7 +232,8 @@ export const useEditStore = create<EditStoreState>((set, get) => ({
   getLastReverseText: (tabId) => get().tabs.get(tabId)?.lastReverseText ?? null,
 }));
 
-function sameTableRef(  a: { schema: string; name: string } | { _new: string },
+function sameTableRef(
+  a: { schema: string; name: string } | { _new: string },
   b: { schema: string; name: string } | { _new: string },
 ): boolean {
   if ("_new" in a && "_new" in b) return a._new === b._new;
