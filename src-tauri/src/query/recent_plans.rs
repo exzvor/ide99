@@ -50,7 +50,8 @@ pub fn save(conn: &mut Connection, input: NewRecentPlan) -> rusqlite::Result<Str
     let plan_json_str = serde_json::to_string(&plan_json).unwrap_or_else(|_| "null".to_string());
 
     let tx = conn.transaction()?;
-    tx.execute(        "INSERT INTO recent_plans \
+    tx.execute(
+        "INSERT INTO recent_plans \
          (id, connection_id, connection_name, sql, plan_json, executed_at, \
           duration_ms, total_cost, mode, options_json, involved_tables_json, pinned) \
          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, 0)",
@@ -67,9 +68,10 @@ pub fn save(conn: &mut Connection, input: NewRecentPlan) -> rusqlite::Result<Str
             options_json,
             involved_tables_json,
         ],
-)?;
+    )?;
     // LRU eviction: keep the LRU_CAP_UNPINNED most-recent unpinned rows.
-    tx.execute(        "DELETE FROM recent_plans \
+    tx.execute(
+        "DELETE FROM recent_plans \
          WHERE pinned = 0 AND id NOT IN (\
            SELECT id FROM recent_plans \
            WHERE pinned = 0 \
@@ -77,7 +79,7 @@ pub fn save(conn: &mut Connection, input: NewRecentPlan) -> rusqlite::Result<Str
            LIMIT ?1 \
 )",
         params![LRU_CAP_UNPINNED],
-)?;
+    )?;
     tx.commit()?;
     Ok(id)
 }
@@ -87,7 +89,8 @@ pub fn save(conn: &mut Connection, input: NewRecentPlan) -> rusqlite::Result<Str
 /// Filters compose with implicit AND. The FTS5 join is conditional —
 /// non-MATCH queries skip the join cost. Order is `(pinned DESC,
 /// executed_at DESC)` so pinned rows surface first even when older.
-pub fn search(    conn: &Connection,
+pub fn search(
+    conn: &Connection,
     filter: &RecentPlansFilter,
 ) -> rusqlite::Result<RecentPlansSearchResult> {
     let limit = filter.limit.min(MAX_PAGE);
@@ -100,10 +103,11 @@ pub fn search(    conn: &Connection,
         "FROM recent_plans p"
     };
 
-    let select_sql = format!(        "SELECT {SELECT_COLUMNS} {from_sql}{where_sql} \
+    let select_sql = format!(
+        "SELECT {SELECT_COLUMNS} {from_sql}{where_sql} \
          ORDER BY p.pinned DESC, p.executed_at DESC \
          LIMIT ? OFFSET ?",
-);
+    );
     let mut select_args = args.clone();
     select_args.push(Value::Integer(i64::from(limit)));
     select_args.push(Value::Integer(i64::from(filter.offset)));
@@ -133,9 +137,10 @@ pub fn get(conn: &Connection, id: &str) -> rusqlite::Result<Option<RecentPlanRow
 
 /// Idempotent — missing-id calls return `Ok(())` (mirror of `history::set_pinned`).
 pub fn set_pinned(conn: &Connection, id: &str, pinned: bool) -> rusqlite::Result<()> {
-    conn.execute(        "UPDATE recent_plans SET pinned = ?1 WHERE id = ?2",
+    conn.execute(
+        "UPDATE recent_plans SET pinned = ?1 WHERE id = ?2",
         params![i64::from(pinned), id],
-)?;
+    )?;
     Ok(())
 }
 
@@ -148,9 +153,10 @@ pub fn delete(conn: &Connection, id: &str) -> rusqlite::Result<()> {
 
 /// Bulk-delete all rows for a connection. Returns the number of rows removed.
 pub fn clear_for_connection(conn: &Connection, connection_id: &str) -> rusqlite::Result<u64> {
-    let rows = conn.execute(        "DELETE FROM recent_plans WHERE connection_id = ?1",
+    let rows = conn.execute(
+        "DELETE FROM recent_plans WHERE connection_id = ?1",
         params![connection_id],
-)?;
+    )?;
     Ok(u64::try_from(rows).unwrap_or(0))
 }
 
@@ -252,12 +258,14 @@ fn row_to_recent_plan(row: &Row) -> rusqlite::Result<RecentPlanRow> {
         "explain" => RecentPlanMode::Explain,
         "analyze" => RecentPlanMode::Analyze,
         other => {
-            return Err(rusqlite::Error::FromSqlConversionFailure(                0,
+            return Err(rusqlite::Error::FromSqlConversionFailure(
+                0,
                 rusqlite::types::Type::Text,
-                Box::new(std::io::Error::new(                    std::io::ErrorKind::InvalidData,
+                Box::new(std::io::Error::new(
+                    std::io::ErrorKind::InvalidData,
                     format!("unknown mode {other}"),
-)),
-));
+                )),
+            ));
         }
     };
     let involved_tables_json: String = row.get("involved_tables_json")?;
@@ -405,7 +413,8 @@ mod tests {
 
     fn insert_n(conn: &mut Connection, n: usize) {
         for i in 0..n {
-            let id = save(                conn,
+            let id = save(
+                conn,
                 NewRecentPlan {
                     connection_id: "c1".into(),
                     connection_name: "test".into(),
@@ -415,7 +424,7 @@ mod tests {
                     mode: RecentPlanMode::Explain,
                     options_json: "{}".into(),
                 },
-)
+            )
             .expect("save");
             assert!(!id.is_empty());
         }
@@ -424,7 +433,8 @@ mod tests {
     #[test]
     fn save_inserts_row_and_returns_uuid() {
         let mut conn = fresh_db();
-        let id = save(            &mut conn,
+        let id = save(
+            &mut conn,
             NewRecentPlan {
                 connection_id: "c1".into(),
                 connection_name: "test".into(),
@@ -434,7 +444,7 @@ mod tests {
                 mode: RecentPlanMode::Analyze,
                 options_json: "{\"verbose\":false}".into(),
             },
-)
+        )
         .expect("save");
 
         assert_eq!(id.len(), 36); // UUID v4
@@ -465,7 +475,8 @@ mod tests {
     fn save_lru_keeps_pinned() {
         let mut conn = fresh_db();
         // Insert 1 plan, pin it.
-        let id = save(            &mut conn,
+        let id = save(
+            &mut conn,
             NewRecentPlan {
                 connection_id: "c1".into(),
                 connection_name: "t".into(),
@@ -475,7 +486,7 @@ mod tests {
                 mode: RecentPlanMode::Explain,
                 options_json: "{}".into(),
             },
-)
+        )
         .expect("save");
         set_pinned(&conn, &id, true).expect("pin");
 
@@ -489,10 +500,11 @@ mod tests {
 
         // Pinned row still present.
         let pinned: i64 = conn
-            .query_row(                "SELECT COUNT(*) FROM recent_plans WHERE id = ?1",
+            .query_row(
+                "SELECT COUNT(*) FROM recent_plans WHERE id = ?1",
                 params![id],
                 |r| r.get(0),
-)
+            )
             .unwrap();
         assert_eq!(pinned, 1);
     }
@@ -500,7 +512,8 @@ mod tests {
     #[test]
     fn save_populates_total_cost_and_tables() {
         let mut conn = fresh_db();
-        let id = save(            &mut conn,
+        let id = save(
+            &mut conn,
             NewRecentPlan {
                 connection_id: "c1".into(),
                 connection_name: "t".into(),
@@ -510,7 +523,7 @@ mod tests {
                 mode: RecentPlanMode::Explain,
                 options_json: "{}".into(),
             },
-)
+        )
         .expect("save");
         let row = get(&conn, &id).expect("get").expect("some");
         assert_eq!(row.total_cost, Some(100.0));
@@ -533,7 +546,8 @@ mod tests {
     #[test]
     fn search_filters_by_fts_query() {
         let mut conn = fresh_db();
-        save(            &mut conn,
+        save(
+            &mut conn,
             NewRecentPlan {
                 connection_id: "c1".into(),
                 connection_name: "t".into(),
@@ -543,9 +557,10 @@ mod tests {
                 mode: RecentPlanMode::Explain,
                 options_json: "{}".into(),
             },
-)
+        )
         .unwrap();
-        save(            &mut conn,
+        save(
+            &mut conn,
             NewRecentPlan {
                 connection_id: "c1".into(),
                 connection_name: "t".into(),
@@ -555,14 +570,15 @@ mod tests {
                 mode: RecentPlanMode::Explain,
                 options_json: "{}".into(),
             },
-)
+        )
         .unwrap();
-        let res = search(            &conn,
+        let res = search(
+            &conn,
             &RecentPlansFilter {
                 query: Some("users".into()),
                 ..RecentPlansFilter::default()
             },
-)
+        )
         .unwrap();
         assert_eq!(res.rows.len(), 1);
         assert!(res.rows[0].sql.contains("users"));
@@ -575,7 +591,8 @@ mod tests {
             "Relation Name": "users", "Total Cost": 1.0, "Plans": [] }}]);
         let plan_orders = json!([{ "Plan": { "Node Type": "Seq Scan", "Schema": "public",
             "Relation Name": "orders", "Total Cost": 1.0, "Plans": [] }}]);
-        save(            &mut conn,
+        save(
+            &mut conn,
             NewRecentPlan {
                 connection_id: "c1".into(),
                 connection_name: "t".into(),
@@ -585,9 +602,10 @@ mod tests {
                 mode: RecentPlanMode::Explain,
                 options_json: "{}".into(),
             },
-)
+        )
         .unwrap();
-        save(            &mut conn,
+        save(
+            &mut conn,
             NewRecentPlan {
                 connection_id: "c1".into(),
                 connection_name: "t".into(),
@@ -597,19 +615,21 @@ mod tests {
                 mode: RecentPlanMode::Explain,
                 options_json: "{}".into(),
             },
-)
+        )
         .unwrap();
-        let res = search(            &conn,
+        let res = search(
+            &conn,
             &RecentPlansFilter {
                 table: Some("orders".into()),
                 ..RecentPlansFilter::default()
             },
-)
+        )
         .unwrap();
         assert_eq!(res.rows.len(), 1);
-        assert_eq!(            res.rows[0].involved_tables,
+        assert_eq!(
+            res.rows[0].involved_tables,
             vec!["public.orders".to_string()]
-);
+        );
     }
 
     #[test]
@@ -618,7 +638,8 @@ mod tests {
         for cost in [10.0_f64, 100.0, 1000.0] {
             let plan = json!([{ "Plan": { "Node Type": "Seq Scan",
                 "Relation Name": "t", "Total Cost": cost, "Plans": [] }}]);
-            save(                &mut conn,
+            save(
+                &mut conn,
                 NewRecentPlan {
                     connection_id: "c1".into(),
                     connection_name: "t".into(),
@@ -628,16 +649,17 @@ mod tests {
                     mode: RecentPlanMode::Explain,
                     options_json: "{}".into(),
                 },
-)
+            )
             .unwrap();
         }
-        let res = search(            &conn,
+        let res = search(
+            &conn,
             &RecentPlansFilter {
                 cost_min: Some(50.0),
                 cost_max: Some(500.0),
                 ..RecentPlansFilter::default()
             },
-)
+        )
         .unwrap();
         assert_eq!(res.rows.len(), 1);
         assert_eq!(res.rows[0].total_cost, Some(100.0));
@@ -646,7 +668,8 @@ mod tests {
     #[test]
     fn search_orders_pinned_first() {
         let mut conn = fresh_db();
-        let id_first = save(            &mut conn,
+        let id_first = save(
+            &mut conn,
             NewRecentPlan {
                 connection_id: "c1".into(),
                 connection_name: "t".into(),
@@ -656,9 +679,10 @@ mod tests {
                 mode: RecentPlanMode::Explain,
                 options_json: "{}".into(),
             },
-)
+        )
         .unwrap();
-        save(            &mut conn,
+        save(
+            &mut conn,
             NewRecentPlan {
                 connection_id: "c1".into(),
                 connection_name: "t".into(),
@@ -668,7 +692,7 @@ mod tests {
                 mode: RecentPlanMode::Explain,
                 options_json: "{}".into(),
             },
-)
+        )
         .unwrap();
         set_pinned(&conn, &id_first, true).unwrap();
 
@@ -682,21 +706,23 @@ mod tests {
     fn search_paginates() {
         let mut conn = fresh_db();
         insert_n(&mut conn, 5);
-        let page1 = search(            &conn,
+        let page1 = search(
+            &conn,
             &RecentPlansFilter {
                 limit: 2,
                 offset: 0,
                 ..RecentPlansFilter::default()
             },
-)
+        )
         .unwrap();
-        let page2 = search(            &conn,
+        let page2 = search(
+            &conn,
             &RecentPlansFilter {
                 limit: 2,
                 offset: 2,
                 ..RecentPlansFilter::default()
             },
-)
+        )
         .unwrap();
         assert_eq!(page1.rows.len(), 2);
         assert_eq!(page2.rows.len(), 2);
@@ -717,7 +743,8 @@ mod tests {
     #[test]
     fn delete_removes_row() {
         let mut conn = fresh_db();
-        let id = save(            &mut conn,
+        let id = save(
+            &mut conn,
             NewRecentPlan {
                 connection_id: "c1".into(),
                 connection_name: "t".into(),
@@ -727,7 +754,7 @@ mod tests {
                 mode: RecentPlanMode::Explain,
                 options_json: "{}".into(),
             },
-)
+        )
         .unwrap();
         delete(&conn, &id).unwrap();
         assert!(get(&conn, &id).unwrap().is_none());
@@ -737,7 +764,8 @@ mod tests {
     fn clear_for_connection_only_targets_one_conn() {
         let mut conn = fresh_db();
         for cid in ["c1", "c1", "c2"] {
-            save(                &mut conn,
+            save(
+                &mut conn,
                 NewRecentPlan {
                     connection_id: cid.into(),
                     connection_name: "t".into(),
@@ -747,7 +775,7 @@ mod tests {
                     mode: RecentPlanMode::Explain,
                     options_json: "{}".into(),
                 },
-)
+            )
             .unwrap();
         }
         let removed = clear_for_connection(&conn, "c1").unwrap();

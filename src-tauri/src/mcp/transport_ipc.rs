@@ -14,7 +14,8 @@
 //! If ide99 is not running, `ide99-mcp` prints a hint to stderr and
 //! exits with code 2 (see `bin/ide99_mcp.rs`).
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::module_name_repetitions,
     clippy::doc_markdown,
     clippy::needless_pass_by_value
@@ -43,7 +44,8 @@ pub fn default_socket_path() -> Option<PathBuf> {
 }
 
 /// Run the IPC server until `shutdown` flips. Cross-platform dispatcher.
-pub async fn serve(    path: PathBuf,
+pub async fn serve(
+    path: PathBuf,
     ctx: Arc<ServerContext>,
     shutdown: tokio::sync::watch::Receiver<bool>,
 ) -> Result<(), McpError> {
@@ -63,7 +65,8 @@ pub async fn serve(    path: PathBuf,
 }
 
 #[cfg(unix)]
-async fn serve_unix(    path: PathBuf,
+async fn serve_unix(
+    path: PathBuf,
     ctx: Arc<ServerContext>,
     mut shutdown: tokio::sync::watch::Receiver<bool>,
 ) -> Result<(), McpError> {
@@ -112,7 +115,8 @@ async fn handle_unix(stream: tokio::net::UnixStream, ctx: Arc<ServerContext>) {
 }
 
 #[cfg(windows)]
-async fn serve_windows(    path: PathBuf,
+async fn serve_windows(
+    path: PathBuf,
     ctx: Arc<ServerContext>,
     mut shutdown: tokio::sync::watch::Receiver<bool>,
 ) -> Result<(), McpError> {
@@ -212,7 +216,8 @@ fn extract_token_from_params(req: &RpcRequest) -> Option<&str> {
     req.params.as_ref()?.get("_meta")?.get("token")?.as_str()
 }
 
-async fn write_frame<W: tokio::io::AsyncWrite + Unpin>(    w: &mut W,
+async fn write_frame<W: tokio::io::AsyncWrite + Unpin>(
+    w: &mut W,
     resp: &RpcResponse,
 ) -> std::io::Result<()> {
     let mut s = serde_json::to_string(resp).unwrap_or_else(|_| "{}".to_string());

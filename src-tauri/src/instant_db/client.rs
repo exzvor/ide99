@@ -103,10 +103,11 @@ fn build_client() -> Result<reqwest::Client, InstantDbError> {
     reqwest::Client::builder()
         .timeout(Duration::from_secs(15))
         .connect_timeout(Duration::from_secs(5))
-        .user_agent(concat!(            "ide99/",
+        .user_agent(concat!(
+            "ide99/",
             env!("CARGO_PKG_VERSION"),
             " instant-db-beta"
-))
+        ))
         .build()
         .map_err(|e| InstantDbError::Network(format!("build client: {e}")))
 }
@@ -120,11 +121,12 @@ fn headers(device_id: &str) -> Result<reqwest::header::HeaderMap, InstantDbError
                name: &'static str,
                value: &str|
      -> Result<(), InstantDbError> {
-        h.insert(            name,
+        h.insert(
+            name,
             value
                 .parse()
                 .map_err(|e| InstantDbError::Auth(format!("header {name}: {e}")))?,
-);
+        );
         Ok(())
     };
     set(&mut h, "X-Device-Id", device_id)?;
@@ -149,11 +151,13 @@ where
             }
         }
     }
-    Err(InstantDbError::Network(        last_err.unwrap_or_else(|| "no endpoints".to_string()),
-))
+    Err(InstantDbError::Network(
+        last_err.unwrap_or_else(|| "no endpoints".to_string()),
+    ))
 }
 
-async fn parse_or_error<T: serde::de::DeserializeOwned>(    resp: reqwest::Response,
+async fn parse_or_error<T: serde::de::DeserializeOwned>(
+    resp: reqwest::Response,
 ) -> Result<T, InstantDbError> {
     let status = resp.status();
     if !status.is_success() {
@@ -180,7 +184,8 @@ pub async fn create(data_dir: &Path, locale: &str) -> Result<InstantDbCreate, In
     parse_or_error(resp).await
 }
 
-pub async fn status(    data_dir: &Path,
+pub async fn status(
+    data_dir: &Path,
     locale: &str,
     db_id: &str,
 ) -> Result<InstantDbStatus, InstantDbError> {
@@ -195,7 +200,8 @@ pub async fn status(    data_dir: &Path,
     parse_or_error(resp).await
 }
 
-pub async fn heartbeat(    data_dir: &Path,
+pub async fn heartbeat(
+    data_dir: &Path,
     locale: &str,
     db_id: &str,
 ) -> Result<InstantDbStatus, InstantDbError> {

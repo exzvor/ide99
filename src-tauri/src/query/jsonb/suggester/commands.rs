@@ -1,6 +1,7 @@
 //! Tauri command surface for the GIN Index Suggester.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::too_many_lines
 )]
@@ -20,7 +21,8 @@ use crate::query::jsonb::suggester::types::{
 // ─────────────────────────────────────────────────────────────────────────────
 
 #[tauri::command]
-pub async fn jsonb_suggester_run(    req: SuggesterRequest,
+pub async fn jsonb_suggester_run(
+    req: SuggesterRequest,
     state: tauri::State<'_, crate::AppState>,
 ) -> Result<SuggesterResult, SuggesterError> {
     let pool = state
@@ -173,7 +175,8 @@ pub async fn jsonb_suggester_run(    req: SuggesterRequest,
 // ─────────────────────────────────────────────────────────────────────────────
 
 #[tauri::command]
-pub async fn jsonb_suggester_hypothetical_explain(    conn_id: String,
+pub async fn jsonb_suggester_hypothetical_explain(
+    conn_id: String,
     recommended_sql: String,
     representative_query: String,
     state: tauri::State<'_, crate::AppState>,
@@ -234,9 +237,10 @@ mod tests {
 
     #[test]
     fn extract_expression_key_basic() {
-        assert_eq!(            extract_expression_key("(data->>'email')"),
+        assert_eq!(
+            extract_expression_key("(data->>'email')"),
             Some("email".to_string())
-);
+        );
     }
 
     #[test]

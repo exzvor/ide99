@@ -24,10 +24,11 @@ fn build_client() -> reqwest::Client {
     reqwest::Client::builder()
         .timeout(Duration::from_secs(5))
         .connect_timeout(Duration::from_secs(3))
-        .user_agent(concat!(            "ide99/",
+        .user_agent(concat!(
+            "ide99/",
             env!("CARGO_PKG_VERSION"),
             " admin-telemetry"
-))
+        ))
         .build()
         .unwrap_or_else(|_| reqwest::Client::new())
 }

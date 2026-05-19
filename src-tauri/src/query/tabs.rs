@@ -18,10 +18,11 @@ use crate::query::types::EditorTabRow;
 /// Return all tabs ordered by `created_at` ascending — matches the
 /// front-end's natural insertion order on rehydrate.
 pub fn list(conn: &Connection) -> rusqlite::Result<Vec<EditorTabRow>> {
-    let mut stmt = conn.prepare(        "SELECT id, kind, name, content, connection_id, node_key, \
+    let mut stmt = conn.prepare(
+        "SELECT id, kind, name, content, connection_id, node_key, \
                 cursor_line, cursor_col, created_at, updated_at \
          FROM editor_tabs ORDER BY created_at ASC",
-)?;
+    )?;
     let rows = stmt.query_map([], |row| {
         Ok(EditorTabRow {
             id: row.get(0)?,
@@ -42,7 +43,8 @@ pub fn list(conn: &Connection) -> rusqlite::Result<Vec<EditorTabRow>> {
 /// Insert-or-replace by primary key (`id`). The table's CHECK constraint on
 /// `kind` enforces the editor/object discriminator at the SQL layer.
 pub fn upsert(conn: &Connection, tab: &EditorTabRow) -> rusqlite::Result<()> {
-    conn.execute(        "INSERT OR REPLACE INTO editor_tabs \
+    conn.execute(
+        "INSERT OR REPLACE INTO editor_tabs \
          (id, kind, name, content, connection_id, node_key, \
           cursor_line, cursor_col, created_at, updated_at) \
          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
@@ -58,7 +60,7 @@ pub fn upsert(conn: &Connection, tab: &EditorTabRow) -> rusqlite::Result<()> {
             tab.created_at,
             tab.updated_at,
         ],
-)?;
+    )?;
     Ok(())
 }
 

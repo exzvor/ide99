@@ -107,9 +107,10 @@ pub fn cell_to_string(row: &Row, idx: usize) -> Option<String> {
 /// instead of the `<numeric>` placeholder ().
 #[must_use]
 pub fn is_numeric_type(type_name: &str) -> bool {
-    matches!(        type_name,
+    matches!(
+        type_name,
         "int2" | "int4" | "int8" | "float4" | "float8" | "numeric"
-)
+    )
 }
 
 /// Newtype that decodes `PostgreSQL`'s binary `NUMERIC` wire format to a
@@ -125,9 +126,10 @@ pub fn is_numeric_type(type_name: &str) -> bool {
 pub struct PgNumericString(pub String);
 
 impl<'a> FromSql<'a> for PgNumericString {
-    fn from_sql(        _ty: &Type,
+    fn from_sql(
+        _ty: &Type,
         raw: &'a [u8],
-) -> Result<Self, Box<dyn std::error::Error + Sync + Send>> {
+    ) -> Result<Self, Box<dyn std::error::Error + Sync + Send>> {
         let s = format_pg_numeric_binary(raw)?;
         Ok(Self(s))
     }
@@ -154,9 +156,10 @@ const NUMERIC_NINF: u16 = 0xF000;
 /// - `[i16; ndigits]` base-10000 digits, most significant first
 fn format_pg_numeric_binary(raw: &[u8]) -> Result<String, String> {
     if raw.len() < 8 {
-        return Err(format!(            "numeric: header truncated ({} bytes, expected >= 8)",
+        return Err(format!(
+            "numeric: header truncated ({} bytes, expected >= 8)",
             raw.len()
-));
+        ));
     }
     let ndigits = i16::from_be_bytes([raw[0], raw[1]]);
     let weight = i16::from_be_bytes([raw[2], raw[3]]);
@@ -176,9 +179,10 @@ fn format_pg_numeric_binary(raw: &[u8]) -> Result<String, String> {
     let body = &raw[8..];
     let expected = ndigits_usize * 2;
     if body.len() != expected {
-        return Err(format!(            "numeric: body length {} ≠ expected {expected}",
+        return Err(format!(
+            "numeric: body length {} ≠ expected {expected}",
             body.len()
-));
+        ));
     }
 
     let mut digits = Vec::with_capacity(ndigits_usize);

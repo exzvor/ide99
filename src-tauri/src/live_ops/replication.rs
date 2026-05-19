@@ -139,16 +139,18 @@ mod tests {
 
     #[test]
     fn redact_conninfo_redacts_kv_form() {
-        assert_eq!(            redact_conninfo("host=db.example.com user=replica password=s3cret port=5432"),
+        assert_eq!(
+            redact_conninfo("host=db.example.com user=replica password=s3cret port=5432"),
             "host=db.example.com user=replica password=*** port=5432"
-);
+        );
     }
 
     #[test]
     fn redact_conninfo_redacts_uri_form() {
-        assert_eq!(            redact_conninfo("postgres://replica:s3cret@db.example.com:5432/main"),
+        assert_eq!(
+            redact_conninfo("postgres://replica:s3cret@db.example.com:5432/main"),
             "postgres://replica:***@db.example.com:5432/main"
-);
+        );
     }
 
     #[test]

@@ -24,7 +24,8 @@ use crate::AppState;
 // ---------------------------------------------------------------------------
 
 #[tauri::command]
-pub async fn ide99_export_connection(    state: State<'_, AppState>,
+pub async fn ide99_export_connection(
+    state: State<'_, AppState>,
     connection_id: String,
     path: String,
 ) -> Result<(), ShareError> {
@@ -32,7 +33,8 @@ pub async fn ide99_export_connection(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn ide99_export_connection_bundle(    state: State<'_, AppState>,
+pub async fn ide99_export_connection_bundle(
+    state: State<'_, AppState>,
     name: String,
     connection_ids: Vec<String>,
     path: String,
@@ -43,7 +45,8 @@ pub async fn ide99_export_connection_bundle(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn ide99_export_snippet(    state: State<'_, AppState>,
+pub async fn ide99_export_snippet(
+    state: State<'_, AppState>,
     snippet_id: i64,
     path: String,
 ) -> Result<(), ShareError> {
@@ -51,7 +54,8 @@ pub async fn ide99_export_snippet(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn ide99_export_snippet_bundle(    state: State<'_, AppState>,
+pub async fn ide99_export_snippet_bundle(
+    state: State<'_, AppState>,
     name: String,
     snippet_ids: Vec<i64>,
     path: String,
@@ -62,7 +66,8 @@ pub async fn ide99_export_snippet_bundle(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn ide99_export_query(    state: State<'_, AppState>,
+pub async fn ide99_export_query(
+    state: State<'_, AppState>,
     tab_id: String,
     path: String,
 ) -> Result<(), ShareError> {
@@ -70,7 +75,8 @@ pub async fn ide99_export_query(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn ide99_export_notebook(    state: State<'_, AppState>,
+pub async fn ide99_export_notebook(
+    state: State<'_, AppState>,
     notebook_id: String,
     path: String,
 ) -> Result<(), ShareError> {
@@ -78,7 +84,8 @@ pub async fn ide99_export_notebook(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn ide99_export_migration_set(    label: String,
+pub async fn ide99_export_migration_set(
+    label: String,
     src_dir: String,
     path: String,
 ) -> Result<(), ShareError> {
@@ -88,7 +95,8 @@ pub async fn ide99_export_migration_set(    label: String,
 }
 
 #[tauri::command]
-pub async fn ide99_export_erd_layout(    label: String,
+pub async fn ide99_export_erd_layout(
+    label: String,
     schemas_key: String,
     positions: Vec<crate::schema::positions::NodePos>,
     path: String,
@@ -99,7 +107,8 @@ pub async fn ide99_export_erd_layout(    label: String,
 }
 
 #[tauri::command]
-pub async fn ide99_export_theme(    name: String,
+pub async fn ide99_export_theme(
+    name: String,
     tokens: serde_json::Value,
     path: String,
 ) -> Result<(), ShareError> {
@@ -109,7 +118,8 @@ pub async fn ide99_export_theme(    name: String,
 }
 
 #[tauri::command]
-pub async fn ide99_export_keymap(    name: String,
+pub async fn ide99_export_keymap(
+    name: String,
     bindings: Vec<serde_json::Value>,
     path: String,
 ) -> Result<(), ShareError> {
@@ -119,7 +129,8 @@ pub async fn ide99_export_keymap(    name: String,
 }
 
 #[tauri::command]
-pub async fn ide99_export_health_config(    label: String,
+pub async fn ide99_export_health_config(
+    label: String,
     checks: serde_json::Value,
     path: String,
 ) -> Result<(), ShareError> {
@@ -141,14 +152,16 @@ pub async fn ide99_preview_file(path: String) -> Result<ImportPreview, ShareErro
 }
 
 #[tauri::command]
-pub async fn ide99_import_file(    state: State<'_, AppState>,
+pub async fn ide99_import_file(
+    state: State<'_, AppState>,
     path: String,
 ) -> Result<ShareEnvelope, ShareError> {
     state.ide99_import_file(&path).await
 }
 
 #[tauri::command]
-pub async fn ide99_apply_snippet(    state: State<'_, AppState>,
+pub async fn ide99_apply_snippet(
+    state: State<'_, AppState>,
     payload: serde_json::Value,
 ) -> Result<u32, ShareError> {
     let store = state.store.lock().await;
@@ -158,7 +171,8 @@ pub async fn ide99_apply_snippet(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn ide99_apply_snippet_bundle(    state: State<'_, AppState>,
+pub async fn ide99_apply_snippet_bundle(
+    state: State<'_, AppState>,
     payload: serde_json::Value,
 ) -> Result<u32, ShareError> {
     let store = state.store.lock().await;
@@ -168,7 +182,8 @@ pub async fn ide99_apply_snippet_bundle(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn ide99_apply_query(    state: State<'_, AppState>,
+pub async fn ide99_apply_query(
+    state: State<'_, AppState>,
     payload: serde_json::Value,
 ) -> Result<String, ShareError> {
     let store = state.store.lock().await;
@@ -178,7 +193,8 @@ pub async fn ide99_apply_query(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn ide99_apply_notebook(    state: State<'_, AppState>,
+pub async fn ide99_apply_notebook(
+    state: State<'_, AppState>,
     payload: serde_json::Value,
 ) -> Result<String, ShareError> {
     let store = state.store.lock().await;
@@ -188,7 +204,8 @@ pub async fn ide99_apply_notebook(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn ide99_apply_migration_set(    payload: serde_json::Value,
+pub async fn ide99_apply_migration_set(
+    payload: serde_json::Value,
     dest_dir: String,
 ) -> Result<u32, ShareError> {
     let n = migration_set::apply(&payload, Path::new(&dest_dir))?;
@@ -199,25 +216,29 @@ pub async fn ide99_apply_migration_set(    payload: serde_json::Value,
 /// health-config) just return the parsed payload — the frontend store does
 /// the actual write into its own state.
 #[tauri::command]
-pub async fn ide99_apply_erd_layout(    payload: serde_json::Value,
+pub async fn ide99_apply_erd_layout(
+    payload: serde_json::Value,
 ) -> Result<erd_layout::ExportedErdLayout, ShareError> {
     erd_layout::from_payload(&payload)
 }
 
 #[tauri::command]
-pub async fn ide99_apply_theme(    payload: serde_json::Value,
+pub async fn ide99_apply_theme(
+    payload: serde_json::Value,
 ) -> Result<theme::ExportedTheme, ShareError> {
     theme::from_payload(&payload)
 }
 
 #[tauri::command]
-pub async fn ide99_apply_keymap(    payload: serde_json::Value,
+pub async fn ide99_apply_keymap(
+    payload: serde_json::Value,
 ) -> Result<keymap::ExportedKeymap, ShareError> {
     keymap::from_payload(&payload)
 }
 
 #[tauri::command]
-pub async fn ide99_apply_health_config(    payload: serde_json::Value,
+pub async fn ide99_apply_health_config(
+    payload: serde_json::Value,
 ) -> Result<health_config::ExportedHealthConfig, ShareError> {
     health_config::from_payload(&payload)
 }
@@ -228,10 +249,11 @@ pub async fn ide99_apply_health_config(    payload: serde_json::Value,
 // ---------------------------------------------------------------------------
 
 impl AppState {
-    pub async fn ide99_export_connection(        &self,
+    pub async fn ide99_export_connection(
+        &self,
         connection_id: &str,
         path: &str,
-) -> Result<(), ShareError> {
+    ) -> Result<(), ShareError> {
         let conn = {
             let store = self.store.lock().await;
             store
@@ -243,11 +265,12 @@ impl AppState {
         fs::write(PathBuf::from(path), raw).map_err(|e| ShareError::Io(e.to_string()))
     }
 
-    pub async fn ide99_export_connection_bundle(        &self,
+    pub async fn ide99_export_connection_bundle(
+        &self,
         name: &str,
         connection_ids: &[String],
         path: &str,
-) -> Result<(), ShareError> {
+    ) -> Result<(), ShareError> {
         let store = self.store.lock().await;
         let mut conns = Vec::with_capacity(connection_ids.len());
         for id in connection_ids {
@@ -262,10 +285,11 @@ impl AppState {
         fs::write(PathBuf::from(path), raw).map_err(|e| ShareError::Io(e.to_string()))
     }
 
-    pub async fn ide99_export_snippet(        &self,
+    pub async fn ide99_export_snippet(
+        &self,
         snippet_id: i64,
         path: &str,
-) -> Result<(), ShareError> {
+    ) -> Result<(), ShareError> {
         let snip = {
             let store = self.store.lock().await;
             crate::snippets::store::SnippetStore::new(store.conn())
@@ -277,11 +301,12 @@ impl AppState {
         fs::write(PathBuf::from(path), raw).map_err(|e| ShareError::Io(e.to_string()))
     }
 
-    pub async fn ide99_export_snippet_bundle(        &self,
+    pub async fn ide99_export_snippet_bundle(
+        &self,
         name: &str,
         snippet_ids: &[i64],
         path: &str,
-) -> Result<(), ShareError> {
+    ) -> Result<(), ShareError> {
         let store = self.store.lock().await;
         let s = crate::snippets::store::SnippetStore::new(store.conn());
         let mut snippets = Vec::with_capacity(snippet_ids.len());
@@ -308,10 +333,11 @@ impl AppState {
         fs::write(PathBuf::from(path), raw).map_err(|e| ShareError::Io(e.to_string()))
     }
 
-    pub async fn ide99_export_notebook(        &self,
+    pub async fn ide99_export_notebook(
+        &self,
         notebook_id: &str,
         path: &str,
-) -> Result<(), ShareError> {
+    ) -> Result<(), ShareError> {
         let nb = {
             let store = self.store.lock().await;
             crate::notebook::store::get(store.conn(), notebook_id)

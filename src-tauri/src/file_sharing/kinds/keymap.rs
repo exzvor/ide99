@@ -20,7 +20,8 @@ pub struct ExportedKeymap {
     pub bindings: Vec<serde_json::Value>,
 }
 
-pub fn to_payload(    name: &str,
+pub fn to_payload(
+    name: &str,
     bindings: &[serde_json::Value],
 ) -> Result<serde_json::Value, ShareError> {
     let exp = ExportedKeymap {

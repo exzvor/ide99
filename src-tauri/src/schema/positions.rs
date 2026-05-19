@@ -79,7 +79,8 @@ fn key(conn_id: &str, schemas_key: &str) -> String {
 /// flattened to a `String` if the data dir cannot be resolved/created or
 /// the JSON file cannot be read or written.
 #[tauri::command]
-pub async fn erd_save_positions(    conn_id: String,
+pub async fn erd_save_positions(
+    conn_id: String,
     schemas_key: String,
     positions: Vec<NodePos>,
 ) -> Result<(), String> {
@@ -99,7 +100,8 @@ pub async fn erd_save_positions(    conn_id: String,
 /// Returns a flattened `String` error when the data dir cannot be resolved
 /// or the JSON file is malformed.
 #[tauri::command]
-pub async fn erd_load_positions(    conn_id: String,
+pub async fn erd_load_positions(
+    conn_id: String,
     schemas_key: String,
 ) -> Result<Vec<NodePos>, String> {
     let _guard = lock().lock().await;

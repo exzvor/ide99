@@ -1,4 +1,5 @@
-#![allow(    clippy::cast_possible_truncation,
+#![allow(
+    clippy::cast_possible_truncation,
     clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::doc_markdown,
@@ -58,11 +59,12 @@ impl Drop for RegistryGuard {
 }
 
 impl ActionRegistry {
-    pub fn insert_guard(        self: &Arc<Self>,
+    pub fn insert_guard(
+        self: &Arc<Self>,
         action_id: &str,
         pid: i32,
         kind: ActionKind,
-) -> RegistryGuard {
+    ) -> RegistryGuard {
         if let Ok(mut g) = self.inner.lock() {
             g.insert(action_id.to_string(), ActionEntry { pid, kind });
         }
@@ -128,7 +130,8 @@ pub(crate) fn map_err(e: tokio_postgres::Error) -> ActionError {
 // Five action functions (— Tasks B3..B7).
 // ─────────────────────────────────────────────────────────────────────────
 
-pub async fn do_reindex_table_inner(    pool: &Pool,
+pub async fn do_reindex_table_inner(
+    pool: &Pool,
     registry: &Arc<ActionRegistry>,
     schema: &str,
     table: &str,
@@ -154,7 +157,8 @@ pub async fn do_reindex_table_inner(    pool: &Pool,
     })
 }
 
-pub async fn do_reindex_table(    pool: &Pool,
+pub async fn do_reindex_table(
+    pool: &Pool,
     registry: &Arc<ActionRegistry>,
     app: &tauri::AppHandle,
     schema: &str,
@@ -170,12 +174,13 @@ pub async fn do_reindex_table(    pool: &Pool,
         .map_err(map_err)?
         .get(0);
     let _guard = registry.insert_guard(&action_id, pid, ActionKind::ReindexTable);
-    emit_started(        app,
+    emit_started(
+        app,
         &ActionStartedPayload {
             action_id: action_id.clone(),
             pid,
         },
-)?;
+    )?;
     client
         .batch_execute(&format!("REINDEX TABLE CONCURRENTLY {qualified}"))
         .await
@@ -187,7 +192,8 @@ pub async fn do_reindex_table(    pool: &Pool,
     })
 }
 
-pub async fn do_vacuum_inner(    pool: &Pool,
+pub async fn do_vacuum_inner(
+    pool: &Pool,
     registry: &Arc<ActionRegistry>,
     schema: &str,
     table: &str,
@@ -213,7 +219,8 @@ pub async fn do_vacuum_inner(    pool: &Pool,
     })
 }
 
-pub async fn do_vacuum(    pool: &Pool,
+pub async fn do_vacuum(
+    pool: &Pool,
     registry: &Arc<ActionRegistry>,
     app: &tauri::AppHandle,
     schema: &str,
@@ -229,12 +236,13 @@ pub async fn do_vacuum(    pool: &Pool,
         .map_err(map_err)?
         .get(0);
     let _guard = registry.insert_guard(&action_id, pid, ActionKind::Vacuum);
-    emit_started(        app,
+    emit_started(
+        app,
         &ActionStartedPayload {
             action_id: action_id.clone(),
             pid,
         },
-)?;
+    )?;
     client
         .batch_execute(&format!("VACUUM {qualified}"))
         .await
@@ -246,7 +254,8 @@ pub async fn do_vacuum(    pool: &Pool,
     })
 }
 
-pub async fn do_analyze(    pool: &Pool,
+pub async fn do_analyze(
+    pool: &Pool,
     schema: &str,
     table: &str,
 ) -> Result<ActionResult, ActionError> {
@@ -265,7 +274,8 @@ pub async fn do_analyze(    pool: &Pool,
     })
 }
 
-pub async fn do_drop_index(    pool: &Pool,
+pub async fn do_drop_index(
+    pool: &Pool,
     schema: &str,
     index: &str,
 ) -> Result<ActionResult, ActionError> {
@@ -284,7 +294,8 @@ pub async fn do_drop_index(    pool: &Pool,
     })
 }
 
-pub async fn do_kill_pid(    pool: &Pool,
+pub async fn do_kill_pid(
+    pool: &Pool,
     pid: i32,
     terminate: bool,
 ) -> Result<ActionResult, ActionError> {
@@ -318,25 +329,28 @@ pub async fn do_kill_pid(    pool: &Pool,
 pub async fn check_pid(pool: &Pool, pid: i32) -> Result<bool, ActionError> {
     let client = pool.get().await.map_err(|_| ActionError::NotConnected)?;
     let row = client
-        .query_opt(            "SELECT 1 FROM pg_stat_activity WHERE pid = $1 AND state IS DISTINCT FROM 'idle'",
+        .query_opt(
+            "SELECT 1 FROM pg_stat_activity WHERE pid = $1 AND state IS DISTINCT FROM 'idle'",
             &[&pid],
-)
+        )
         .await
         .map_err(map_err)?;
     Ok(row.is_some())
 }
 
-pub async fn read_progress(    pool: &Pool,
+pub async fn read_progress(
+    pool: &Pool,
     entry: ActionEntry,
 ) -> Result<(String, Option<i64>, Option<i64>), ActionError> {
     let client = pool.get().await.map_err(|_| ActionError::NotConnected)?;
     let res = match entry.kind {
         ActionKind::Vacuum => client
-            .query_opt(                "SELECT phase, heap_blks_total, heap_blks_scanned
+            .query_opt(
+                "SELECT phase, heap_blks_total, heap_blks_scanned
                    FROM pg_stat_progress_vacuum
                   WHERE pid = $1",
                 &[&entry.pid],
-)
+            )
             .await
             .map_err(map_err)?
             .map(|r| {
@@ -346,11 +360,12 @@ pub async fn read_progress(    pool: &Pool,
                 (phase, scanned, total)
             }),
         ActionKind::ReindexTable => client
-            .query_opt(                "SELECT phase, blocks_total, blocks_done
+            .query_opt(
+                "SELECT phase, blocks_total, blocks_done
                    FROM pg_stat_progress_create_index
                   WHERE pid = $1",
                 &[&entry.pid],
-)
+            )
             .await
             .map_err(map_err)?
             .map(|r| {
@@ -367,7 +382,8 @@ pub async fn read_progress(    pool: &Pool,
 /// Build + emit the started event. Used by `do_vacuum` and `do_reindex_table`
 /// only — short actions don't bother. Pulled into a helper because both call
 /// sites do the same JSON build.
-pub(crate) fn emit_started(    app: &tauri::AppHandle,
+pub(crate) fn emit_started(
+    app: &tauri::AppHandle,
     payload: &ActionStartedPayload,
 ) -> Result<(), ActionError> {
     use tauri::Emitter;
@@ -419,8 +435,9 @@ mod tests {
 
     #[test]
     fn quote_qualified_combines() {
-        assert_eq!(            quote_qualified("public", "users").unwrap(),
+        assert_eq!(
+            quote_qualified("public", "users").unwrap(),
             "\"public\".\"users\""
-);
+        );
     }
 }

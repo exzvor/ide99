@@ -17,7 +17,8 @@
 //!
 //! Frame protocol = line-delimited JSON (see `mcp::transport_ipc`).
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::single_match_else,
     clippy::ptr_arg,
     clippy::doc_markdown,
@@ -47,19 +48,21 @@ fn main() -> ExitCode {
         let socket = match transport_ipc::default_socket_path() {
             Some(p) => p,
             None => {
-                eprintln!(                    "ide99-mcp: could not resolve IPC socket path (no HOME?). \
+                eprintln!(
+                    "ide99-mcp: could not resolve IPC socket path (no HOME?). \
                      Launch ide99 to use MCP."
-);
+                );
                 return ExitCode::from(2);
             }
         };
 
         if !socket_exists(&socket).await {
-            eprintln!(                "ide99-mcp: IPC socket not found at {}.\n\
+            eprintln!(
+                "ide99-mcp: IPC socket not found at {}.\n\
                  Launch ide99 and enable the MCP server in Settings to \
                  use this proxy.",
                 socket.display()
-);
+            );
             return ExitCode::from(2);
         }
 

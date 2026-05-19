@@ -26,11 +26,13 @@ pub struct CacheEntry {
 ///
 /// Returns [`InferenceError::Sqlite`] on database failure or
 /// [`InferenceError::Internal`] if the stored JSON is malformed.
-pub fn read(    db: &SqliteConnection,
+pub fn read(
+    db: &SqliteConnection,
     conn_id: &str,
     fqn: &FullyQualifiedColumn,
 ) -> Result<Option<CacheEntry>, InferenceError> {
-    db.query_row(        "SELECT schema_json, generated_at, stat_n_ins, stat_n_upd, stat_n_del, stat_n_live \
+    db.query_row(
+        "SELECT schema_json, generated_at, stat_n_ins, stat_n_upd, stat_n_del, stat_n_live \
          FROM inferred_schemas \
          WHERE conn_id=?1 AND schema_name=?2 AND table_name=?3 AND column_name=?4",
         params![conn_id, &fqn.schema, &fqn.table, &fqn.column],
@@ -43,7 +45,7 @@ pub fn read(    db: &SqliteConnection,
             let n_live: Option<i64> = row.get(5)?;
             Ok((schema_json, inferred_at, n_ins, n_upd, n_del, n_live))
         },
-)
+    )
     .optional()
     .map_err(|e| map_sqlite(&e))?
     .map(|(json, ts, ins, upd, del, live)| {
@@ -78,7 +80,8 @@ pub fn read(    db: &SqliteConnection,
 ///
 /// Returns [`InferenceError::Internal`] if serialization fails, or
 /// [`InferenceError::Sqlite`] on database failure.
-pub fn write(    db: &SqliteConnection,
+pub fn write(
+    db: &SqliteConnection,
     conn_id: &str,
     fqn: &FullyQualifiedColumn,
     schema: &InferredSchema,
@@ -120,14 +123,16 @@ pub fn write(    db: &SqliteConnection,
 /// # Errors
 ///
 /// Returns [`InferenceError::Sqlite`] on database failure.
-pub fn invalidate(    db: &SqliteConnection,
+pub fn invalidate(
+    db: &SqliteConnection,
     conn_id: &str,
     fqn: &FullyQualifiedColumn,
 ) -> Result<(), InferenceError> {
-    db.execute(        "DELETE FROM inferred_schemas \
+    db.execute(
+        "DELETE FROM inferred_schemas \
          WHERE conn_id=?1 AND schema_name=?2 AND table_name=?3 AND column_name=?4",
         params![conn_id, &fqn.schema, &fqn.table, &fqn.column],
-)
+    )
     .map_err(|e| map_sqlite(&e))?;
     Ok(())
 }
@@ -141,9 +146,10 @@ pub fn invalidate(    db: &SqliteConnection,
 /// Returns [`InferenceError::Sqlite`] on database failure.
 pub fn evict_for_connection(db: &SqliteConnection, conn_id: &str) -> Result<usize, InferenceError> {
     let n = db
-        .execute(            "DELETE FROM inferred_schemas WHERE conn_id = ?1",
+        .execute(
+            "DELETE FROM inferred_schemas WHERE conn_id = ?1",
             params![conn_id],
-)
+        )
         .map_err(|e| map_sqlite(&e))?;
     Ok(n)
 }
@@ -171,11 +177,12 @@ fn serialize_with_softcap(schema: &InferredSchema) -> Result<String, InferenceEr
             .cmp(&b.path.len())
             .then_with(|| a.path.cmp(&b.path))
     });
-    tracing::warn!(        blob_bytes = primary.len(),
+    tracing::warn!(
+        blob_bytes = primary.len(),
         cap_bytes = SOFT_CAP_BYTES,
         top_nodes = TOP_NODES_AFTER_TRUNCATE,
         "inference: schema blob exceeds cap, truncated to top nodes",
-);
+    );
     serde_json::to_string(&truncated).map_err(|e| InferenceError::Internal {
         message: e.to_string(),
     })
@@ -197,8 +204,9 @@ mod tests {
     fn open_in_memory() -> SqliteConnection {
         let db = SqliteConnection::open_in_memory().unwrap();
         // Apply the migration manually for tests.
-        db.execute_batch(include_str!(            "../../../../migrations/009_jsonb_inferred_schemas.sql"
-))
+        db.execute_batch(include_str!(
+            "../../../../migrations/009_jsonb_inferred_schemas.sql"
+        ))
         .unwrap();
         db
     }
@@ -328,18 +336,20 @@ mod tests {
             .iter()
             .map(|n| n.freq)
             .fold(f32::INFINITY, f32::min);
-        assert!(            min_kept_freq >= 0.975 - 1e-3,
+        assert!(
+            min_kept_freq >= 0.975 - 1e-3,
             "expected top-freq nodes retained; min freq in survivors = {min_kept_freq}"
-);
+        );
 
         // Surviving nodes must remain sorted by (path.len ASC, path lex) per
         // serialize_with_softcap's re-sort step.
         for window in entry.schema.nodes.windows(2) {
             let a = &window[0];
             let b = &window[1];
-            assert!(                a.path.len() < b.path.len() || (a.path.len() == b.path.len() && a.path <= b.path),
+            assert!(
+                a.path.len() < b.path.len() || (a.path.len() == b.path.len() && a.path <= b.path),
                 "soft-cap output must be sorted by (path.len, path)"
-);
+            );
         }
     }
 }

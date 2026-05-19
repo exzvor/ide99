@@ -51,7 +51,8 @@ pub fn preview(env: &ShareEnvelope) -> Result<ImportPreview, ShareError> {
         ShareKind::Keymap => kinds::keymap::summary(&env.payload)?,
         ShareKind::HealthConfig => kinds::health_config::summary(&env.payload)?,
     };
-    let may_collide = matches!(        env.kind,
+    let may_collide = matches!(
+        env.kind,
         ShareKind::Connection
             | ShareKind::ConnectionBundle
             | ShareKind::Snippet
@@ -60,7 +61,7 @@ pub fn preview(env: &ShareEnvelope) -> Result<ImportPreview, ShareError> {
             | ShareKind::Keymap
             | ShareKind::MigrationSet
             | ShareKind::HealthConfig
-);
+    );
     Ok(ImportPreview {
         kind: env.kind,
         version: env.version,

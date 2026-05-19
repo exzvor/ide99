@@ -15,7 +15,8 @@
 //! * Stderr tail is capped at 4 KB — even if pg_dump dumps a megabyte of
 //!   errors, only the last lines end up in `Done.stderr_tail`.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::doc_markdown,
     clippy::must_use_candidate,
@@ -84,10 +85,11 @@ impl Tool {
 /// [`BackupError::BinaryUnavailable`] if not found.
 pub fn locate_binary(tool: Tool) -> Result<std::path::PathBuf, BackupError> {
     which::which(tool.binary()).map_err(|e| {
-        BackupError::BinaryUnavailable(format!(            "{}: {} (install Postgres client tools and add to PATH)",
+        BackupError::BinaryUnavailable(format!(
+            "{}: {} (install Postgres client tools and add to PATH)",
             tool.binary(),
             e
-))
+        ))
     })
 }
 
@@ -96,7 +98,8 @@ pub fn locate_binary(tool: Tool) -> Result<std::path::PathBuf, BackupError> {
 ///
 /// Returns the final tail string. Never panics — any parse failure is
 /// ignored (parse_line returns a Some(log) fallback).
-pub async fn process_stderr_stream<R, S>(    reader: R,
+pub async fn process_stderr_stream<R, S>(
+    reader: R,
     job_id: &str,
     sink: &S,
 ) -> std::io::Result<String>
@@ -173,7 +176,8 @@ impl TailBuffer {
 /// Spawn pg_dump / pg_restore / pg_basebackup. Returns
 /// `Result<(), BackupError>` where `Ok(())` means success. All
 /// ProgressEvents (including the final Done) are emitted inside.
-async fn run_command<S: EventSink + ?Sized>(    tool: Tool,
+async fn run_command<S: EventSink + ?Sized>(
+    tool: Tool,
     args: Vec<String>,
     password: Option<String>,
     job_id: &str,
@@ -250,11 +254,12 @@ async fn run_command<S: EventSink + ?Sized>(    tool: Tool,
         return Err(BackupError::Subprocess("cancelled".into()));
     }
     if !success {
-        return Err(BackupError::Subprocess(format!(            "{} exited with {:?}: {}",
+        return Err(BackupError::Subprocess(format!(
+            "{} exited with {:?}: {}",
             tool.binary(),
             exit_code,
             stderr_tail.lines().last().unwrap_or("(no stderr)")
-)));
+        )));
     }
     Ok(())
 }
@@ -279,7 +284,8 @@ impl EventSink for NoopSink {
 /// Run pg_dump with an explicit sink. Public so integration tests can
 /// call it directly (a Tauri AppHandle cannot be constructed without
 /// the `test` feature).
-pub async fn run_backup_with_sink<S: EventSink + ?Sized>(    sink: &S,
+pub async fn run_backup_with_sink<S: EventSink + ?Sized>(
+    sink: &S,
     state: &AppState,
     job_id: &str,
     opts: BackupOptions,
@@ -292,7 +298,8 @@ pub async fn run_backup_with_sink<S: EventSink + ?Sized>(    sink: &S,
 }
 
 /// Run pg_restore with an explicit sink.
-pub async fn run_restore_with_sink<S: EventSink + ?Sized>(    sink: &S,
+pub async fn run_restore_with_sink<S: EventSink + ?Sized>(
+    sink: &S,
     state: &AppState,
     job_id: &str,
     opts: RestoreOptions,
@@ -305,7 +312,8 @@ pub async fn run_restore_with_sink<S: EventSink + ?Sized>(    sink: &S,
 }
 
 /// Run pg_basebackup with an explicit sink.
-pub async fn run_basebackup_with_sink<S: EventSink + ?Sized>(    sink: &S,
+pub async fn run_basebackup_with_sink<S: EventSink + ?Sized>(
+    sink: &S,
     state: &AppState,
     job_id: &str,
     opts: BaseBackupOptions,
@@ -318,7 +326,8 @@ pub async fn run_basebackup_with_sink<S: EventSink + ?Sized>(    sink: &S,
 }
 
 /// Run pg_dump (production wrapper — emits to the Tauri event bus).
-pub async fn run_backup(    app: &AppHandle,
+pub async fn run_backup(
+    app: &AppHandle,
     state: &AppState,
     job_id: &str,
     opts: BackupOptions,
@@ -328,7 +337,8 @@ pub async fn run_backup(    app: &AppHandle,
 }
 
 /// Run pg_restore (production wrapper).
-pub async fn run_restore(    app: &AppHandle,
+pub async fn run_restore(
+    app: &AppHandle,
     state: &AppState,
     job_id: &str,
     opts: RestoreOptions,
@@ -338,7 +348,8 @@ pub async fn run_restore(    app: &AppHandle,
 }
 
 /// Run pg_basebackup (production wrapper).
-pub async fn run_basebackup(    app: &AppHandle,
+pub async fn run_basebackup(
+    app: &AppHandle,
     state: &AppState,
     job_id: &str,
     opts: BaseBackupOptions,

@@ -30,7 +30,8 @@ pub(crate) const INTERMEDIATE_ROWSET_CAP: usize = 500;
 /// `AppState.cursors`. Calling this with `want_cursor=true` therefore returns
 /// a `StorageError` that callers must avoid by branching beforehand.
 #[allow(clippy::missing_errors_doc)]
-pub async fn run_one_on_conn(    client: &mut Client,
+pub async fn run_one_on_conn(
+    client: &mut Client,
     sql: &str,
     index: u32,
     want_cursor: bool,

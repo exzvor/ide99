@@ -95,9 +95,10 @@ pub fn apply(value: &serde_json::Value, dest_dir: &Path) -> Result<usize, ShareE
         let up_name = format!("{}_{}.up.sql", f.version, f.name);
         let up_path = dest_dir.join(&up_name);
         if up_path.exists() {
-            return Err(ShareError::Storage(format!(                "refusing to overwrite existing file: {}",
+            return Err(ShareError::Storage(format!(
+                "refusing to overwrite existing file: {}",
                 up_path.display()
-)));
+            )));
         }
         fs::write(&up_path, &f.up_sql).map_err(|e| ShareError::Io(e.to_string()))?;
         written += 1;
@@ -105,9 +106,10 @@ pub fn apply(value: &serde_json::Value, dest_dir: &Path) -> Result<usize, ShareE
             let down_name = format!("{}_{}.down.sql", f.version, f.name);
             let down_path = dest_dir.join(&down_name);
             if down_path.exists() {
-                return Err(ShareError::Storage(format!(                    "refusing to overwrite existing file: {}",
+                return Err(ShareError::Storage(format!(
+                    "refusing to overwrite existing file: {}",
                     down_path.display()
-)));
+                )));
             }
             fs::write(&down_path, down_sql).map_err(|e| ShareError::Io(e.to_string()))?;
         }

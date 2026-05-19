@@ -48,8 +48,9 @@ mod tests {
                 value: "not json".into(),
             },
         };
-        assert!(matches!(            jsonb_builder_preview(req).await,
+        assert!(matches!(
+            jsonb_builder_preview(req).await,
             Err(BuilderError::InvalidJson { .. })
-));
+        ));
     }
 }

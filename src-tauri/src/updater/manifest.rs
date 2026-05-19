@@ -12,9 +12,10 @@ use crate::updater::types::ReleaseChannel;
 /// payloads to it).
 #[must_use]
 pub fn manifest_url(channel: ReleaseChannel) -> String {
-    format!(        "https://updates.ide99.io/{}/manifest.json",
+    format!(
+        "https://updates.ide99.io/{}/manifest.json",
         channel.as_str()
-)
+    )
 }
 
 /// Naive semver compare for "X.Y.Z" with optional pre-release suffix
@@ -63,15 +64,18 @@ mod tests {
 
     #[test]
     fn manifest_url_per_channel() {
-        assert_eq!(            manifest_url(ReleaseChannel::Stable),
+        assert_eq!(
+            manifest_url(ReleaseChannel::Stable),
             "https://updates.ide99.io/stable/manifest.json"
-);
-        assert_eq!(            manifest_url(ReleaseChannel::Beta),
+        );
+        assert_eq!(
+            manifest_url(ReleaseChannel::Beta),
             "https://updates.ide99.io/beta/manifest.json"
-);
-        assert_eq!(            manifest_url(ReleaseChannel::Nightly),
+        );
+        assert_eq!(
+            manifest_url(ReleaseChannel::Nightly),
             "https://updates.ide99.io/nightly/manifest.json"
-);
+        );
     }
 
     #[test]

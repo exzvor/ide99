@@ -48,7 +48,8 @@ pub fn to_single_payload(s: &UserSnippet) -> Result<serde_json::Value, ShareErro
         .map_err(|e| ShareError::InvalidFile(format!("encode snippet: {e}")))
 }
 
-pub fn to_bundle_payload(    name: &str,
+pub fn to_bundle_payload(
+    name: &str,
     snippets: &[UserSnippet],
 ) -> Result<serde_json::Value, ShareError> {
     let bundle = SnippetBundle {
@@ -80,7 +81,8 @@ pub fn bundle_summary(value: &serde_json::Value) -> Result<String, ShareError> {
 
 /// Apply a single snippet payload — inserts into the `user_snippets` table.
 /// Caller holds the `Store` lock. Returns the inserted row.
-pub fn apply_single(    conn: &rusqlite::Connection,
+pub fn apply_single(
+    conn: &rusqlite::Connection,
     payload: &serde_json::Value,
 ) -> Result<UserSnippet, ShareError> {
     let exp = from_single_payload(payload)?;
@@ -96,7 +98,8 @@ pub fn apply_single(    conn: &rusqlite::Connection,
 
 /// Apply a snippet-bundle payload — inserts every snippet sequentially.
 /// Returns the count of inserted rows.
-pub fn apply_bundle(    conn: &rusqlite::Connection,
+pub fn apply_bundle(
+    conn: &rusqlite::Connection,
     payload: &serde_json::Value,
 ) -> Result<usize, ShareError> {
     let bundle = from_bundle_payload(payload)?;
@@ -156,9 +159,10 @@ mod tests {
     fn bundle_summary_counts_entries() {
         let snippets = vec![fake(1, "a"), fake(2, "b"), fake(3, "c")];
         let payload = to_bundle_payload("team-helpers", &snippets).unwrap();
-        assert_eq!(            bundle_summary(&payload).unwrap(),
+        assert_eq!(
+            bundle_summary(&payload).unwrap(),
             "team-helpers (3 snippets)"
-);
+        );
     }
 
     #[test]

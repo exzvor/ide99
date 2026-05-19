@@ -101,8 +101,9 @@ pub fn compose(cells: &[Cell], target_idx: usize) -> Result<ComposedSql, String>
     let target_sql = match &cells[target_idx] {
         Cell::Sql { source, .. } => source.clone(),
         _ => {
-            return Err(format!(                "cell {target_idx} is not a SQL cell — cannot compose"
-))
+            return Err(format!(
+                "cell {target_idx} is not a SQL cell — cannot compose"
+            ))
         }
     };
 
@@ -254,7 +255,8 @@ fn detect_cycle(candidates: &[(usize, String, String)]) -> Option<Vec<String>> {
     None
 }
 
-fn dfs(    u: usize,
+fn dfs(
+    u: usize,
     adj: &[Vec<usize>],
     state: &mut [u8],
     path: &mut Vec<usize>,

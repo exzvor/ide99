@@ -71,7 +71,8 @@ pub struct FailedPayload {
 
 /// Spawn a background task to (re)compute the schema for `(conn_id, fqn)`.
 /// No-op if a task for the same key is already running.
-pub async fn ensure_running(    state: Arc<InferenceState>,
+pub async fn ensure_running(
+    state: Arc<InferenceState>,
     app: AppHandle,
     pool: Pool,
     store: Arc<Mutex<Store>>,
@@ -97,29 +98,31 @@ pub async fn ensure_running(    state: Arc<InferenceState>,
         let result = run_once(&pool, store.clone(), &conn_id, &fqn, previous_stats).await;
         match result {
             Ok(schema) => {
-                let _ = app.emit(                    EVENT_UPDATED,
+                let _ = app.emit(
+                    EVENT_UPDATED,
                     UpdatedPayload {
                         conn_id: conn_id.clone(),
                         fqn: fqn.clone(),
                         schema,
                     },
-);
+                );
             }
             Err(e) => {
                 tracing::warn!(                    conn_id = %conn_id,
-                    schema = %fqn.schema,
-                    table = %fqn.table,
-                    column = %fqn.column,
-                    error = %e,
-                    "jsonb inference task failed"
-);
-                let _ = app.emit(                    EVENT_FAILED,
+                                    schema = %fqn.schema,
+                                    table = %fqn.table,
+                                    column = %fqn.column,
+                                    error = %e,
+                                    "jsonb inference task failed"
+                );
+                let _ = app.emit(
+                    EVENT_FAILED,
                     FailedPayload {
                         conn_id,
                         fqn,
                         message: e.to_string(),
                     },
-);
+                );
             }
         }
         {
@@ -129,7 +132,8 @@ pub async fn ensure_running(    state: Arc<InferenceState>,
     });
 }
 
-async fn run_once(    pool: &Pool,
+async fn run_once(
+    pool: &Pool,
     store: Arc<Mutex<Store>>,
     conn_id: &str,
     fqn: &FullyQualifiedColumn,

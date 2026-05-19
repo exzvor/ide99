@@ -27,7 +27,8 @@ pub struct McpClientListItem {
 }
 
 #[tauri::command]
-pub async fn mcp_client_list(    state: tauri::State<'_, AppState>,
+pub async fn mcp_client_list(
+    state: tauri::State<'_, AppState>,
 ) -> Result<Vec<McpClientListItem>, McpError> {
     let cfg_path =
         crate::app_paths::mcp_servers_config_path().map_err(|e| McpError::Io(e.to_string()))?;
@@ -53,7 +54,8 @@ pub async fn mcp_client_list(    state: tauri::State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn mcp_client_connect(    state: tauri::State<'_, AppState>,
+pub async fn mcp_client_connect(
+    state: tauri::State<'_, AppState>,
     name: String,
 ) -> Result<(), McpError> {
     let conn = state
@@ -65,7 +67,8 @@ pub async fn mcp_client_connect(    state: tauri::State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn mcp_client_disconnect(    state: tauri::State<'_, AppState>,
+pub async fn mcp_client_disconnect(
+    state: tauri::State<'_, AppState>,
     name: String,
 ) -> Result<(), McpError> {
     let conn = state
@@ -90,7 +93,8 @@ pub async fn mcp_client_reload(state: tauri::State<'_, AppState>) -> Result<(), 
 /// Path of the user-editable config file. Frontend shows it next to
 /// "Open in editor" so users can `cat` / hand-edit.
 #[tauri::command]
-pub async fn mcp_client_config_path(    _state: tauri::State<'_, AppState>,
+pub async fn mcp_client_config_path(
+    _state: tauri::State<'_, AppState>,
 ) -> Result<String, McpError> {
     let p = crate::app_paths::mcp_servers_config_path().map_err(|e| McpError::Io(e.to_string()))?;
     Ok(p.to_string_lossy().into_owned())

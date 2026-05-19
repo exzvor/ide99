@@ -13,7 +13,8 @@
 //! pending oneshot and the MCP server sends the response back to the
 //! connected client.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::needless_pass_by_value,
     clippy::significant_drop_tightening,
     clippy::map_unwrap_or,
@@ -29,14 +30,16 @@ use crate::mcp::store_migration;
 use crate::AppState;
 
 #[tauri::command]
-pub async fn mcp_get_status(    state: tauri::State<'_, AppState>,
+pub async fn mcp_get_status(
+    state: tauri::State<'_, AppState>,
 ) -> Result<McpServerStatus, McpError> {
     let handle = state.mcp_server.lock().await;
     Ok(handle.status.clone())
 }
 
 #[tauri::command]
-pub async fn mcp_set_enabled(    state: tauri::State<'_, AppState>,
+pub async fn mcp_set_enabled(
+    state: tauri::State<'_, AppState>,
     app: tauri::AppHandle,
     enabled: bool,
 ) -> Result<McpServerStatus, McpError> {
@@ -45,11 +48,12 @@ pub async fn mcp_set_enabled(    state: tauri::State<'_, AppState>,
         if handle.status.enabled {
             return Ok(handle.status.clone());
         }
-        let new = crate::mcp::server::start(            state.store.clone(),
+        let new = crate::mcp::server::start(
+            state.store.clone(),
             state.pools.clone(),
             state.mcp_bridge.clone(),
             Some(app),
-)
+        )
         .await?;
         *handle = new;
     } else {
@@ -62,14 +66,16 @@ pub async fn mcp_set_enabled(    state: tauri::State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn mcp_list_clients(    state: tauri::State<'_, AppState>,
+pub async fn mcp_list_clients(
+    state: tauri::State<'_, AppState>,
 ) -> Result<Vec<AuthorizedClient>, McpError> {
     let store = state.store.lock().await;
     store_migration::list_clients(store.conn()).map_err(|e| McpError::Internal(e.to_string()))
 }
 
 #[tauri::command]
-pub async fn mcp_revoke_client(    state: tauri::State<'_, AppState>,
+pub async fn mcp_revoke_client(
+    state: tauri::State<'_, AppState>,
     client_id: String,
 ) -> Result<(), McpError> {
     let store = state.store.lock().await;
@@ -87,7 +93,8 @@ pub struct McpConfigSnippet {
 }
 
 #[tauri::command]
-pub async fn mcp_get_config_snippet(    state: tauri::State<'_, AppState>,
+pub async fn mcp_get_config_snippet(
+    state: tauri::State<'_, AppState>,
 ) -> Result<McpConfigSnippet, McpError> {
     let handle = state.mcp_server.lock().await;
     if !handle.status.enabled {
@@ -115,7 +122,8 @@ pub async fn mcp_get_config_snippet(    state: tauri::State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn mcp_bridge_update(    state: tauri::State<'_, AppState>,
+pub async fn mcp_bridge_update(
+    state: tauri::State<'_, AppState>,
     snapshot: IdeBridgeState,
 ) -> Result<(), McpError> {
     let mut bridge = state.mcp_bridge.write().await;
@@ -129,7 +137,8 @@ pub async fn mcp_bridge_update(    state: tauri::State<'_, AppState>,
 /// `scopes` is the user-edited subset (e.g. read-only checkbox unchecked
 /// `db:write`).
 #[tauri::command]
-pub async fn mcp_authorize_response(    state: tauri::State<'_, AppState>,
+pub async fn mcp_authorize_response(
+    state: tauri::State<'_, AppState>,
     request_id: String,
     scopes: Vec<McpScope>,
 ) -> Result<(), McpError> {
@@ -141,7 +150,8 @@ pub async fn mcp_authorize_response(    state: tauri::State<'_, AppState>,
 
 /// Frontend resolves a pending `mcp:authorize-request` negatively.
 #[tauri::command]
-pub async fn mcp_authorize_deny(    state: tauri::State<'_, AppState>,
+pub async fn mcp_authorize_deny(
+    state: tauri::State<'_, AppState>,
     request_id: String,
 ) -> Result<(), McpError> {
     let handle = state.mcp_server.lock().await;
@@ -152,7 +162,8 @@ pub async fn mcp_authorize_deny(    state: tauri::State<'_, AppState>,
 
 /// Frontend resolves a pending write-confirmation dialog.
 #[tauri::command]
-pub async fn mcp_write_confirm_response(    state: tauri::State<'_, AppState>,
+pub async fn mcp_write_confirm_response(
+    state: tauri::State<'_, AppState>,
     request_id: String,
     allow: bool,
 ) -> Result<(), McpError> {
@@ -164,7 +175,8 @@ pub async fn mcp_write_confirm_response(    state: tauri::State<'_, AppState>,
 
 /// Read the last `limit` lines of the MCP audit log (newest first).
 #[tauri::command]
-pub async fn mcp_get_audit_log(    _state: tauri::State<'_, AppState>,
+pub async fn mcp_get_audit_log(
+    _state: tauri::State<'_, AppState>,
     limit: u32,
 ) -> Result<Vec<serde_json::Value>, McpError> {
     let dir = crate::app_paths::data_dir().map_err(|e| McpError::Io(e.to_string()))?;

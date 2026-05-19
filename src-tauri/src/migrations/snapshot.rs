@@ -132,13 +132,14 @@ pub async fn capture(client: &Client) -> Result<Vec<u8>, MigrationsError> {
     for row in &tables_rows {
         let schema: String = row.get("schema");
         let name: String = row.get("name");
-        tables.insert(            format!("{schema}.{name}"),
+        tables.insert(
+            format!("{schema}.{name}"),
             json!({
                 "schema": schema,
                 "name": name,
                 "columns": [],
             }),
-);
+        );
     }
 
     // 3. Columns — attach to their owning table entry, in attnum order
@@ -268,8 +269,9 @@ mod tests {
             }
         };
         let host_port = container.get_host_port_ipv4(5432).await.expect("host port");
-        let conn_str = format!(            "host=127.0.0.1 port={host_port} user=postgres password=postgres dbname=postgres"
-);
+        let conn_str = format!(
+            "host=127.0.0.1 port={host_port} user=postgres password=postgres dbname=postgres"
+        );
         let (client, connection) = tokio_postgres::connect(&conn_str, NoTls)
             .await
             .expect("connect tc pg");
@@ -285,13 +287,14 @@ mod tests {
             return;
         };
         client
-            .batch_execute(                "CREATE TABLE public.users (\
+            .batch_execute(
+                "CREATE TABLE public.users (\
                     id   serial PRIMARY KEY, \
                     name text   NOT NULL, \
                     bio  text \
 ); \
                  CREATE INDEX users_name_idx ON public.users(name);",
-)
+            )
             .await
             .expect("seed schema");
 
@@ -307,9 +310,10 @@ mod tests {
             .get("schemas")
             .and_then(|v| v.as_array())
             .expect("schemas array");
-        assert!(            schemas.iter().any(|s| s.as_str() == Some("public")),
+        assert!(
+            schemas.iter().any(|s| s.as_str() == Some("public")),
             "expected schemas[] to contain 'public', got: {schemas:?}",
-);
+        );
 
         // Includes the users table with its columns.
         let tables = parsed
@@ -328,11 +332,12 @@ mod tests {
             .get("indexes")
             .and_then(|v| v.as_array())
             .expect("indexes array");
-        assert!(            indexes
+        assert!(
+            indexes
                 .iter()
                 .any(|i| i.get("name").and_then(|v| v.as_str()) == Some("users_name_idx")),
             "expected users_name_idx in indexes",
-);
+        );
     }
 
     #[test]
@@ -346,8 +351,9 @@ mod tests {
     #[test]
     fn unified_diff_identical_returns_empty_string() {
         let d = unified_diff("a\nb\nc\n", "a\nb\nc\n");
-        assert!(            d.is_empty(),
+        assert!(
+            d.is_empty(),
             "expected empty diff for identical input, got:\n{d}",
-);
+        );
     }
 }

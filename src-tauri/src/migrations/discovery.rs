@@ -8,7 +8,8 @@
 //! Also exposes the SHA-256 helper used by the executor and the
 //! `-- ide99:no-transaction` magic-comment parser.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::items_after_statements,
     clippy::too_many_lines
@@ -247,10 +248,11 @@ mod tests {
     #[test]
     fn up_only_no_rollback() {
         let dir = TempDir::new().unwrap();
-        write(            &dir,
+        write(
+            &dir,
             "0002_add_email.up.sql",
             "ALTER TABLE u ADD email text;",
-);
+        );
 
         let out = discover(dir.path()).unwrap();
         assert_eq!(out.len(), 1);
@@ -331,37 +333,44 @@ mod tests {
     #[test]
     fn computes_sha256_checksum_hex() {
         // Known vector: SHA-256("abc") = ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
-        assert_eq!(            checksum_hex(b"abc"),
+        assert_eq!(
+            checksum_hex(b"abc"),
             "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
-);
+        );
         // Empty input
-        assert_eq!(            checksum_hex(b""),
+        assert_eq!(
+            checksum_hex(b""),
             "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-);
+        );
         // Determinism
         assert_eq!(checksum_hex(b"hello"), checksum_hex(b"hello"));
     }
 
     #[test]
     fn detects_no_transaction_magic_comment() {
-        assert!(has_no_transaction_directive(            "-- ide99:no-transaction\nCREATE INDEX CONCURRENTLY ..."
-));
+        assert!(has_no_transaction_directive(
+            "-- ide99:no-transaction\nCREATE INDEX CONCURRENTLY ..."
+        ));
         // Leading blank lines OK.
-        assert!(has_no_transaction_directive(            "\n\n   \n-- ide99:no-transaction\nSELECT 1;"
-));
+        assert!(has_no_transaction_directive(
+            "\n\n   \n-- ide99:no-transaction\nSELECT 1;"
+        ));
         // Trimmed whitespace around the line OK.
-        assert!(has_no_transaction_directive(            "  -- ide99:no-transaction  \nSELECT 1;"
-));
+        assert!(has_no_transaction_directive(
+            "  -- ide99:no-transaction  \nSELECT 1;"
+        ));
     }
 
     #[test]
     fn rejects_no_transaction_when_not_first_line() {
         // Magic comment on line 2 — first non-blank is "SELECT 1;"
-        assert!(!has_no_transaction_directive(            "SELECT 1;\n-- ide99:no-transaction"
-));
+        assert!(!has_no_transaction_directive(
+            "SELECT 1;\n-- ide99:no-transaction"
+        ));
         // Trailing text on the magic line — not exact match.
-        assert!(!has_no_transaction_directive(            "-- ide99:no-transaction please\nSELECT 1;"
-));
+        assert!(!has_no_transaction_directive(
+            "-- ide99:no-transaction please\nSELECT 1;"
+        ));
         // Different comment — no match.
         assert!(!has_no_transaction_directive("-- some-other-comment\n"));
         // Empty input

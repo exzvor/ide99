@@ -391,9 +391,10 @@ mod tests {
         let r = parse_select("SELECT id, email FROM public.users").unwrap();
         assert_eq!(r.base_select.schema.as_deref(), Some("public"));
         assert_eq!(r.base_select.table, "users");
-        assert_eq!(            r.base_select.columns,
+        assert_eq!(
+            r.base_select.columns,
             vec!["id".to_string(), "email".to_string()]
-);
+        );
     }
 
     #[test]

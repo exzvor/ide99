@@ -19,9 +19,10 @@ impl<'a> SnippetStore<'a> {
     pub fn list(&self) -> Result<Vec<UserSnippet>, SnippetError> {
         let mut stmt = self
             .conn
-            .prepare(                "SELECT id, label, prefix, body, documentation, created_at, updated_at \
+            .prepare(
+                "SELECT id, label, prefix, body, documentation, created_at, updated_at \
                  FROM user_snippets ORDER BY label COLLATE NOCASE",
-)
+            )
             .map_err(|e| SnippetError::Storage(e.to_string()))?;
         let rows = stmt
             .query_map([], |r| {
@@ -48,10 +49,11 @@ impl<'a> SnippetStore<'a> {
         validate_prefix(&input.prefix)?;
         validate_body(&input.body)?;
         self.conn
-            .execute(                "INSERT INTO user_snippets (label, prefix, body, documentation) \
+            .execute(
+                "INSERT INTO user_snippets (label, prefix, body, documentation) \
                  VALUES (?, ?, ?, ?)",
                 params![input.label, input.prefix, input.body, input.documentation],
-)
+            )
             .map_err(|e| SnippetError::Storage(e.to_string()))?;
         let id = self.conn.last_insert_rowid();
         self.get(id)
@@ -59,7 +61,8 @@ impl<'a> SnippetStore<'a> {
 
     pub fn get(&self, id: i64) -> Result<UserSnippet, SnippetError> {
         self.conn
-            .query_row(                "SELECT id, label, prefix, body, documentation, created_at, updated_at \
+            .query_row(
+                "SELECT id, label, prefix, body, documentation, created_at, updated_at \
                  FROM user_snippets WHERE id = ?",
                 params![id],
                 |r| {
@@ -73,7 +76,7 @@ impl<'a> SnippetStore<'a> {
                         updated_at: r.get(6)?,
                     })
                 },
-)
+            )
             .map_err(|e| match e {
                 rusqlite::Error::QueryReturnedNoRows => SnippetError::NotFound(id),
                 other => SnippetError::Storage(other.to_string()),
@@ -86,7 +89,8 @@ impl<'a> SnippetStore<'a> {
         validate_body(&input.body)?;
         let affected = self
             .conn
-            .execute(                "UPDATE user_snippets \
+            .execute(
+                "UPDATE user_snippets \
                  SET label = ?, prefix = ?, body = ?, documentation = ?, \
                      updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') \
                  WHERE id = ?",
@@ -97,7 +101,7 @@ impl<'a> SnippetStore<'a> {
                     input.documentation,
                     id
                 ],
-)
+            )
             .map_err(|e| SnippetError::Storage(e.to_string()))?;
         if affected == 0 {
             return Err(SnippetError::NotFound(id));
@@ -122,8 +126,9 @@ fn validate_label(s: &str) -> Result<(), SnippetError> {
         return Err(SnippetError::InvalidInput("label is empty".into()));
     }
     if s.len() > 200 {
-        return Err(SnippetError::InvalidInput(            "label too long (max 200)".into(),
-));
+        return Err(SnippetError::InvalidInput(
+            "label too long (max 200)".into(),
+        ));
     }
     Ok(())
 }
@@ -134,16 +139,19 @@ fn validate_prefix(s: &str) -> Result<(), SnippetError> {
     }
     let first = s.chars().next().unwrap();
     if !first.is_ascii_alphabetic() {
-        return Err(SnippetError::InvalidInput(            "prefix must start with a letter".into(),
-));
+        return Err(SnippetError::InvalidInput(
+            "prefix must start with a letter".into(),
+        ));
     }
     if !s.chars().all(|c| c.is_ascii_alphanumeric() || c == '_') {
-        return Err(SnippetError::InvalidInput(            "prefix may contain only [A-Za-z0-9_]".into(),
-));
+        return Err(SnippetError::InvalidInput(
+            "prefix may contain only [A-Za-z0-9_]".into(),
+        ));
     }
     if s.len() > 32 {
-        return Err(SnippetError::InvalidInput(            "prefix too long (max 32)".into(),
-));
+        return Err(SnippetError::InvalidInput(
+            "prefix too long (max 32)".into(),
+        ));
     }
     Ok(())
 }
@@ -153,8 +161,9 @@ fn validate_body(s: &str) -> Result<(), SnippetError> {
         return Err(SnippetError::InvalidInput("body is empty".into()));
     }
     if s.len() > 10_000 {
-        return Err(SnippetError::InvalidInput(            "body too long (max 10000 chars)".into(),
-));
+        return Err(SnippetError::InvalidInput(
+            "body too long (max 10000 chars)".into(),
+        ));
     }
     Ok(())
 }
@@ -216,14 +225,15 @@ mod tests {
         // Force ms tick so updated_at strictly differs
         std::thread::sleep(std::time::Duration::from_millis(2));
         let updated = s
-            .update(                snip.id,
+            .update(
+                snip.id,
                 &UpdateUserSnippet {
                     label: "v2".into(),
                     prefix: "v".into(),
                     body: "SELECT 2".into(),
                     documentation: "doc".into(),
                 },
-)
+            )
             .unwrap();
         assert_eq!(updated.label, "v2");
         assert_eq!(updated.body, "SELECT 2");

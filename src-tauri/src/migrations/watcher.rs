@@ -61,7 +61,8 @@ fn event_touches_sql(event: &Event) -> bool {
 /// other async setup work in `migrations_set_dir` without blocking the
 /// runtime; the actual blocking happens on the `spawn_blocking` thread.
 #[allow(clippy::unused_async)]
-pub async fn spawn_watcher(    path: PathBuf,
+pub async fn spawn_watcher(
+    path: PathBuf,
     on_event: WatcherCallback,
 ) -> Result<WatcherHandle, MigrationsError> {
     // notify uses a sync channel; we'll bridge it into Tokio via spawn_blocking.
@@ -107,9 +108,10 @@ pub async fn spawn_watcher(    path: PathBuf,
 
             // Check the stop signal between polls so dropping the handle ends
             // us within ~100ms even when the watched dir is quiet.
-            if matches!(                stop_rx.try_recv(),
+            if matches!(
+                stop_rx.try_recv(),
                 Ok(()) | Err(oneshot::error::TryRecvError::Closed)
-) {
+            ) {
                 break;
             }
 
@@ -184,9 +186,10 @@ mod tests {
         let count = counter.load(Ordering::SeqCst);
         // Debounce should collapse the 5 writes into 1 burst (occasionally 2
         // if the OS's notify backend splits the burst across the deadline).
-        assert!(            (1..=2).contains(&count),
+        assert!(
+            (1..=2).contains(&count),
             "expected 1 or 2 callback invocations from burst, got {count}",
-);
+        );
     }
 
     #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
@@ -205,8 +208,9 @@ mod tests {
         tokio::time::sleep(Duration::from_millis(600)).await;
 
         let count = counter.load(Ordering::SeqCst);
-        assert_eq!(            count, 0,
+        assert_eq!(
+            count, 0,
             "non-SQL writes should never trigger the callback (got {count})",
-);
+        );
     }
 }

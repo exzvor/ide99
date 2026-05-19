@@ -68,7 +68,8 @@ fn map_err(e: InstantDbError) -> String {
 }
 
 #[tauri::command]
-pub async fn instant_db_create(    state: State<'_, AppState>,
+pub async fn instant_db_create(
+    state: State<'_, AppState>,
     locale: String,
 ) -> Result<InstantDbCreateView, String> {
     client::create(&state.data_dir, &locale)
@@ -78,7 +79,8 @@ pub async fn instant_db_create(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn instant_db_status(    state: State<'_, AppState>,
+pub async fn instant_db_status(
+    state: State<'_, AppState>,
     locale: String,
     db_id: String,
 ) -> Result<InstantDbStatusView, String> {
@@ -89,7 +91,8 @@ pub async fn instant_db_status(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn instant_db_heartbeat(    state: State<'_, AppState>,
+pub async fn instant_db_heartbeat(
+    state: State<'_, AppState>,
     locale: String,
     db_id: String,
 ) -> Result<InstantDbStatusView, String> {
@@ -100,7 +103,8 @@ pub async fn instant_db_heartbeat(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn instant_db_delete(    state: State<'_, AppState>,
+pub async fn instant_db_delete(
+    state: State<'_, AppState>,
     locale: String,
     db_id: String,
 ) -> Result<(), String> {

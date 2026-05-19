@@ -50,7 +50,8 @@ pub fn write_all(data_dir: &Path, entries: &[ScheduleEntry]) -> Result<(), Backu
     fs::write(schedule_file(data_dir), raw).map_err(|e| BackupError::Io(e.to_string()))
 }
 
-pub fn upsert(    data_dir: &Path,
+pub fn upsert(
+    data_dir: &Path,
     id: &str,
     label: &str,
     cron: &str,
@@ -99,9 +100,10 @@ pub fn remove(data_dir: &Path, id: &str) -> Result<(), BackupError> {
 pub fn validate_cron(expr: &str) -> Result<(), BackupError> {
     let fields: Vec<&str> = expr.split_whitespace().collect();
     if fields.len() != 5 {
-        return Err(BackupError::Schedule(format!(            "cron expression must have 5 fields, got {}",
+        return Err(BackupError::Schedule(format!(
+            "cron expression must have 5 fields, got {}",
             fields.len()
-)));
+        )));
     }
     for (idx, raw) in fields.iter().enumerate() {
         let (lo, hi) = match idx {
@@ -204,12 +206,13 @@ mod tests {
         let entry =
             upsert(dir.path(), "s1", "Daily prod", "0 3 * * *", opts()).expect("first upsert");
         assert_eq!(entry.label, "Daily prod");
-        let updated = upsert(            dir.path(),
+        let updated = upsert(
+            dir.path(),
             "s1",
             "Daily prod (updated)",
             "0 4 * * *",
             opts(),
-)
+        )
         .expect("update");
         assert_eq!(updated.label, "Daily prod (updated)");
         assert_eq!(updated.cron, "0 4 * * *");

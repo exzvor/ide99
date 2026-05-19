@@ -245,12 +245,14 @@ mod tests {
             install_sql: "CREATE EXTENSION hypopg;".into(),
         };
         let s = serde_json::to_string(&v).unwrap();
-        assert!(            s.contains("\"installSql\""),
+        assert!(
+            s.contains("\"installSql\""),
             "field must serialize as installSql, got: {s}"
-);
-        assert!(            !s.contains("\"install_sql\""),
+        );
+        assert!(
+            !s.contains("\"install_sql\""),
             "snake_case must NOT appear on wire, got: {s}"
-);
+        );
         // Roundtrip with camelCase shape.
         let back: ExtensionAvailability = serde_json::from_str(&s).unwrap();
         assert_eq!(v, back);
@@ -265,18 +267,22 @@ mod tests {
             ops_seen: vec!["@>".into()],
         };
         let s = serde_json::to_string(&v).unwrap();
-        assert!(            s.contains("\"totalExecTimeMs\""),
+        assert!(
+            s.contains("\"totalExecTimeMs\""),
             "field must serialize as totalExecTimeMs, got: {s}"
-);
-        assert!(            s.contains("\"opsSeen\""),
+        );
+        assert!(
+            s.contains("\"opsSeen\""),
             "field must serialize as opsSeen, got: {s}"
-);
-        assert!(            !s.contains("\"total_exec_time_ms\""),
+        );
+        assert!(
+            !s.contains("\"total_exec_time_ms\""),
             "snake_case must NOT appear on wire, got: {s}"
-);
-        assert!(            !s.contains("\"ops_seen\""),
+        );
+        assert!(
+            !s.contains("\"ops_seen\""),
             "snake_case must NOT appear on wire, got: {s}"
-);
+        );
         // Roundtrip.
         let back: SuggestionRationale = serde_json::from_str(&s).unwrap();
         assert_eq!(v, back);
@@ -291,18 +297,22 @@ mod tests {
             reduction_pct: 95.0,
         };
         let s = serde_json::to_string(&v).unwrap();
-        assert!(            s.contains("\"baselineCost\""),
+        assert!(
+            s.contains("\"baselineCost\""),
             "field must serialize as baselineCost, got: {s}"
-);
-        assert!(            s.contains("\"hypotheticalCost\""),
+        );
+        assert!(
+            s.contains("\"hypotheticalCost\""),
             "field must serialize as hypotheticalCost, got: {s}"
-);
-        assert!(            s.contains("\"reductionPct\""),
+        );
+        assert!(
+            s.contains("\"reductionPct\""),
             "field must serialize as reductionPct, got: {s}"
-);
-        assert!(            !s.contains("\"baseline_cost\""),
+        );
+        assert!(
+            !s.contains("\"baseline_cost\""),
             "snake_case must NOT appear on wire, got: {s}"
-);
+        );
         // Roundtrip.
         let back: HypoPgEstimate = serde_json::from_str(&s).unwrap();
         assert_eq!(v, back);

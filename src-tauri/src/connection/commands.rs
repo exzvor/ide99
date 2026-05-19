@@ -5,7 +5,8 @@
 //! drives the same code paths the frontend will, by calling these handler
 //! bodies via the inherent helpers below.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::needless_pass_by_value
 )]
@@ -59,27 +60,31 @@ fn error_says_password_missing(err: &ConnectionError) -> bool {
 }
 
 #[tauri::command]
-pub async fn list_connections(    state: tauri::State<'_, AppState>,
+pub async fn list_connections(
+    state: tauri::State<'_, AppState>,
 ) -> Result<Vec<Connection>, ConnectionError> {
     state.list_connections().await
 }
 
 #[tauri::command]
-pub async fn create_connection(    state: tauri::State<'_, AppState>,
+pub async fn create_connection(
+    state: tauri::State<'_, AppState>,
     input: NewConnection,
 ) -> Result<Connection, ConnectionError> {
     state.create_connection(input).await
 }
 
 #[tauri::command]
-pub async fn duplicate_connection(    state: tauri::State<'_, AppState>,
+pub async fn duplicate_connection(
+    state: tauri::State<'_, AppState>,
     id: String,
 ) -> Result<Connection, ConnectionError> {
     state.duplicate_connection(&id).await
 }
 
 #[tauri::command]
-pub async fn update_connection(    state: tauri::State<'_, AppState>,
+pub async fn update_connection(
+    state: tauri::State<'_, AppState>,
     id: String,
     input: UpdateConnection,
 ) -> Result<Connection, ConnectionError> {
@@ -87,14 +92,16 @@ pub async fn update_connection(    state: tauri::State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn delete_connection(    state: tauri::State<'_, AppState>,
+pub async fn delete_connection(
+    state: tauri::State<'_, AppState>,
     id: String,
 ) -> Result<(), ConnectionError> {
     state.delete_connection(&id).await
 }
 
 #[tauri::command]
-pub async fn test_connection(    state: tauri::State<'_, AppState>,
+pub async fn test_connection(
+    state: tauri::State<'_, AppState>,
     input: TestInput,
 ) -> Result<TestResult, ConnectionError> {
     state.test_connection(input).await
@@ -109,7 +116,8 @@ pub async fn test_connection(    state: tauri::State<'_, AppState>,
 /// blank intending to keep the saved password — without this fallback, PG
 /// would reject with "invalid configuration" / auth failure.
 #[tauri::command]
-pub async fn test_connection_for_edit(    state: tauri::State<'_, AppState>,
+pub async fn test_connection_for_edit(
+    state: tauri::State<'_, AppState>,
     id: String,
     input: TestInput,
 ) -> Result<TestResult, ConnectionError> {
@@ -117,7 +125,8 @@ pub async fn test_connection_for_edit(    state: tauri::State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn test_saved_connection(    state: tauri::State<'_, AppState>,
+pub async fn test_saved_connection(
+    state: tauri::State<'_, AppState>,
     id: String,
 ) -> Result<TestResult, ConnectionError> {
     state.test_saved_connection(&id).await
@@ -129,21 +138,24 @@ pub fn parse_connection_uri(uri: String) -> Result<ParsedUri, ConnectionError> {
 }
 
 #[tauri::command]
-pub async fn connection_connect(    state: tauri::State<'_, AppState>,
+pub async fn connection_connect(
+    state: tauri::State<'_, AppState>,
     id: String,
 ) -> Result<ConnectInfo, ConnectionError> {
     state.connection_connect(&id).await
 }
 
 #[tauri::command]
-pub async fn connection_disconnect(    state: tauri::State<'_, AppState>,
+pub async fn connection_disconnect(
+    state: tauri::State<'_, AppState>,
     id: String,
 ) -> Result<(), ConnectionError> {
     state.connection_disconnect(&id).await
 }
 
 #[tauri::command]
-pub async fn connection_set_exclude_from_history(    state: tauri::State<'_, AppState>,
+pub async fn connection_set_exclude_from_history(
+    state: tauri::State<'_, AppState>,
     id: String,
     exclude: bool,
 ) -> Result<(), ConnectionError> {
@@ -154,7 +166,8 @@ pub async fn connection_set_exclude_from_history(    state: tauri::State<'_, App
 
 /// — toggle the per-connection Recent Plans opt-out flag.
 #[tauri::command]
-pub async fn connection_set_exclude_from_recent_plans(    state: tauri::State<'_, AppState>,
+pub async fn connection_set_exclude_from_recent_plans(
+    state: tauri::State<'_, AppState>,
     id: String,
     exclude: bool,
 ) -> Result<(), ConnectionError> {
@@ -164,7 +177,8 @@ pub async fn connection_set_exclude_from_recent_plans(    state: tauri::State<'_
 }
 
 #[tauri::command]
-pub async fn connection_set_environment(    state: tauri::State<'_, AppState>,
+pub async fn connection_set_environment(
+    state: tauri::State<'_, AppState>,
     id: String,
     environment: Environment,
 ) -> Result<Connection, ConnectionError> {
@@ -172,7 +186,8 @@ pub async fn connection_set_environment(    state: tauri::State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn connection_set_read_only(    state: tauri::State<'_, AppState>,
+pub async fn connection_set_read_only(
+    state: tauri::State<'_, AppState>,
     id: String,
     read_only: bool,
 ) -> Result<Connection, ConnectionError> {
@@ -180,7 +195,8 @@ pub async fn connection_set_read_only(    state: tauri::State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn connection_set_slow_query_warning(    state: tauri::State<'_, AppState>,
+pub async fn connection_set_slow_query_warning(
+    state: tauri::State<'_, AppState>,
     id: String,
     enabled: bool,
 ) -> Result<Connection, ConnectionError> {
@@ -188,7 +204,8 @@ pub async fn connection_set_slow_query_warning(    state: tauri::State<'_, AppSt
 }
 
 #[tauri::command]
-pub async fn connection_set_confirm_destructive(    state: tauri::State<'_, AppState>,
+pub async fn connection_set_confirm_destructive(
+    state: tauri::State<'_, AppState>,
     id: String,
     enabled: bool,
 ) -> Result<Connection, ConnectionError> {
@@ -196,7 +213,8 @@ pub async fn connection_set_confirm_destructive(    state: tauri::State<'_, AppS
 }
 
 #[tauri::command]
-pub async fn connection_set_squawk_lint_enabled(    state: tauri::State<'_, AppState>,
+pub async fn connection_set_squawk_lint_enabled(
+    state: tauri::State<'_, AppState>,
     id: String,
     enabled: bool,
 ) -> Result<Connection, ConnectionError> {
@@ -211,7 +229,8 @@ pub async fn connection_set_squawk_lint_enabled(    state: tauri::State<'_, AppS
 /// just dismissed (). Returns the updated row so the frontend can
 /// upsert without a separate `list_connections` round-trip.
 #[tauri::command]
-pub async fn connection_record_test_result(    state: tauri::State<'_, AppState>,
+pub async fn connection_record_test_result(
+    state: tauri::State<'_, AppState>,
     id: String,
     ok: bool,
 ) -> Result<Connection, ConnectionError> {
@@ -228,9 +247,10 @@ impl AppState {
         self.store.lock().await.list()
     }
 
-    pub async fn create_connection(        &self,
+    pub async fn create_connection(
+        &self,
         input: NewConnection,
-) -> Result<Connection, ConnectionError> {
+    ) -> Result<Connection, ConnectionError> {
         let password_present = input.password.as_ref().is_some_and(|p| !p.is_empty());
         let row = self.store.lock().await.create(&input, password_present)?;
         if password_present {
@@ -295,10 +315,11 @@ impl AppState {
         Err(ConnectionError::DuplicateName(base))
     }
 
-    pub async fn update_connection(        &self,
+    pub async fn update_connection(
+        &self,
         id: &str,
         input: UpdateConnection,
-) -> Result<Connection, ConnectionError> {
+    ) -> Result<Connection, ConnectionError> {
         let existing = self.store.lock().await.get_by_id(id)?;
 
         // Pre-decide has_password and side-effects against the keychain so the
@@ -352,9 +373,9 @@ impl AppState {
             crate::query::jsonb::inference::cache::evict_for_connection(store.conn(), id)
         {
             tracing::warn!(                connection_id = id,
-                error = %err,
-                "inference cache evict failed during connection delete; orphaned rows may remain",
-);
+                            error = %err,
+                            "inference cache evict failed during connection delete; orphaned rows may remain",
+            );
         }
         store.delete(id)
     }
@@ -367,10 +388,11 @@ impl AppState {
     /// `None`, fills it from the keychain entry for `id` before delegating to
     /// `test_connection`. Defends against "invalid configuration" failures when
     /// the user keeps a saved password by leaving the field blank.
-    pub async fn test_connection_for_edit(        &self,
+    pub async fn test_connection_for_edit(
+        &self,
         id: &str,
         mut input: TestInput,
-) -> Result<TestResult, ConnectionError> {
+    ) -> Result<TestResult, ConnectionError> {
         if input.password.is_none() {
             // Verify the connection still exists; without this the keychain lookup
             // could silently return None and the test fall through to a confusing
@@ -432,9 +454,9 @@ impl AppState {
             };
             if let Err(e) = sync {
                 tracing::warn!(                    connection_id = id,
-                    error = %e,
-                    "failed to sync has_password flag after keychain miss",
-);
+                                    error = %e,
+                                    "failed to sync has_password flag after keychain miss",
+                );
             }
             // Same recovery as the connect-probe "no saved password" branch
             // below — frontend renders a clean i18n string with an "Open Edit"
@@ -480,9 +502,9 @@ impl AppState {
             Ok(Err(err)) => {
                 pool.close();
                 tracing::warn!(                    connection_id = id,
-                    error = %err,
-                    "connection_connect probe failed",
-);
+                                    error = %err,
+                                    "connection_connect probe failed",
+                );
                 // Rewrite the cryptic `tokio_postgres` "password missing" chain
                 // into something the user can act on. We hit this path when the
                 // user saved a connection without entering a password (or the
@@ -523,73 +545,81 @@ impl AppState {
 
     /// Toggle the per-connection History opt-out flag without forcing the
     /// caller to re-submit a full `UpdateConnection` payload.
-    pub async fn connection_set_exclude_from_history(        &self,
+    pub async fn connection_set_exclude_from_history(
+        &self,
         id: &str,
         exclude: bool,
-) -> Result<(), ConnectionError> {
+    ) -> Result<(), ConnectionError> {
         let store = self.store.lock().await;
         store.set_exclude_from_history(id, exclude)
     }
 
     /// — Recent Plans opt-out toggle (mirror of
     /// `connection_set_exclude_from_history`).
-    pub async fn connection_set_exclude_from_recent_plans(        &self,
+    pub async fn connection_set_exclude_from_recent_plans(
+        &self,
         id: &str,
         exclude: bool,
-) -> Result<(), ConnectionError> {
+    ) -> Result<(), ConnectionError> {
         let store = self.store.lock().await;
         store.set_exclude_from_recent_plans(id, exclude)
     }
 
-    pub async fn connection_set_environment(        &self,
+    pub async fn connection_set_environment(
+        &self,
         id: &str,
         env: Environment,
-) -> Result<Connection, ConnectionError> {
+    ) -> Result<Connection, ConnectionError> {
         let store = self.store.lock().await;
         store.set_environment(id, env)?;
         store.get_by_id(id)
     }
 
-    pub async fn connection_set_read_only(        &self,
+    pub async fn connection_set_read_only(
+        &self,
         id: &str,
         value: bool,
-) -> Result<Connection, ConnectionError> {
+    ) -> Result<Connection, ConnectionError> {
         let store = self.store.lock().await;
         store.set_read_only(id, value)?;
         store.get_by_id(id)
     }
 
-    pub async fn connection_set_slow_query_warning(        &self,
+    pub async fn connection_set_slow_query_warning(
+        &self,
         id: &str,
         value: bool,
-) -> Result<Connection, ConnectionError> {
+    ) -> Result<Connection, ConnectionError> {
         let store = self.store.lock().await;
         store.set_slow_query_warning(id, value)?;
         store.get_by_id(id)
     }
 
-    pub async fn connection_set_confirm_destructive(        &self,
+    pub async fn connection_set_confirm_destructive(
+        &self,
         id: &str,
         value: bool,
-) -> Result<Connection, ConnectionError> {
+    ) -> Result<Connection, ConnectionError> {
         let store = self.store.lock().await;
         store.set_confirm_destructive(id, value)?;
         store.get_by_id(id)
     }
 
-    pub async fn connection_set_squawk_lint_enabled(        &self,
+    pub async fn connection_set_squawk_lint_enabled(
+        &self,
         id: &str,
         value: bool,
-) -> Result<Connection, ConnectionError> {
+    ) -> Result<Connection, ConnectionError> {
         let store = self.store.lock().await;
         store.set_squawk_lint_enabled(id, value)?;
         store.get_by_id(id)
     }
 
-    pub async fn connection_record_test_result(        &self,
+    pub async fn connection_record_test_result(
+        &self,
         id: &str,
         ok: bool,
-) -> Result<Connection, ConnectionError> {
+    ) -> Result<Connection, ConnectionError> {
         let now = Utc::now().to_rfc3339();
         let store = self.store.lock().await;
         store.record_test_result(id, ok, &now)?;
@@ -611,10 +641,10 @@ async fn cleanup_cursors_for_conn(state: &AppState, conn_id: &str) {
             .await
         {
             tracing::warn!(                cursor_id = cs.cursor_id,
-                conn_id = cs.conn_id,
-                error = %err,
-                "cursor cleanup SQL failed during conn lifecycle hook",
-);
+                            conn_id = cs.conn_id,
+                            error = %err,
+                            "cursor cleanup SQL failed during conn lifecycle hook",
+            );
         }
     }
     // also drop finished-cursor metadata for this conn so a
@@ -623,9 +653,9 @@ async fn cleanup_cursors_for_conn(state: &AppState, conn_id: &str) {
     let n = state.cursors.cleanup_finished_for_conn(conn_id).await;
     if n > 0 {
         tracing::debug!(            conn_id = %conn_id,
-            cleared = n,
-            "finished-cursor metadata cleared during conn lifecycle hook",
-);
+                    cleared = n,
+                    "finished-cursor metadata cleared during conn lifecycle hook",
+        );
     }
 }
 
@@ -639,8 +669,9 @@ fn parse_uri(uri: &str) -> Result<ParsedUri, ConnectionError> {
 
     let scheme = parsed.scheme();
     if scheme != "postgres" && scheme != "postgresql" {
-        return Err(ConnectionError::InvalidUri(format!(            "unsupported scheme '{scheme}'; expected postgres or postgresql"
-)));
+        return Err(ConnectionError::InvalidUri(format!(
+            "unsupported scheme '{scheme}'; expected postgres or postgresql"
+        )));
     }
 
     let host_raw = parsed
@@ -699,8 +730,9 @@ fn percent_decode(s: &str) -> Result<String, ConnectionError> {
     while i < bytes.len() {
         if bytes[i] == b'%' {
             if i + 2 >= bytes.len() {
-                return Err(ConnectionError::InvalidUri(                    "truncated percent-encoding in URI".into(),
-));
+                return Err(ConnectionError::InvalidUri(
+                    "truncated percent-encoding in URI".into(),
+                ));
             }
             let hi = hex_value(bytes[i + 1])?;
             let lo = hex_value(bytes[i + 2])?;
@@ -720,9 +752,10 @@ fn hex_value(b: u8) -> Result<u8, ConnectionError> {
         b'0'..=b'9' => Ok(b - b'0'),
         b'a'..=b'f' => Ok(b - b'a' + 10),
         b'A'..=b'F' => Ok(b - b'A' + 10),
-        _ => Err(ConnectionError::InvalidUri(format!(            "invalid hex digit '{}' in percent-encoding",
+        _ => Err(ConnectionError::InvalidUri(format!(
+            "invalid hex digit '{}' in percent-encoding",
             b as char
-))),
+        ))),
     }
 }
 
@@ -823,13 +856,13 @@ mod tests {
     use proptest::prelude::*;
 
     proptest! {
-        #[test]
-        fn percent_encoded_passwords_round_trip(            pw in "[A-Za-z0-9!@#$%^&*()_+=\\-]{1,32}"
-) {
-            let encoded = percent_encode(&pw);
-            let uri = format!("postgres://user:{encoded}@h/db");
-            let p = parse_uri(&uri).unwrap();
-            prop_assert_eq!(p.password.as_deref(), Some(pw.as_str()));
+            #[test]
+            fn percent_encoded_passwords_round_trip(            pw in "[A-Za-z0-9!@#$%^&*()_+=\\-]{1,32}"
+    ) {
+                let encoded = percent_encode(&pw);
+                let uri = format!("postgres://user:{encoded}@h/db");
+                let p = parse_uri(&uri).unwrap();
+                prop_assert_eq!(p.password.as_deref(), Some(pw.as_str()));
+            }
         }
-    }
 }

@@ -34,81 +34,98 @@ pub fn register_all(r: &mut ToolRegistry) {
     }
 
     // ---- DB family (10) ----
-    reg!(        "list_connections",
+    reg!(
+        "list_connections",
         McpScope::DbList,
         db::list_connections_tool
-);
+    );
     reg!("get_schema", McpScope::DbRead, db::get_schema_tool);
-    reg!(        "get_table_sample",
+    reg!(
+        "get_table_sample",
         McpScope::DbRead,
         db::get_table_sample_tool
-);
+    );
     reg!("run_query", McpScope::DbRead, db::run_query_tool);
-    reg!(        "run_query_write",
+    reg!(
+        "run_query_write",
         McpScope::DbWrite,
         db::run_query_write_tool
-);
+    );
     reg!("get_explain", McpScope::DbRead, db::get_explain_tool);
-    reg!(        "get_health_summary",
+    reg!(
+        "get_health_summary",
         McpScope::DbRead,
         db::get_health_summary_tool
-);
-    reg!(        "list_slow_queries",
+    );
+    reg!(
+        "list_slow_queries",
         McpScope::DbRead,
         db::list_slow_queries_tool
-);
-    reg!(        "dry_run_migration",
+    );
+    reg!(
+        "dry_run_migration",
         McpScope::DbRead,
         db::dry_run_migration_tool
-);
-    reg!(        "apply_migration",
+    );
+    reg!(
+        "apply_migration",
         McpScope::DbWrite,
         db::apply_migration_tool
-);
+    );
 
     // ---- IDE state family (5) ----
-    reg!(        "get_active_connection",
+    reg!(
+        "get_active_connection",
         McpScope::IdeRead,
         ide_state::get_active_connection_tool
-);
-    reg!(        "get_current_query",
+    );
+    reg!(
+        "get_current_query",
         McpScope::IdeRead,
         ide_state::get_current_query_tool
-);
-    reg!(        "get_selected_text",
+    );
+    reg!(
+        "get_selected_text",
         McpScope::IdeRead,
         ide_state::get_selected_text_tool
-);
-    reg!(        "get_last_result",
+    );
+    reg!(
+        "get_last_result",
         McpScope::IdeRead,
         ide_state::get_last_result_tool
-);
-    reg!(        "get_open_tabs",
+    );
+    reg!(
+        "get_open_tabs",
         McpScope::IdeRead,
         ide_state::get_open_tabs_tool
-);
+    );
 
     // ---- IDE actions family (5) ----
-    reg!(        "open_query_in_editor",
+    reg!(
+        "open_query_in_editor",
         McpScope::IdeWrite,
         ide_actions::open_query_in_editor_tool
-);
-    reg!(        "run_in_editor",
+    );
+    reg!(
+        "run_in_editor",
         McpScope::IdeWrite,
         ide_actions::run_in_editor_tool
-);
-    reg!(        "open_table",
+    );
+    reg!(
+        "open_table",
         McpScope::IdeWrite,
         ide_actions::open_table_tool
-);
-    reg!(        "open_explain_for",
+    );
+    reg!(
+        "open_explain_for",
         McpScope::IdeWrite,
         ide_actions::open_explain_for_tool
-);
-    reg!(        "navigate_to",
+    );
+    reg!(
+        "navigate_to",
         McpScope::IdeWrite,
         ide_actions::navigate_to_tool
-);
+    );
 }
 
 #[cfg(test)]
@@ -144,9 +161,10 @@ mod tests {
             "open_explain_for",
             "navigate_to",
         ] {
-            assert!(                r.get(expected).is_some(),
+            assert!(
+                r.get(expected).is_some(),
                 "missing tool registration: {expected}"
-);
+            );
         }
     }
 

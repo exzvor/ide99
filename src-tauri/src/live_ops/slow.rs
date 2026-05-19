@@ -24,9 +24,10 @@ pub async fn fetch_slow(pool: &Pool, sort_by: SlowSortBy) -> Result<SlowSnapshot
 
     // Pre-check: pg_stat_statements installed?
     let extn_row = client
-        .query_opt(            "SELECT 1 FROM pg_extension WHERE extname = 'pg_stat_statements'",
+        .query_opt(
+            "SELECT 1 FROM pg_extension WHERE extname = 'pg_stat_statements'",
             &[],
-)
+        )
         .await
         .map_err(map_err)?;
     if extn_row.is_none() {
@@ -36,7 +37,8 @@ pub async fn fetch_slow(pool: &Pool, sort_by: SlowSortBy) -> Result<SlowSnapshot
         });
     }
 
-    let sql = format!(        "SELECT query,
+    let sql = format!(
+        "SELECT query,
                 mean_exec_time AS mean_exec_time_ms,
                 total_exec_time AS total_exec_time_ms,
                 calls,
@@ -46,7 +48,7 @@ pub async fn fetch_slow(pool: &Pool, sort_by: SlowSortBy) -> Result<SlowSnapshot
           ORDER BY {} DESC NULLS LAST
           LIMIT $1::bigint",
         order_clause(sort_by)
-);
+    );
     let rows = client.query(&sql, &[&SLOW_LIMIT]).await.map_err(map_err)?;
 
     let result: Vec<SlowQuery> = rows

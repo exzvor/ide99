@@ -65,13 +65,14 @@ pub async fn ensure_table(client: &Client) -> Result<(), MigrationsError> {
 /// True iff `public.ide99_migrations` exists.
 pub async fn table_exists(client: &Client) -> Result<bool, MigrationsError> {
     let row = client
-        .query_one(            "SELECT EXISTS (\
+        .query_one(
+            "SELECT EXISTS (\
                  SELECT 1 FROM information_schema.tables \
                   WHERE table_schema = 'public' \
                     AND table_name = 'ide99_migrations' \
 ) AS present",
             &[],
-)
+        )
         .await
         .map_err(pg_err)?;
     Ok(row.get::<_, bool>("present"))
@@ -84,12 +85,13 @@ pub async fn list_applied(client: &Client) -> Result<Vec<LedgerEntry>, Migration
         return Ok(Vec::new());
     }
     let rows = client
-        .query(            "SELECT version, name, checksum, applied_at, applied_by, duration_ms, \
+        .query(
+            "SELECT version, name, checksum, applied_at, applied_by, duration_ms, \
                     (schema_snapshot IS NOT NULL) AS has_snapshot \
                FROM public.ide99_migrations \
               ORDER BY version ASC",
             &[],
-)
+        )
         .await
         .map_err(pg_err)?;
     let mut out = Vec::with_capacity(rows.len());
@@ -110,7 +112,8 @@ pub async fn list_applied(client: &Client) -> Result<Vec<LedgerEntry>, Migration
 
 /// Insert a row recording an applied migration. The `applied_at` and
 /// `applied_by` columns get DB defaults (`now()` / `current_user`).
-pub async fn insert(    client: &Client,
+pub async fn insert(
+    client: &Client,
     version: &str,
     name: &str,
     checksum: &str,
@@ -119,10 +122,11 @@ pub async fn insert(    client: &Client,
     // Postgres `integer` is i32; clamp/convert duration safely.
     let duration_i32 = i32::try_from(duration_ms).unwrap_or(i32::MAX);
     client
-        .execute(            "INSERT INTO public.ide99_migrations (version, name, checksum, duration_ms) \
+        .execute(
+            "INSERT INTO public.ide99_migrations (version, name, checksum, duration_ms) \
              VALUES ($1, $2, $3, $4)",
             &[&version, &name, &checksum, &duration_i32],
-)
+        )
         .await
         .map_err(pg_err)?;
     Ok(())
@@ -132,36 +136,41 @@ pub async fn insert(    client: &Client,
 /// (rollback orchestrator checks existence first).
 pub async fn delete(client: &Client, version: &str) -> Result<(), MigrationsError> {
     client
-        .execute(            "DELETE FROM public.ide99_migrations WHERE version = $1",
+        .execute(
+            "DELETE FROM public.ide99_migrations WHERE version = $1",
             &[&version],
-)
+        )
         .await
         .map_err(pg_err)?;
     Ok(())
 }
 
 /// Store a (gzipped JSON) schema snapshot blob in the row.
-pub async fn set_snapshot(    client: &Client,
+pub async fn set_snapshot(
+    client: &Client,
     version: &str,
     gzipped_bytes: &[u8],
 ) -> Result<(), MigrationsError> {
     client
-        .execute(            "UPDATE public.ide99_migrations SET schema_snapshot = $1 WHERE version = $2",
+        .execute(
+            "UPDATE public.ide99_migrations SET schema_snapshot = $1 WHERE version = $2",
             &[&gzipped_bytes, &version],
-)
+        )
         .await
         .map_err(pg_err)?;
     Ok(())
 }
 
 /// Fetch a stored snapshot blob if any.
-pub async fn get_snapshot(    client: &Client,
+pub async fn get_snapshot(
+    client: &Client,
     version: &str,
 ) -> Result<Option<Vec<u8>>, MigrationsError> {
     let row = client
-        .query_opt(            "SELECT schema_snapshot FROM public.ide99_migrations WHERE version = $1",
+        .query_opt(
+            "SELECT schema_snapshot FROM public.ide99_migrations WHERE version = $1",
             &[&version],
-)
+        )
         .await
         .map_err(pg_err)?;
     Ok(row.and_then(|r| r.get::<_, Option<Vec<u8>>>("schema_snapshot")))

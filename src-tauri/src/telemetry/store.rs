@@ -18,7 +18,8 @@ fn map_storage(e: &rusqlite::Error) -> TelemetryError {
 
 /// Read the singleton row. Returns Err only on storage failure.
 pub fn read(conn: &Connection) -> Result<AppSettings, TelemetryError> {
-    conn.query_row(        "SELECT telemetry_enabled, crash_reports_enabled, telemetry_endpoint, \
+    conn.query_row(
+        "SELECT telemetry_enabled, crash_reports_enabled, telemetry_endpoint, \
                 device_uuid, onboarding_completed, privacy_choice_made, \
                 privacy_choice_made_at, release_channel, last_update_check_at, \
                 spg99_subscribed, vibepg_subscribed, created_at, updated_at \
@@ -42,7 +43,7 @@ pub fn read(conn: &Connection) -> Result<AppSettings, TelemetryError> {
                 updated_at: row.get(12)?,
             })
         },
-)
+    )
     .map_err(|e| map_storage(&e))
 }
 
@@ -54,7 +55,8 @@ pub fn write(conn: &Connection, mut next: AppSettings) -> Result<AppSettings, Te
     if (next.telemetry_enabled || next.crash_reports_enabled) && next.device_uuid.is_none() {
         next.device_uuid = Some(Uuid::new_v4().to_string());
     }
-    conn.execute(        "UPDATE app_settings SET \
+    conn.execute(
+        "UPDATE app_settings SET \
             telemetry_enabled = ?1, \
             crash_reports_enabled = ?2, \
             telemetry_endpoint = ?3, \
@@ -82,7 +84,7 @@ pub fn write(conn: &Connection, mut next: AppSettings) -> Result<AppSettings, Te
             i64::from(next.vibepg_subscribed),
             now,
         ],
-)
+    )
     .map_err(|e| map_storage(&e))?;
     read(conn)
 }
@@ -91,7 +93,8 @@ pub fn write(conn: &Connection, mut next: AppSettings) -> Result<AppSettings, Te
 /// Settings action.
 pub fn clear_all(conn: &Connection) -> Result<AppSettings, TelemetryError> {
     let now = Utc::now().to_rfc3339();
-    conn.execute(        "UPDATE app_settings SET \
+    conn.execute(
+        "UPDATE app_settings SET \
             telemetry_enabled = 0, \
             crash_reports_enabled = 0, \
             device_uuid = NULL, \
@@ -100,7 +103,7 @@ pub fn clear_all(conn: &Connection) -> Result<AppSettings, TelemetryError> {
             updated_at = ?1 \
          WHERE id = 1",
         params![now],
-)
+    )
     .map_err(|e| map_storage(&e))?;
     read(conn)
 }

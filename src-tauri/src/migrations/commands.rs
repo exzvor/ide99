@@ -41,7 +41,8 @@ use crate::AppState;
 // --- helpers ------------------------------------------------------------
 
 /// Look up the connection metadata, mapping `NotFound` → `ConnectionNotFound`.
-async fn load_connection(    state: &AppState,
+async fn load_connection(
+    state: &AppState,
     conn_id: &str,
 ) -> Result<crate::connection::types::Connection, MigrationsError> {
     let store = state.store.lock().await;
@@ -53,7 +54,8 @@ async fn load_connection(    state: &AppState,
 
 /// Acquire a pool client for `conn_id`, surfacing `NotConnected` when the
 /// pool isn't registered (i.e. user hasn't connected via `connection_connect`).
-async fn pool_client(    state: &AppState,
+async fn pool_client(
+    state: &AppState,
     conn_id: &str,
 ) -> Result<deadpool_postgres::Object, MigrationsError> {
     let pool = state
@@ -70,7 +72,8 @@ async fn pool_client(    state: &AppState,
 /// list and a flag indicating whether the tracking table is missing
 /// (true when `tracking_enabled` and the table is absent — UI can prompt to
 /// create it on first apply).
-async fn list_with_ledger(    state: &AppState,
+async fn list_with_ledger(
+    state: &AppState,
     conn_id: &str,
 ) -> Result<(Vec<Migration>, bool), MigrationsError> {
     let conn = load_connection(state, conn_id).await?;
@@ -116,7 +119,8 @@ async fn replace_watcher(state: &AppState, conn_id: &str, new_handle: Option<Wat
 // --- commands -----------------------------------------------------------
 
 #[tauri::command]
-pub async fn migrations_set_dir(    state: State<'_, AppState>,
+pub async fn migrations_set_dir(
+    state: State<'_, AppState>,
     app: AppHandle,
     conn_id: String,
     dir: String,
@@ -133,9 +137,10 @@ pub async fn migrations_set_dir(    state: State<'_, AppState>,
     let app_for_cb = app.clone();
     let conn_id_for_cb = conn_id.clone();
     let cb: watcher::WatcherCallback = Box::new(move || {
-        let _ = app_for_cb.emit(            "migrations:dir-changed",
+        let _ = app_for_cb.emit(
+            "migrations:dir-changed",
             json!({ "connId": conn_id_for_cb }),
-);
+        );
     });
 
     let handle = watcher::spawn_watcher(std::path::PathBuf::from(&dir), cb).await?;
@@ -145,7 +150,8 @@ pub async fn migrations_set_dir(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn migrations_clear_dir(    state: State<'_, AppState>,
+pub async fn migrations_clear_dir(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<(), MigrationsError> {
     {
@@ -159,7 +165,8 @@ pub async fn migrations_clear_dir(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn migrations_list(    state: State<'_, AppState>,
+pub async fn migrations_list(
+    state: State<'_, AppState>,
     app: AppHandle,
     conn_id: String,
 ) -> Result<ListResult, MigrationsError> {
@@ -179,9 +186,10 @@ pub async fn migrations_list(    state: State<'_, AppState>,
             let app_for_cb = app.clone();
             let conn_id_for_cb = conn_id.clone();
             let cb: watcher::WatcherCallback = Box::new(move || {
-                let _ = app_for_cb.emit(                    "migrations:dir-changed",
+                let _ = app_for_cb.emit(
+                    "migrations:dir-changed",
                     json!({ "connId": conn_id_for_cb }),
-);
+                );
             });
             // Watcher spawn errors are non-fatal for `list` — log and
             // proceed; the user still sees the timeline.
@@ -192,10 +200,10 @@ pub async fn migrations_list(    state: State<'_, AppState>,
                 }
                 Err(e) => {
                     tracing::warn!(                        conn_id,
-                        dir,
-                        error = %e,
-                        "could not auto-spawn migrations watcher",
-);
+                                            dir,
+                                            error = %e,
+                                            "could not auto-spawn migrations watcher",
+                    );
                 }
             }
         }
@@ -218,7 +226,8 @@ pub async fn migrations_list(    state: State<'_, AppState>,
 /// Build the JSON payload for an apply/rollback progress event. `durationMs`
 /// is included only when present so frontend listeners can `if (msg.durationMs)`
 /// without spurious nulls.
-fn progress_payload(    conn_id: &str,
+fn progress_payload(
+    conn_id: &str,
     version: &str,
     phase: &str,
     duration_ms: Option<i64>,
@@ -234,7 +243,8 @@ fn progress_payload(    conn_id: &str,
     obj
 }
 
-fn emit_apply_progress(    app: &AppHandle,
+fn emit_apply_progress(
+    app: &AppHandle,
     conn_id: &str,
     version: &str,
     phase: &str,
@@ -246,7 +256,8 @@ fn emit_apply_progress(    app: &AppHandle,
     }
 }
 
-fn emit_rollback_progress(    app: &AppHandle,
+fn emit_rollback_progress(
+    app: &AppHandle,
     conn_id: &str,
     version: &str,
     phase: &str,
@@ -260,7 +271,8 @@ fn emit_rollback_progress(    app: &AppHandle,
 
 /// Build the slice of migrations to run for the given `mode`. Pulls from the
 /// merged list + applies range/single filters per the spec.
-fn select_for_apply<'a>(    merged: &'a [Migration],
+fn select_for_apply<'a>(
+    merged: &'a [Migration],
     mode: &ApplyMode,
 ) -> Result<Vec<&'a Migration>, MigrationsError> {
     // Pending = anything not in `Applied` status (Dirty rows still need user
@@ -311,7 +323,8 @@ fn select_for_apply<'a>(    merged: &'a [Migration],
 }
 
 #[tauri::command]
-pub async fn migrations_apply(    state: State<'_, AppState>,
+pub async fn migrations_apply(
+    state: State<'_, AppState>,
     app: AppHandle,
     conn_id: String,
     mode: ApplyMode,
@@ -349,12 +362,13 @@ pub async fn migrations_apply(    state: State<'_, AppState>,
         }
 
         for entry in result.applied {
-            emit_apply_progress(                &app,
+            emit_apply_progress(
+                &app,
                 &conn_id,
                 &entry.version,
                 "done",
                 Some(entry.duration_ms),
-);
+            );
 
             // Capture schema snapshot if enabled. Per spec §6.1 step 5,
             // snapshot failures must NOT roll back the migration — log + skip.
@@ -364,15 +378,15 @@ pub async fn migrations_apply(    state: State<'_, AppState>,
                         if let Err(e) = tracking::set_snapshot(&client, &entry.version, &blob).await
                         {
                             tracing::warn!(                                version = entry.version,
-                                error = %e,
-                                "snapshot persist failed (migration applied successfully)",
-);
+                                                            error = %e,
+                                                            "snapshot persist failed (migration applied successfully)",
+                            );
                         }
                     }
                     Err(e) => tracing::warn!(                        version = entry.version,
-                        error = %e,
-                        "snapshot capture failed (migration applied successfully)",
-),
+                                            error = %e,
+                                            "snapshot capture failed (migration applied successfully)",
+                    ),
                 }
             }
 
@@ -387,7 +401,8 @@ pub async fn migrations_apply(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn migrations_rollback(    state: State<'_, AppState>,
+pub async fn migrations_rollback(
+    state: State<'_, AppState>,
     app: AppHandle,
     conn_id: String,
     version: String,
@@ -422,7 +437,8 @@ pub async fn migrations_rollback(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn migrations_preview_up(    state: State<'_, AppState>,
+pub async fn migrations_preview_up(
+    state: State<'_, AppState>,
     conn_id: String,
     version: String,
 ) -> Result<SqlPreview, MigrationsError> {
@@ -445,7 +461,8 @@ pub async fn migrations_preview_up(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn migrations_preview_down(    state: State<'_, AppState>,
+pub async fn migrations_preview_down(
+    state: State<'_, AppState>,
     conn_id: String,
     version: String,
 ) -> Result<SqlPreview, MigrationsError> {
@@ -468,7 +485,8 @@ pub async fn migrations_preview_down(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn migrations_diff_snapshots(    state: State<'_, AppState>,
+pub async fn migrations_diff_snapshots(
+    state: State<'_, AppState>,
     conn_id: String,
     from_version: String,
     to_version: String,
@@ -495,7 +513,8 @@ pub async fn migrations_diff_snapshots(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn migrations_set_options(    state: State<'_, AppState>,
+pub async fn migrations_set_options(
+    state: State<'_, AppState>,
     conn_id: String,
     tracking_enabled: bool,
     snapshots_enabled: bool,
@@ -527,7 +546,8 @@ pub async fn migrations_set_options(    state: State<'_, AppState>,
 // AppHandle-free entry points used by tests.
 
 #[cfg(test)]
-async fn test_apply(    state: &AppState,
+async fn test_apply(
+    state: &AppState,
     conn_id: &str,
     mode: ApplyMode,
 ) -> Result<ApplyResult, MigrationsError> {
@@ -571,7 +591,8 @@ async fn test_apply(    state: &AppState,
 }
 
 #[cfg(test)]
-async fn test_rollback(    state: &AppState,
+async fn test_rollback(
+    state: &AppState,
     conn_id: &str,
     version: &str,
 ) -> Result<RollbackResult, MigrationsError> {
@@ -609,7 +630,8 @@ async fn test_set_dir(state: &AppState, conn_id: &str, dir: &str) -> Result<(), 
 }
 
 #[cfg(test)]
-async fn test_diff(    state: &AppState,
+async fn test_diff(
+    state: &AppState,
     conn_id: &str,
     from_version: &str,
     to_version: &str,
@@ -653,10 +675,11 @@ mod tests {
         let db_path = data_dir.join("store.db");
         let mut store = Store::open(&db_path).expect("open store");
         store.run_migrations().expect("migrations");
-        AppState::new(            store,
+        AppState::new(
+            store,
             Box::new(MemoryKeychain::new()),
             Arc::new(PoolRegistry::new()),
-)
+        )
     }
 
     /// Boot a PG testcontainer + return host port. `None` if Docker missing.
@@ -727,12 +750,13 @@ mod tests {
         let conn_id = register_and_connect(&state, port, false).await;
 
         let mig_dir = TempDir::new().unwrap();
-        write_migration(            mig_dir.path(),
+        write_migration(
+            mig_dir.path(),
             "0001",
             "create_t",
             "CREATE TABLE t (id int);",
             "DROP TABLE t;",
-);
+        );
 
         test_set_dir(&state, &conn_id, mig_dir.path().to_str().unwrap())
             .await
@@ -740,9 +764,10 @@ mod tests {
 
         // Re-load the connection — migrations_dir should now be populated.
         let conn = load_connection(&state, &conn_id).await.expect("reload");
-        assert_eq!(            conn.migrations_dir.as_deref(),
+        assert_eq!(
+            conn.migrations_dir.as_deref(),
             Some(mig_dir.path().to_str().unwrap()),
-);
+        );
 
         let (migrations, missing) = list_with_ledger(&state, &conn_id).await.expect("list");
         assert_eq!(migrations.len(), 1);
@@ -765,23 +790,25 @@ mod tests {
         let conn_id = register_and_connect(&state, port, false).await;
 
         let mig_dir = TempDir::new().unwrap();
-        write_migration(            mig_dir.path(),
+        write_migration(
+            mig_dir.path(),
             "0001",
             "create_users",
             "CREATE TABLE users (id serial primary key, name text not null);",
             "DROP TABLE users;",
-);
+        );
 
         test_set_dir(&state, &conn_id, mig_dir.path().to_str().unwrap())
             .await
             .expect("set_dir");
 
-        let result = test_apply(            &state,
+        let result = test_apply(
+            &state,
             &conn_id,
             ApplyMode::Single {
                 version: "0001".into(),
             },
-)
+        )
         .await
         .expect("apply");
 
@@ -811,23 +838,25 @@ mod tests {
         let conn_id = register_and_connect(&state, port, false).await;
 
         let mig_dir = TempDir::new().unwrap();
-        write_migration(            mig_dir.path(),
+        write_migration(
+            mig_dir.path(),
             "0001",
             "create_widgets",
             "CREATE TABLE widgets (id int);",
             "DROP TABLE widgets;",
-);
+        );
         test_set_dir(&state, &conn_id, mig_dir.path().to_str().unwrap())
             .await
             .expect("set_dir");
 
         // Apply.
-        test_apply(            &state,
+        test_apply(
+            &state,
             &conn_id,
             ApplyMode::Single {
                 version: "0001".into(),
             },
-)
+        )
         .await
         .expect("apply");
 
@@ -860,18 +889,20 @@ mod tests {
         let conn_id = register_and_connect(&state, port, /* snapshots_enabled */ true).await;
 
         let mig_dir = TempDir::new().unwrap();
-        write_migration(            mig_dir.path(),
+        write_migration(
+            mig_dir.path(),
             "0001",
             "v1",
             "CREATE TABLE diff_t (id int);",
             "DROP TABLE diff_t;",
-);
-        write_migration(            mig_dir.path(),
+        );
+        write_migration(
+            mig_dir.path(),
             "0002",
             "v2",
             "ALTER TABLE diff_t ADD COLUMN name text;",
             "ALTER TABLE diff_t DROP COLUMN name;",
-);
+        );
         test_set_dir(&state, &conn_id, mig_dir.path().to_str().unwrap())
             .await
             .expect("set_dir");
@@ -886,12 +917,14 @@ mod tests {
 
         // Snapshots include the table state at each point — the second has
         // the `name` column added, so the unified diff must be non-empty.
-        assert!(            !diff.unified_diff.is_empty(),
+        assert!(
+            !diff.unified_diff.is_empty(),
             "expected non-empty diff between 0001 and 0002, got empty",
-);
-        assert!(            diff.unified_diff.contains("name"),
+        );
+        assert!(
+            diff.unified_diff.contains("name"),
             "expected diff to mention the new column 'name', got:\n{}",
             diff.unified_diff,
-);
+        );
     }
 }

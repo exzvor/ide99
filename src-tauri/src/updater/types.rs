@@ -58,7 +58,8 @@ pub struct PlatformAsset {
 /// frontend `CheckResult` union); `rename_all = "camelCase"` keeps the
 /// `kind` discriminator values lowerCamel (`upToDate` etc.).
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(    tag = "kind",
+#[serde(
+    tag = "kind",
     rename_all = "camelCase",
     rename_all_fields = "camelCase"
 )]

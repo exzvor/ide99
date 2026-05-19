@@ -36,7 +36,8 @@ pub struct ApplyError {
 /// - the connection pool is missing or unavailable for `conn_id`,
 /// - any statement in the script fails (PG auto-rolls-back the TX).
 #[tauri::command]
-pub async fn schema_apply_ddl(    state: State<'_, AppState>,
+pub async fn schema_apply_ddl(
+    state: State<'_, AppState>,
     conn_id: String,
     sql_script: String,
 ) -> Result<ApplyResult, ApplyError> {
@@ -120,9 +121,10 @@ fn map_apply_error(sql: &str, e: &tokio_postgres::Error) -> ApplyError {
         }
         None => None,
     });
-    let (failing_statement_index, failing_sql) = position_byte.map_or_else(        || (None, String::new()),
+    let (failing_statement_index, failing_sql) = position_byte.map_or_else(
+        || (None, String::new()),
         |byte_pos| statement_at_byte(sql, byte_pos.saturating_sub(1)),
-);
+    );
     ApplyError {
         failing_statement_index,
         failing_sql,

@@ -72,14 +72,16 @@ pub fn decode(raw: &str) -> Result<Notebook, NotebookError> {
     let envelope: NotebookFile = serde_json::from_str(raw)
         .map_err(|e| NotebookError::InvalidFile(format!("decode: {e}")))?;
     if envelope.kind != NOTEBOOK_FILE_KIND {
-        return Err(NotebookError::InvalidFile(format!(            "expected kind='{NOTEBOOK_FILE_KIND}', got '{}'",
+        return Err(NotebookError::InvalidFile(format!(
+            "expected kind='{NOTEBOOK_FILE_KIND}', got '{}'",
             envelope.kind
-)));
+        )));
     }
     if envelope.version > NOTEBOOK_FILE_VERSION {
-        return Err(NotebookError::InvalidFile(format!(            "unsupported version {} (max supported: {NOTEBOOK_FILE_VERSION})",
+        return Err(NotebookError::InvalidFile(format!(
+            "unsupported version {} (max supported: {NOTEBOOK_FILE_VERSION})",
             envelope.version
-)));
+        )));
     }
     let mut nb = envelope.notebook;
     if nb.id.trim().is_empty() {

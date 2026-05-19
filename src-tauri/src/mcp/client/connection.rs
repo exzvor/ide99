@@ -148,16 +148,18 @@ impl ClientConnection {
 
     // ---- transport-specific handshake ----
 
-    async fn connect_stdio(        &self,
+    async fn connect_stdio(
+        &self,
         command: &str,
         args: &[String],
         env: &std::collections::BTreeMap<String, String>,
-) -> Result<
-        (            Vec<RemoteTool>,
+    ) -> Result<
+        (
+            Vec<RemoteTool>,
             Vec<RemoteResource>,
             Option<String>,
             Option<String>,
-),
+        ),
         McpError,
     > {
         let mut cmd = Command::new(command);
@@ -197,36 +199,41 @@ impl ClientConnection {
         }
     }
 
-    async fn connect_http(        &self,
+    async fn connect_http(
+        &self,
         _url: &str,
         _auth: Option<&str>,
-) -> Result<
-        (            Vec<RemoteTool>,
+    ) -> Result<
+        (
+            Vec<RemoteTool>,
             Vec<RemoteResource>,
             Option<String>,
             Option<String>,
-),
+        ),
         McpError,
     > {
         // v1.0 ships stdio only — HTTP transport is the rarer path and
         // brings in a full HTTP client dep we don't otherwise need.
         // Surfacing a clear error keeps the Settings UI honest until v1.1
         // grows real HTTP support.
-        Err(McpError::Transport(            "HTTP transport for external MCP servers is not yet supported (v1.1+)".into(),
-))
+        Err(McpError::Transport(
+            "HTTP transport for external MCP servers is not yet supported (v1.1+)".into(),
+        ))
     }
 }
 
 // ---- JSON-RPC handshake helpers ----
 
-async fn handshake_over_stdio(    mut stdin: tokio::process::ChildStdin,
+async fn handshake_over_stdio(
+    mut stdin: tokio::process::ChildStdin,
     stdout: tokio::process::ChildStdout,
 ) -> Result<
-    (        Vec<RemoteTool>,
+    (
+        Vec<RemoteTool>,
         Vec<RemoteResource>,
         Option<String>,
         Option<String>,
-),
+    ),
     McpError,
 > {
     let mut reader = BufReader::new(stdout).lines();
@@ -277,7 +284,8 @@ async fn handshake_over_stdio(    mut stdin: tokio::process::ChildStdin,
     Ok((tools, resources, server_name, protocol_version))
 }
 
-async fn write_line(    stdin: &mut tokio::process::ChildStdin,
+async fn write_line(
+    stdin: &mut tokio::process::ChildStdin,
     payload: &Value,
 ) -> Result<(), McpError> {
     let line =
@@ -291,7 +299,8 @@ async fn write_line(    stdin: &mut tokio::process::ChildStdin,
     Ok(())
 }
 
-async fn read_line<R: AsyncBufReadExt + Unpin>(    reader: &mut tokio::io::Lines<R>,
+async fn read_line<R: AsyncBufReadExt + Unpin>(
+    reader: &mut tokio::io::Lines<R>,
 ) -> Result<Value, McpError> {
     let line = reader
         .next_line()

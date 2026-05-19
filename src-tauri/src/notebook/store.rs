@@ -19,9 +19,10 @@ fn map_storage(e: &rusqlite::Error) -> NotebookError {
 /// matches frontend tab-rehydrate order).
 pub fn list(conn: &Connection) -> Result<Vec<Notebook>, NotebookError> {
     let mut stmt = conn
-        .prepare(            "SELECT id, name, cells_json, connection_id, file_path, created_at, updated_at \
+        .prepare(
+            "SELECT id, name, cells_json, connection_id, file_path, created_at, updated_at \
              FROM notebooks ORDER BY updated_at DESC",
-)
+        )
         .map_err(|e| map_storage(&e))?;
     let rows = stmt
         .query_map([], |row| {
@@ -45,9 +46,10 @@ pub fn list(conn: &Connection) -> Result<Vec<Notebook>, NotebookError> {
 /// Read a single notebook by id (None if absent).
 pub fn get(conn: &Connection, id: &str) -> Result<Option<Notebook>, NotebookError> {
     let mut stmt = conn
-        .prepare(            "SELECT id, name, cells_json, connection_id, file_path, created_at, updated_at \
+        .prepare(
+            "SELECT id, name, cells_json, connection_id, file_path, created_at, updated_at \
              FROM notebooks WHERE id = ?1",
-)
+        )
         .map_err(|e| map_storage(&e))?;
     stmt.query_row(params![id], |row| {
         let cells_json: String = row.get(2)?;
@@ -74,10 +76,11 @@ pub fn upsert(conn: &Connection, input: &UpsertNotebookInput) -> Result<Notebook
 
     // Preserve created_at on update by reading existing row first.
     let existing_created = conn
-        .query_row(            "SELECT created_at FROM notebooks WHERE id = ?1",
+        .query_row(
+            "SELECT created_at FROM notebooks WHERE id = ?1",
             params![input.id],
             |row| row.get::<_, String>(0),
-)
+        )
         .optional()
         .map_err(|e| map_storage(&e))?;
     let created_at = existing_created.unwrap_or_else(|| now.clone());

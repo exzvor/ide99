@@ -28,7 +28,8 @@ const SELECT_COLUMNS: &str = "h.id, h.connection_id, h.connection_name, h.sql, \
 /// Insert a new history row. Returns the generated UUID.
 pub fn record(conn: &Connection, input: &NewHistoryRecord) -> rusqlite::Result<String> {
     let id = Uuid::new_v4().to_string();
-    conn.execute(        "INSERT INTO query_history \
+    conn.execute(
+        "INSERT INTO query_history \
          (id, connection_id, connection_name, sql, executed_at, duration_ms, status, \
           rows_affected, rows_returned, truncated, error_message, tag, comment, pinned) \
          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)",
@@ -52,14 +53,15 @@ pub fn record(conn: &Connection, input: &NewHistoryRecord) -> rusqlite::Result<S
             Option::<String>::None, // comment — set via set_comment
             0_i64,                  // pinned — set via set_pinned
         ],
-)?;
+    )?;
     Ok(id)
 }
 
 /// FTS-aware paginated search. Filters compose with implicit AND; `since` is
 /// inclusive and `until` is exclusive, mirroring the frontend's date-range
 /// picker semantics.
-pub fn search(    conn: &Connection,
+pub fn search(
+    conn: &Connection,
     filter: &HistorySearchFilter,
 ) -> rusqlite::Result<HistorySearchResult> {
     let limit = filter.limit.min(MAX_PAGE);
@@ -74,9 +76,10 @@ pub fn search(    conn: &Connection,
         "FROM query_history h"
     };
 
-    let select_sql = format!(        "SELECT {SELECT_COLUMNS} {from_sql}{where_sql} \
+    let select_sql = format!(
+        "SELECT {SELECT_COLUMNS} {from_sql}{where_sql} \
          ORDER BY h.executed_at DESC LIMIT ? OFFSET ?",
-);
+    );
     let mut select_args = args.clone();
     select_args.push(Value::Integer(i64::from(limit)));
     select_args.push(Value::Integer(i64::from(filter.offset)));
@@ -107,23 +110,26 @@ pub fn get_by_id(conn: &Connection, id: &str) -> rusqlite::Result<Option<History
 /// Idempotent — missing-id calls return `Ok(())` so concurrent UI updates
 /// against a row that was just deleted don't surface as errors.
 pub fn set_pinned(conn: &Connection, id: &str, pinned: bool) -> rusqlite::Result<()> {
-    conn.execute(        "UPDATE query_history SET pinned = ?1 WHERE id = ?2",
+    conn.execute(
+        "UPDATE query_history SET pinned = ?1 WHERE id = ?2",
         params![i64::from(pinned), id],
-)?;
+    )?;
     Ok(())
 }
 
 pub fn set_tag(conn: &Connection, id: &str, tag: Option<&str>) -> rusqlite::Result<()> {
-    conn.execute(        "UPDATE query_history SET tag = ?1 WHERE id = ?2",
+    conn.execute(
+        "UPDATE query_history SET tag = ?1 WHERE id = ?2",
         params![tag, id],
-)?;
+    )?;
     Ok(())
 }
 
 pub fn set_comment(conn: &Connection, id: &str, comment: Option<&str>) -> rusqlite::Result<()> {
-    conn.execute(        "UPDATE query_history SET comment = ?1 WHERE id = ?2",
+    conn.execute(
+        "UPDATE query_history SET comment = ?1 WHERE id = ?2",
         params![comment, id],
-)?;
+    )?;
     Ok(())
 }
 
@@ -137,9 +143,10 @@ pub fn delete(conn: &Connection, id: &str) -> rusqlite::Result<()> {
 /// Bulk-delete all rows for a connection (used by the per-connection "Clear
 /// history" action). Returns the number of rows deleted.
 pub fn delete_all_for_connection(conn: &Connection, connection_id: &str) -> rusqlite::Result<u64> {
-    let n = conn.execute(        "DELETE FROM query_history WHERE connection_id = ?1",
+    let n = conn.execute(
+        "DELETE FROM query_history WHERE connection_id = ?1",
         params![connection_id],
-)?;
+    )?;
     Ok(u64::try_from(n).unwrap_or(0))
 }
 
@@ -150,7 +157,8 @@ pub fn delete_all_for_connection(conn: &Connection, connection_id: &str) -> rusq
 /// `cb`'s `io::Error` is wrapped via `rusqlite::Error::ToSqlConversionFailure`
 /// — the standard rusqlite escape hatch for a callback error so it bubbles
 /// through `query_map` without losing the underlying cause.
-pub fn export_iter<F>(    conn: &Connection,
+pub fn export_iter<F>(
+    conn: &Connection,
     filter: &HistorySearchFilter,
     mut cb: F,
 ) -> rusqlite::Result<u64>
@@ -346,9 +354,10 @@ mod tests {
         let conn = store.conn();
         let id = record(conn, &sample("c1", "2026-04-27T00:00:00Z", "SELECT 1")).unwrap();
         set_tag(conn, &id, Some("foo")).unwrap();
-        assert_eq!(            get_by_id(conn, &id).unwrap().unwrap().tag.as_deref(),
+        assert_eq!(
+            get_by_id(conn, &id).unwrap().unwrap().tag.as_deref(),
             Some("foo")
-);
+        );
         set_tag(conn, &id, None).unwrap();
         assert_eq!(get_by_id(conn, &id).unwrap().unwrap().tag, None);
     }
@@ -359,9 +368,10 @@ mod tests {
         let conn = store.conn();
         let id = record(conn, &sample("c1", "2026-04-27T00:00:00Z", "SELECT 1")).unwrap();
         set_comment(conn, &id, Some("note")).unwrap();
-        assert_eq!(            get_by_id(conn, &id).unwrap().unwrap().comment.as_deref(),
+        assert_eq!(
+            get_by_id(conn, &id).unwrap().unwrap().comment.as_deref(),
             Some("note")
-);
+        );
         set_comment(conn, &id, None).unwrap();
         assert_eq!(get_by_id(conn, &id).unwrap().unwrap().comment, None);
     }
@@ -383,25 +393,28 @@ mod tests {
         let store = fresh_store();
         let conn = store.conn();
         for i in 0..5 {
-            record(                conn,
+            record(
+                conn,
                 &sample("A", &format!("2026-04-27T00:00:{i:02}Z"), "SELECT 1"),
-)
+            )
             .unwrap();
         }
         for i in 0..3 {
-            record(                conn,
+            record(
+                conn,
                 &sample("B", &format!("2026-04-27T00:00:{i:02}Z"), "SELECT 2"),
-)
+            )
             .unwrap();
         }
         let removed = delete_all_for_connection(conn, "A").unwrap();
         assert_eq!(removed, 5);
-        let result = search(            conn,
+        let result = search(
+            conn,
             &HistorySearchFilter {
                 limit: 200,
                 ..HistorySearchFilter::default()
             },
-)
+        )
         .unwrap();
         assert_eq!(result.rows.len(), 3);
         assert!(result.rows.iter().all(|r| r.connection_id == "B"));
@@ -418,12 +431,13 @@ mod tests {
         // serde-only default helper isn't applied for in-process callers).
         // Frontend-driven flows always go through serde, but Rust-level tests
         // need to set the limit explicitly.
-        let result = search(            conn,
+        let result = search(
+            conn,
             &HistorySearchFilter {
                 limit: 200,
                 ..HistorySearchFilter::default()
             },
-)
+        )
         .unwrap();
         assert_eq!(result.rows.len(), 3);
         assert_eq!(result.rows[0].executed_at, "2026-04-27T00:00:03Z");
@@ -437,12 +451,14 @@ mod tests {
         let store = fresh_store();
         let conn = store.conn();
         for i in 0..50 {
-            record(                conn,
-                &sample(                    "c1",
+            record(
+                conn,
+                &sample(
+                    "c1",
                     &format!("2026-04-27T00:00:{i:02}Z"),
                     &format!("SELECT {i}"),
-),
-)
+                ),
+            )
             .unwrap();
         }
         let mut filter = HistorySearchFilter {
@@ -471,16 +487,19 @@ mod tests {
     fn search_match_finds_token() {
         let store = fresh_store();
         let conn = store.conn();
-        record(            conn,
+        record(
+            conn,
             &sample("c1", "2026-04-27T00:00:01Z", "SELECT * FROM users"),
-)
+        )
         .unwrap();
-        record(            conn,
-            &sample(                "c1",
+        record(
+            conn,
+            &sample(
+                "c1",
                 "2026-04-27T00:00:02Z",
                 "INSERT INTO orders VALUES (1)",
-),
-)
+            ),
+        )
         .unwrap();
         let filter = HistorySearchFilter {
             query: Some("users".into()),
@@ -497,17 +516,20 @@ mod tests {
     fn search_match_two_tokens_implicit_and() {
         let store = fresh_store();
         let conn = store.conn();
-        record(            conn,
+        record(
+            conn,
             &sample("c1", "2026-04-27T00:00:01Z", "select users from t"),
-)
+        )
         .unwrap();
-        record(            conn,
+        record(
+            conn,
             &sample("c1", "2026-04-27T00:00:02Z", "users only here"),
-)
+        )
         .unwrap();
-        record(            conn,
+        record(
+            conn,
             &sample("c1", "2026-04-27T00:00:03Z", "select orders from t"),
-)
+        )
         .unwrap();
         let filter = HistorySearchFilter {
             query: Some("\"select\" \"users\"".into()),
@@ -525,12 +547,14 @@ mod tests {
         let conn = store.conn();
         for cid in ["A", "B", "C"] {
             for i in 0..3 {
-                record(                    conn,
-                    &sample(                        cid,
+                record(
+                    conn,
+                    &sample(
+                        cid,
                         &format!("2026-04-27T00:00:{i:02}Z"),
                         &format!("SELECT {cid} {i}"),
-),
-)
+                    ),
+                )
                 .unwrap();
             }
         }
@@ -577,12 +601,14 @@ mod tests {
         let conn = store.conn();
         let mut ids = Vec::new();
         for i in 0..5 {
-            let id = record(                conn,
-                &sample(                    "c1",
+            let id = record(
+                conn,
+                &sample(
+                    "c1",
                     &format!("2026-04-27T00:00:{i:02}Z"),
                     &format!("SELECT {i}"),
-),
-)
+                ),
+            )
             .unwrap();
             ids.push(id);
         }
@@ -617,13 +643,15 @@ mod tests {
         };
         let result = search(conn, &filter).unwrap();
         let sqls: Vec<&str> = result.rows.iter().map(|r| r.sql.as_str()).collect();
-        assert!(            sqls.contains(&"at_since"),
+        assert!(
+            sqls.contains(&"at_since"),
             "since boundary inclusive: {sqls:?}"
-);
+        );
         assert!(sqls.contains(&"middle"));
-        assert!(            !sqls.contains(&"at_until"),
+        assert!(
+            !sqls.contains(&"at_until"),
             "until boundary exclusive: {sqls:?}"
-);
+        );
         assert!(!sqls.contains(&"before"));
         assert!(!sqls.contains(&"after"));
         assert_eq!(result.rows.len(), 2);
@@ -634,12 +662,14 @@ mod tests {
         let store = fresh_store();
         let conn = store.conn();
         for i in 0..205 {
-            record(                conn,
-                &sample(                    "c1",
+            record(
+                conn,
+                &sample(
+                    "c1",
                     &format!("2026-04-27T00:{:02}:{:02}Z", i / 60, i % 60),
                     &format!("SELECT {i}"),
-),
-)
+                ),
+            )
             .unwrap();
         }
         let filter = HistorySearchFilter {
@@ -656,16 +686,19 @@ mod tests {
     fn search_cyrillic_match_via_unicode61() {
         let store = fresh_store();
         let conn = store.conn();
-        record(            conn,
-            &sample(                "c1",
+        record(
+            conn,
+            &sample(
+                "c1",
                 "2026-04-27T00:00:01Z",
                 "SELECT 1 -- комментарий пользователя",
-),
-)
+            ),
+        )
         .unwrap();
-        record(            conn,
+        record(
+            conn,
             &sample("c1", "2026-04-27T00:00:02Z", "SELECT 2 -- english only"),
-)
+        )
         .unwrap();
         let filter = HistorySearchFilter {
             query: Some("комментарий".into()),
@@ -693,12 +726,14 @@ mod tests {
         let store = fresh_store();
         let conn = store.conn();
         for i in 0..7 {
-            record(                conn,
-                &sample(                    "c1",
+            record(
+                conn,
+                &sample(
+                    "c1",
                     &format!("2026-04-27T00:00:{i:02}Z"),
                     &format!("SELECT {i}"),
-),
-)
+                ),
+            )
             .unwrap();
         }
         let mut collected: Vec<HistoryRow> = Vec::new();
@@ -721,9 +756,10 @@ mod tests {
         })
         .expect_err("must surface io error");
         let s = err.to_string();
-        assert!(            s.contains("disk full"),
+        assert!(
+            s.contains("disk full"),
             "expected propagated io::Error: {s}"
-);
+        );
     }
 
     #[test]
@@ -731,24 +767,28 @@ mod tests {
         let store = fresh_store();
         let conn = store.conn();
         for i in 0..10 {
-            record(                conn,
-                &sample(                    "c1",
+            record(
+                conn,
+                &sample(
+                    "c1",
                     &format!("2026-04-27T00:00:{i:02}Z"),
                     &format!("SELECT ok {i}"),
-),
-)
+                ),
+            )
             .unwrap();
         }
         for i in 0..3 {
-            let mut input = sample(                "c1",
+            let mut input = sample(
+                "c1",
                 &format!("2026-04-27T00:01:{i:02}Z"),
                 &format!("SELECT err {i}"),
-);
+            );
             input.status = HistoryStatus::Error;
             record(conn, &input).unwrap();
         }
         let mut count_visited = 0;
-        let count = export_iter(            conn,
+        let count = export_iter(
+            conn,
             &HistorySearchFilter {
                 status: Some(HistoryStatus::Error),
                 ..HistorySearchFilter::default()
@@ -757,7 +797,7 @@ mod tests {
                 count_visited += 1;
                 Ok(())
             },
-)
+        )
         .unwrap();
         assert_eq!(count, 3);
         assert_eq!(count_visited, 3);
@@ -773,8 +813,9 @@ mod tests {
             .query_row("SELECT COUNT(*) FROM schema_migrations", [], |r| r.get(0))
             .unwrap();
         // added migrations 004 + 005 — total = MIGRATIONS.len()
-        assert_eq!(            count,
+        assert_eq!(
+            count,
             i64::try_from(crate::connection::store::migrations_count()).unwrap()
-);
+        );
     }
 }

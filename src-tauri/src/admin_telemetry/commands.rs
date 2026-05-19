@@ -9,7 +9,8 @@ use super::client;
 use crate::AppState;
 
 #[tauri::command]
-pub async fn admin_telemetry_emit(    state: State<'_, AppState>,
+pub async fn admin_telemetry_emit(
+    state: State<'_, AppState>,
     locale: String,
     event_name: String,
     payload: Option<Value>,

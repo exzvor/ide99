@@ -9,13 +9,15 @@ use crate::modules::types::{ActionPreflight, ModuleError, ModuleId, Subscription
 use crate::AppState;
 
 #[tauri::command]
-pub async fn modules_get_state(    state: State<'_, AppState>,
+pub async fn modules_get_state(
+    state: State<'_, AppState>,
 ) -> Result<SubscriptionState, ModuleError> {
     state.modules_get_state().await
 }
 
 #[tauri::command]
-pub async fn modules_pre_flight(    state: State<'_, AppState>,
+pub async fn modules_pre_flight(
+    state: State<'_, AppState>,
     module: ModuleId,
 ) -> Result<ActionPreflight, ModuleError> {
     state.modules_pre_flight(module).await
@@ -27,9 +29,10 @@ impl AppState {
         manager::read_state(store.conn())
     }
 
-    pub async fn modules_pre_flight(        &self,
+    pub async fn modules_pre_flight(
+        &self,
         module: ModuleId,
-) -> Result<ActionPreflight, ModuleError> {
+    ) -> Result<ActionPreflight, ModuleError> {
         let state = self.modules_get_state().await?;
         Ok(manager::pre_flight(&state, module))
     }

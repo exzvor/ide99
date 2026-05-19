@@ -82,12 +82,14 @@ mod tests {
 
     #[test]
     fn parses_version_from_squawk_output() {
-        assert_eq!(            parse_version_line("squawk 1.5.0\n"),
+        assert_eq!(
+            parse_version_line("squawk 1.5.0\n"),
             Some("1.5.0".to_string())
-);
-        assert_eq!(            parse_version_line("squawk 1.5.0"),
+        );
+        assert_eq!(
+            parse_version_line("squawk 1.5.0"),
             Some("1.5.0".to_string())
-);
+        );
     }
 
     #[test]

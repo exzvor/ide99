@@ -159,9 +159,10 @@ mod tests {
         assert_eq!(findings[0].rule, "prefer-text-field");
         assert_eq!(findings[0].line, 1);
         assert_eq!(findings[0].file, "/tmp/x.up.sql");
-        assert_eq!(            findings[0].severity,
+        assert_eq!(
+            findings[0].severity,
             crate::lint::types::SquawkSeverity::Warning
-);
+        );
     }
 
     #[test]
@@ -177,9 +178,10 @@ mod tests {
             {"file":"x","line":1,"column":1,"level":"FutureLevel","messages":[{"Title":"r"}]}
         ]"#;
         let findings = parse_findings_json(json).unwrap();
-        assert_eq!(            findings[0].severity,
+        assert_eq!(
+            findings[0].severity,
             crate::lint::types::SquawkSeverity::Warning
-);
+        );
     }
 
     #[tokio::test]

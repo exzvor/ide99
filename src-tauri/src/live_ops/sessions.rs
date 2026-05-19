@@ -50,7 +50,8 @@ SELECT bl.locktype, bl.mode, bl.relation::regclass::text AS relation,
 ";
 
 #[allow(clippy::missing_errors_doc)]
-pub async fn fetch_sessions(    pool: &Pool,
+pub async fn fetch_sessions(
+    pool: &Pool,
     mode: SessionsMode,
 ) -> Result<SessionsSnapshot, LiveOpsError> {
     let client = pool.get().await.map_err(|_| LiveOpsError::NotConnected)?;

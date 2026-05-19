@@ -5,7 +5,8 @@
 //! No I/O — every function is a pure transformation so it can be
 //! exhaustively unit-tested without a database.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::module_name_repetitions,
     clippy::cast_possible_truncation,
@@ -151,7 +152,8 @@ pub(crate) fn encode_path_array(path: &[PathSegment]) -> String {
 /// - Empty path → just the value JSON.
 /// - `Key("k")` → `{"k": <inner>}`.
 /// - [`PathSegment::ArrayWildcard`] → `[<inner>]`.
-pub(crate) fn containment_object(    path: &[PathSegment],
+pub(crate) fn containment_object(
+    path: &[PathSegment],
     value: &BuilderValue,
 ) -> Result<String, BuilderError> {
     let inner_json = value_to_json(value)?;
@@ -172,7 +174,8 @@ pub(crate) fn containment_object(    path: &[PathSegment],
 ///
 /// Returns a string like `"a"."b" ? (@ == "value")` which the caller
 /// wraps in `'$.<result>'` after JSONPath-escaping.
-pub(crate) fn jsonpath_predicate(    path: &[PathSegment],
+pub(crate) fn jsonpath_predicate(
+    path: &[PathSegment],
     comparator: Comparator,
     rhs: &BuilderValue,
 ) -> Result<String, BuilderError> {
@@ -313,7 +316,8 @@ const fn comparator_to_jsonpath(c: Comparator) -> &'static str {
 /// element is semantically undefined; fall back to the last `Key` segment in
 /// the path as the key and build the parent chain up to (and including) the
 /// ArrayWildcard's predecessor, `is_top_level = true` (caller emits warning).
-fn existence_lhs_key(    col: &str,
+fn existence_lhs_key(
+    col: &str,
     path: &[PathSegment],
     value: &BuilderValue,
 ) -> (String, String, bool) {
@@ -324,7 +328,8 @@ fn existence_lhs_key(    col: &str,
         .rev()
         .find_map(|(i, seg)| matches!(seg, PathSegment::Key(_)).then_some(i));
 
-    last_key_idx.map_or_else(        || {
+    last_key_idx.map_or_else(
+        || {
             // No Key segment at all (empty path, or only ArrayWildcards).
             let key = if let BuilderValue::String { value } = value {
                 value.clone()
@@ -343,7 +348,7 @@ fn existence_lhs_key(    col: &str,
             let is_top_level = parent_segments.is_empty();
             (lhs, last_key.clone(), is_top_level)
         },
-)
+    )
 }
 
 /// Build a `->'seg'` accessor chain: `col->'s1'->'s2'->'s3'`.
@@ -406,12 +411,13 @@ mod tests {
 
     #[test]
     fn existence_empty_path_uses_string_value() {
-        let r = req(            BuilderOp::Existence,
+        let r = req(
+            BuilderOp::Existence,
             vec![],
             BuilderValue::String {
                 value: "mykey".into(),
             },
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("? 'mykey'"), "sql: {}", p.sql);
         assert!(p.warnings.is_empty());
@@ -419,10 +425,11 @@ mod tests {
 
     #[test]
     fn existence_single_key_segment_warns() {
-        let r = req(            BuilderOp::Existence,
+        let r = req(
+            BuilderOp::Existence,
             vec![PathSegment::Key("user".into())],
             BuilderValue::None,
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("? 'user'"), "sql: {}", p.sql);
         assert!(p
@@ -434,24 +441,27 @@ mod tests {
     #[test]
     fn existence_deep_path_builds_parent_chain_no_warning() {
         // [a, b, c] → LHS = "data"->'a'->'b', key = 'c', no ExistenceTopLevel warning.
-        let r = req(            BuilderOp::Existence,
+        let r = req(
+            BuilderOp::Existence,
             vec![
                 PathSegment::Key("a".into()),
                 PathSegment::Key("b".into()),
                 PathSegment::Key("c".into()),
             ],
             BuilderValue::None,
-);
+        );
         let p = generate(&r).unwrap();
-        assert!(            p.sql.contains("'a'->'b' ? 'c'"),
+        assert!(
+            p.sql.contains("'a'->'b' ? 'c'"),
             "expected parent chain in sql: {}",
             p.sql
-);
-        assert!(            p.warnings
+        );
+        assert!(
+            p.warnings
                 .iter()
                 .all(|w| !matches!(w, BuilderWarning::ExistenceTopLevel)),
             "should NOT warn ExistenceTopLevel for nested key path"
-);
+        );
     }
 
     // ── Existence — new path-resolution tests () ─────────────────
@@ -459,10 +469,11 @@ mod tests {
     #[test]
     fn existence_empty_path_key_from_value() {
         // Empty path → col ? 'k' (key from BuilderValue::String).
-        let r = req(            BuilderOp::Existence,
+        let r = req(
+            BuilderOp::Existence,
             vec![],
             BuilderValue::String { value: "k".into() },
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("? 'k'"), "sql: {}", p.sql);
         assert!(p.warnings.is_empty(), "no warnings for empty path");
@@ -471,61 +482,68 @@ mod tests {
     #[test]
     fn existence_single_key_path_top_level() {
         // [Key("language")] → "data" ? 'language' (only segment = key, parent empty).
-        let r = req(            BuilderOp::Existence,
+        let r = req(
+            BuilderOp::Existence,
             vec![PathSegment::Key("language".into())],
             BuilderValue::None,
-);
+        );
         let p = generate(&r).unwrap();
         // LHS is just col ("data"), key is 'language'.
         assert!(p.sql.contains(r#""data" ? 'language'"#), "sql: {}", p.sql);
         // Single-key path: parent chain is empty → still top-level, warn.
-        assert!(            p.warnings
+        assert!(
+            p.warnings
                 .iter()
                 .any(|w| matches!(w, BuilderWarning::ExistenceTopLevel)),
             "single-key path is still top-level → warn"
-);
+        );
     }
 
     #[test]
     fn existence_two_segment_path_nested() {
         // [Key("preferences"), Key("language")] → "data"->'preferences' ? 'language'.
-        let r = req(            BuilderOp::Existence,
+        let r = req(
+            BuilderOp::Existence,
             vec![
                 PathSegment::Key("preferences".into()),
                 PathSegment::Key("language".into()),
             ],
             BuilderValue::None,
-);
+        );
         let p = generate(&r).unwrap();
-        assert!(            p.sql.contains("'preferences' ? 'language'"),
+        assert!(
+            p.sql.contains("'preferences' ? 'language'"),
             "sql: {}",
             p.sql
-);
-        assert!(            p.warnings
+        );
+        assert!(
+            p.warnings
                 .iter()
                 .all(|w| !matches!(w, BuilderWarning::ExistenceTopLevel)),
             "two-segment nested path must NOT warn ExistenceTopLevel"
-);
+        );
     }
 
     #[test]
     fn existence_three_segment_path_nested() {
         // [Key("a"), Key("b"), Key("c")] → "data"->'a'->'b' ? 'c'.
-        let r = req(            BuilderOp::Existence,
+        let r = req(
+            BuilderOp::Existence,
             vec![
                 PathSegment::Key("a".into()),
                 PathSegment::Key("b".into()),
                 PathSegment::Key("c".into()),
             ],
             BuilderValue::None,
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("'a'->'b' ? 'c'"), "sql: {}", p.sql);
-        assert!(            p.warnings
+        assert!(
+            p.warnings
                 .iter()
                 .all(|w| !matches!(w, BuilderWarning::ExistenceTopLevel)),
             "three-segment nested path must NOT warn ExistenceTopLevel"
-);
+        );
     }
 
     #[test]
@@ -534,64 +552,71 @@ mod tests {
         // parent chain includes the ArrayWildcard predecessor; ExistenceTopLevel warned.
         // e.g. [Key("tags"), ArrayWildcard] → last Key idx = 0 ("tags"),
         // parent = [] (empty), so is_top_level = true → warn.
-        let r = req(            BuilderOp::Existence,
+        let r = req(
+            BuilderOp::Existence,
             vec![PathSegment::Key("tags".into()), PathSegment::ArrayWildcard],
             BuilderValue::None,
-);
+        );
         let p = generate(&r).unwrap();
         // Key is "tags" (last Key segment); parent chain is empty.
         assert!(p.sql.contains("? 'tags'"), "sql: {}", p.sql);
-        assert!(            p.warnings
+        assert!(
+            p.warnings
                 .iter()
                 .any(|w| matches!(w, BuilderWarning::ExistenceTopLevel)),
             "ArrayWildcard-terminated path must warn ExistenceTopLevel"
-);
+        );
     }
 
     // ── Containment ──────────────────────────────────────────────────────────
 
     #[test]
     fn containment_empty_path_string_value() {
-        let r = req(            BuilderOp::Containment,
+        let r = req(
+            BuilderOp::Containment,
             vec![],
             BuilderValue::String {
                 value: "alice".into(),
             },
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("@> '\"alice\"'::jsonb"), "sql: {}", p.sql);
     }
 
     #[test]
     fn containment_single_key_wraps_in_object() {
-        let r = req(            BuilderOp::Containment,
+        let r = req(
+            BuilderOp::Containment,
             vec![PathSegment::Key("user".into())],
             BuilderValue::String {
                 value: "alice".into(),
             },
-);
+        );
         let p = generate(&r).unwrap();
-        assert!(            p.sql.contains(r#"@> '{"user": "alice"}'::jsonb"#),
+        assert!(
+            p.sql.contains(r#"@> '{"user": "alice"}'::jsonb"#),
             "sql: {}",
             p.sql
-);
+        );
     }
 
     #[test]
     fn containment_three_level_nested() {
-        let r = req(            BuilderOp::Containment,
+        let r = req(
+            BuilderOp::Containment,
             vec![
                 PathSegment::Key("a".into()),
                 PathSegment::Key("b".into()),
                 PathSegment::Key("c".into()),
             ],
             BuilderValue::Number { value: "42".into() },
-);
+        );
         let p = generate(&r).unwrap();
-        assert!(            p.sql.contains(r#"@> '{"a": {"b": {"c": 42}}}'::jsonb"#),
+        assert!(
+            p.sql.contains(r#"@> '{"a": {"b": {"c": 42}}}'::jsonb"#),
             "sql: {}",
             p.sql
-);
+        );
     }
 
     #[test]
@@ -610,32 +635,35 @@ mod tests {
 
     #[test]
     fn containment_bool_true() {
-        let r = req(            BuilderOp::Containment,
+        let r = req(
+            BuilderOp::Containment,
             vec![],
             BuilderValue::Bool { value: true },
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("@> 'true'::jsonb"), "sql: {}", p.sql);
     }
 
     #[test]
     fn containment_bool_false() {
-        let r = req(            BuilderOp::Containment,
+        let r = req(
+            BuilderOp::Containment,
             vec![],
             BuilderValue::Bool { value: false },
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("@> 'false'::jsonb"), "sql: {}", p.sql);
     }
 
     #[test]
     fn containment_json_literal_valid() {
-        let r = req(            BuilderOp::Containment,
+        let r = req(
+            BuilderOp::Containment,
             vec![],
             BuilderValue::JsonLiteral {
                 value: r#"{"x":1}"#.into(),
             },
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("@>"), "sql: {}", p.sql);
         assert!(p.sql.contains("::jsonb"), "sql: {}", p.sql);
@@ -643,59 +671,66 @@ mod tests {
 
     #[test]
     fn containment_json_literal_invalid_errors() {
-        let r = req(            BuilderOp::Containment,
+        let r = req(
+            BuilderOp::Containment,
             vec![],
             BuilderValue::JsonLiteral {
                 value: "not json".into(),
             },
-);
-        assert!(matches!(            generate(&r),
+        );
+        assert!(matches!(
+            generate(&r),
             Err(BuilderError::InvalidJson { .. })
-));
+        ));
     }
 
     #[test]
     fn containment_invalid_number_errors() {
-        let r = req(            BuilderOp::Containment,
+        let r = req(
+            BuilderOp::Containment,
             vec![],
             BuilderValue::Number {
                 value: "abc".into(),
             },
-);
-        assert!(matches!(            generate(&r),
+        );
+        assert!(matches!(
+            generate(&r),
             Err(BuilderError::TypeMismatch { .. })
-));
+        ));
     }
 
     #[test]
     fn containment_array_wildcard_wraps_in_array() {
-        let r = req(            BuilderOp::Containment,
+        let r = req(
+            BuilderOp::Containment,
             vec![PathSegment::Key("tags".into()), PathSegment::ArrayWildcard],
             BuilderValue::String {
                 value: "rust".into(),
             },
-);
+        );
         let p = generate(&r).unwrap();
         // serde_json encodes "rust" as "\"rust\"" (JSON string), then array-wrapped,
         // then object-wrapped: {"tags": ["\"rust\""]}
         // SQL-literal-escaping doesn't change quotes, so the final output is:
         // @> '{"tags": ["rust"]}'::jsonb
-        assert!(            p.sql.contains(r#"@> '{"tags": ["rust"]}'::jsonb"#),
+        assert!(
+            p.sql.contains(r#"@> '{"tags": ["rust"]}'::jsonb"#),
             "sql: {}",
             p.sql
-);
+        );
     }
 
     // ── PathExtract — Projection ──────────────────────────────────────────────
 
     #[test]
     fn path_extract_projection_empty_path() {
-        let r = req(            BuilderOp::PathExtract {
+        let r = req(
+            BuilderOp::PathExtract {
                 mode: ExtractMode::Projection,
             },
             vec![],
             BuilderValue::None,
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("#>'{}'"), "sql: {}", p.sql);
         assert!(p.sql.contains("AS extracted"), "sql: {}", p.sql);
@@ -703,19 +738,21 @@ mod tests {
 
     #[test]
     fn path_extract_projection_single_segment() {
-        let r = req(            BuilderOp::PathExtract {
+        let r = req(
+            BuilderOp::PathExtract {
                 mode: ExtractMode::Projection,
             },
             vec![PathSegment::Key("user".into())],
             BuilderValue::None,
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("#>'{user}'"), "sql: {}", p.sql);
     }
 
     #[test]
     fn path_extract_projection_three_segments() {
-        let r = req(            BuilderOp::PathExtract {
+        let r = req(
+            BuilderOp::PathExtract {
                 mode: ExtractMode::Projection,
             },
             vec![
@@ -724,7 +761,7 @@ mod tests {
                 PathSegment::Key("c".into()),
             ],
             BuilderValue::None,
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("#>'{a,b,c}'"), "sql: {}", p.sql);
     }
@@ -733,7 +770,8 @@ mod tests {
 
     #[test]
     fn path_extract_comparison_single_segment() {
-        let r = req(            BuilderOp::PathExtract {
+        let r = req(
+            BuilderOp::PathExtract {
                 mode: ExtractMode::Comparison {
                     eq_value: BuilderValue::String {
                         value: "hello".into(),
@@ -742,7 +780,7 @@ mod tests {
             },
             vec![PathSegment::Key("name".into())],
             BuilderValue::None,
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("#>'{name}' ="), "sql: {}", p.sql);
         assert!(p.sql.contains("::jsonb"), "sql: {}", p.sql);
@@ -753,13 +791,14 @@ mod tests {
 
     #[test]
     fn path_predicate_eq_empty_path() {
-        let r = req(            BuilderOp::PathPredicate {
+        let r = req(
+            BuilderOp::PathPredicate {
                 comparator: Comparator::Eq,
                 rhs: BuilderValue::Number { value: "5".into() },
             },
             vec![],
             BuilderValue::None,
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("@?"), "sql: {}", p.sql);
         assert!(p.sql.contains("=="), "sql: {}", p.sql);
@@ -776,13 +815,14 @@ mod tests {
             (Comparator::Le, "<="),
             (Comparator::LikeRegex, "like_regex"),
         ] {
-            let r = req(                BuilderOp::PathPredicate {
+            let r = req(
+                BuilderOp::PathPredicate {
                     comparator: cmp,
                     rhs: BuilderValue::Number { value: "1".into() },
                 },
                 vec![PathSegment::Key("x".into())],
                 BuilderValue::None,
-);
+            );
             let p = generate(&r).unwrap();
             assert!(p.sql.contains(symbol), "comparator {cmp:?}: sql: {}", p.sql);
         }
@@ -790,7 +830,8 @@ mod tests {
 
     #[test]
     fn path_predicate_three_level() {
-        let r = req(            BuilderOp::PathPredicate {
+        let r = req(
+            BuilderOp::PathPredicate {
                 comparator: Comparator::Eq,
                 rhs: BuilderValue::String {
                     value: "weekly".into(),
@@ -802,7 +843,7 @@ mod tests {
                 PathSegment::Key("notif".into()),
             ],
             BuilderValue::None,
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("@?"), "sql: {}", p.sql);
         assert!(p.sql.contains("\"user\""), "sql: {}", p.sql);
@@ -814,9 +855,10 @@ mod tests {
     fn depth_17_returns_error() {
         let path: Vec<PathSegment> = (0..17).map(|i| PathSegment::Key(i.to_string())).collect();
         let r = req(BuilderOp::Containment, path, BuilderValue::Null);
-        assert!(matches!(            generate(&r),
+        assert!(matches!(
+            generate(&r),
             Err(BuilderError::PathTooDeep { .. })
-));
+        ));
     }
 
     #[test]
@@ -839,9 +881,10 @@ mod tests {
 
     #[test]
     fn escape_multiple_quotes() {
-        assert_eq!(            escape_string_literal("it's ''quoted''").unwrap(),
+        assert_eq!(
+            escape_string_literal("it's ''quoted''").unwrap(),
             "it''s ''''quoted''''"
-);
+        );
     }
 
     #[test]
@@ -860,9 +903,10 @@ mod tests {
 
     #[test]
     fn escape_nul_byte_rejected() {
-        assert!(matches!(            escape_string_literal("a\0b"),
+        assert!(matches!(
+            escape_string_literal("a\0b"),
             Err(BuilderError::InvalidJson { .. })
-));
+        ));
     }
 
     // ── Identifier escaping ───────────────────────────────────────────────────
@@ -886,12 +930,13 @@ mod tests {
 
     #[test]
     fn containment_with_quotes_in_string_value() {
-        let r = req(            BuilderOp::Containment,
+        let r = req(
+            BuilderOp::Containment,
             vec![],
             BuilderValue::String {
                 value: "O'Reilly".into(),
             },
-);
+        );
         let p = generate(&r).unwrap();
         assert!(p.sql.contains("O''Reilly"), "sql: {}", p.sql);
     }
@@ -910,19 +955,21 @@ mod tests {
 
     #[test]
     fn encode_path_array_multi() {
-        assert_eq!(            encode_path_array(&[
+        assert_eq!(
+            encode_path_array(&[
                 PathSegment::Key("a".into()),
                 PathSegment::Key("b".into()),
                 PathSegment::Key("c".into())
             ]),
             "{a,b,c}"
-);
+        );
     }
 
     #[test]
     fn encode_path_array_wildcard() {
-        assert_eq!(            encode_path_array(&[PathSegment::Key("tags".into()), PathSegment::ArrayWildcard]),
+        assert_eq!(
+            encode_path_array(&[PathSegment::Key("tags".into()), PathSegment::ArrayWildcard]),
             "{tags,*}"
-);
+        );
     }
 }

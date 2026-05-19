@@ -50,19 +50,22 @@ fn emit(ctx: &ServerContext, payload: Value) -> Result<(), McpError> {
     Ok(())
 }
 
-pub async fn open_query_in_editor_tool(    ctx: &ServerContext,
+pub async fn open_query_in_editor_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
     let sql = arg_str(&args, "sql")?;
     let focus = arg_bool(&args, "focusEditor", true);
-    emit(        ctx,
+    emit(
+        ctx,
         json!({ "kind": "open-query", "sql": sql, "focusEditor": focus }),
-)?;
+    )?;
     Ok(json!({ "accepted": true }))
 }
 
-pub async fn run_in_editor_tool(    ctx: &ServerContext,
+pub async fn run_in_editor_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
@@ -71,55 +74,61 @@ pub async fn run_in_editor_tool(    ctx: &ServerContext,
     Ok(json!({ "accepted": true }))
 }
 
-pub async fn open_table_tool(    ctx: &ServerContext,
+pub async fn open_table_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
     let conn_id = arg_str(&args, "connId")?;
     let schema = arg_str(&args, "schema")?;
     let table = arg_str(&args, "table")?;
-    emit(        ctx,
+    emit(
+        ctx,
         json!({
             "kind": "open-table",
             "connId": conn_id,
             "schema": schema,
             "table": table,
         }),
-)?;
+    )?;
     Ok(json!({ "accepted": true }))
 }
 
-pub async fn open_explain_for_tool(    ctx: &ServerContext,
+pub async fn open_explain_for_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
     let conn_id = arg_str(&args, "connId")?;
     let sql = arg_str(&args, "sql")?;
-    emit(        ctx,
+    emit(
+        ctx,
         json!({
             "kind": "open-explain",
             "connId": conn_id,
             "sql": sql,
         }),
-)?;
+    )?;
     Ok(json!({ "accepted": true }))
 }
 
-pub async fn navigate_to_tool(    ctx: &ServerContext,
+pub async fn navigate_to_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
     let conn_id = arg_str(&args, "connId")?;
     let schema = arg_str(&args, "schema")?;
     let table = arg_str_opt(&args, "table");
-    emit(        ctx,
+    emit(
+        ctx,
         json!({
             "kind": "navigate-tree",
             "connId": conn_id,
             "schema": schema,
             "table": table,
         }),
-)?;
+    )?;
     Ok(json!({ "accepted": true }))
 }
 
@@ -193,10 +202,11 @@ mod tests {
     #[tokio::test]
     async fn open_table_validates_args() {
         let ctx = test_ctx();
-        let v = open_table_tool(            &ctx,
+        let v = open_table_tool(
+            &ctx,
             &dummy_client(),
             json!({ "connId": "c", "schema": "public", "table": "users" }),
-)
+        )
         .await
         .unwrap();
         assert_eq!(v["accepted"], json!(true));
@@ -209,10 +219,11 @@ mod tests {
     #[tokio::test]
     async fn navigate_to_accepts_optional_table() {
         let ctx = test_ctx();
-        let v = navigate_to_tool(            &ctx,
+        let v = navigate_to_tool(
+            &ctx,
             &dummy_client(),
             json!({ "connId": "c", "schema": "public" }),
-)
+        )
         .await
         .unwrap();
         assert_eq!(v["accepted"], json!(true));

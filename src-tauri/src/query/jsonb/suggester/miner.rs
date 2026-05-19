@@ -6,7 +6,8 @@
 //! `jsonb_columns` list (derived from the `is_jsonb=true` autocomplete
 //! snapshot) to discard false positives.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::doc_markdown
 )]
@@ -98,7 +99,8 @@ fn patterns() -> &'static Patterns {
 /// from the `is_jsonb=true` autocomplete snapshot.  Only hits whose column name
 /// appears in that list are returned — false-positive matches on shared column
 /// names (e.g. `data`) across multiple tables are tolerated for v1.
-pub async fn mine(    client: &impl deadpool_postgres::GenericClient,
+pub async fn mine(
+    client: &impl deadpool_postgres::GenericClient,
     jsonb_columns: &[(String, String, String)],
 ) -> Result<Vec<MinedHit>, SuggesterError> {
     let rows = client
@@ -122,14 +124,15 @@ pub async fn mine(    client: &impl deadpool_postgres::GenericClient,
         let mean_exec_time_ms: f64 = row.try_get("mean_exec_time").unwrap_or(0.0);
         let total_exec_time_ms: f64 = row.try_get("total_exec_time").unwrap_or(0.0);
 
-        extract_hits(            &query_text,
+        extract_hits(
+            &query_text,
             calls,
             mean_exec_time_ms,
             total_exec_time_ms,
             &known_columns,
             jsonb_columns,
             &mut hits,
-);
+        );
     }
 
     Ok(hits)
@@ -143,7 +146,8 @@ pub async fn mine(    client: &impl deadpool_postgres::GenericClient,
 ///
 /// Exposed as `pub(crate)` so unit-tests can drive it without a real
 /// database connection.
-pub(crate) fn extract_hits(    query_text: &str,
+pub(crate) fn extract_hits(
+    query_text: &str,
     calls: i64,
     mean_exec_time_ms: f64,
     total_exec_time_ms: f64,
@@ -244,21 +248,24 @@ pub(crate) fn extract_hits(    query_text: &str,
 /// Best-effort: returns the first match from `jsonb_columns` (case-insensitive
 /// column comparison). Falls back to `("public", col_raw, col_raw)` if no
 /// match is found (should never happen after `known_columns` filtering).
-fn resolve_column(    col_raw: &str,
+fn resolve_column(
+    col_raw: &str,
     jsonb_columns: &[(String, String, String)],
 ) -> (String, String, String) {
     let lower = col_raw.to_lowercase();
     jsonb_columns
         .iter()
         .find(|(_, _, col)| col.to_lowercase() == lower)
-        .map_or_else(            || {
-                (                    "public".to_string(),
+        .map_or_else(
+            || {
+                (
+                    "public".to_string(),
                     col_raw.to_string(),
                     col_raw.to_string(),
-)
+                )
             },
             |(s, t, c)| (s.clone(), t.clone(), c.clone()),
-)
+        )
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -329,17 +336,19 @@ mod tests {
     #[test]
     fn detects_path_predicate_at_question() {
         let hits = extract("SELECT * FROM t WHERE data @? '$.x'", &["data"]);
-        assert!(            hits.iter().any(|h| h.op == MinedOp::PathPredicate),
+        assert!(
+            hits.iter().any(|h| h.op == MinedOp::PathPredicate),
             "{hits:?}"
-);
+        );
     }
 
     #[test]
     fn detects_path_predicate_double_at() {
         let hits = extract("SELECT * FROM t WHERE data @@ '$.x > 0'", &["data"]);
-        assert!(            hits.iter().any(|h| h.op == MinedOp::PathPredicate),
+        assert!(
+            hits.iter().any(|h| h.op == MinedOp::PathPredicate),
             "{hits:?}"
-);
+        );
     }
 
     // ── TextExtract ──────────────────────────────────────────────────────────
@@ -361,9 +370,10 @@ mod tests {
     fn comment_style_match_still_extracted_column_filter_drops_it() {
         // The query mentions @> but the column is not in our jsonb list.
         let hits = extract("-- my_table @> '{}' in a comment", &["data"]);
-        assert!(            hits.is_empty(),
+        assert!(
+            hits.is_empty(),
             "expected empty; comment-like match should be filtered: {hits:?}"
-);
+        );
     }
 
     #[test]
@@ -382,9 +392,10 @@ mod tests {
         let hits = extract("SELECT * FROM t WHERE Data @> '{}'", &["data"]);
         // regex is case-sensitive but PG identifiers are lower-cased unless quoted.
         // Our known-set is lower-cased so "Data".to_lowercase() == "data" → match.
-        assert!(            hits.iter().any(|h| h.op == MinedOp::Containment),
+        assert!(
+            hits.iter().any(|h| h.op == MinedOp::Containment),
             "{hits:?}"
-);
+        );
     }
 
     // ── proptest: random texts never panic ────────────────────────────────────

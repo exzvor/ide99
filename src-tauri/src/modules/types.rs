@@ -72,9 +72,10 @@ impl serde::Serialize for ModuleError {
     fn serialize<S: serde::Serializer>(&self, ser: S) -> Result<S::Ok, S::Error> {
         use serde::ser::SerializeStruct;
         let (code, message) = match self {
-            Self::NotSubscribed(id) => (                "not_subscribed",
+            Self::NotSubscribed(id) => (
+                "not_subscribed",
                 format!("module {} requires an active subscription", id.as_str()),
-),
+            ),
             Self::Storage(m) => ("storage_error", m.clone()),
             Self::InvalidInput(m) => ("invalid_input", m.clone()),
         };

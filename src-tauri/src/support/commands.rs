@@ -10,7 +10,8 @@ fn map_err(e: SupportError) -> String {
 }
 
 #[tauri::command]
-pub async fn support_send_feedback(    locale: String,
+pub async fn support_send_feedback(
+    locale: String,
     email: String,
     message: String,
     screenshots: Vec<Screenshot>,

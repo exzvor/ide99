@@ -24,21 +24,24 @@ use crate::AppState;
 // ---------------------------------------------------------------------------
 
 #[tauri::command]
-pub async fn backup_preview_command(    state: State<'_, AppState>,
+pub async fn backup_preview_command(
+    state: State<'_, AppState>,
     opts: BackupOptions,
 ) -> Result<Vec<String>, BackupError> {
     state.backup_preview_command(opts).await
 }
 
 #[tauri::command]
-pub async fn restore_preview_command(    state: State<'_, AppState>,
+pub async fn restore_preview_command(
+    state: State<'_, AppState>,
     opts: RestoreOptions,
 ) -> Result<Vec<String>, BackupError> {
     state.restore_preview_command(opts).await
 }
 
 #[tauri::command]
-pub async fn basebackup_preview_command(    state: State<'_, AppState>,
+pub async fn basebackup_preview_command(
+    state: State<'_, AppState>,
     opts: BaseBackupOptions,
 ) -> Result<Vec<String>, BackupError> {
     state.basebackup_preview_command(opts).await
@@ -51,7 +54,8 @@ pub async fn basebackup_preview_command(    state: State<'_, AppState>,
 
 #[tauri::command]
 #[allow(unused_variables)]
-pub async fn backup_run(    app: tauri::AppHandle,
+pub async fn backup_run(
+    app: tauri::AppHandle,
     state: State<'_, AppState>,
     job_id: String,
     opts: BackupOptions,
@@ -61,7 +65,8 @@ pub async fn backup_run(    app: tauri::AppHandle,
 
 #[tauri::command]
 #[allow(unused_variables)]
-pub async fn restore_run(    app: tauri::AppHandle,
+pub async fn restore_run(
+    app: tauri::AppHandle,
     state: State<'_, AppState>,
     job_id: String,
     opts: RestoreOptions,
@@ -71,7 +76,8 @@ pub async fn restore_run(    app: tauri::AppHandle,
 
 #[tauri::command]
 #[allow(unused_variables)]
-pub async fn basebackup_run(    app: tauri::AppHandle,
+pub async fn basebackup_run(
+    app: tauri::AppHandle,
     state: State<'_, AppState>,
     job_id: String,
     opts: BaseBackupOptions,
@@ -95,7 +101,8 @@ pub async fn schedule_list(state: State<'_, AppState>) -> Result<Vec<ScheduleEnt
 }
 
 #[tauri::command]
-pub async fn schedule_upsert(    state: State<'_, AppState>,
+pub async fn schedule_upsert(
+    state: State<'_, AppState>,
     id: String,
     label: String,
     cron: String,
@@ -110,7 +117,8 @@ pub async fn schedule_remove(state: State<'_, AppState>, id: String) -> Result<(
 }
 
 #[tauri::command]
-pub async fn schedule_preview_cron_line(    id: String,
+pub async fn schedule_preview_cron_line(
+    id: String,
     cron: String,
     backup: BackupOptions,
 ) -> Result<String, BackupError> {
@@ -119,7 +127,8 @@ pub async fn schedule_preview_cron_line(    id: String,
 }
 
 #[tauri::command]
-pub async fn schedule_install(    state: State<'_, AppState>,
+pub async fn schedule_install(
+    state: State<'_, AppState>,
     _app: tauri::AppHandle,
     id: String,
 ) -> Result<(), BackupError> {
@@ -127,7 +136,8 @@ pub async fn schedule_install(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schedule_uninstall(    state: State<'_, AppState>,
+pub async fn schedule_uninstall(
+    state: State<'_, AppState>,
     _app: tauri::AppHandle,
     id: String,
 ) -> Result<(), BackupError> {
@@ -135,7 +145,8 @@ pub async fn schedule_uninstall(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schedule_run_now(    state: State<'_, AppState>,
+pub async fn schedule_run_now(
+    state: State<'_, AppState>,
     app: tauri::AppHandle,
     id: String,
 ) -> Result<(), BackupError> {
@@ -149,9 +160,10 @@ pub async fn schedule_run_now(    state: State<'_, AppState>,
 // ---------------------------------------------------------------------------
 
 impl AppState {
-    pub async fn lookup_connection(        &self,
+    pub async fn lookup_connection(
+        &self,
         connection_id: &str,
-) -> Result<crate::connection::types::Connection, BackupError> {
+    ) -> Result<crate::connection::types::Connection, BackupError> {
         let store = self.store.lock().await;
         store.get_by_id(connection_id).map_err(|e| {
             if matches!(e, crate::connection::types::ConnectionError::NotFound(_)) {
@@ -162,25 +174,28 @@ impl AppState {
         })
     }
 
-    pub async fn backup_preview_command(        &self,
+    pub async fn backup_preview_command(
+        &self,
         opts: BackupOptions,
-) -> Result<Vec<String>, BackupError> {
+    ) -> Result<Vec<String>, BackupError> {
         dump::validate(&opts).map_err(BackupError::InvalidInput)?;
         let conn = self.lookup_connection(&opts.connection_id).await?;
         Ok(dump::build_args(&conn, &opts))
     }
 
-    pub async fn restore_preview_command(        &self,
+    pub async fn restore_preview_command(
+        &self,
         opts: RestoreOptions,
-) -> Result<Vec<String>, BackupError> {
+    ) -> Result<Vec<String>, BackupError> {
         restore::validate(&opts).map_err(BackupError::InvalidInput)?;
         let conn = self.lookup_connection(&opts.connection_id).await?;
         Ok(restore::build_args(&conn, &opts))
     }
 
-    pub async fn basebackup_preview_command(        &self,
+    pub async fn basebackup_preview_command(
+        &self,
         opts: BaseBackupOptions,
-) -> Result<Vec<String>, BackupError> {
+    ) -> Result<Vec<String>, BackupError> {
         basebackup::validate(&opts).map_err(BackupError::InvalidInput)?;
         let conn = self.lookup_connection(&opts.connection_id).await?;
         Ok(basebackup::build_args(&conn, &opts))
@@ -188,27 +203,30 @@ impl AppState {
 
     /// Real pg_dump spawn via `runner::run_backup`.
     /// Pre-validates options and connection lookup before spawning.
-    pub async fn backup_run(        &self,
+    pub async fn backup_run(
+        &self,
         app: tauri::AppHandle,
         job_id: &str,
         opts: BackupOptions,
-) -> Result<(), BackupError> {
+    ) -> Result<(), BackupError> {
         runner::run_backup(&app, self, job_id, opts).await
     }
 
-    pub async fn restore_run(        &self,
+    pub async fn restore_run(
+        &self,
         app: tauri::AppHandle,
         job_id: &str,
         opts: RestoreOptions,
-) -> Result<(), BackupError> {
+    ) -> Result<(), BackupError> {
         runner::run_restore(&app, self, job_id, opts).await
     }
 
-    pub async fn basebackup_run(        &self,
+    pub async fn basebackup_run(
+        &self,
         app: tauri::AppHandle,
         job_id: &str,
         opts: BaseBackupOptions,
-) -> Result<(), BackupError> {
+    ) -> Result<(), BackupError> {
         runner::run_basebackup(&app, self, job_id, opts).await
     }
 
@@ -220,12 +238,13 @@ impl AppState {
         schedule::read_all(&self.data_dir)
     }
 
-    pub async fn schedule_upsert(        &self,
+    pub async fn schedule_upsert(
+        &self,
         id: &str,
         label: &str,
         cron: &str,
         backup: BackupOptions,
-) -> Result<ScheduleEntry, BackupError> {
+    ) -> Result<ScheduleEntry, BackupError> {
         schedule::upsert(&self.data_dir, id, label, cron, backup)
     }
 
@@ -247,19 +266,21 @@ impl AppState {
     /// Run the scheduled backup immediately (for UI verification — the
     /// user does not have to wait for a real cron tick). Uses a
     /// synthetic `job_id = schedule-<id>-<timestamp_ms>`.
-    pub async fn schedule_run_now(        &self,
+    pub async fn schedule_run_now(
+        &self,
         app: tauri::AppHandle,
         id: &str,
-) -> Result<(), BackupError> {
+    ) -> Result<(), BackupError> {
         let entries = schedule::read_all(&self.data_dir)?;
         let entry = entries
             .into_iter()
             .find(|e| e.id == id)
             .ok_or_else(|| BackupError::Schedule(format!("schedule {id} not found")))?;
-        let job_id = format!(            "schedule-{}-{}",
+        let job_id = format!(
+            "schedule-{}-{}",
             entry.id,
             chrono::Utc::now().timestamp_millis()
-);
+        );
         runner::run_backup(&app, self, &job_id, entry.backup).await
     }
 }

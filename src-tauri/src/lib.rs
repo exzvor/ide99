@@ -98,11 +98,12 @@ impl AppState {
 
     /// Construct with explicit data dir — production builds use the resolved
     /// `app_paths::data_dir()`; integration tests pass a `tempdir`.
-    pub fn with_data_dir(        store: Store,
+    pub fn with_data_dir(
+        store: Store,
         keychain: Box<dyn Keychain>,
         pools: Arc<PoolRegistry>,
         data_dir: PathBuf,
-) -> Self {
+    ) -> Self {
         Self {
             store: Arc::new(Mutex::new(store)),
             keychain,
@@ -139,11 +140,12 @@ pub fn run() {
     let mut store = Store::open(&db_path).expect("open store");
     store.run_migrations().expect("migrations");
 
-    let state = AppState::with_data_dir(        store,
+    let state = AppState::with_data_dir(
+        store,
         connection::keychain::pick(),
         Arc::new(PoolRegistry::new()),
         data_dir_path,
-);
+    );
 
     // Idle-cursor sweeper: every 60s, close any cursor whose last fetch
     // was over IDLE_TIMEOUT ago. Bounds the open-transaction window even
@@ -159,10 +161,11 @@ pub fn run() {
             tick.tick().await;
             let drained = cursors_for_sweeper.drain_idle().await;
             for cs in drained {
-                tracing::info!(                    cursor_id = cs.cursor_id,
+                tracing::info!(
+                    cursor_id = cs.cursor_id,
                     conn_id = cs.conn_id,
                     "idle cursor swept",
-);
+                );
                 let _ = cs
                     .client
                     .batch_execute(&format!("CLOSE \"{}\"; ROLLBACK;", cs.cursor_id))
@@ -206,10 +209,11 @@ pub fn run() {
         for (name, err) in &failures {
             tracing::warn!(server = %name, error = %err, "mcp client auto-start failed");
         }
-        tracing::info!(            servers = cfg.mcp_servers.len(),
+        tracing::info!(
+            servers = cfg.mcp_servers.len(),
             failed = failures.len(),
             "mcp client auto-start complete"
-);
+        );
     });
 
     tauri::Builder::default()

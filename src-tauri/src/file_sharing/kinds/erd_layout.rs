@@ -19,7 +19,8 @@ pub struct ExportedErdLayout {
     pub positions: Vec<NodePos>,
 }
 
-pub fn to_payload(    label: &str,
+pub fn to_payload(
+    label: &str,
     schemas_key: &str,
     positions: &[NodePos],
 ) -> Result<serde_json::Value, ShareError> {

@@ -141,9 +141,10 @@ mod tests {
     fn constants_are_nonempty_and_parameterized() {
         for sql in [ERD_TABLES_AND_COLUMNS_SQL, ERD_FOREIGN_KEYS_SQL] {
             assert!(!sql.trim().is_empty(), "ERD SQL constant must not be empty");
-            assert!(                sql.contains("$1::text[]"),
+            assert!(
+                sql.contains("$1::text[]"),
                 "ERD SQL must accept text[] schema list as $1: {sql}"
-);
+            );
         }
         assert!(!ERD_ALL_USER_SCHEMAS_SQL.trim().is_empty());
         assert!(ERD_TABLES_AND_COLUMNS_SQL.contains("relkind IN ('r', 'p')"));

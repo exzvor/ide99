@@ -15,7 +15,8 @@
 // `relkind` arrives from PG as a single-byte `char` — we read it as i8 and
 // reinterpret as ASCII u8 to compare with byte literals (b'r' etc.). This
 // is a deliberate cross-cast over a single byte and never lossy.
-#![allow(    clippy::cast_sign_loss,
+#![allow(
+    clippy::cast_sign_loss,
     clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::too_many_lines,
@@ -351,7 +352,8 @@ pub fn inject_ctid_column(sql: &str) -> Option<String> {
 /// # Errors
 ///
 /// Returns `QueryError::PoolError` / `PostgresError` when catalog lookups fail.
-pub async fn resolve_row_key(    pool: &Pool,
+pub async fn resolve_row_key(
+    pool: &Pool,
     column_sources: &[ColumnSource],
     column_names: &[String],
     row_values: &[Option<String>],
@@ -382,10 +384,11 @@ pub async fn resolve_row_key(    pool: &Pool,
         message: e.to_string(),
     })?;
     let row = client
-        .query_opt(            "SELECT n.nspname, c.relname, c.relkind FROM pg_class c \
+        .query_opt(
+            "SELECT n.nspname, c.relname, c.relkind FROM pg_class c \
              JOIN pg_namespace n ON c.relnamespace = n.oid WHERE c.oid::int8 = $1",
             &[&i64::from(table_oid)],
-)
+        )
         .await
         .map_err(|e| map_pg_err(&e))?;
     let Some(row) = row else {
@@ -419,14 +422,15 @@ pub async fn resolve_row_key(    pool: &Pool,
 
     // 3) Lookup PK columns (attnum + type) from pg_constraint + pg_attribute.
     let pk_rows = client
-        .query(            "SELECT a.attnum, a.attname, format_type(a.atttypid, a.atttypmod) AS type_name \
+        .query(
+            "SELECT a.attnum, a.attname, format_type(a.atttypid, a.atttypmod) AS type_name \
              FROM pg_constraint con \
              JOIN unnest(con.conkey) WITH ORDINALITY AS k(attnum, ord) ON true \
              JOIN pg_attribute a ON a.attrelid = con.conrelid AND a.attnum = k.attnum \
              WHERE con.contype = 'p' AND con.conrelid::int8 = $1 \
              ORDER BY k.ord",
             &[&i64::from(table_oid)],
-)
+        )
         .await
         .map_err(|e| map_pg_err(&e))?;
 
@@ -466,10 +470,11 @@ pub async fn resolve_row_key(    pool: &Pool,
                 .map(|c| quote_ident(&c.name))
                 .collect::<Vec<_>>()
                 .join(", ");
-            let sql = format!(                "SELECT {cols_sql} FROM {}.{} WHERE ctid = $1::text::tid",
+            let sql = format!(
+                "SELECT {cols_sql} FROM {}.{} WHERE ctid = $1::text::tid",
                 quote_ident(&schema),
                 quote_ident(&table),
-);
+            );
             let r = client
                 .query_one(&sql, &[&ctid])
                 .await
@@ -489,7 +494,8 @@ pub async fn resolve_row_key(    pool: &Pool,
     // 4) No PK: heap → ctid; view → ReadOnly; partition → ReadOnly.
     let reason = match relkind_byte {
         b'r' => {
-            return Ok(ctid_value.map_or(                RowKey::ReadOnly {
+            return Ok(ctid_value.map_or(
+                RowKey::ReadOnly {
                     reason: ReadOnlyReason::ViewWithoutPk,
                 },
                 |ctid| RowKey::Ctid {
@@ -497,7 +503,7 @@ pub async fn resolve_row_key(    pool: &Pool,
                     table,
                     ctid: ctid.into(),
                 },
-));
+            ));
         }
         b'v' => ReadOnlyReason::ViewWithoutPk,
         b'p' => ReadOnlyReason::PartitionedNoPk,
@@ -553,7 +559,8 @@ const fn json_type_tag(v: &JsonValue) -> u8 {
     }
 }
 
-fn diff_walk(    path: &mut Vec<String>,
+fn diff_walk(
+    path: &mut Vec<String>,
     old: &JsonValue,
     new: &JsonValue,
     ops: &mut Vec<JsonbOp>,
@@ -701,7 +708,8 @@ pub enum JsonbParam {
 /// parameter values for the diff-preview pane (the executed SQL stays
 /// parameterized). Identifier quoting handles embedded `"` (escaped to `""`).
 #[must_use]
-pub fn build_update_sql(    row_key: &RowKey,
+pub fn build_update_sql(
+    row_key: &RowKey,
     column: &str,
     diff: &JsonbDiff,
 ) -> (String, Vec<JsonbParam>, String) {
@@ -712,9 +720,10 @@ pub fn build_update_sql(    row_key: &RowKey,
         let val = diff.full_value.clone().unwrap_or(JsonValue::Null);
         let display = format!("'{}'::jsonb", json_lit_escape(&val));
         params.push(JsonbParam::Jsonb(val));
-        (            format!("{} = $1::jsonb", quote_ident(column)),
+        (
+            format!("{} = $1::jsonb", quote_ident(column)),
             format!("{} = {}", quote_ident(column), display),
-)
+        )
     } else {
         // Composed path. Start from `<column>` and wrap.
         let mut expr = quote_ident(column);
@@ -728,10 +737,11 @@ pub fn build_update_sql(    row_key: &RowKey,
                     params.push(JsonbParam::Jsonb(value.clone()));
                     expr =
                         format!("jsonb_set({expr}, ${path_idx}::text[], ${val_idx}::jsonb, true)");
-                    display_expr = format!(                        "jsonb_set({display_expr}, ARRAY[{}]::text[], '{}'::jsonb, true)",
+                    display_expr = format!(
+                        "jsonb_set({display_expr}, ARRAY[{}]::text[], '{}'::jsonb, true)",
                         path_lit(path),
                         json_lit_escape(value),
-);
+                    );
                 }
                 JsonbOp::Delete { path } => {
                     let idx = params.len() + 1;
@@ -741,9 +751,10 @@ pub fn build_update_sql(    row_key: &RowKey,
                 }
             }
         }
-        (            format!("{} = {expr}", quote_ident(column)),
+        (
+            format!("{} = {expr}", quote_ident(column)),
             format!("{} = {display_expr}", quote_ident(column)),
-)
+        )
     };
 
     // WHERE clause.
@@ -772,14 +783,16 @@ pub fn build_update_sql(    row_key: &RowKey,
                         // type directly (e.g. int4) and rejects the
                         // String binding with "error serializing
                         // parameter".
-                        parts.push(format!(                            "{} = ${idx}::text::{}",
+                        parts.push(format!(
+                            "{} = ${idx}::text::{}",
                             quote_ident(&col.name),
                             col.type_name,
-));
-                        display_parts.push(format!(                            "{} = {}",
+                        ));
+                        display_parts.push(format!(
+                            "{} = {}",
                             quote_ident(&col.name),
                             display_pk_lit(v, &col.type_name),
-));
+                        ));
                     }
                 }
             }
@@ -791,13 +804,15 @@ pub fn build_update_sql(    row_key: &RowKey,
                 value: Some(ctid.clone()),
                 type_name: "tid".into(),
             });
-            (                format!("ctid = ${idx}::text::tid"),
+            (
+                format!("ctid = ${idx}::text::tid"),
                 format!("ctid = '{}'::tid", ctid.replace('\'', "''")),
-)
+            )
         }
-        RowKey::ReadOnly { .. } => (            "FALSE /* read-only */".to_string(),
+        RowKey::ReadOnly { .. } => (
             "FALSE /* read-only */".to_string(),
-),
+            "FALSE /* read-only */".to_string(),
+        ),
     };
 
     let table_qualified = match row_key {
@@ -832,7 +847,8 @@ fn json_lit_escape(v: &JsonValue) -> String {
 /// Render a PK literal for the display SQL. Numeric / boolean PG types
 /// don't need quotes; everything else gets single-quoted.
 fn display_pk_lit(value: &str, type_name: &str) -> String {
-    let numeric_or_bool = matches!(        type_name,
+    let numeric_or_bool = matches!(
+        type_name,
         "int2"
             | "int4"
             | "int8"
@@ -844,7 +860,7 @@ fn display_pk_lit(value: &str, type_name: &str) -> String {
             | "smallint"
             | "integer"
             | "bigint"
-);
+    );
     if numeric_or_bool {
         value.to_string()
     } else {
@@ -865,7 +881,8 @@ fn display_pk_lit(value: &str, type_name: &str) -> String {
 ///
 /// Returns `QueryError::ProductionGuardFailed` / `ReadOnlyResult` /
 /// `PostgresError` / `RowVanished` per spec §7.
-pub async fn apply(    pool: &Pool,
+pub async fn apply(
+    pool: &Pool,
     env: Environment,
     ctx: &JsonbWriteContext,
     diff: &JsonbDiff,
@@ -973,25 +990,31 @@ mod tests {
     #[test]
     fn sbt_detects_simple_select() {
         assert!(looks_like_single_base_table("SELECT * FROM events"));
-        assert!(looks_like_single_base_table(            "SELECT id, data FROM public.events WHERE id = 1"
-));
+        assert!(looks_like_single_base_table(
+            "SELECT id, data FROM public.events WHERE id = 1"
+        ));
         assert!(looks_like_single_base_table("SELECT * FROM \"Events\""));
-        assert!(looks_like_single_base_table(            "SELECT * FROM public.events ORDER BY id LIMIT 10"
-));
+        assert!(looks_like_single_base_table(
+            "SELECT * FROM public.events ORDER BY id LIMIT 10"
+        ));
         assert!(looks_like_single_base_table("SELECT 1 FROM events;"));
     }
 
     #[test]
     fn sbt_rejects_join_union_subquery() {
-        assert!(!looks_like_single_base_table(            "SELECT * FROM events e JOIN users u ON e.uid = u.id"
-));
-        assert!(!looks_like_single_base_table(            "SELECT * FROM events UNION SELECT * FROM logs"
-));
+        assert!(!looks_like_single_base_table(
+            "SELECT * FROM events e JOIN users u ON e.uid = u.id"
+        ));
+        assert!(!looks_like_single_base_table(
+            "SELECT * FROM events UNION SELECT * FROM logs"
+        ));
         assert!(!looks_like_single_base_table("SELECT * FROM events, users"));
-        assert!(!looks_like_single_base_table(            "SELECT * FROM (SELECT * FROM events) e"
-));
-        assert!(!looks_like_single_base_table(            "WITH x AS (SELECT 1) SELECT * FROM x"
-));
+        assert!(!looks_like_single_base_table(
+            "SELECT * FROM (SELECT * FROM events) e"
+        ));
+        assert!(!looks_like_single_base_table(
+            "WITH x AS (SELECT 1) SELECT * FROM x"
+        ));
         assert!(!looks_like_single_base_table("SELECT 1"));
         assert!(!looks_like_single_base_table(""));
     }
@@ -1004,26 +1027,35 @@ mod tests {
         // injection path.
         assert!(!looks_like_single_base_table("SELECT count(*) FROM events"));
         assert!(!looks_like_single_base_table("SELECT COUNT(*) FROM events"));
-        assert!(!looks_like_single_base_table(            "SELECT sum(amount) FROM orders"
-));
-        assert!(!looks_like_single_base_table(            "SELECT avg(score) FROM stats"
-));
-        assert!(!looks_like_single_base_table(            "SELECT max(created_at), min(created_at) FROM events"
-));
-        assert!(!looks_like_single_base_table(            "SELECT type, count(*) FROM events GROUP BY type"
-));
-        assert!(!looks_like_single_base_table(            "SELECT type FROM events GROUP BY type HAVING count(*) > 1"
-));
-        assert!(!looks_like_single_base_table(            "SELECT DISTINCT type FROM events"
-));
-        assert!(!looks_like_single_base_table(            "SELECT array_agg(id) FROM events"
-));
-        assert!(!looks_like_single_base_table(            "SELECT json_agg(data) FROM events"
-));
+        assert!(!looks_like_single_base_table(
+            "SELECT sum(amount) FROM orders"
+        ));
+        assert!(!looks_like_single_base_table(
+            "SELECT avg(score) FROM stats"
+        ));
+        assert!(!looks_like_single_base_table(
+            "SELECT max(created_at), min(created_at) FROM events"
+        ));
+        assert!(!looks_like_single_base_table(
+            "SELECT type, count(*) FROM events GROUP BY type"
+        ));
+        assert!(!looks_like_single_base_table(
+            "SELECT type FROM events GROUP BY type HAVING count(*) > 1"
+        ));
+        assert!(!looks_like_single_base_table(
+            "SELECT DISTINCT type FROM events"
+        ));
+        assert!(!looks_like_single_base_table(
+            "SELECT array_agg(id) FROM events"
+        ));
+        assert!(!looks_like_single_base_table(
+            "SELECT json_agg(data) FROM events"
+        ));
         // Regular non-aggregate SELECTs still pass.
         assert!(looks_like_single_base_table("SELECT * FROM events"));
-        assert!(looks_like_single_base_table(            "SELECT id, data FROM events WHERE id = 1"
-));
+        assert!(looks_like_single_base_table(
+            "SELECT id, data FROM events WHERE id = 1"
+        ));
     }
 
     // ---------------- inject_ctid_column ----------------
@@ -1037,17 +1069,19 @@ mod tests {
     #[test]
     fn inject_ctid_into_explicit_columns() {
         let out = inject_ctid_column("SELECT id, data FROM events WHERE id = 1").unwrap();
-        assert_eq!(            out,
+        assert_eq!(
+            out,
             "SELECT id, data, ctid::text AS __ctid__ FROM events WHERE id = 1"
-);
+        );
     }
 
     #[test]
     fn inject_ctid_preserves_order_limit_and_schema_qualified() {
         let out = inject_ctid_column("SELECT * FROM public.events ORDER BY id LIMIT 10").unwrap();
-        assert_eq!(            out,
+        assert_eq!(
+            out,
             "SELECT *, ctid::text AS __ctid__ FROM public.events ORDER BY id LIMIT 10"
-);
+        );
     }
 
     #[test]
@@ -1061,9 +1095,10 @@ mod tests {
         // The SELECT-list contains 'FROM' as a string literal — must NOT
         // be treated as the FROM clause. Real FROM follows.
         let out = inject_ctid_column("SELECT 'FROM clause' AS lit FROM events").unwrap();
-        assert_eq!(            out,
+        assert_eq!(
+            out,
             "SELECT 'FROM clause' AS lit, ctid::text AS __ctid__ FROM events"
-);
+        );
     }
 
     #[test]
@@ -1221,13 +1256,15 @@ mod tests {
             full_value: Some(serde_json::json!({"a": 1})),
         };
         let (sql, params, display) = build_update_sql(&rk, "data", &diff);
-        assert_eq!(            sql,
+        assert_eq!(
+            sql,
             r#"UPDATE "public"."events" SET "data" = $1::jsonb WHERE "id" = $2::text::int4"#
-);
+        );
         assert_eq!(params.len(), 2);
         assert!(matches!(params[0], JsonbParam::Jsonb(_)));
-        assert!(            matches!(&params[1], JsonbParam::PkText { value: Some(v), type_name } if v == "42" && type_name == "int4")
-);
+        assert!(
+            matches!(&params[1], JsonbParam::PkText { value: Some(v), type_name } if v == "42" && type_name == "int4")
+        );
         assert!(display.contains("'{\"a\":1}'") || display.contains("'{\"a\": 1}'"));
         assert!(display.contains("\"id\" = 42"));
     }

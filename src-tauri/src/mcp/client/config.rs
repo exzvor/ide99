@@ -223,7 +223,8 @@ mod tests {
         let p = dir.path().join("mcp-servers.json");
 
         let mut cfg = McpClientConfig::default();
-        cfg.mcp_servers.insert(            "x".into(),
+        cfg.mcp_servers.insert(
+            "x".into(),
             McpServerEntry::Stdio {
                 transport: "stdio".into(),
                 command: "echo".into(),
@@ -231,7 +232,7 @@ mod tests {
                 env: BTreeMap::new(),
                 auto_start: false,
             },
-);
+        );
         cfg.save(&p).unwrap();
         let reloaded = McpClientConfig::load(&p).unwrap();
         assert_eq!(reloaded.mcp_servers.len(), 1);
@@ -240,7 +241,8 @@ mod tests {
     #[test]
     fn summaries_hide_secrets() {
         let mut cfg = McpClientConfig::default();
-        cfg.mcp_servers.insert(            "linear".into(),
+        cfg.mcp_servers.insert(
+            "linear".into(),
             McpServerEntry::Stdio {
                 transport: "stdio".into(),
                 command: "npx".into(),
@@ -248,7 +250,7 @@ mod tests {
                 env: BTreeMap::from([("LINEAR_API_KEY".into(), "secret".into())]),
                 auto_start: true,
             },
-);
+        );
         let summaries = cfg.to_summaries();
         let s = serde_json::to_string(&summaries[0]).unwrap();
         assert!(!s.contains("secret")); // env is dropped on summary

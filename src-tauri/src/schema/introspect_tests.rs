@@ -32,12 +32,13 @@ async fn try_pg_pool() -> Option<(ContainerAsync<Postgres>, Pool)> {
         .dbname("postgres")
         .user("postgres")
         .password("postgres");
-    let mgr = Manager::from_config(        cfg,
+    let mgr = Manager::from_config(
+        cfg,
         NoTls,
         ManagerConfig {
             recycling_method: RecyclingMethod::Fast,
         },
-);
+    );
     let pool = Pool::builder(mgr)
         .max_size(4)
         .runtime(Runtime::Tokio1)
@@ -61,9 +62,10 @@ async fn roundtrip_basic_table() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec_setup(        &pool,
+    exec_setup(
+        &pool,
         "CREATE TABLE t (id int PRIMARY KEY, name text NOT NULL DEFAULT 'x', email text);",
-)
+    )
     .await;
 
     let def = introspect::get_table_definition(&pool, "public", "t")
@@ -71,26 +73,29 @@ async fn roundtrip_basic_table() {
         .expect("fetch");
     assert_eq!(def.schema, "public");
     assert_eq!(def.name, "t");
-    assert_eq!(        def.columns.len(),
+    assert_eq!(
+        def.columns.len(),
         3,
         "expected 3 cols, got {:?}",
         def.columns
-);
+    );
     assert_eq!(def.columns[0].name, "id");
     assert_eq!(def.columns[1].name, "name");
     assert!(!def.columns[1].nullable, "name is NOT NULL");
     let default = def.columns[1].default.as_deref().unwrap_or("");
-    assert!(        default.contains("'x'"),
+    assert!(
+        default.contains("'x'"),
         "default should mention 'x', got {default:?}"
-);
+    );
     assert_eq!(def.constraints.len(), 1, "exactly one PK constraint");
     assert_eq!(def.constraints[0].kind, "pk");
     assert_eq!(def.constraints[0].columns, vec!["id".to_string()]);
     // The PK fabricates an implicit unique index — surfaces in `indexes`.
     assert!(!def.indexes.is_empty(), "PK creates an index");
-    assert!(        def.indexes.iter().any(|i| i.primary),
+    assert!(
+        def.indexes.iter().any(|i| i.primary),
         "one index is primary"
-);
+    );
     assert!(!def.rls_enabled);
     assert!(def.partition.is_none());
 }
@@ -101,9 +106,10 @@ async fn roundtrip_table_with_generated_columns() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec_setup(        &pool,
+    exec_setup(
+        &pool,
         "CREATE TABLE t (a int, b int GENERATED ALWAYS AS (a*2) STORED);",
-)
+    )
     .await;
 
     let def = introspect::get_table_definition(&pool, "public", "t")
@@ -115,16 +121,18 @@ async fn roundtrip_table_with_generated_columns() {
     assert_eq!(g.kind, "stored");
     // PG normalizes `a*2` to `(a * 2)`; assert on the operands rather than
     // exact whitespace.
-    assert!(        g.expression.contains('a') && g.expression.contains('2') && g.expression.contains('*'),
+    assert!(
+        g.expression.contains('a') && g.expression.contains('2') && g.expression.contains('*'),
         "expression should reference a*2, got {:?}",
         g.expression
-);
+    );
     // Generated columns must NOT have `default` set (the expression text
     // belongs to `generated`).
-    assert!(        b.default.is_none(),
+    assert!(
+        b.default.is_none(),
         "generated col should have no separate default, got {:?}",
         b.default
-);
+    );
 }
 
 #[tokio::test]
@@ -133,9 +141,10 @@ async fn roundtrip_table_with_rls() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec_setup(        &pool,
+    exec_setup(
+        &pool,
         "CREATE TABLE t (id int); ALTER TABLE t ENABLE ROW LEVEL SECURITY;",
-)
+    )
     .await;
 
     let def = introspect::get_table_definition(&pool, "public", "t")
@@ -150,9 +159,10 @@ async fn roundtrip_partitioned_table() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec_setup(        &pool,
+    exec_setup(
+        &pool,
         "CREATE TABLE p (id int, c text) PARTITION BY RANGE (id);",
-)
+    )
     .await;
 
     let def = introspect::get_table_definition(&pool, "public", "p")
@@ -185,18 +195,20 @@ async fn roundtrip_matview_unpopulated() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec_setup(        &pool,
+    exec_setup(
+        &pool,
         "CREATE MATERIALIZED VIEW m AS SELECT 1 AS x WITH NO DATA;",
-)
+    )
     .await;
 
     let def = introspect::get_matview_definition(&pool, "public", "m")
         .await
         .expect("fetch");
     assert_eq!(def.name, "m");
-    assert!(        !def.populated,
+    assert!(
+        !def.populated,
         "matview created WITH NO DATA is unpopulated"
-);
+    );
     assert!(!def.body.trim().is_empty());
 }
 
@@ -206,10 +218,11 @@ async fn roundtrip_partial_unique_include() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec_setup(        &pool,
+    exec_setup(
+        &pool,
         "CREATE TABLE t (a int, b int, c int); \
          CREATE UNIQUE INDEX i ON t (a) INCLUDE (b) WHERE c IS NOT NULL;",
-)
+    )
     .await;
 
     let def = introspect::get_index_definition(&pool, "public", "i")
@@ -222,12 +235,13 @@ async fn roundtrip_partial_unique_include() {
     assert_eq!(def.columns, vec!["a".to_string()]);
     assert_eq!(def.include, vec!["b".to_string()]);
     assert!(def.predicate.is_some(), "partial WHERE clause must surface");
-    assert!(        def.definition
+    assert!(
+        def.definition
             .to_uppercase()
             .contains("CREATE UNIQUE INDEX"),
         "verbatim DDL should round-trip, got {:?}",
         def.definition
-);
+    );
 }
 
 #[tokio::test]
@@ -236,9 +250,10 @@ async fn reads_full_sequence_options() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec_setup(        &pool,
+    exec_setup(
+        &pool,
         "CREATE SEQUENCE s START 100 INCREMENT 5 MINVALUE 50 MAXVALUE 1000 CACHE 10 CYCLE;",
-)
+    )
     .await;
 
     let def = introspect::get_sequence_definition(&pool, "public", "s")
@@ -261,11 +276,12 @@ async fn list_matviews_returns_only_matviews() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec_setup(        &pool,
+    exec_setup(
+        &pool,
         "CREATE TABLE plain (id int); \
          CREATE VIEW v AS SELECT 1 AS x; \
          CREATE MATERIALIZED VIEW m AS SELECT 1 AS x;",
-)
+    )
     .await;
 
     let mvs = introspect::list_matviews(&pool, "public")
@@ -288,8 +304,9 @@ async fn list_sequences_excludes_serial_implicit() {
         .await
         .expect("fetch");
     let names: Vec<&str> = seqs.iter().map(|s| s.name.as_str()).collect();
-    assert_eq!(        names,
+    assert_eq!(
+        names,
         vec!["s"],
         "implicit `t_id_seq` must be hidden, only `s` listed"
-);
+    );
 }

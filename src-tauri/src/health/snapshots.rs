@@ -1,4 +1,5 @@
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::doc_markdown,
     clippy::missing_panics_doc
 )]
@@ -20,7 +21,8 @@ pub enum SnapshotError {
 /// Insert a snapshot if the most recent one is older than 1 hour, then
 /// delete snapshots older than 30 days. Both run in a single transaction
 /// so reads never see a partial state.
-pub fn save(    conn: &mut SqliteConnection,
+pub fn save(
+    conn: &mut SqliteConnection,
     connection_id: &str,
     now_iso: &str,
     db_size_bytes: i64,
@@ -31,7 +33,8 @@ pub fn save(    conn: &mut SqliteConnection,
     // `T`/`Z` is normalized before the lexicographic comparison; without
     // this, `'2026-04-29T12:00:00Z' > '2026-04-29 12:01:00'` would
     // incorrectly evaluate true (the 'T' byte sorts after space).
-    tx.execute(        "INSERT INTO health_snapshots (connection_id, taken_at, db_size_bytes) \
+    tx.execute(
+        "INSERT INTO health_snapshots (connection_id, taken_at, db_size_bytes) \
          SELECT ?1, ?2, ?3 \
          WHERE NOT EXISTS (\
            SELECT 1 FROM health_snapshots \
@@ -39,30 +42,33 @@ pub fn save(    conn: &mut SqliteConnection,
               AND datetime(taken_at) > datetime(?2, '-1 hour') \
 )",
         params![connection_id, now_iso, db_size_bytes],
-)?;
+    )?;
     // 30d retention — drop anything older than 30d for this connection.
-    tx.execute(        "DELETE FROM health_snapshots \
+    tx.execute(
+        "DELETE FROM health_snapshots \
           WHERE connection_id = ?1 \
             AND datetime(taken_at) < datetime(?2, '-30 days')",
         params![connection_id, now_iso],
-)?;
+    )?;
     tx.commit()?;
     Ok(())
 }
 
 /// Return snapshots for `connection_id` taken within the last `days` days,
 /// ordered oldest → newest (the order the sparkline expects).
-pub fn recent(    conn: &SqliteConnection,
+pub fn recent(
+    conn: &SqliteConnection,
     connection_id: &str,
     days: i64,
 ) -> Result<Vec<HealthSnapshotRow>, SnapshotError> {
     let bound = format!("-{days} days");
-    let mut stmt = conn.prepare(        "SELECT taken_at, db_size_bytes \
+    let mut stmt = conn.prepare(
+        "SELECT taken_at, db_size_bytes \
            FROM health_snapshots \
           WHERE connection_id = ?1 \
             AND datetime(taken_at) > datetime('now', ?2) \
           ORDER BY datetime(taken_at) ASC",
-)?;
+    )?;
     let rows = stmt.query_map(params![connection_id, bound], |row| {
         Ok(HealthSnapshotRow {
             taken_at: row.get(0)?,
@@ -96,20 +102,22 @@ mod tests {
 
     /// Create a connections row so FK refs resolve. Returns the inserted id.
     fn make_conn(conn: &Connection, id: &str) {
-        conn.execute(            "INSERT INTO connections \
+        conn.execute(
+            "INSERT INTO connections \
                 (id, name, host, port, database, username, ssl_mode, has_password, \
                  created_at, updated_at) \
              VALUES (?1, ?1, 'h', 5432, 'd', 'u', 'prefer', 0, '2026-01-01', '2026-01-01')",
             params![id],
-)
+        )
         .expect("insert conn");
     }
 
     fn count_rows(conn: &Connection, conn_id: &str) -> i64 {
-        conn.query_row(            "SELECT COUNT(*) FROM health_snapshots WHERE connection_id = ?1",
+        conn.query_row(
+            "SELECT COUNT(*) FROM health_snapshots WHERE connection_id = ?1",
             params![conn_id],
             |r| r.get(0),
-)
+        )
         .expect("count")
     }
 
@@ -130,10 +138,11 @@ mod tests {
         save(&mut conn, "c1", "2026-04-29T12:30:00Z", 2_000).expect("save 2");
         assert_eq!(count_rows(&conn, "c1"), 1);
         let bytes: i64 = conn
-            .query_row(                "SELECT db_size_bytes FROM health_snapshots WHERE connection_id = ?1",
+            .query_row(
+                "SELECT db_size_bytes FROM health_snapshots WHERE connection_id = ?1",
                 params!["c1"],
                 |r| r.get(0),
-)
+            )
             .unwrap();
         assert_eq!(bytes, 1_000, "first snapshot wins inside the 1h window");
     }
@@ -152,19 +161,21 @@ mod tests {
         let mut conn = fresh_db();
         make_conn(&conn, "c1");
         // Manually seed a 31-day-old row.
-        conn.execute(            "INSERT INTO health_snapshots (connection_id, taken_at, db_size_bytes) \
+        conn.execute(
+            "INSERT INTO health_snapshots (connection_id, taken_at, db_size_bytes) \
              VALUES ('c1', '2026-03-29T12:00:00Z', 100)",
             [],
-)
+        )
         .unwrap();
         // Save at 2026-04-29 → datetime('-30 days') = 2026-03-30 → seeded
         // row at 2026-03-29 is older and gets deleted; new row inserted.
         save(&mut conn, "c1", "2026-04-29T12:00:00Z", 200).expect("save");
         let bytes: i64 = conn
-            .query_row(                "SELECT db_size_bytes FROM health_snapshots WHERE connection_id = 'c1'",
+            .query_row(
+                "SELECT db_size_bytes FROM health_snapshots WHERE connection_id = 'c1'",
                 [],
                 |r| r.get(0),
-)
+            )
             .unwrap();
         assert_eq!(bytes, 200);
         assert_eq!(count_rows(&conn, "c1"), 1);
@@ -190,10 +201,11 @@ mod tests {
         assert_eq!(count_rows(&conn, "c1"), 1);
         conn.execute("DELETE FROM connections WHERE id = 'c1'", [])
             .unwrap();
-        assert_eq!(            count_rows(&conn, "c1"),
+        assert_eq!(
+            count_rows(&conn, "c1"),
             0,
             "FK ON DELETE CASCADE must wipe snapshots when conn deleted"
-);
+        );
     }
 
     #[test]
@@ -201,12 +213,13 @@ mod tests {
         let conn = fresh_db();
         make_conn(&conn, "c1");
         // Seed three snapshots at known times.
-        conn.execute(            "INSERT INTO health_snapshots (connection_id, taken_at, db_size_bytes) VALUES \
+        conn.execute(
+            "INSERT INTO health_snapshots (connection_id, taken_at, db_size_bytes) VALUES \
              ('c1', datetime('now', '-3 days'),  300), \
              ('c1', datetime('now', '-2 days'),  200), \
              ('c1', datetime('now', '-1 days'),  100)",
             [],
-)
+        )
         .unwrap();
         let rows = recent(&conn, "c1", 7).expect("recent");
         assert_eq!(rows.len(), 3);
@@ -219,11 +232,12 @@ mod tests {
     fn recent_filters_outside_window() {
         let conn = fresh_db();
         make_conn(&conn, "c1");
-        conn.execute(            "INSERT INTO health_snapshots (connection_id, taken_at, db_size_bytes) VALUES \
+        conn.execute(
+            "INSERT INTO health_snapshots (connection_id, taken_at, db_size_bytes) VALUES \
              ('c1', datetime('now', '-10 days'), 999), \
              ('c1', datetime('now', '-1 days'),  111)",
             [],
-)
+        )
         .unwrap();
         let rows = recent(&conn, "c1", 7).expect("recent");
         assert_eq!(rows.len(), 1);
@@ -235,11 +249,12 @@ mod tests {
         let conn = fresh_db();
         make_conn(&conn, "c1");
         make_conn(&conn, "c2");
-        conn.execute(            "INSERT INTO health_snapshots (connection_id, taken_at, db_size_bytes) VALUES \
+        conn.execute(
+            "INSERT INTO health_snapshots (connection_id, taken_at, db_size_bytes) VALUES \
              ('c1', datetime('now', '-1 days'), 1), \
              ('c2', datetime('now', '-1 days'), 2)",
             [],
-)
+        )
         .unwrap();
         let r1 = recent(&conn, "c1", 7).expect("c1");
         let r2 = recent(&conn, "c2", 7).expect("c2");

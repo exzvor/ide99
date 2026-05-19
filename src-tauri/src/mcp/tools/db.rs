@@ -18,7 +18,8 @@
 //! | `dry_run_migration` | R (testcontainer) | `db:read` |
 //! | `apply_migration` | W (per-call confirm) | `db:write` |
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::too_many_lines,
     clippy::doc_markdown,
@@ -61,13 +62,15 @@ fn validate_ident(s: &str, kind: &str) -> Result<(), McpError> {
         .next()
         .ok_or_else(|| McpError::InvalidArgs(format!("{kind} cannot be empty")))?;
     if !(first.is_ascii_alphabetic() || first == '_') {
-        return Err(McpError::InvalidArgs(format!(            "{kind} must start with a letter or underscore: {s}"
-)));
+        return Err(McpError::InvalidArgs(format!(
+            "{kind} must start with a letter or underscore: {s}"
+        )));
     }
     for c in chars {
         if !(c.is_ascii_alphanumeric() || c == '_') {
-            return Err(McpError::InvalidArgs(format!(                "{kind} contains invalid character {c:?}: {s}"
-)));
+            return Err(McpError::InvalidArgs(format!(
+                "{kind} contains invalid character {c:?}: {s}"
+            )));
         }
     }
     Ok(())
@@ -106,7 +109,8 @@ fn arg_bool(args: &Value, key: &str, default: bool) -> bool {
 // list_connections
 // ---------------------------------------------------------------------------
 
-pub async fn list_connections_tool(    ctx: &ServerContext,
+pub async fn list_connections_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     _args: Value,
 ) -> Result<Value, McpError> {
@@ -135,7 +139,8 @@ pub async fn list_connections_tool(    ctx: &ServerContext,
 // get_schema
 // ---------------------------------------------------------------------------
 
-pub async fn get_schema_tool(    ctx: &ServerContext,
+pub async fn get_schema_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
@@ -174,9 +179,10 @@ pub async fn get_schema_tool(    ctx: &ServerContext,
             let comment: Option<String> = tr.get("comment");
 
             let column_rows = pg_client
-                .query(                    crate::schema::queries::LIST_COLUMNS_SQL,
+                .query(
+                    crate::schema::queries::LIST_COLUMNS_SQL,
                     &[schema, &table_name],
-)
+                )
                 .await
                 .map_err(|e| {
                     McpError::Internal(format!("list columns {schema}.{table_name}: {e}"))
@@ -195,9 +201,10 @@ pub async fn get_schema_tool(    ctx: &ServerContext,
                 .collect();
 
             let index_rows = pg_client
-                .query(                    crate::schema::queries::LIST_INDEXES_SQL,
+                .query(
+                    crate::schema::queries::LIST_INDEXES_SQL,
                     &[schema, &table_name],
-)
+                )
                 .await
                 .map_err(|e| {
                     McpError::Internal(format!("list indexes {schema}.{table_name}: {e}"))
@@ -216,9 +223,10 @@ pub async fn get_schema_tool(    ctx: &ServerContext,
                 .collect();
 
             let fk_rows = pg_client
-                .query(                    crate::schema::queries::LIST_FOREIGN_KEYS_SQL,
+                .query(
+                    crate::schema::queries::LIST_FOREIGN_KEYS_SQL,
                     &[schema, &table_name],
-)
+                )
                 .await
                 .map_err(|e| McpError::Internal(format!("list FKs {schema}.{table_name}: {e}")))?;
             let foreign_keys: Vec<Value> = fk_rows
@@ -258,7 +266,8 @@ pub async fn get_schema_tool(    ctx: &ServerContext,
 // get_table_sample
 // ---------------------------------------------------------------------------
 
-pub async fn get_table_sample_tool(    ctx: &ServerContext,
+pub async fn get_table_sample_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
@@ -267,8 +276,9 @@ pub async fn get_table_sample_tool(    ctx: &ServerContext,
     let table = arg_str(&args, "table")?;
     let limit_in = arg_u64_opt(&args, "limit").unwrap_or(100);
     if limit_in == 0 || limit_in > 100 {
-        return Err(McpError::InvalidArgs(format!(            "limit must be between 1 and 100, got {limit_in}"
-)));
+        return Err(McpError::InvalidArgs(format!(
+            "limit must be between 1 and 100, got {limit_in}"
+        )));
     }
     validate_ident(&schema, "schema")?;
     validate_ident(&table, "table")?;
@@ -348,7 +358,8 @@ fn ensure_select_only(sql: &str) -> Result<(), McpError> {
     Ok(())
 }
 
-pub async fn run_query_tool(    ctx: &ServerContext,
+pub async fn run_query_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
@@ -417,7 +428,8 @@ pub async fn run_query_tool(    ctx: &ServerContext,
 // run_query_write (per-call user confirm)
 // ---------------------------------------------------------------------------
 
-async fn await_write_confirm(    ctx: &ServerContext,
+async fn await_write_confirm(
+    ctx: &ServerContext,
     client: &AuthorizedClient,
     sql: &str,
 ) -> Result<(), McpError> {
@@ -429,14 +441,15 @@ async fn await_write_confirm(    ctx: &ServerContext,
 
     if let Some(app) = &ctx.app_handle {
         use tauri::Emitter;
-        let _ = app.emit(            "mcp:write-confirm-request",
+        let _ = app.emit(
+            "mcp:write-confirm-request",
             json!({
                 "requestId": request_id,
                 "clientId": client.id,
                 "clientName": client.name,
                 "sql": sql,
             }),
-);
+        );
     }
 
     match tokio::time::timeout(WRITE_CONFIRM_TIMEOUT, rx).await {
@@ -445,7 +458,8 @@ async fn await_write_confirm(    ctx: &ServerContext,
     }
 }
 
-pub async fn run_query_write_tool(    ctx: &ServerContext,
+pub async fn run_query_write_tool(
+    ctx: &ServerContext,
     client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
@@ -476,7 +490,8 @@ pub async fn run_query_write_tool(    ctx: &ServerContext,
 // get_explain
 // ---------------------------------------------------------------------------
 
-pub async fn get_explain_tool(    ctx: &ServerContext,
+pub async fn get_explain_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
@@ -515,7 +530,8 @@ pub async fn get_explain_tool(    ctx: &ServerContext,
 // get_health_summary
 // ---------------------------------------------------------------------------
 
-pub async fn get_health_summary_tool(    ctx: &ServerContext,
+pub async fn get_health_summary_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
@@ -600,7 +616,8 @@ pub async fn get_health_summary_tool(    ctx: &ServerContext,
 // list_slow_queries
 // ---------------------------------------------------------------------------
 
-pub async fn list_slow_queries_tool(    ctx: &ServerContext,
+pub async fn list_slow_queries_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
@@ -618,14 +635,16 @@ pub async fn list_slow_queries_tool(    ctx: &ServerContext,
         .await
         .map_err(|e| McpError::Internal(format!("probe: {e}")))?;
     if probe.is_empty() {
-        return Err(McpError::Internal(            "pg_stat_statements extension not installed".into(),
-));
+        return Err(McpError::Internal(
+            "pg_stat_statements extension not installed".into(),
+        ));
     }
 
     // The shipped query is `LIMIT 10` — for MCP we want a configurable cap.
-    let sql = format!(        "SELECT query, mean_exec_time AS mean_time_ms, total_exec_time AS total_time_ms, calls \
+    let sql = format!(
+        "SELECT query, mean_exec_time AS mean_time_ms, total_exec_time AS total_time_ms, calls \
          FROM pg_stat_statements ORDER BY total_exec_time DESC LIMIT {limit}",
-);
+    );
     let rows = pg_client
         .query(sql.as_str(), &[])
         .await
@@ -649,7 +668,8 @@ pub async fn list_slow_queries_tool(    ctx: &ServerContext,
 // dry_run_migration  — stand up disposable PG via testcontainers, run SQL.
 // ---------------------------------------------------------------------------
 
-pub async fn dry_run_migration_tool(    _ctx: &ServerContext,
+pub async fn dry_run_migration_tool(
+    _ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
@@ -707,7 +727,8 @@ pub async fn dry_run_migration_tool(    _ctx: &ServerContext,
 // apply_migration  — write SQL to user's DB after per-call user confirm.
 // ---------------------------------------------------------------------------
 
-pub async fn apply_migration_tool(    ctx: &ServerContext,
+pub async fn apply_migration_tool(
+    ctx: &ServerContext,
     client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
@@ -751,12 +772,13 @@ pub async fn apply_migration_tool(    ctx: &ServerContext,
         .await
         .is_ok()
     {
-        let _ = crate::migrations::tracking::insert(            &pg_client,
+        let _ = crate::migrations::tracking::insert(
+            &pg_client,
             &version,
             &name,
             &checksum,
             duration_ms,
-)
+        )
         .await;
     }
 

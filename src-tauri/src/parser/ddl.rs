@@ -60,14 +60,15 @@ fn handle_create_stmt(create: &pb::CreateStmt, out: &mut Vec<DdlChange>) {
                     let Some(NodeEnum::Constraint(c)) = cnode.node.as_ref() else {
                         continue;
                     };
-                    apply_column_constraint(                        c,
+                    apply_column_constraint(
+                        c,
                         &mut def,
                         &mut pk_cols,
                         &col.colname,
                         &schema,
                         &table_name,
                         &mut deferred_fks,
-);
+                    );
                 }
                 if def.is_primary_key && !pk_cols.contains(&def.name) {
                     pk_cols.push(def.name.clone());
@@ -75,13 +76,14 @@ fn handle_create_stmt(create: &pb::CreateStmt, out: &mut Vec<DdlChange>) {
                 columns.push(def);
             }
             NodeEnum::Constraint(c) => {
-                apply_table_constraint(                    c,
+                apply_table_constraint(
+                    c,
                     &schema,
                     &table_name,
                     &mut pk_cols,
                     &mut deferred_fks,
                     &mut columns,
-);
+                );
             }
             _ => {}
         }
@@ -96,7 +98,8 @@ fn handle_create_stmt(create: &pb::CreateStmt, out: &mut Vec<DdlChange>) {
     out.extend(deferred_fks);
 }
 
-fn apply_column_constraint(    c: &pb::Constraint,
+fn apply_column_constraint(
+    c: &pb::Constraint,
     def: &mut ColumnDef,
     pk_cols: &mut Vec<String>,
     col_name: &str,
@@ -152,7 +155,8 @@ fn apply_column_constraint(    c: &pb::Constraint,
     }
 }
 
-fn apply_table_constraint(    c: &pb::Constraint,
+fn apply_table_constraint(
+    c: &pb::Constraint,
     schema: &str,
     table_name: &str,
     pk_cols: &mut Vec<String>,
@@ -269,7 +273,8 @@ fn handle_alter_table(alter: &pb::AlterTableStmt, out: &mut Vec<DdlChange>) {
 /// than one change (e.g. ALTER ADD COLUMN with inline REFERENCES emits both
 /// `AddColumn` and `AddForeignKey`). Returns false when the subtype is
 /// unsupported so the caller can record an Unrepresentable entry.
-fn handle_alter_cmd(    cmd: &pb::AlterTableCmd,
+fn handle_alter_cmd(
+    cmd: &pb::AlterTableCmd,
     schema: &str,
     table: &str,
     out: &mut Vec<DdlChange>,
@@ -298,14 +303,15 @@ fn handle_alter_cmd(    cmd: &pb::AlterTableCmd,
             let mut tmp_pk = Vec::new();
             for cnode in &col.constraints {
                 if let Some(NodeEnum::Constraint(c)) = cnode.node.as_ref() {
-                    apply_column_constraint(                        c,
+                    apply_column_constraint(
+                        c,
                         &mut def,
                         &mut tmp_pk,
                         &col.colname,
                         schema,
                         table,
                         &mut deferred_fks,
-);
+                    );
                 }
             }
             out.push(DdlChange::AddColumn {
@@ -728,10 +734,11 @@ mod tests {
             post_id bigint REFERENCES posts(id)\
 )";
         let result = parse_ddl(sql).unwrap();
-        assert_eq!(            result.changes.len(),
+        assert_eq!(
+            result.changes.len(),
             2,
             "expected CreateTable + AddForeignKey"
-);
+        );
         match &result.changes[1] {
             DdlChange::AddForeignKey {
                 table,
@@ -786,10 +793,11 @@ mod tests {
             CONSTRAINT posts_user_fk FOREIGN KEY (user_id) REFERENCES public.users (id)\
 )";
         let result = parse_ddl(sql).unwrap();
-        assert_eq!(            result.changes.len(),
+        assert_eq!(
+            result.changes.len(),
             2,
             "expected CreateTable + AddForeignKey"
-);
+        );
 
         match &result.changes[0] {
             DdlChange::CreateTable {

@@ -58,7 +58,8 @@ pub fn summary(value: &serde_json::Value) -> Result<String, ShareError> {
 /// Apply: insert a fresh `editor_tabs` row with a new id + timestamps.
 /// `connection_id` and `node_key` deliberately reset to NULL — caller (UI)
 /// re-binds them to a target connection if desired.
-pub fn apply(    conn: &rusqlite::Connection,
+pub fn apply(
+    conn: &rusqlite::Connection,
     payload: &serde_json::Value,
 ) -> Result<EditorTabRow, ShareError> {
     let q = from_payload(payload)?;

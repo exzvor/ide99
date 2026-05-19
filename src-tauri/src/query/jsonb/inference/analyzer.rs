@@ -136,13 +136,14 @@ impl NodeAcc {
             },
             TypeTag::Object => ProbableType::Object,
             TypeTag::Array => {
-                let element = self.element_acc.as_ref().map_or_else(                    || {
+                let element = self.element_acc.as_ref().map_or_else(
+                    || {
                         Box::new(ProbableType::Primitive {
                             value: Primitive::Null,
                         })
                     },
                     |e| Box::new(e.finalize_kind()),
-);
+                );
                 ProbableType::Array { element }
             }
         }
@@ -158,7 +159,8 @@ impl NodeAcc {
     }
 }
 
-fn walk(    value: &Value,
+fn walk(
+    value: &Value,
     path: &[PathSegment],
     acc: &mut BTreeMap<Vec<PathSegment>, NodeAcc>,
     seen: &mut HashSet<Vec<PathSegment>>,
@@ -326,11 +328,12 @@ mod tests {
         let samples: Vec<_> = (0..20).map(|i| json!({"id": format!("u_{i}")})).collect();
         let s = analyze(&samples);
         let node = find(&s, &p(&["id"])).unwrap();
-        assert!(matches!(            node.kind,
+        assert!(matches!(
+            node.kind,
             ProbableType::Primitive {
                 value: Primitive::String
             }
-));
+        ));
     }
 
     #[test]
@@ -368,13 +371,15 @@ mod tests {
         let tags = find(&s, &p(&["tags"])).expect("tags node present");
         match &tags.kind {
             ProbableType::Array { element } => {
-                assert!(                    matches!(                        **element,
+                assert!(
+                    matches!(
+                        **element,
                         ProbableType::Primitive {
                             value: Primitive::String
                         }
-),
+                    ),
                     "expected Array<Primitive(String)>, got Array<{element:?}>"
-);
+                );
             }
             other => panic!("expected Array kind, got {other:?}"),
         }
@@ -382,14 +387,16 @@ mod tests {
         // Wildcard child `[tags, *]`: must be Primitive(String), not Enum.
         let wildcard_path = vec![PathSegment::Key("tags".into()), PathSegment::ArrayWildcard];
         let wildcard = find(&s, &wildcard_path).expect("wildcard child present");
-        assert!(            matches!(                wildcard.kind,
+        assert!(
+            matches!(
+                wildcard.kind,
                 ProbableType::Primitive {
                     value: Primitive::String
                 }
-),
+            ),
             "expected wildcard child Primitive(String), got {:?}",
             wildcard.kind,
-);
+        );
     }
 
     #[test]
@@ -402,11 +409,12 @@ mod tests {
             PathSegment::Key("price".into()),
         ];
         let node = find(&s, &elem_path).unwrap();
-        assert!(matches!(            node.kind,
+        assert!(matches!(
+            node.kind,
             ProbableType::Primitive {
                 value: Primitive::Number
             }
-));
+        ));
     }
 
     #[test]
@@ -437,11 +445,12 @@ mod tests {
         let samples = vec![json!(42), json!(43), json!(44)];
         let s = analyze(&samples);
         let root = find(&s, &[]).unwrap();
-        assert!(matches!(            root.kind,
+        assert!(matches!(
+            root.kind,
             ProbableType::Primitive {
                 value: Primitive::Number
             }
-));
+        ));
         assert!((root.freq - 1.0).abs() < 0.001);
     }
 
@@ -455,11 +464,12 @@ mod tests {
         ];
         let s = analyze(&samples);
         for node in &s.nodes {
-            assert!(                node.freq >= 0.0 && node.freq <= 1.0,
+            assert!(
+                node.freq >= 0.0 && node.freq <= 1.0,
                 "freq={}, path={:?}",
                 node.freq,
                 node.path
-);
+            );
         }
     }
 
@@ -486,22 +496,25 @@ mod tests {
             ProbableType::Array { element } => {
                 // The element kind should be a sentinel — not Union { variants: [] }.
                 // Plan calls for Primitive(Null) as the unobserved-element fallback.
-                assert!(                    matches!(                        **element,
+                assert!(
+                    matches!(
+                        **element,
                         ProbableType::Primitive {
                             value: Primitive::Null
                         }
-),
+                    ),
                     "expected Primitive(Null) for empty-array element, got {element:?}"
-);
+                );
             }
             other => panic!("expected Array kind, got {other:?}"),
         }
         // Also assert that the wildcard child node is NOT present (no elements were
         // walked, so no [tags, *] path should be in the schema).
         let wildcard_path = vec![PathSegment::Key("tags".into()), PathSegment::ArrayWildcard];
-        assert!(            s.nodes.iter().all(|n| n.path != wildcard_path),
+        assert!(
+            s.nodes.iter().all(|n| n.path != wildcard_path),
             "expected no wildcard child for empty array"
-);
+        );
     }
 
     use proptest::prelude::*;

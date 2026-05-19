@@ -17,7 +17,8 @@
 //! NEVER log api_key, request body, response body, query, schema, or any
 //! PII. Only `event name + host + status code` go to `tracing::debug!`.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::doc_markdown
 )]
@@ -52,7 +53,8 @@ struct CapturePayload<'a> {
 
 /// Build an event from primitive inputs. Validates the event name + sanitizes
 /// props. Caller passes the current `device_uuid` from settings.
-pub fn build_event(    name: &str,
+pub fn build_event(
+    name: &str,
     distinct_id: &str,
     props: BTreeMap<String, String>,
 ) -> Result<TelemetryEvent, TelemetryError> {
@@ -60,8 +62,9 @@ pub fn build_event(    name: &str,
         return Err(TelemetryError::UnknownEvent(name.to_string()));
     }
     if distinct_id.is_empty() {
-        return Err(TelemetryError::InvalidInput(            "distinct_id must not be empty".into(),
-));
+        return Err(TelemetryError::InvalidInput(
+            "distinct_id must not be empty".into(),
+        ));
     }
     Ok(TelemetryEvent {
         name: name.to_string(),
@@ -75,7 +78,8 @@ pub fn build_event(    name: &str,
 /// Resolves base URL from `settings.telemetry_endpoint`; if API key env var
 /// is unset the call still returns `Ok(())` (defence-in-depth — nothing to
 /// authenticate with means nothing leaves the host).
-pub async fn send_event(    settings: &AppSettings,
+pub async fn send_event(
+    settings: &AppSettings,
     event: TelemetryEvent,
 ) -> Result<(), TelemetryError> {
     if !settings.telemetry_enabled {
@@ -96,8 +100,8 @@ pub async fn send_event(    settings: &AppSettings,
             // No key configured — silent no-op. Do NOT log the env var name
             // alongside any value-bearing output.
             tracing::debug!(                event = %event.name,
-                "telemetry api key not configured; skipping send"
-);
+                            "telemetry api key not configured; skipping send"
+            );
             return Ok(());
         }
     };
@@ -109,7 +113,8 @@ pub async fn send_event(    settings: &AppSettings,
 ///
 /// Privacy: api_key is **never** logged. Body and response body are
 /// **never** logged. Only the host + status code at debug level.
-pub async fn post_event(    base_url: &str,
+pub async fn post_event(
+    base_url: &str,
     api_key: &str,
     event: &TelemetryEvent,
 ) -> Result<(), TelemetryError> {
@@ -137,14 +142,15 @@ pub async fn post_event(    base_url: &str,
 
     let status = resp.status();
     tracing::debug!(        event = %event.name,
-        host = %host,
-        status = status.as_u16(),
-        "telemetry capture posted"
-);
+            host = %host,
+            status = status.as_u16(),
+            "telemetry capture posted"
+    );
     if !status.is_success() {
-        return Err(TelemetryError::Network(format!(            "non-success status: {}",
+        return Err(TelemetryError::Network(format!(
+            "non-success status: {}",
             status.as_u16()
-)));
+        )));
     }
     Ok(())
 }
@@ -189,10 +195,11 @@ mod tests {
 
     #[test]
     fn build_event_validates_known_name() {
-        let ev = build_event(            "app_launched",
+        let ev = build_event(
+            "app_launched",
             "deadbeef-0000-0000-0000-000000000000",
             BTreeMap::new(),
-)
+        )
         .expect("build");
         assert_eq!(ev.name, "app_launched");
     }
@@ -205,9 +212,10 @@ mod tests {
 
     #[test]
     fn build_event_rejects_empty_distinct_id() {
-        assert!(matches!(            build_event("app_launched", "", BTreeMap::new()),
+        assert!(matches!(
+            build_event("app_launched", "", BTreeMap::new()),
             Err(TelemetryError::InvalidInput(_))
-));
+        ));
     }
 
     #[test]
@@ -224,24 +232,27 @@ mod tests {
     async fn send_noop_when_disabled() {
         let mut s = opted_in_settings();
         s.telemetry_enabled = false;
-        let ev = build_event(            "app_launched",
+        let ev = build_event(
+            "app_launched",
             s.device_uuid.as_deref().unwrap(),
             BTreeMap::new(),
-)
+        )
         .unwrap();
-        assert!(matches!(            send_event(&s, ev).await,
+        assert!(matches!(
+            send_event(&s, ev).await,
             Err(TelemetryError::NotOptedIn)
-));
+        ));
     }
 
     #[tokio::test]
     async fn send_noop_when_endpoint_none() {
         let mut s = opted_in_settings();
         s.telemetry_endpoint = TelemetryEndpoint::None;
-        let ev = build_event(            "app_launched",
+        let ev = build_event(
+            "app_launched",
             s.device_uuid.as_deref().unwrap(),
             BTreeMap::new(),
-)
+        )
         .unwrap();
         // Endpoint=None still satisfies opt-in but short-circuits — Ok(()).
         assert!(send_event(&s, ev).await.is_ok());
@@ -262,10 +273,11 @@ mod tests {
             return;
         }
         let s = opted_in_settings();
-        let ev = build_event(            "app_launched",
+        let ev = build_event(
+            "app_launched",
             s.device_uuid.as_deref().unwrap(),
             BTreeMap::new(),
-)
+        )
         .unwrap();
         send_event(&s, ev)
             .await
@@ -276,14 +288,16 @@ mod tests {
     async fn send_rejects_distinct_id_mismatch() {
         let s = opted_in_settings();
         // Build with a different distinct_id than settings.device_uuid.
-        let ev = build_event(            "app_launched",
+        let ev = build_event(
+            "app_launched",
             "ffffffff-ffff-ffff-ffff-ffffffffffff",
             BTreeMap::new(),
-)
+        )
         .unwrap();
-        assert!(matches!(            send_event(&s, ev).await,
+        assert!(matches!(
+            send_event(&s, ev).await,
             Err(TelemetryError::InvalidInput(_))
-));
+        ));
     }
 
     #[test]
@@ -296,12 +310,14 @@ mod tests {
 
     #[test]
     fn host_only_strips_scheme_and_path() {
-        assert_eq!(            host_only("https://telemetry.ide99.io"),
+        assert_eq!(
+            host_only("https://telemetry.ide99.io"),
             "telemetry.ide99.io"
-);
-        assert_eq!(            host_only("https://telemetry.ide99.io/capture/"),
+        );
+        assert_eq!(
+            host_only("https://telemetry.ide99.io/capture/"),
             "telemetry.ide99.io"
-);
+        );
         assert_eq!(host_only("http://127.0.0.1:8080/x"), "127.0.0.1:8080");
     }
 
@@ -310,10 +326,11 @@ mod tests {
     /// Confirms the error path is `Network(_)`, never panics.
     #[tokio::test]
     async fn post_event_unreachable_yields_network_err() {
-        let ev = build_event(            "app_launched",
+        let ev = build_event(
+            "app_launched",
             "00000000-0000-0000-0000-000000000001",
             BTreeMap::new(),
-)
+        )
         .unwrap();
         // Port 1 is reserved + unbound on every CI runner we use.
         let err = post_event("http://127.0.0.1:1", "test_key", &ev)

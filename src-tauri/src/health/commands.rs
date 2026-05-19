@@ -1,4 +1,5 @@
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::doc_markdown,
     clippy::too_many_lines,
@@ -143,84 +144,96 @@ const LAG_SECONDS_THRESHOLD: f64 = 60.0;
 // ---------------------------------------------------------------------------
 
 #[tauri::command]
-pub async fn health_db_size(    state: State<'_, AppState>,
+pub async fn health_db_size(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<DbSizeData, CardError> {
     state.health_db_size(&conn_id).await
 }
 
 #[tauri::command]
-pub async fn health_bloat(    state: State<'_, AppState>,
+pub async fn health_bloat(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<BloatTopData, CardError> {
     state.health_bloat(&conn_id).await
 }
 
 #[tauri::command]
-pub async fn health_slow_queries(    state: State<'_, AppState>,
+pub async fn health_slow_queries(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<SlowQueriesData, CardError> {
     state.health_slow_queries(&conn_id).await
 }
 
 #[tauri::command]
-pub async fn health_missing_indexes(    state: State<'_, AppState>,
+pub async fn health_missing_indexes(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<MissingIndexesData, CardError> {
     state.health_missing_indexes(&conn_id).await
 }
 
 #[tauri::command]
-pub async fn health_unused_indexes(    state: State<'_, AppState>,
+pub async fn health_unused_indexes(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<UnusedIndexesData, CardError> {
     state.health_unused_indexes(&conn_id).await
 }
 
 #[tauri::command]
-pub async fn health_cache_hit(    state: State<'_, AppState>,
+pub async fn health_cache_hit(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<CacheHitData, CardError> {
     state.health_cache_hit(&conn_id).await
 }
 
 #[tauri::command]
-pub async fn health_active_connections(    state: State<'_, AppState>,
+pub async fn health_active_connections(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<ActiveConnectionsData, CardError> {
     state.health_active_connections(&conn_id).await
 }
 
 #[tauri::command]
-pub async fn health_long_running(    state: State<'_, AppState>,
+pub async fn health_long_running(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<LongRunningData, CardError> {
     state.health_long_running(&conn_id).await
 }
 
 #[tauri::command]
-pub async fn health_vacuum_status(    state: State<'_, AppState>,
+pub async fn health_vacuum_status(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<VacuumStatusData, CardError> {
     state.health_vacuum_status(&conn_id).await
 }
 
 #[tauri::command]
-pub async fn health_replication_lag(    state: State<'_, AppState>,
+pub async fn health_replication_lag(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<ReplicationLagData, CardError> {
     state.health_replication_lag(&conn_id).await
 }
 
 #[tauri::command]
-pub async fn health_wal_throughput(    state: State<'_, AppState>,
+pub async fn health_wal_throughput(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<WalThroughputData, CardError> {
     state.health_wal_throughput(&conn_id).await
 }
 
 #[tauri::command]
-pub async fn health_snapshots_save(    state: State<'_, AppState>,
+pub async fn health_snapshots_save(
+    state: State<'_, AppState>,
     conn_id: String,
     db_size_bytes: i64,
 ) -> Result<(), CardError> {
@@ -228,7 +241,8 @@ pub async fn health_snapshots_save(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn health_snapshots_recent(    state: State<'_, AppState>,
+pub async fn health_snapshots_recent(
+    state: State<'_, AppState>,
     conn_id: String,
     days: i64,
 ) -> Result<Vec<HealthSnapshotRow>, CardError> {
@@ -343,9 +357,10 @@ impl AppState {
         Ok(SlowQueriesData { rows: out })
     }
 
-    pub async fn health_missing_indexes(        &self,
+    pub async fn health_missing_indexes(
+        &self,
         conn_id: &str,
-) -> Result<MissingIndexesData, CardError> {
+    ) -> Result<MissingIndexesData, CardError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool_client(&pool).await?;
         let rows = client
@@ -365,9 +380,10 @@ impl AppState {
         Ok(MissingIndexesData { rows: out })
     }
 
-    pub async fn health_unused_indexes(        &self,
+    pub async fn health_unused_indexes(
+        &self,
         conn_id: &str,
-) -> Result<UnusedIndexesData, CardError> {
+    ) -> Result<UnusedIndexesData, CardError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool_client(&pool).await?;
         let rows = client
@@ -398,9 +414,10 @@ impl AppState {
         Ok(CacheHitData { ratio_pct })
     }
 
-    pub async fn health_active_connections(        &self,
+    pub async fn health_active_connections(
+        &self,
         conn_id: &str,
-) -> Result<ActiveConnectionsData, CardError> {
+    ) -> Result<ActiveConnectionsData, CardError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool_client(&pool).await?;
 
@@ -471,9 +488,10 @@ impl AppState {
         Ok(VacuumStatusData { rows: out })
     }
 
-    pub async fn health_replication_lag(        &self,
+    pub async fn health_replication_lag(
+        &self,
         conn_id: &str,
-) -> Result<ReplicationLagData, CardError> {
+    ) -> Result<ReplicationLagData, CardError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool_client(&pool).await?;
         let rows = client
@@ -529,9 +547,10 @@ impl AppState {
         Ok(ReplicationLagData { state, slots })
     }
 
-    pub async fn health_wal_throughput(        &self,
+    pub async fn health_wal_throughput(
+        &self,
         conn_id: &str,
-) -> Result<WalThroughputData, CardError> {
+    ) -> Result<WalThroughputData, CardError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool_client(&pool).await?;
 
@@ -576,10 +595,11 @@ impl AppState {
         })
     }
 
-    pub async fn health_snapshots_save(        &self,
+    pub async fn health_snapshots_save(
+        &self,
         conn_id: &str,
         db_size_bytes: i64,
-) -> Result<(), CardError> {
+    ) -> Result<(), CardError> {
         let now = chrono::Utc::now().to_rfc3339();
         let mut store = self.store.lock().await;
         snapshots::save(store.conn_mut(), conn_id, &now, db_size_bytes).map_err(|e| {
@@ -589,10 +609,11 @@ impl AppState {
         })
     }
 
-    pub async fn health_snapshots_recent(        &self,
+    pub async fn health_snapshots_recent(
+        &self,
         conn_id: &str,
         days: i64,
-) -> Result<Vec<HealthSnapshotRow>, CardError> {
+    ) -> Result<Vec<HealthSnapshotRow>, CardError> {
         let store = self.store.lock().await;
         snapshots::recent(store.conn(), conn_id, days).map_err(|e| CardError::QueryFailed {
             message: e.to_string(),
@@ -608,7 +629,8 @@ use crate::health::actions;
 use crate::health::types::{ActionError, ActionResult, ProgressSnapshot};
 
 #[tauri::command]
-pub async fn health_action_reindex_table(    conn_id: String,
+pub async fn health_action_reindex_table(
+    conn_id: String,
     schema: String,
     table: String,
     state: tauri::State<'_, crate::AppState>,
@@ -623,7 +645,8 @@ pub async fn health_action_reindex_table(    conn_id: String,
 }
 
 #[tauri::command]
-pub async fn health_action_vacuum(    conn_id: String,
+pub async fn health_action_vacuum(
+    conn_id: String,
     schema: String,
     table: String,
     state: tauri::State<'_, crate::AppState>,
@@ -638,7 +661,8 @@ pub async fn health_action_vacuum(    conn_id: String,
 }
 
 #[tauri::command]
-pub async fn health_action_analyze(    conn_id: String,
+pub async fn health_action_analyze(
+    conn_id: String,
     schema: String,
     table: String,
     state: tauri::State<'_, crate::AppState>,
@@ -652,7 +676,8 @@ pub async fn health_action_analyze(    conn_id: String,
 }
 
 #[tauri::command]
-pub async fn health_action_drop_index(    conn_id: String,
+pub async fn health_action_drop_index(
+    conn_id: String,
     schema: String,
     index: String,
     state: tauri::State<'_, crate::AppState>,
@@ -666,7 +691,8 @@ pub async fn health_action_drop_index(    conn_id: String,
 }
 
 #[tauri::command]
-pub async fn health_action_kill_pid(    conn_id: String,
+pub async fn health_action_kill_pid(
+    conn_id: String,
     pid: i32,
     terminate: bool,
     state: tauri::State<'_, crate::AppState>,
@@ -680,7 +706,8 @@ pub async fn health_action_kill_pid(    conn_id: String,
 }
 
 #[tauri::command]
-pub async fn health_action_check_pid(    conn_id: String,
+pub async fn health_action_check_pid(
+    conn_id: String,
     pid: i32,
     state: tauri::State<'_, crate::AppState>,
 ) -> Result<bool, ActionError> {
@@ -693,7 +720,8 @@ pub async fn health_action_check_pid(    conn_id: String,
 }
 
 #[tauri::command]
-pub async fn health_action_progress(    conn_id: String,
+pub async fn health_action_progress(
+    conn_id: String,
     action_id: String,
     state: tauri::State<'_, crate::AppState>,
 ) -> Result<ProgressSnapshot, ActionError> {

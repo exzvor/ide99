@@ -16,7 +16,8 @@
 //! - [`issue_token`] / [`revoke_token`] — backend ↔ keychain ↔ store.
 //! - [`require_scope`] — helper for tool dispatch.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::module_name_repetitions,
     clippy::doc_markdown,
     clippy::significant_drop_tightening,
@@ -165,26 +166,29 @@ impl AuthState {
 
     /// Register a pending authorize request. Returns the request_id which
     /// frontend uses to resolve it.
-    pub async fn register_authorize(        &self,
+    pub async fn register_authorize(
+        &self,
         client_name: String,
         responder: oneshot::Sender<Result<Vec<McpScope>, McpError>>,
-) -> String {
+    ) -> String {
         let request_id = Uuid::new_v4().to_string();
         let mut g = self.pending_authorize.lock().await;
-        g.insert(            request_id.clone(),
+        g.insert(
+            request_id.clone(),
             PendingAuthorize {
                 client_name,
                 responder,
             },
-);
+        );
         request_id
     }
 
     /// Resolve an authorize request positively (user clicked Allow).
-    pub async fn resolve_authorize(        &self,
+    pub async fn resolve_authorize(
+        &self,
         request_id: &str,
         scopes: Vec<McpScope>,
-) -> Result<(), McpError> {
+    ) -> Result<(), McpError> {
         let mut g = self.pending_authorize.lock().await;
         let entry = g
             .remove(request_id)
@@ -208,28 +212,31 @@ impl AuthState {
     }
 
     /// Register a pending write-confirm request.
-    pub async fn register_write_confirm(        &self,
+    pub async fn register_write_confirm(
+        &self,
         client_name: String,
         sql: String,
         responder: oneshot::Sender<bool>,
-) -> String {
+    ) -> String {
         let request_id = Uuid::new_v4().to_string();
         let mut g = self.pending_write.lock().await;
-        g.insert(            request_id.clone(),
+        g.insert(
+            request_id.clone(),
             PendingWriteConfirm {
                 client_name,
                 sql,
                 responder,
             },
-);
+        );
         request_id
     }
 
     /// Resolve a write-confirm.
-    pub async fn resolve_write_confirm(        &self,
+    pub async fn resolve_write_confirm(
+        &self,
         request_id: &str,
         allow: bool,
-) -> Result<(), McpError> {
+    ) -> Result<(), McpError> {
         let mut g = self.pending_write.lock().await;
         let entry = g
             .remove(request_id)
@@ -291,7 +298,8 @@ fn base64_url_encode(input: &[u8]) -> String {
 ///
 /// Returns the (id, raw token). The raw token is the only artifact handed
 /// to the external agent; it never leaves this function path.
-pub fn issue_token(    conn: &rusqlite::Connection,
+pub fn issue_token(
+    conn: &rusqlite::Connection,
     keychain: &dyn Keychain,
     client_name: &str,
     scopes: &[McpScope],
@@ -319,7 +327,8 @@ pub fn issue_token(    conn: &rusqlite::Connection,
 /// Revoke a previously-issued token. Idempotent on the keychain side
 /// (missing entry is not an error); SQLite delete returns NotAuthorized
 /// for unknown ids so the UI can surface "no such client".
-pub fn revoke_token(    conn: &rusqlite::Connection,
+pub fn revoke_token(
+    conn: &rusqlite::Connection,
     keychain: &dyn Keychain,
     id: &str,
 ) -> Result<(), McpError> {
@@ -331,7 +340,8 @@ pub fn revoke_token(    conn: &rusqlite::Connection,
 
 /// Resolve a bearer token to an AuthorizedClient. Updates `last_used_at`
 /// as a side effect (best-effort; failures are logged, not raised).
-pub fn authorize_request(    conn: &rusqlite::Connection,
+pub fn authorize_request(
+    conn: &rusqlite::Connection,
     token: &str,
 ) -> Result<AuthorizedClient, McpError> {
     let hash = store_migration::hash_token(token);

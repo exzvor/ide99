@@ -10,7 +10,8 @@ use crate::AppState;
 use tauri::State;
 
 #[tauri::command]
-pub async fn live_ops_sessions(    conn_id: String,
+pub async fn live_ops_sessions(
+    conn_id: String,
     mode: SessionsMode,
     state: State<'_, AppState>,
 ) -> Result<SessionsSnapshot, LiveOpsError> {
@@ -23,7 +24,8 @@ pub async fn live_ops_sessions(    conn_id: String,
 }
 
 #[tauri::command]
-pub async fn live_ops_slow(    conn_id: String,
+pub async fn live_ops_slow(
+    conn_id: String,
     sort_by: SlowSortBy,
     state: State<'_, AppState>,
 ) -> Result<SlowSnapshot, LiveOpsError> {
@@ -36,7 +38,8 @@ pub async fn live_ops_slow(    conn_id: String,
 }
 
 #[tauri::command]
-pub async fn live_ops_replication(    conn_id: String,
+pub async fn live_ops_replication(
+    conn_id: String,
     state: State<'_, AppState>,
 ) -> Result<ReplicationOverview, LiveOpsError> {
     let pool = state

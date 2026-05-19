@@ -39,7 +39,8 @@ pub struct ApplyOptions<'a> {
 }
 
 /// Resolve `mode` against `all` into the ordered slice of migrations to run.
-fn select_targets<'m>(    all: &'m [Migration],
+fn select_targets<'m>(
+    all: &'m [Migration],
     mode: &ApplyMode,
 ) -> Result<Vec<&'m Migration>, MigrationsError> {
     match mode {
@@ -185,12 +186,13 @@ pub async fn apply(opts: ApplyOptions<'_>) -> Result<ApplyResult, MigrationsErro
             Ok(()) => {
                 let elapsed_ms = i64::try_from(started.elapsed().as_millis()).unwrap_or(i64::MAX);
                 if tracking_enabled {
-                    if let Err(e) = tracking::insert(                        client,
+                    if let Err(e) = tracking::insert(
+                        client,
                         &migration.version,
                         &migration.name,
                         &checksum,
                         elapsed_ms,
-)
+                    )
                     .await
                     {
                         failed = Some(ApplyFailure {
@@ -219,7 +221,8 @@ pub async fn apply(opts: ApplyOptions<'_>) -> Result<ApplyResult, MigrationsErro
 }
 
 /// Roll back a single migration.
-pub async fn rollback(    client: &Client,
+pub async fn rollback(
+    client: &Client,
     tracking_enabled: bool,
     migration: &Migration,
 ) -> Result<RollbackResult, MigrationsError> {
@@ -233,8 +236,9 @@ pub async fn rollback(    client: &Client,
 
     // 2. Verify the .down.sql path exists.
     let Some(down_path) = migration.down_path.as_ref() else {
-        return Err(MigrationsError::RollbackFileMissing(            migration.version.clone(),
-));
+        return Err(MigrationsError::RollbackFileMissing(
+            migration.version.clone(),
+        ));
     };
 
     // 3. Read down SQL.
@@ -271,12 +275,13 @@ mod tests {
 
     /// Build a Migration with `up_path`/`down_path` rooted in `dir`. Writes
     /// both files unless `down_body` is `None`. Returns the Migration struct.
-    fn write_migration(        dir: &TempDir,
+    fn write_migration(
+        dir: &TempDir,
         version: &str,
         name: &str,
         up_body: &str,
         down_body: Option<&str>,
-) -> Migration {
+    ) -> Migration {
         let up_path = dir.path().join(format!("{version}_{name}.up.sql"));
         fs::write(&up_path, up_body).unwrap();
         let up_str = up_path.to_string_lossy().to_string();
@@ -328,12 +333,13 @@ mod tests {
             return;
         };
         let dir = TempDir::new().unwrap();
-        let m = write_migration(            &dir,
+        let m = write_migration(
+            &dir,
             "0001",
             "create_users",
             "CREATE TABLE users(id int);",
             Some("DROP TABLE users;"),
-);
+        );
 
         let res = apply(ApplyOptions {
             client: &client,
@@ -358,10 +364,11 @@ mod tests {
 
         // Table exists.
         let row = client
-            .query_one(                "SELECT count(*) AS c FROM information_schema.tables \
+            .query_one(
+                "SELECT count(*) AS c FROM information_schema.tables \
                   WHERE table_schema='public' AND table_name='users'",
                 &[],
-)
+            )
             .await
             .unwrap();
         assert_eq!(row.get::<_, i64>("c"), 1);
@@ -375,12 +382,13 @@ mod tests {
         let dir = TempDir::new().unwrap();
         // First statement succeeds, second fails — wrapped in BEGIN/COMMIT
         // so the entire migration tx rolls back.
-        let m = write_migration(            &dir,
+        let m = write_migration(
+            &dir,
             "0001",
             "broken",
             "CREATE TABLE foo (id int);\nTHIS_IS_NOT_SQL;",
             None,
-);
+        );
 
         let res = apply(ApplyOptions {
             client: &client,
@@ -398,10 +406,11 @@ mod tests {
 
         // foo table should NOT exist (tx rolled back).
         let row = client
-            .query_one(                "SELECT count(*) AS c FROM information_schema.tables \
+            .query_one(
+                "SELECT count(*) AS c FROM information_schema.tables \
                   WHERE table_schema='public' AND table_name='foo'",
                 &[],
-)
+            )
             .await
             .unwrap();
         assert_eq!(row.get::<_, i64>("c"), 0);
@@ -424,12 +433,13 @@ mod tests {
             .unwrap();
 
         let dir = TempDir::new().unwrap();
-        let m = write_migration(            &dir,
+        let m = write_migration(
+            &dir,
             "0001",
             "concurrent_index",
             "-- ide99:no-transaction\nCREATE INDEX CONCURRENTLY concur_idx ON concur_t (val);",
             None,
-);
+        );
 
         let res = apply(ApplyOptions {
             client: &client,
@@ -446,10 +456,11 @@ mod tests {
         assert_eq!(res.applied.len(), 1);
         // Index must exist.
         let row = client
-            .query_one(                "SELECT count(*) AS c FROM pg_indexes \
+            .query_one(
+                "SELECT count(*) AS c FROM pg_indexes \
                   WHERE schemaname='public' AND indexname='concur_idx'",
                 &[],
-)
+            )
             .await
             .unwrap();
         assert_eq!(row.get::<_, i64>("c"), 1);
@@ -521,10 +532,11 @@ mod tests {
         .unwrap();
         let failure = res2.failed.expect("failed");
         assert_eq!(failure.version, "0001");
-        assert!(            failure.error.contains("already applied"),
+        assert!(
+            failure.error.contains("already applied"),
             "expected already-applied error, got {}",
             failure.error
-);
+        );
     }
 
     #[tokio::test]
@@ -533,12 +545,13 @@ mod tests {
             return;
         };
         let dir = TempDir::new().unwrap();
-        let m = write_migration(            &dir,
+        let m = write_migration(
+            &dir,
             "0001",
             "create_users",
             "CREATE TABLE users(id int);",
             Some("DROP TABLE users;"),
-);
+        );
 
         // Apply first.
         apply(ApplyOptions {
@@ -559,10 +572,11 @@ mod tests {
 
         // Table must be gone.
         let row = client
-            .query_one(                "SELECT count(*) AS c FROM information_schema.tables \
+            .query_one(
+                "SELECT count(*) AS c FROM information_schema.tables \
                   WHERE table_schema='public' AND table_name='users'",
                 &[],
-)
+            )
             .await
             .unwrap();
         assert_eq!(row.get::<_, i64>("c"), 0);
@@ -623,24 +637,27 @@ mod tests {
             return;
         };
         let dir = TempDir::new().unwrap();
-        let m1 = write_migration(            &dir,
+        let m1 = write_migration(
+            &dir,
             "0001",
             "ok1",
             "CREATE TABLE t1(id int);",
             Some("DROP TABLE t1;"),
-);
-        let m2 = write_migration(            &dir,
+        );
+        let m2 = write_migration(
+            &dir,
             "0002",
             "broken",
             "CREATE TABLE t2(id int);\nNOT_A_STATEMENT;",
             None,
-);
-        let m3 = write_migration(            &dir,
+        );
+        let m3 = write_migration(
+            &dir,
             "0003",
             "ok3",
             "CREATE TABLE t3(id int);",
             Some("DROP TABLE t3;"),
-);
+        );
 
         let res = apply(ApplyOptions {
             client: &client,
@@ -659,10 +676,11 @@ mod tests {
         // t1 exists, t2 does not, t3 does not.
         async fn table_count(client: &Client, name: &str) -> i64 {
             let row = client
-                .query_one(                    "SELECT count(*) AS c FROM information_schema.tables \
+                .query_one(
+                    "SELECT count(*) AS c FROM information_schema.tables \
                       WHERE table_schema='public' AND table_name=$1",
                     &[&name],
-)
+                )
                 .await
                 .unwrap();
             row.get::<_, i64>("c")

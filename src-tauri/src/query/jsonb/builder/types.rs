@@ -156,12 +156,14 @@ mod tests {
             eq_value: BuilderValue::String { value: "x".into() },
         };
         let s = serde_json::to_string(&v).unwrap();
-        assert!(            s.contains("\"eqValue\""),
+        assert!(
+            s.contains("\"eqValue\""),
             "field must serialize as eqValue, got: {s}"
-);
-        assert!(            !s.contains("\"eq_value\""),
+        );
+        assert!(
+            !s.contains("\"eq_value\""),
             "snake_case must NOT appear on wire, got: {s}"
-);
+        );
         // Roundtrip: frontend sends camelCase, backend must deserialize it.
         let back: ExtractMode = serde_json::from_str(&s).unwrap();
         assert_eq!(v, back);
@@ -172,8 +174,9 @@ mod tests {
         // If frontend erroneously sends eq_value (snake), deserialization must fail.
         let snake_json = r#"{"kind":"comparison","eq_value":{"kind":"null"}}"#;
         let result: Result<ExtractMode, _> = serde_json::from_str(snake_json);
-        assert!(            result.is_err(),
+        assert!(
+            result.is_err(),
             "snake_case eq_value must NOT deserialize successfully"
-);
+        );
     }
 }

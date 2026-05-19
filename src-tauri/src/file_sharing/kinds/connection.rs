@@ -67,7 +67,8 @@ pub fn to_single_payload(c: &Connection) -> Result<serde_json::Value, ShareError
         .map_err(|e| ShareError::InvalidFile(format!("encode connection: {e}")))
 }
 
-pub fn to_bundle_payload(    name: &str,
+pub fn to_bundle_payload(
+    name: &str,
     connections: &[Connection],
 ) -> Result<serde_json::Value, ShareError> {
     let bundle = ConnectionBundle {
@@ -90,9 +91,10 @@ pub fn from_bundle_payload(value: &serde_json::Value) -> Result<ConnectionBundle
 /// Human-readable summary for the import preview.
 pub fn summary(value: &serde_json::Value) -> Result<String, ShareError> {
     let c = from_single_payload(value)?;
-    Ok(format!(        "{} ({}:{} / {})",
+    Ok(format!(
+        "{} ({}:{} / {})",
         c.name, c.host, c.port, c.database
-))
+    ))
 }
 
 pub fn bundle_summary(value: &serde_json::Value) -> Result<String, ShareError> {
@@ -174,8 +176,9 @@ mod tests {
     fn bundle_summary_format() {
         let conns = vec![fake_conn("a"), fake_conn("b"), fake_conn("c")];
         let payload = to_bundle_payload("team-mirror", &conns).unwrap();
-        assert_eq!(            bundle_summary(&payload).unwrap(),
+        assert_eq!(
+            bundle_summary(&payload).unwrap(),
             "team-mirror (3 connections)"
-);
+        );
     }
 }

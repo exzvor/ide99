@@ -170,13 +170,14 @@ mod error_serde_tests {
             install_sql: "CREATE EXTENSION pg_stat_statements;".into(),
         };
         let v = serde_json::to_value(&e).unwrap();
-        assert_eq!(            v,
+        assert_eq!(
+            v,
             json!({
                 "kind": "unavailable",
                 "extension": "pg_stat_statements",
                 "installSql": "CREATE EXTENSION pg_stat_statements;",
             })
-);
+        );
     }
 
     #[test]
@@ -185,12 +186,13 @@ mod error_serde_tests {
             required_role: "pg_monitor".into(),
         };
         let v = serde_json::to_value(&e).unwrap();
-        assert_eq!(            v,
+        assert_eq!(
+            v,
             json!({
                 "kind": "forbidden",
                 "requiredRole": "pg_monitor",
             })
-);
+        );
     }
 
     #[test]
@@ -200,13 +202,14 @@ mod error_serde_tests {
             message: "relation \"x\" does not exist".into(),
         };
         let v = serde_json::to_value(&e).unwrap();
-        assert_eq!(            v,
+        assert_eq!(
+            v,
             json!({
                 "kind": "queryFailed",
                 "sqlstate": "42P01",
                 "message": "relation \"x\" does not exist",
             })
-);
+        );
     }
 
     #[test]

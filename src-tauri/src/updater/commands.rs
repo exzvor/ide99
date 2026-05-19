@@ -61,14 +61,16 @@ pub async fn updater_manifest_url(channel: ReleaseChannel) -> Result<String, Upd
 }
 
 #[tauri::command]
-pub async fn updater_check(    state: State<'_, AppState>,
+pub async fn updater_check(
+    state: State<'_, AppState>,
     app: AppHandle,
 ) -> Result<CheckResult, UpdaterError> {
     state.updater_check(&app).await
 }
 
 #[tauri::command]
-pub async fn updater_install_pending(    state: State<'_, AppState>,
+pub async fn updater_install_pending(
+    state: State<'_, AppState>,
     app: AppHandle,
 ) -> Result<(), UpdaterError> {
     state.updater_install_pending(&app).await
@@ -140,55 +142,61 @@ impl AppState {
             .await
             .map_err(|e| UpdaterError::Network(format!("{e}")))?
             .ok_or_else(|| {
-                UpdaterError::Install(                    "no pending update — re-check before requesting install".into(),
-)
+                UpdaterError::Install(
+                    "no pending update — re-check before requesting install".into(),
+                )
             })?;
 
         // Emit a started event before the first chunk lands so the UI can
         // flip its progress bar immediately (the Tauri plugin's own
         // download() callback only fires per-chunk).
-        let _ = app.emit(            PROGRESS_CHANNEL,
+        let _ = app.emit(
+            PROGRESS_CHANNEL,
             ProgressEvent {
                 phase: "started",
                 bytes_downloaded: 0,
                 bytes_total: None,
             },
-);
+        );
 
         let mut downloaded: u64 = 0;
         let app_for_chunks = app.clone();
         let app_for_finish = app.clone();
         update
-            .download_and_install(                move |chunk_len, total| {
+            .download_and_install(
+                move |chunk_len, total| {
                     downloaded = downloaded.saturating_add(chunk_len as u64);
-                    let _ = app_for_chunks.emit(                        PROGRESS_CHANNEL,
+                    let _ = app_for_chunks.emit(
+                        PROGRESS_CHANNEL,
                         ProgressEvent {
                             phase: "downloading",
                             bytes_downloaded: downloaded,
                             bytes_total: total,
                         },
-);
+                    );
                 },
                 move || {
-                    let _ = app_for_finish.emit(                        PROGRESS_CHANNEL,
+                    let _ = app_for_finish.emit(
+                        PROGRESS_CHANNEL,
                         ProgressEvent {
                             phase: "installing",
                             bytes_downloaded: 0,
                             bytes_total: None,
                         },
-);
+                    );
                 },
-)
+            )
             .await
             .map_err(|e| UpdaterError::Install(format!("{e}")))?;
 
-        let _ = app.emit(            PROGRESS_CHANNEL,
+        let _ = app.emit(
+            PROGRESS_CHANNEL,
             ProgressEvent {
                 phase: "done",
                 bytes_downloaded: 0,
                 bytes_total: None,
             },
-);
+        );
         Ok(())
     }
 
@@ -201,8 +209,9 @@ impl AppState {
             crate::telemetry::store::read(store.conn())
                 .map_err(|e| UpdaterError::Storage(e.to_string()))?
         };
-        Ok(ReleaseChannel::from_str_lossy(            &app_settings.release_channel,
-))
+        Ok(ReleaseChannel::from_str_lossy(
+            &app_settings.release_channel,
+        ))
     }
 }
 
@@ -212,12 +221,13 @@ impl AppState {
 /// "what you'll get" preview.
 fn project_update_to_manifest(update: &tauri_plugin_updater::Update) -> UpdateManifest {
     let mut platforms = BTreeMap::new();
-    platforms.insert(        update.target.clone(),
+    platforms.insert(
+        update.target.clone(),
         PlatformAsset {
             signature: update.signature.clone(),
             url: update.download_url.to_string(),
         },
-);
+    );
     UpdateManifest {
         version: update.version.clone(),
         notes: update.body.clone().unwrap_or_default(),

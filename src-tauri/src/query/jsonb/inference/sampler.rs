@@ -26,7 +26,8 @@ const STATEMENT_TIMEOUT_MS: u32 = 5000;
 ///
 /// Returns [`InferenceError::Timeout`] if the query exceeds 5 seconds, or
 /// [`InferenceError::Postgres`] for any other database error.
-pub async fn sample_jsonb_column(    pool: &Pool,
+pub async fn sample_jsonb_column(
+    pool: &Pool,
     fqn: &FullyQualifiedColumn,
 ) -> Result<Vec<Value>, InferenceError> {
     let mut client = pool.get().await.map_err(|e| InferenceError::Postgres {
@@ -34,8 +35,9 @@ pub async fn sample_jsonb_column(    pool: &Pool,
     })?;
 
     let txn = client.transaction().await.map_err(pg)?;
-    txn.batch_execute(&format!(        "SET LOCAL statement_timeout = {STATEMENT_TIMEOUT_MS}"
-))
+    txn.batch_execute(&format!(
+        "SET LOCAL statement_timeout = {STATEMENT_TIMEOUT_MS}"
+    ))
     .await
     .map_err(pg)?;
 
@@ -124,7 +126,8 @@ fn build_query(strategy: &Strategy, fqn: &FullyQualifiedColumn) -> String {
     }
 }
 
-async fn lookup_relkind_and_size<C>(    client: &C,
+async fn lookup_relkind_and_size<C>(
+    client: &C,
     schema: &str,
     table: &str,
 ) -> Result<(String, i64), InferenceError>
@@ -132,11 +135,12 @@ where
     C: deadpool_postgres::GenericClient,
 {
     let row = client
-        .query_one(            "SELECT c.relkind::text, c.reltuples::bigint \
+        .query_one(
+            "SELECT c.relkind::text, c.reltuples::bigint \
              FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace \
              WHERE n.nspname = $1 AND c.relname = $2",
             &[&schema, &table],
-)
+        )
         .await
         .map_err(pg)?;
     Ok((row.get::<_, String>(0), row.get::<_, i64>(1)))
@@ -175,14 +179,16 @@ fn is_timeout_classifier(sqlstate: Option<&str>, message: &str) -> bool {
 fn is_timeout(e: &tokio_postgres::Error) -> bool {
     // tokio_postgres::Error::to_string() for a DbError produces only "db error",
     // not the PG message text. Use as_db_error() to reach the real message and code.
-    e.as_db_error().map_or_else(        // Non-DbError (IO, closed, etc.) — check the top-level string as fallback.
+    e.as_db_error().map_or_else(
+        // Non-DbError (IO, closed, etc.) — check the top-level string as fallback.
         || {
-            is_timeout_classifier(                e.code().map(tokio_postgres::error::SqlState::code),
+            is_timeout_classifier(
+                e.code().map(tokio_postgres::error::SqlState::code),
                 &e.to_string(),
-)
+            )
         },
         |db| is_timeout_classifier(Some(db.code().code()), db.message()),
-)
+    )
 }
 
 #[cfg(test)]
@@ -208,16 +214,18 @@ mod tests {
 
     #[test]
     fn large_heap_uses_bernoulli() {
-        assert!(matches!(            pick_strategy("r", 100_000),
+        assert!(matches!(
+            pick_strategy("r", 100_000),
             Strategy::Bernoulli(_)
-));
+        ));
     }
 
     #[test]
     fn huge_heap_uses_system() {
-        assert!(matches!(            pick_strategy("r", 50_000_000),
+        assert!(matches!(
+            pick_strategy("r", 50_000_000),
             Strategy::System(_)
-));
+        ));
     }
 
     #[test]
@@ -238,17 +246,20 @@ mod tests {
     #[test]
     fn is_timeout_classifier_requires_both_signals() {
         // Both SQLSTATE 57014 and "statement timeout" message → Timeout.
-        assert!(is_timeout_classifier(            Some("57014"),
+        assert!(is_timeout_classifier(
+            Some("57014"),
             "ERROR: canceling statement due to statement timeout"
-));
+        ));
         // SQLSTATE alone (e.g. pg_cancel_backend with non-timeout message) → not Timeout.
-        assert!(!is_timeout_classifier(            Some("57014"),
+        assert!(!is_timeout_classifier(
+            Some("57014"),
             "ERROR: canceling statement due to user request"
-));
+        ));
         // Message alone (some other error type with "statement timeout" in body) → not Timeout.
-        assert!(!is_timeout_classifier(            Some("42P01"),
+        assert!(!is_timeout_classifier(
+            Some("42P01"),
             "did not match statement timeout window"
-));
+        ));
         // Neither → not Timeout.
         assert!(!is_timeout_classifier(None, "connection closed"));
     }

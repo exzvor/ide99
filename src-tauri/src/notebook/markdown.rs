@@ -32,14 +32,16 @@ use crate::notebook::types::{Cell, CellResult, NotebookError};
 /// * `InvalidInput` — `target_idx` out of bounds, or target cell is not Markdown.
 pub fn render_markdown(cells: &[Cell], target_idx: usize) -> Result<String, NotebookError> {
     if target_idx >= cells.len() {
-        return Err(NotebookError::InvalidInput(format!(            "target_idx {target_idx} out of bounds"
-)));
+        return Err(NotebookError::InvalidInput(format!(
+            "target_idx {target_idx} out of bounds"
+        )));
     }
     let source = match &cells[target_idx] {
         Cell::Markdown { source, .. } => source.clone(),
         _ => {
-            return Err(NotebookError::InvalidInput(format!(                "cell {target_idx} is not a Markdown cell"
-)))
+            return Err(NotebookError::InvalidInput(format!(
+                "cell {target_idx} is not a Markdown cell"
+            )))
         }
     };
     Ok(substitute(&source, &cells[..target_idx]))
@@ -263,14 +265,16 @@ mod tests {
 
     #[test]
     fn row_index_lookup_works() {
-        let result = sample_result(            vec!["month"],
+        let result = sample_result(
+            vec!["month"],
             vec![vec![Some("Jan")], vec![Some("Feb")], vec![Some("Mar")]],
-);
+        );
         let cells = vec![
             sql_with_result("c0", "SELECT month FROM x", Some(result)),
-            md(                "c1",
+            md(
+                "c1",
                 "Second: {{ cell_0.result.month.1 }} / Third: {{ cell_0.result.month.2 }}",
-),
+            ),
         ];
         let rendered = render_markdown(&cells, 1).unwrap();
         assert_eq!(rendered, "Second: Feb / Third: Mar");

@@ -83,14 +83,15 @@ mod tests {
         assert!(!d.events.insert);
         assert!(!d.events.truncate);
         assert_eq!(d.for_each, "statement");
-        assert_eq!(            d.events,
+        assert_eq!(
+            d.events,
             TriggerEvents {
                 insert: false,
                 update: true,
                 delete: true,
                 truncate: false,
             }
-);
+        );
     }
 
     #[test]
@@ -104,8 +105,9 @@ mod tests {
 
     #[test]
     fn all_events_after_for_each_statement() {
-        let d = decode_tgtype(            TRIGGER_TYPE_INSERT | TRIGGER_TYPE_UPDATE | TRIGGER_TYPE_DELETE | TRIGGER_TYPE_TRUNCATE,
-);
+        let d = decode_tgtype(
+            TRIGGER_TYPE_INSERT | TRIGGER_TYPE_UPDATE | TRIGGER_TYPE_DELETE | TRIGGER_TYPE_TRUNCATE,
+        );
         assert!(d.events.insert && d.events.update && d.events.delete && d.events.truncate);
         assert_eq!(d.timing, "after");
         assert_eq!(d.for_each, "statement");

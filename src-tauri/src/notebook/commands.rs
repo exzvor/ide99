@@ -23,14 +23,16 @@ pub async fn notebook_list(state: State<'_, AppState>) -> Result<Vec<Notebook>, 
 }
 
 #[tauri::command]
-pub async fn notebook_get(    state: State<'_, AppState>,
+pub async fn notebook_get(
+    state: State<'_, AppState>,
     id: String,
 ) -> Result<Option<Notebook>, NotebookError> {
     state.notebook_get(&id).await
 }
 
 #[tauri::command]
-pub async fn notebook_save(    state: State<'_, AppState>,
+pub async fn notebook_save(
+    state: State<'_, AppState>,
     input: UpsertNotebookInput,
 ) -> Result<Notebook, NotebookError> {
     state.notebook_save(input).await
@@ -49,7 +51,8 @@ pub async fn notebook_export_file(notebook: Notebook, path: String) -> Result<()
 /// Export without inline-result snapshots (for sharing a "clean"
 /// notebook: tutorials, code review).
 #[tauri::command]
-pub async fn notebook_export_file_minimal(    notebook: Notebook,
+pub async fn notebook_export_file_minimal(
+    notebook: Notebook,
     path: String,
 ) -> Result<(), NotebookError> {
     file_io::write_minimal_to_path(&PathBuf::from(path), &notebook)
@@ -62,7 +65,8 @@ pub async fn notebook_import_file(path: String) -> Result<Notebook, NotebookErro
 
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
-pub fn notebook_compose_sql(    cells: Vec<Cell>,
+pub fn notebook_compose_sql(
+    cells: Vec<Cell>,
     target_idx: usize,
 ) -> Result<ComposedSql, NotebookError> {
     compose(&cells, target_idx).map_err(NotebookError::InvalidInput)
@@ -73,7 +77,8 @@ pub fn notebook_compose_sql(    cells: Vec<Cell>,
 /// rendering stays on the frontend.
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)]
-pub fn notebook_render_markdown(    cells: Vec<Cell>,
+pub fn notebook_render_markdown(
+    cells: Vec<Cell>,
     target_idx: usize,
 ) -> Result<String, NotebookError> {
     markdown::render_markdown(&cells, target_idx)
@@ -96,9 +101,10 @@ impl AppState {
         store::get(store.conn(), id)
     }
 
-    pub async fn notebook_save(        &self,
+    pub async fn notebook_save(
+        &self,
         input: UpsertNotebookInput,
-) -> Result<Notebook, NotebookError> {
+    ) -> Result<Notebook, NotebookError> {
         let store = self.store.lock().await;
         store::upsert(store.conn(), &input)
     }

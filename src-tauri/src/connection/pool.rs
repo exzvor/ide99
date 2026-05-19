@@ -5,7 +5,8 @@
 //! ephemeral, possibly-invalid credentials and pooling them would let bad
 //! creds leak into later operations.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::significant_drop_tightening,
     clippy::doc_markdown
 )]
@@ -68,13 +69,14 @@ impl PoolRegistry {
         }
     }
 
-    fn pg_config(        host: &str,
+    fn pg_config(
+        host: &str,
         port: u16,
         database: &str,
         username: &str,
         password: Option<&str>,
         mode: SslMode,
-) -> PgConfig {
+    ) -> PgConfig {
         let mut cfg = PgConfig::new();
         cfg.host(host)
             .port(port)
@@ -89,21 +91,23 @@ impl PoolRegistry {
     }
 
     /// Get-or-create the pool for a saved connection.
-    pub async fn get_or_init(        &self,
+    pub async fn get_or_init(
+        &self,
         connection: &Connection,
         password: Option<&str>,
-) -> Result<Pool, ConnectionError> {
+    ) -> Result<Pool, ConnectionError> {
         let mut guard = self.pools.lock().await;
         if let Some(pool) = guard.get(&connection.id) {
             return Ok(pool.clone());
         }
-        let pool = build_pool(            &connection.host,
+        let pool = build_pool(
+            &connection.host,
             connection.port,
             &connection.database,
             &connection.username,
             password,
             connection.ssl_mode,
-)?;
+        )?;
         guard.insert(connection.id.clone(), pool.clone());
         Ok(pool)
     }
@@ -112,13 +116,14 @@ impl PoolRegistry {
     /// because callers may pass throwaway/invalid creds via the form.
     pub async fn test(&self, input: TestInput) -> Result<TestResult, ConnectionError> {
         let start = Instant::now();
-        let cfg = Self::pg_config(            &input.host,
+        let cfg = Self::pg_config(
+            &input.host,
             input.port,
             &input.database,
             &input.username,
             input.password.as_deref(),
             input.ssl_mode,
-);
+        );
 
         match run_probe(cfg, input.ssl_mode).await {
             Ok(version) => Ok(TestResult {
@@ -187,16 +192,18 @@ impl PoolRegistry {
     /// config or TLS-stack init, not from the remote server. Used by
     /// `connection_connect` so the call site can run a validation probe before
     /// committing the pool to the registry.
-    pub fn build_for(        connection: &Connection,
+    pub fn build_for(
+        connection: &Connection,
         password: Option<&str>,
-) -> Result<Pool, ConnectionError> {
-        build_pool(            &connection.host,
+    ) -> Result<Pool, ConnectionError> {
+        build_pool(
+            &connection.host,
             connection.port,
             &connection.database,
             &connection.username,
             password,
             connection.ssl_mode,
-)
+        )
     }
 }
 
@@ -206,7 +213,8 @@ impl Default for PoolRegistry {
     }
 }
 
-fn build_pool(    host: &str,
+fn build_pool(
+    host: &str,
     port: u16,
     database: &str,
     username: &str,
@@ -319,29 +327,32 @@ fn build_tls_connector(flavor: TlsFlavor) -> Result<MakeRustlsConnect, Connectio
 struct NoCertificateVerification;
 
 impl ServerCertVerifier for NoCertificateVerification {
-    fn verify_server_cert(        &self,
+    fn verify_server_cert(
+        &self,
         _end_entity: &CertificateDer<'_>,
         _intermediates: &[CertificateDer<'_>],
         _server_name: &ServerName<'_>,
         _ocsp_response: &[u8],
         _now: UnixTime,
-) -> Result<ServerCertVerified, rustls::Error> {
+    ) -> Result<ServerCertVerified, rustls::Error> {
         Ok(ServerCertVerified::assertion())
     }
 
-    fn verify_tls12_signature(        &self,
+    fn verify_tls12_signature(
+        &self,
         _message: &[u8],
         _cert: &CertificateDer<'_>,
         _dss: &DigitallySignedStruct,
-) -> Result<HandshakeSignatureValid, rustls::Error> {
+    ) -> Result<HandshakeSignatureValid, rustls::Error> {
         Ok(HandshakeSignatureValid::assertion())
     }
 
-    fn verify_tls13_signature(        &self,
+    fn verify_tls13_signature(
+        &self,
         _message: &[u8],
         _cert: &CertificateDer<'_>,
         _dss: &DigitallySignedStruct,
-) -> Result<HandshakeSignatureValid, rustls::Error> {
+    ) -> Result<HandshakeSignatureValid, rustls::Error> {
         Ok(HandshakeSignatureValid::assertion())
     }
 
@@ -372,19 +383,21 @@ struct SkipHostnameVerifier {
 }
 
 impl ServerCertVerifier for SkipHostnameVerifier {
-    fn verify_server_cert(        &self,
+    fn verify_server_cert(
+        &self,
         end_entity: &CertificateDer<'_>,
         intermediates: &[CertificateDer<'_>],
         server_name: &ServerName<'_>,
         ocsp_response: &[u8],
         now: UnixTime,
-) -> Result<ServerCertVerified, rustls::Error> {
-        match self.inner.verify_server_cert(            end_entity,
+    ) -> Result<ServerCertVerified, rustls::Error> {
+        match self.inner.verify_server_cert(
+            end_entity,
             intermediates,
             server_name,
             ocsp_response,
             now,
-) {
+        ) {
             Ok(v) => Ok(v),
             // Hostname mismatch is allowed under verify-ca.
             Err(rustls::Error::InvalidCertificate(rustls::CertificateError::NotValidForName)) => {
@@ -394,19 +407,21 @@ impl ServerCertVerifier for SkipHostnameVerifier {
         }
     }
 
-    fn verify_tls12_signature(        &self,
+    fn verify_tls12_signature(
+        &self,
         message: &[u8],
         cert: &CertificateDer<'_>,
         dss: &DigitallySignedStruct,
-) -> Result<HandshakeSignatureValid, rustls::Error> {
+    ) -> Result<HandshakeSignatureValid, rustls::Error> {
         self.inner.verify_tls12_signature(message, cert, dss)
     }
 
-    fn verify_tls13_signature(        &self,
+    fn verify_tls13_signature(
+        &self,
         message: &[u8],
         cert: &CertificateDer<'_>,
         dss: &DigitallySignedStruct,
-) -> Result<HandshakeSignatureValid, rustls::Error> {
+    ) -> Result<HandshakeSignatureValid, rustls::Error> {
         self.inner.verify_tls13_signature(message, cert, dss)
     }
 
@@ -422,21 +437,26 @@ mod tests {
     #[test]
     fn ssl_flavor_mapping() {
         assert_eq!(TlsFlavor::from_ssl_mode(SslMode::Disable), TlsFlavor::None);
-        assert_eq!(            TlsFlavor::from_ssl_mode(SslMode::Allow),
+        assert_eq!(
+            TlsFlavor::from_ssl_mode(SslMode::Allow),
             TlsFlavor::AcceptAny
-);
-        assert_eq!(            TlsFlavor::from_ssl_mode(SslMode::Prefer),
+        );
+        assert_eq!(
+            TlsFlavor::from_ssl_mode(SslMode::Prefer),
             TlsFlavor::AcceptAny
-);
-        assert_eq!(            TlsFlavor::from_ssl_mode(SslMode::Require),
+        );
+        assert_eq!(
+            TlsFlavor::from_ssl_mode(SslMode::Require),
             TlsFlavor::AcceptAny
-);
-        assert_eq!(            TlsFlavor::from_ssl_mode(SslMode::VerifyCa),
+        );
+        assert_eq!(
+            TlsFlavor::from_ssl_mode(SslMode::VerifyCa),
             TlsFlavor::VerifyCa
-);
-        assert_eq!(            TlsFlavor::from_ssl_mode(SslMode::VerifyFull),
+        );
+        assert_eq!(
+            TlsFlavor::from_ssl_mode(SslMode::VerifyFull),
             TlsFlavor::VerifyFull
-);
+        );
     }
 
     #[test]
@@ -446,9 +466,10 @@ mod tests {
         assert!(matches!(pg_ssl_mode(SslMode::Prefer), PgSslMode::Prefer));
         assert!(matches!(pg_ssl_mode(SslMode::Require), PgSslMode::Require));
         assert!(matches!(pg_ssl_mode(SslMode::VerifyCa), PgSslMode::Require));
-        assert!(matches!(            pg_ssl_mode(SslMode::VerifyFull),
+        assert!(matches!(
+            pg_ssl_mode(SslMode::VerifyFull),
             PgSslMode::Require
-));
+        ));
     }
 
     #[tokio::test]
@@ -461,13 +482,14 @@ mod tests {
     async fn build_pool_with_disable_succeeds() {
         // Pool construction is offline — only fails on bad config, not on
         // actual TCP connect (that's lazy on first checkout).
-        let pool = build_pool(            "127.0.0.1",
+        let pool = build_pool(
+            "127.0.0.1",
             5432,
             "postgres",
             "user",
             Some("pw"),
             SslMode::Disable,
-)
+        )
         .unwrap();
         assert_eq!(pool.status().max_size, 4);
     }

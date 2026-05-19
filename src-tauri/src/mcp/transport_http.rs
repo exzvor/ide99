@@ -12,7 +12,8 @@
 //! tools/call. SSE can be added later if we need server-initiated
 //! notifications.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::module_name_repetitions,
     clippy::doc_markdown
 )]
@@ -54,14 +55,16 @@ fn extract_bearer(headers: &HeaderMap) -> Option<String> {
         .map(str::to_string)
 }
 
-async fn rpc_handler(    State(ctx): State<Arc<ServerContext>>,
+async fn rpc_handler(
+    State(ctx): State<Arc<ServerContext>>,
     headers: HeaderMap,
     Json(body): Json<Value>,
 ) -> impl IntoResponse {
     if !origin_allowed(&headers) {
-        return (            StatusCode::FORBIDDEN,
+        return (
+            StatusCode::FORBIDDEN,
             Json(serde_json::json!({"error": "origin"})),
-)
+        )
             .into_response();
     }
 
@@ -92,7 +95,8 @@ pub fn router(ctx: Arc<ServerContext>) -> Router {
 
 /// Run the HTTP server on the pre-bound listener until `shutdown` flips
 /// to `true`.
-pub async fn serve(    listener: tokio::net::TcpListener,
+pub async fn serve(
+    listener: tokio::net::TcpListener,
     ctx: Arc<ServerContext>,
     mut shutdown: tokio::sync::watch::Receiver<bool>,
 ) -> Result<(), McpError> {

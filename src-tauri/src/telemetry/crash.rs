@@ -13,7 +13,8 @@
 //! **Privacy**: paths are redacted in `build_report`; we never log the
 //! envelope body or DSN. Only host + status code at debug.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::doc_markdown
 )]
@@ -191,13 +192,15 @@ pub async fn post_envelope(endpoint: &str, report: &CrashReport) -> Result<(), T
     });
 
     let mut body = String::new();
-    body.push_str(        &serde_json::to_string(&envelope_header)
+    body.push_str(
+        &serde_json::to_string(&envelope_header)
             .map_err(|e| TelemetryError::Network(format!("envelope header: {e}")))?,
-);
+    );
     body.push('\n');
-    body.push_str(        &serde_json::to_string(&item_header)
+    body.push_str(
+        &serde_json::to_string(&item_header)
             .map_err(|e| TelemetryError::Network(format!("item header: {e}")))?,
-);
+    );
     body.push('\n');
     body.push_str(&item_payload.to_string());
 
@@ -209,9 +212,10 @@ pub async fn post_envelope(endpoint: &str, report: &CrashReport) -> Result<(), T
 
     let resp = client
         .post(endpoint)
-        .header(            reqwest::header::CONTENT_TYPE,
+        .header(
+            reqwest::header::CONTENT_TYPE,
             "application/x-sentry-envelope",
-)
+        )
         .body(body)
         .send()
         .await
@@ -219,13 +223,14 @@ pub async fn post_envelope(endpoint: &str, report: &CrashReport) -> Result<(), T
 
     let status = resp.status();
     tracing::debug!(        host = %host,
-        status = status.as_u16(),
-        "sentry envelope posted"
-);
+            status = status.as_u16(),
+            "sentry envelope posted"
+    );
     if !status.is_success() {
-        return Err(TelemetryError::Network(format!(            "non-success status: {}",
+        return Err(TelemetryError::Network(format!(
+            "non-success status: {}",
             status.as_u16()
-)));
+        )));
     }
     Ok(())
 }
@@ -262,10 +267,11 @@ mod tests {
 
     #[test]
     fn build_report_redacts_unix_home() {
-        let report = build_report(            "panic at /Users/alice/code/ide99/src/lib.rs:42",
+        let report = build_report(
+            "panic at /Users/alice/code/ide99/src/lib.rs:42",
             "stack frame /Users/alice/code/x.rs",
             "1.0.0",
-);
+        );
         assert!(!report.message.contains("alice"));
         assert!(report.message.contains("<home>/code"));
         assert!(!report.stack.contains("alice"));
@@ -290,9 +296,10 @@ mod tests {
         let mut s = opted_in();
         s.crash_reports_enabled = false;
         let report = build_report("x", "", "1.0.0");
-        assert!(matches!(            send(&s, report).await,
+        assert!(matches!(
+            send(&s, report).await,
             Err(TelemetryError::NotOptedIn)
-));
+        ));
     }
 
     /// when DSN env var is absent, `send` returns `Ok(())` silently
@@ -316,17 +323,19 @@ mod tests {
     #[test]
     fn derive_envelope_url_classic_dsn() {
         let dsn = "https://abc123@sentry.ide99.io/42";
-        assert_eq!(            derive_envelope_url(dsn),
+        assert_eq!(
+            derive_envelope_url(dsn),
             Some("https://sentry.ide99.io/api/42/envelope/".to_string())
-);
+        );
     }
 
     #[test]
     fn derive_envelope_url_explicit_url_passthrough() {
         let url = "https://sentry.ide99.io/api/42/envelope/";
-        assert_eq!(            derive_envelope_url(url),
+        assert_eq!(
+            derive_envelope_url(url),
             Some(url.trim_end_matches('/').to_string())
-);
+        );
     }
 
     #[test]

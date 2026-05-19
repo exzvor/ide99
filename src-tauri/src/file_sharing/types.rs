@@ -84,9 +84,10 @@ impl serde::Serialize for ShareError {
         use serde::ser::SerializeStruct;
         let (code, message) = match self {
             Self::InvalidFile(m) => ("invalid_file", m.clone()),
-            Self::UnsupportedVersion { got, max } => (                "unsupported_version",
+            Self::UnsupportedVersion { got, max } => (
+                "unsupported_version",
                 format!("got version {got}, max supported {max}"),
-),
+            ),
             Self::NotImplemented(m) => ("not_implemented", m.clone()),
             Self::Storage(m) => ("storage_error", m.clone()),
             Self::Io(m) => ("io_error", m.clone()),

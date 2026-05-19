@@ -22,7 +22,8 @@ use crate::mcp::server::{McpError, ServerContext};
 
 const DEFAULT_MAX_ROWS: u64 = 1000;
 
-pub async fn get_active_connection_tool(    ctx: &ServerContext,
+pub async fn get_active_connection_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     _args: Value,
 ) -> Result<Value, McpError> {
@@ -49,7 +50,8 @@ pub async fn get_active_connection_tool(    ctx: &ServerContext,
     }))
 }
 
-pub async fn get_current_query_tool(    ctx: &ServerContext,
+pub async fn get_current_query_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     _args: Value,
 ) -> Result<Value, McpError> {
@@ -57,7 +59,8 @@ pub async fn get_current_query_tool(    ctx: &ServerContext,
     Ok(json!({ "content": bridge.editor_content }))
 }
 
-pub async fn get_selected_text_tool(    ctx: &ServerContext,
+pub async fn get_selected_text_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     _args: Value,
 ) -> Result<Value, McpError> {
@@ -76,7 +79,8 @@ pub async fn get_selected_text_tool(    ctx: &ServerContext,
     Ok(json!({ "text": text }))
 }
 
-pub async fn get_last_result_tool(    ctx: &ServerContext,
+pub async fn get_last_result_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     args: Value,
 ) -> Result<Value, McpError> {
@@ -103,7 +107,8 @@ pub async fn get_last_result_tool(    ctx: &ServerContext,
     }))
 }
 
-pub async fn get_open_tabs_tool(    ctx: &ServerContext,
+pub async fn get_open_tabs_tool(
+    ctx: &ServerContext,
     _client: &AuthorizedClient,
     _args: Value,
 ) -> Result<Value, McpError> {

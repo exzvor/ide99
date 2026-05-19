@@ -59,8 +59,8 @@ pub fn pick_with_data_dir(data_dir: Option<&Path>) -> Box<dyn Keychain> {
         Ok(k) => Box::new(k),
         Err(err) => {
             tracing::warn!(                error = %err,
-                "OS keychain unavailable; falling back to in-memory backend"
-);
+                            "OS keychain unavailable; falling back to in-memory backend"
+            );
             Box::new(MemoryKeychain::new())
         }
     };
@@ -77,15 +77,15 @@ pub fn pick_with_data_dir(data_dir: Option<&Path>) -> Box<dyn Keychain> {
             match FsKeychain::open(&fs_path) {
                 Ok(fs) => {
                     tracing::info!(                        path = %fs_path.display(),
-                        "filesystem keychain fallback engaged (debug build / opt-in)"
-);
+                                            "filesystem keychain fallback engaged (debug build / opt-in)"
+                    );
                     Box::new(LayeredKeychain::new(primary, Box::new(fs)))
                 }
                 Err(e) => {
                     tracing::warn!(                        error = %e,
-                        path = %fs_path.display(),
-                        "FS keychain init failed; using primary backend only",
-);
+                                            path = %fs_path.display(),
+                                            "FS keychain init failed; using primary backend only",
+                    );
                     primary
                 }
             }

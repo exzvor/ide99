@@ -122,7 +122,8 @@ pub fn build_explain_sql(user_sql: &str, options: &ExplainOptions) -> String {
 /// Timeout split:
 /// - `EXPLAIN_TIMEOUT` (5s) for plain EXPLAIN — planner-only, should be fast.
 /// - `ANALYZE_TIMEOUT` (60s) for ANALYZE — actually executes the query.
-pub async fn run_explain(    pool: &Pool,
+pub async fn run_explain(
+    pool: &Pool,
     user_sql: &str,
     options: &ExplainOptions,
     on_pid: impl FnOnce(i32) + Send,
@@ -255,9 +256,10 @@ mod tests {
             timing: true,
         };
         let sql = build_explain_sql("SELECT 1", &opts);
-        assert_eq!(            sql,
+        assert_eq!(
+            sql,
             "EXPLAIN (FORMAT JSON, BUFFERS, SETTINGS, ANALYZE, WAL, TIMING, VERBOSE) SELECT 1"
-);
+        );
     }
 
     #[test]
@@ -272,9 +274,10 @@ mod tests {
             timing: true,
         };
         let sql = build_explain_sql("SELECT 1", &opts);
-        assert_eq!(            sql,
+        assert_eq!(
+            sql,
             "EXPLAIN (FORMAT JSON, BUFFERS, SETTINGS, VERBOSE) SELECT 1"
-);
+        );
     }
 
     #[test]

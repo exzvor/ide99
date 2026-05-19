@@ -4,7 +4,8 @@
 //! using two read-only queries bounded by a 2-second `statement_timeout`.
 //! Returns `None` on timeout or any other error so callers degrade gracefully.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::cast_sign_loss,
     clippy::cast_possible_truncation
@@ -30,7 +31,8 @@ pub const GIN_OVERHEAD_FACTOR: f64 = 0.3;
 ///
 /// Returns `None` on any error (timeout, connection problem, missing relation,
 /// etc.) so callers can hide the estimate section gracefully.
-pub async fn estimate(    client: &impl deadpool_postgres::GenericClient,
+pub async fn estimate(
+    client: &impl deadpool_postgres::GenericClient,
     schema: &str,
     table: &str,
     column: &str,

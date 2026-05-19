@@ -21,7 +21,8 @@ pub async fn settings_get(state: State<'_, AppState>) -> Result<AppSettings, Tel
 }
 
 #[tauri::command]
-pub async fn settings_set(    state: State<'_, AppState>,
+pub async fn settings_set(
+    state: State<'_, AppState>,
     settings: AppSettings,
 ) -> Result<AppSettings, TelemetryError> {
     state.settings_set(settings).await
@@ -41,7 +42,8 @@ pub async fn telemetry_known_events() -> Result<Vec<String>, TelemetryError> {
 }
 
 #[tauri::command]
-pub async fn telemetry_send_event(    state: State<'_, AppState>,
+pub async fn telemetry_send_event(
+    state: State<'_, AppState>,
     name: String,
     props: BTreeMap<String, String>,
 ) -> Result<(), TelemetryError> {
@@ -49,7 +51,8 @@ pub async fn telemetry_send_event(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn crash_report_build(    message: String,
+pub async fn crash_report_build(
+    message: String,
     stack: String,
     app_version: String,
 ) -> Result<CrashReport, TelemetryError> {
@@ -57,7 +60,8 @@ pub async fn crash_report_build(    message: String,
 }
 
 #[tauri::command]
-pub async fn crash_report_send(    state: State<'_, AppState>,
+pub async fn crash_report_send(
+    state: State<'_, AppState>,
     report: CrashReport,
 ) -> Result<(), TelemetryError> {
     state.crash_report_send(report).await
@@ -79,10 +83,11 @@ impl AppState {
         store::clear_all(store.conn())
     }
 
-    pub async fn telemetry_send_event(        &self,
+    pub async fn telemetry_send_event(
+        &self,
         name: &str,
         props: BTreeMap<String, String>,
-) -> Result<(), TelemetryError> {
+    ) -> Result<(), TelemetryError> {
         let settings = self.settings_get().await?;
         if !settings.telemetry_enabled {
             return Err(TelemetryError::NotOptedIn);

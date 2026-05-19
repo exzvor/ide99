@@ -6,7 +6,8 @@
 //!
 //! All functions here are pure (no I/O), which makes them trivially testable.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::cast_precision_loss,
     clippy::too_many_lines
@@ -194,9 +195,10 @@ pub fn derive(hits: &[MinedHit]) -> Vec<RankedSuggestion> {
 /// for expression indexes), truncated to 63 characters (PG identifier limit).
 #[must_use]
 pub fn make_index_name(table: &str, column: &str, key: Option<&str>) -> String {
-    let raw = key.map_or_else(        || format!("idx_{table}_{column}_gin"),
+    let raw = key.map_or_else(
+        || format!("idx_{table}_{column}_gin"),
         |k| format!("idx_{table}_{column}_{k}"),
-);
+    );
     if raw.len() > 63 {
         raw[..63].to_string()
     } else {
@@ -208,7 +210,8 @@ pub fn make_index_name(table: &str, column: &str, key: Option<&str>) -> String {
 ///
 /// Uses [`quote_qualified`] / [`quote_ident`] for identifier safety.
 #[must_use]
-pub fn make_recommended_sql(    schema: &str,
+pub fn make_recommended_sql(
+    schema: &str,
     table: &str,
     column: &str,
     op_class: &OpClass,
@@ -223,8 +226,9 @@ pub fn make_recommended_sql(    schema: &str,
             format!("CREATE INDEX CONCURRENTLY {idx_q} ON {fqt} USING GIN ({col_q} jsonb_ops);")
         }
         OpClass::JsonbPathOps => {
-            format!(                "CREATE INDEX CONCURRENTLY {idx_q} ON {fqt} USING GIN ({col_q} jsonb_path_ops);"
-)
+            format!(
+                "CREATE INDEX CONCURRENTLY {idx_q} ON {fqt} USING GIN ({col_q} jsonb_path_ops);"
+            )
         }
         OpClass::Expression { expr } => {
             format!("CREATE INDEX CONCURRENTLY {idx_q} ON {fqt} USING GIN ({expr});")
@@ -279,10 +283,11 @@ mod tests {
         ];
         let sug = derive(&hits);
         assert_eq!(sug.len(), 1);
-        assert!(            matches!(sug[0].op_class, OpClass::JsonbOps),
+        assert!(
+            matches!(sug[0].op_class, OpClass::JsonbOps),
             "{:?}",
             sug[0].op_class
-);
+        );
     }
 
     #[test]
@@ -321,12 +326,13 @@ mod tests {
 
     #[test]
     fn text_extract_single_key_gives_expression_suggestion() {
-        let hits = vec![hit(            "profile",
+        let hits = vec![hit(
+            "profile",
             MinedOp::TextExtract,
             Some("email"),
             200,
             5.0,
-)];
+        )];
         let sug = derive(&hits);
         let expr: Vec<_> = sug
             .iter()
@@ -351,25 +357,28 @@ mod tests {
             .iter()
             .filter(|s| matches!(s.op_class, OpClass::Expression { .. }))
             .count();
-        assert!(            expr_count <= 3,
+        assert!(
+            expr_count <= 3,
             "expected at most 3 expression suggestions, got {expr_count}"
-);
+        );
     }
 
     // ── index name helpers ────────────────────────────────────────────────────
 
     #[test]
     fn make_index_name_basic() {
-        assert_eq!(            make_index_name("events", "data", None),
+        assert_eq!(
+            make_index_name("events", "data", None),
             "idx_events_data_gin"
-);
+        );
     }
 
     #[test]
     fn make_index_name_with_key() {
-        assert_eq!(            make_index_name("profile", "profile", Some("email")),
+        assert_eq!(
+            make_index_name("profile", "profile", Some("email")),
             "idx_profile_profile_email"
-);
+        );
     }
 
     #[test]
@@ -383,12 +392,13 @@ mod tests {
 
     #[test]
     fn recommended_sql_jsonb_ops() {
-        let sql = make_recommended_sql(            "public",
+        let sql = make_recommended_sql(
+            "public",
             "events",
             "data",
             &OpClass::JsonbOps,
             "idx_events_data_gin",
-);
+        );
         assert!(sql.contains("USING GIN"), "sql: {sql}");
         assert!(sql.contains("jsonb_ops"), "sql: {sql}");
         assert!(sql.contains("CONCURRENTLY"), "sql: {sql}");
@@ -396,25 +406,27 @@ mod tests {
 
     #[test]
     fn recommended_sql_jsonb_path_ops() {
-        let sql = make_recommended_sql(            "public",
+        let sql = make_recommended_sql(
+            "public",
             "events",
             "data",
             &OpClass::JsonbPathOps,
             "idx_events_data_gin",
-);
+        );
         assert!(sql.contains("jsonb_path_ops"), "sql: {sql}");
     }
 
     #[test]
     fn recommended_sql_expression() {
-        let sql = make_recommended_sql(            "public",
+        let sql = make_recommended_sql(
+            "public",
             "profile",
             "profile",
             &OpClass::Expression {
                 expr: "(profile->>'email')".into(),
             },
             "idx_profile_profile_email",
-);
+        );
         assert!(sql.contains("profile->>'email'"), "sql: {sql}");
         assert!(sql.contains("USING GIN"), "sql: {sql}");
     }

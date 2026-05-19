@@ -17,7 +17,8 @@ use super::types::{InferenceError, TableStats};
 /// # Errors
 ///
 /// Returns `Err(InferenceError::Postgres { .. })` if the database query fails.
-pub async fn fetch_table_stats(    pool: &Pool,
+pub async fn fetch_table_stats(
+    pool: &Pool,
     schema: &str,
     table: &str,
 ) -> Result<Option<TableStats>, InferenceError> {
@@ -25,10 +26,11 @@ pub async fn fetch_table_stats(    pool: &Pool,
         message: e.to_string(),
     })?;
     let row_opt = client
-        .query_opt(            "SELECT n_tup_ins, n_tup_upd, n_tup_del, n_live_tup \
+        .query_opt(
+            "SELECT n_tup_ins, n_tup_upd, n_tup_del, n_live_tup \
              FROM pg_stat_user_tables WHERE schemaname = $1 AND relname = $2",
             &[&schema, &table],
-)
+        )
         .await
         .map_err(|e| InferenceError::Postgres {
             message: e.to_string(),

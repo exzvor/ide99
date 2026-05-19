@@ -5,7 +5,8 @@
 //! Errors propagate as `IntrospectError`, which the Tauri command layer
 //! serializes for the frontend.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::similar_names,
     clippy::too_many_lines
@@ -84,7 +85,8 @@ fn contype_to_kind(c: &str) -> &'static str {
 /// Resolve `attnum` → column name for a list of attnums on a single relation.
 /// Returns names in the order requested. Missing attnums are silently skipped
 /// (this only happens if the catalog is in an unexpected state).
-async fn resolve_attnames(    client: &deadpool_postgres::Client,
+async fn resolve_attnames(
+    client: &deadpool_postgres::Client,
     relid: Oid,
     attnums: &[i16],
 ) -> Result<Vec<String>, IntrospectError> {
@@ -102,7 +104,8 @@ async fn resolve_attnames(    client: &deadpool_postgres::Client,
     Ok(attnums.iter().filter_map(|n| map.get(n).cloned()).collect())
 }
 
-pub async fn get_table_definition(    pool: &Pool,
+pub async fn get_table_definition(
+    pool: &Pool,
     schema: &str,
     name: &str,
 ) -> Result<TableDefinition, IntrospectError> {
@@ -191,10 +194,11 @@ pub async fn get_table_definition(    pool: &Pool,
                 Some(v) if !v.is_empty() => resolve_attnames(&client, confrelid, v).await?,
                 _ => Vec::new(),
             };
-            (                r.get::<_, Option<String>>("ref_schema"),
+            (
+                r.get::<_, Option<String>>("ref_schema"),
                 r.get::<_, Option<String>>("ref_table"),
                 names,
-)
+            )
         };
         let definition: String = r.get("definition");
         // For CHECK constraints, the body inside parens is the expression. We
@@ -241,7 +245,8 @@ pub async fn get_table_definition(    pool: &Pool,
     })
 }
 
-pub async fn get_view_definition(    pool: &Pool,
+pub async fn get_view_definition(
+    pool: &Pool,
     schema: &str,
     name: &str,
 ) -> Result<ViewDefinition, IntrospectError> {
@@ -262,7 +267,8 @@ pub async fn get_view_definition(    pool: &Pool,
     })
 }
 
-pub async fn get_matview_definition(    pool: &Pool,
+pub async fn get_matview_definition(
+    pool: &Pool,
     schema: &str,
     name: &str,
 ) -> Result<MatviewDefinition, IntrospectError> {
@@ -284,7 +290,8 @@ pub async fn get_matview_definition(    pool: &Pool,
     })
 }
 
-pub async fn get_index_definition(    pool: &Pool,
+pub async fn get_index_definition(
+    pool: &Pool,
     schema: &str,
     name: &str,
 ) -> Result<IndexDefinition, IntrospectError> {
@@ -340,7 +347,8 @@ pub async fn get_index_definition(    pool: &Pool,
     })
 }
 
-pub async fn get_sequence_definition(    pool: &Pool,
+pub async fn get_sequence_definition(
+    pool: &Pool,
     schema: &str,
     name: &str,
 ) -> Result<SequenceDefinition, IntrospectError> {
@@ -376,7 +384,8 @@ pub async fn get_sequence_definition(    pool: &Pool,
     })
 }
 
-pub async fn list_matviews(    pool: &Pool,
+pub async fn list_matviews(
+    pool: &Pool,
     schema: &str,
 ) -> Result<Vec<MatviewSummary>, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
@@ -394,7 +403,8 @@ pub async fn list_matviews(    pool: &Pool,
         .collect())
 }
 
-pub async fn list_sequences(    pool: &Pool,
+pub async fn list_sequences(
+    pool: &Pool,
     schema: &str,
 ) -> Result<Vec<SequenceSummary>, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
@@ -521,7 +531,8 @@ fn split_default_exprs(s: &str) -> Vec<String> {
 /// Combines `proargnames`/`proargmodes`/`proallargtypes` (or `proargtypes`
 /// fallback) so OUT/INOUT/VARIADIC modes round-trip. Defaults apply to the
 /// LAST `pronargdefaults` IN/INOUT/VARIADIC parameters per PG semantics.
-async fn fetch_function_params(    client: &deadpool_postgres::Client,
+async fn fetch_function_params(
+    client: &deadpool_postgres::Client,
     oid: Oid,
 ) -> Result<Vec<FunctionParameter>, IntrospectError> {
     let row = client
@@ -586,7 +597,8 @@ async fn fetch_function_params(    client: &deadpool_postgres::Client,
     Ok(params)
 }
 
-pub async fn get_function_definition(    pool: &Pool,
+pub async fn get_function_definition(
+    pool: &Pool,
     schema: &str,
     name: &str,
     args: &str,
@@ -640,7 +652,8 @@ pub async fn get_function_definition(    pool: &Pool,
     })
 }
 
-pub async fn get_procedure_definition(    pool: &Pool,
+pub async fn get_procedure_definition(
+    pool: &Pool,
     schema: &str,
     name: &str,
     args: &str,
@@ -671,7 +684,8 @@ pub async fn get_procedure_definition(    pool: &Pool,
     })
 }
 
-pub async fn get_trigger_definition(    pool: &Pool,
+pub async fn get_trigger_definition(
+    pool: &Pool,
     schema: &str,
     table: &str,
     name: &str,
@@ -724,7 +738,8 @@ pub async fn get_trigger_definition(    pool: &Pool,
     })
 }
 
-pub async fn list_functions(    pool: &Pool,
+pub async fn list_functions(
+    pool: &Pool,
     schema: &str,
     trigger_only: bool,
 ) -> Result<Vec<FunctionSummary>, IntrospectError> {
@@ -753,7 +768,8 @@ pub async fn list_functions(    pool: &Pool,
         .collect())
 }
 
-pub async fn list_procedures(    pool: &Pool,
+pub async fn list_procedures(
+    pool: &Pool,
     schema: &str,
 ) -> Result<Vec<ProcedureSummary>, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
@@ -770,7 +786,8 @@ pub async fn list_procedures(    pool: &Pool,
         .collect())
 }
 
-pub async fn list_triggers(    pool: &Pool,
+pub async fn list_triggers(
+    pool: &Pool,
     schema: &str,
     table: Option<&str>,
 ) -> Result<Vec<TriggerSummary>, IntrospectError> {
@@ -805,7 +822,8 @@ use super::types::{
     SubscriptionDefinition, UserMapping,
 };
 
-pub async fn get_fdw_server_definition(    pool: &Pool,
+pub async fn get_fdw_server_definition(
+    pool: &Pool,
     server_name: &str,
 ) -> Result<FdwServerDefinition, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
@@ -858,7 +876,8 @@ fn parse_kv_options(raw: &[String]) -> Vec<KvOption> {
         .collect()
 }
 
-pub async fn get_publication_definition(    pool: &Pool,
+pub async fn get_publication_definition(
+    pool: &Pool,
     pub_name: &str,
 ) -> Result<PublicationDefinition, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
@@ -900,7 +919,8 @@ pub async fn get_publication_definition(    pool: &Pool,
     })
 }
 
-pub async fn get_subscription_definition(    pool: &Pool,
+pub async fn get_subscription_definition(
+    pool: &Pool,
     sub_name: &str,
 ) -> Result<SubscriptionDefinition, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
@@ -914,8 +934,9 @@ pub async fn get_subscription_definition(    pool: &Pool,
         Err(e) => {
             let msg = e.to_string();
             if msg.contains("permission denied") {
-                return Err(IntrospectError::PermissionDenied(                    "pg_subscription requires superuser privileges".to_string(),
-));
+                return Err(IntrospectError::PermissionDenied(
+                    "pg_subscription requires superuser privileges".to_string(),
+                ));
             }
             return Err(IntrospectError::Postgres(msg));
         }
@@ -937,7 +958,8 @@ pub async fn get_subscription_definition(    pool: &Pool,
     })
 }
 
-pub async fn get_role_definition(    pool: &Pool,
+pub async fn get_role_definition(
+    pool: &Pool,
     role_name: &str,
 ) -> Result<RoleDefinition, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
@@ -971,7 +993,8 @@ pub async fn get_role_definition(    pool: &Pool,
     })
 }
 
-pub async fn get_custom_type_definition(    pool: &Pool,
+pub async fn get_custom_type_definition(
+    pool: &Pool,
     schema: &str,
     name: &str,
 ) -> Result<CustomTypeDefinition, IntrospectError> {
@@ -1077,8 +1100,9 @@ pub async fn get_custom_type_definition(    pool: &Pool,
                 comment,
             }))
         }
-        other => Err(IntrospectError::Internal(format!(            "unsupported typtype '{other}' for {schema}.{name}"
-))),
+        other => Err(IntrospectError::Internal(format!(
+            "unsupported typtype '{other}' for {schema}.{name}"
+        ))),
     }
 }
 

@@ -116,7 +116,8 @@ pub struct SeedRow {
 /// Test-friendly variant: connect to an already-running PG and run the
 /// dry-run sequence. The wrapping `migrations_dryrun` (Tauri command body)
 /// handles container spinup + cleanup. Tests inject their own container.
-pub async fn run_dryrun_against(    host: String,
+pub async fn run_dryrun_against(
+    host: String,
     port: u16,
     tracking_enabled: bool,
     seed: Vec<SeedRow>,
@@ -177,7 +178,8 @@ pub async fn run_dryrun_against(    host: String,
                         (version, name, checksum, applied_at, applied_by, duration_ms) \
                         VALUES ($1, $2, $3, $4, $5, $6)";
             if let Err(e) = client
-                .execute(                    stmt,
+                .execute(
+                    stmt,
                     &[
                         &row.version,
                         &row.name,
@@ -186,7 +188,7 @@ pub async fn run_dryrun_against(    host: String,
                         &row.applied_by,
                         &duration_i32,
                     ],
-)
+                )
                 .await
             {
                 return DryRunReport {
@@ -232,23 +234,25 @@ pub async fn run_dryrun_against(    host: String,
                     duration_ms: 0,
                     error: Some(failure.error.clone()),
                 });
-                (                    steps,
+                (
+                    steps,
                     Some(DryRunError::MigrationFailed {
                         version: failure.version,
                         error: failure.error,
                     }),
                     false,
-)
+                )
             } else {
                 (steps, None, true)
             }
         }
-        Err(e) => (            Vec::new(),
+        Err(e) => (
+            Vec::new(),
             Some(DryRunError::Internal {
                 error: e.to_string(),
             }),
             false,
-),
+        ),
     };
 
     // Step 7: aggregate Squawk findings (per design §5.1.7 — visibility into
@@ -276,7 +280,8 @@ pub async fn run_dryrun_against(    host: String,
 /// so the testcontainer is dropped immediately instead of waiting for the
 /// natural end of the run (which can be minutes for image pulls).
 #[tauri::command]
-pub async fn migrations_dryrun_cancel(    state: State<'_, AppState>,
+pub async fn migrations_dryrun_cancel(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<(), MigrationsError> {
     let mut map = state.dryrun_cancellers.write().await;
@@ -289,7 +294,8 @@ pub async fn migrations_dryrun_cancel(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn migrations_dryrun(    app: AppHandle,
+pub async fn migrations_dryrun(
+    app: AppHandle,
     state: State<'_, AppState>,
     conn_id: String,
     mode: ApplyMode,
@@ -332,26 +338,28 @@ pub async fn migrations_dryrun(    app: AppHandle,
         }
     }
 
-    let _ = app.emit(        "migrations:dryrun-progress",
+    let _ = app.emit(
+        "migrations:dryrun-progress",
         &json!({"connId": conn_id, "phase": "pulling"}),
-);
+    );
 
     // Step 2: pre-check Docker (raceable with cancel).
     let docker_check = tokio::select! {
-        biased;
-        _ = &mut cancel_rx => {
-            let _ = app.emit(                "migrations:dryrun-progress",
-                &json!({"connId": conn_id, "phase": "failed"}),
-);
-            unregister(&state, &conn_id).await;
-            return Ok(cancelled_report());
-        }
-        r = check_docker_availability() => r,
-    };
+            biased;
+            _ = &mut cancel_rx => {
+                let _ = app.emit(                "migrations:dryrun-progress",
+                    &json!({"connId": conn_id, "phase": "failed"}),
+    );
+                unregister(&state, &conn_id).await;
+                return Ok(cancelled_report());
+            }
+            r = check_docker_availability() => r,
+        };
     if let Err(e) = docker_check {
-        let _ = app.emit(            "migrations:dryrun-progress",
+        let _ = app.emit(
+            "migrations:dryrun-progress",
             &json!({"connId": conn_id, "phase": "failed"}),
-);
+        );
         unregister(&state, &conn_id).await;
         return Ok(DryRunReport {
             success: false,
@@ -423,49 +431,51 @@ pub async fn migrations_dryrun(    app: AppHandle,
 
     // Step 3: pull + start container
     let pull_start = Instant::now();
-    let _ = app.emit(        "migrations:dryrun-progress",
+    let _ = app.emit(
+        "migrations:dryrun-progress",
         &json!({"connId": conn_id, "phase": "starting"}),
-);
+    );
     let container = tokio::select! {
-        biased;
-        _ = &mut cancel_rx => {
-            let _ = app.emit(                "migrations:dryrun-progress",
-                &json!({"connId": conn_id, "phase": "failed"}),
-);
-            unregister(&state, &conn_id).await;
-            return Ok(cancelled_report());
-        }
-        r = Postgres::default().with_tag("17-alpine").start() => match r {
-            Ok(c) => c,
-            Err(e) => {
-                let _ = app.emit(                    "migrations:dryrun-progress",
+            biased;
+            _ = &mut cancel_rx => {
+                let _ = app.emit(                "migrations:dryrun-progress",
                     &json!({"connId": conn_id, "phase": "failed"}),
-);
+    );
                 unregister(&state, &conn_id).await;
-                return Ok(DryRunReport {
-                    success: false,
-                    container_pull_ms: i64::try_from(pull_start.elapsed().as_millis())
-                        .unwrap_or(i64::MAX),
-                    container_start_ms: 0,
-                    steps: Vec::new(),
-                    total_ms: i64::try_from(pull_start.elapsed().as_millis()).unwrap_or(i64::MAX),
-                    findings: Vec::new(),
-                    error: Some(DryRunError::ImagePullFailed {
-                        error: e.to_string(),
-                    }),
-                });
+                return Ok(cancelled_report());
             }
-        },
-    };
+            r = Postgres::default().with_tag("17-alpine").start() => match r {
+                Ok(c) => c,
+                Err(e) => {
+                    let _ = app.emit(                    "migrations:dryrun-progress",
+                        &json!({"connId": conn_id, "phase": "failed"}),
+    );
+                    unregister(&state, &conn_id).await;
+                    return Ok(DryRunReport {
+                        success: false,
+                        container_pull_ms: i64::try_from(pull_start.elapsed().as_millis())
+                            .unwrap_or(i64::MAX),
+                        container_start_ms: 0,
+                        steps: Vec::new(),
+                        total_ms: i64::try_from(pull_start.elapsed().as_millis()).unwrap_or(i64::MAX),
+                        findings: Vec::new(),
+                        error: Some(DryRunError::ImagePullFailed {
+                            error: e.to_string(),
+                        }),
+                    });
+                }
+            },
+        };
     let container_pull_ms = i64::try_from(pull_start.elapsed().as_millis()).unwrap_or(i64::MAX);
 
     let start_start = Instant::now();
     let host = match container.get_host().await {
         Ok(h) => h.to_string(),
         Err(e) => {
-            let _ = app.emit(                "migrations:dryrun-progress",
+            let _ = app.emit(
+                "migrations:dryrun-progress",
                 &json!({"connId": conn_id, "phase": "failed"}),
-);
+            );
             unregister(&state, &conn_id).await;
             return Ok(DryRunReport {
                 success: false,
@@ -483,9 +493,10 @@ pub async fn migrations_dryrun(    app: AppHandle,
     let port = match container.get_host_port_ipv4(5432).await {
         Ok(p) => p,
         Err(e) => {
-            let _ = app.emit(                "migrations:dryrun-progress",
+            let _ = app.emit(
+                "migrations:dryrun-progress",
                 &json!({"connId": conn_id, "phase": "failed"}),
-);
+            );
             unregister(&state, &conn_id).await;
             return Ok(DryRunReport {
                 success: false,
@@ -506,43 +517,47 @@ pub async fn migrations_dryrun(    app: AppHandle,
     // populate the ephemeral ledger. Skipped (silent) when tracking is off
     // since `run_dryrun_against` won't INSERT anything in that case.
     if connection.migration_tracking_enabled {
-        let _ = app.emit(            "migrations:dryrun-progress",
+        let _ = app.emit(
+            "migrations:dryrun-progress",
             &json!({"connId": conn_id, "phase": "seeding"}),
-);
+        );
     }
 
     // Steps 5-7: seed + run + lint (raceable with cancel).
-    let _ = app.emit(        "migrations:dryrun-progress",
+    let _ = app.emit(
+        "migrations:dryrun-progress",
         &json!({"connId": conn_id, "phase": "running"}),
-);
-    let run_fut = run_dryrun_against(        host,
+    );
+    let run_fut = run_dryrun_against(
+        host,
         port,
         connection.migration_tracking_enabled,
         seed,
         &migrations,
         mode,
-);
+    );
     let mut report = tokio::select! {
-        biased;
-        _ = &mut cancel_rx => {
-            let _ = app.emit(                "migrations:dryrun-progress",
-                &json!({"connId": conn_id, "phase": "failed"}),
-);
-            unregister(&state, &conn_id).await;
-            // Container handle goes out of scope here → testcontainers Drop
-            // tears it down within ~1s (Bollard removes the container).
-            drop(container);
-            return Ok(cancelled_report());
-        }
-        r = run_fut => r,
-    };
+            biased;
+            _ = &mut cancel_rx => {
+                let _ = app.emit(                "migrations:dryrun-progress",
+                    &json!({"connId": conn_id, "phase": "failed"}),
+    );
+                unregister(&state, &conn_id).await;
+                // Container handle goes out of scope here → testcontainers Drop
+                // tears it down within ~1s (Bollard removes the container).
+                drop(container);
+                return Ok(cancelled_report());
+            }
+            r = run_fut => r,
+        };
     report.container_pull_ms = container_pull_ms;
     report.container_start_ms = container_start_ms;
 
     let final_phase = if report.success { "done" } else { "failed" };
-    let _ = app.emit(        "migrations:dryrun-progress",
+    let _ = app.emit(
+        "migrations:dryrun-progress",
         &json!({"connId": conn_id, "phase": final_phase}),
-);
+    );
 
     drop(container); // explicit cleanup; testcontainers Drop handles it
     unregister(&state, &conn_id).await;
@@ -602,13 +617,14 @@ mod tests {
             make_migration(&dir, "0003", "c", "CREATE TABLE c (id serial PRIMARY KEY);"),
         ];
 
-        let report = run_dryrun_against(            host,
+        let report = run_dryrun_against(
+            host,
             port,
             /*tracking_enabled*/ true,
             /*seed_rows*/ Vec::new(),
             &migrations,
             ApplyMode::AllPending,
-)
+        )
         .await;
 
         assert!(report.success, "report: {report:?}");
@@ -632,13 +648,14 @@ mod tests {
             make_migration(&dir, "0003", "c", "CREATE TABLE c (id serial PRIMARY KEY);"),
         ];
 
-        let report = run_dryrun_against(            host,
+        let report = run_dryrun_against(
+            host,
             port,
             true,
             Vec::new(),
             &migrations,
             ApplyMode::AllPending,
-)
+        )
         .await;
 
         assert!(!report.success);
@@ -673,7 +690,8 @@ mod tests {
         }];
 
         // Apply only 0002; 0001 is already in the ledger so it's skipped.
-        let report = run_dryrun_against(            host,
+        let report = run_dryrun_against(
+            host,
             port,
             true,
             seed,
@@ -681,7 +699,7 @@ mod tests {
             ApplyMode::Single {
                 version: "0002".into(),
             },
-)
+        )
         .await;
 
         assert!(report.success, "report: {report:?}");

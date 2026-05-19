@@ -41,7 +41,8 @@ const MAX_ROWS: usize = 1000;
 // ---------------------------------------------------------------------------
 
 #[tauri::command]
-pub async fn query_execute(    state: State<'_, AppState>,
+pub async fn query_execute(
+    state: State<'_, AppState>,
     conn_id: String,
     sql: String,
 ) -> Result<QueryResult, QueryError> {
@@ -68,14 +69,16 @@ pub async fn tabs_delete(state: State<'_, AppState>, id: String) -> Result<(), Q
 // ---------------------------------------------------------------------------
 
 #[tauri::command]
-pub async fn history_search(    state: State<'_, AppState>,
+pub async fn history_search(
+    state: State<'_, AppState>,
     filter: crate::query::types::HistorySearchFilter,
 ) -> Result<crate::query::types::HistorySearchResult, QueryError> {
     state.history_search(&filter).await
 }
 
 #[tauri::command]
-pub async fn history_set_pinned(    state: State<'_, AppState>,
+pub async fn history_set_pinned(
+    state: State<'_, AppState>,
     id: String,
     pinned: bool,
 ) -> Result<(), QueryError> {
@@ -83,7 +86,8 @@ pub async fn history_set_pinned(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn history_set_tag(    state: State<'_, AppState>,
+pub async fn history_set_tag(
+    state: State<'_, AppState>,
     id: String,
     tag: Option<String>,
 ) -> Result<(), QueryError> {
@@ -91,7 +95,8 @@ pub async fn history_set_tag(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn history_set_comment(    state: State<'_, AppState>,
+pub async fn history_set_comment(
+    state: State<'_, AppState>,
     id: String,
     comment: Option<String>,
 ) -> Result<(), QueryError> {
@@ -104,14 +109,16 @@ pub async fn history_delete(state: State<'_, AppState>, id: String) -> Result<()
 }
 
 #[tauri::command]
-pub async fn history_clear_for_connection(    state: State<'_, AppState>,
+pub async fn history_clear_for_connection(
+    state: State<'_, AppState>,
     connection_id: String,
 ) -> Result<u64, QueryError> {
     state.history_clear_for_connection(&connection_id).await
 }
 
 #[tauri::command]
-pub async fn history_export(    state: State<'_, AppState>,
+pub async fn history_export(
+    state: State<'_, AppState>,
     filter: crate::query::types::HistorySearchFilter,
     path: String,
 ) -> Result<crate::query::types::HistoryExportResult, QueryError> {
@@ -119,7 +126,8 @@ pub async fn history_export(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn query_open_cursor(    state: State<'_, AppState>,
+pub async fn query_open_cursor(
+    state: State<'_, AppState>,
     conn_id: String,
     sql: String,
 ) -> Result<OpenCursorResult, QueryError> {
@@ -127,23 +135,26 @@ pub async fn query_open_cursor(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn query_run_batch(    state: State<'_, AppState>,
+pub async fn query_run_batch(
+    state: State<'_, AppState>,
     conn_id: String,
     statements: Vec<String>,
     cursor_for_last: bool,
 ) -> Result<crate::query::types::BatchResult, QueryError> {
-    crate::query::batch::run_batch(        &state,
+    crate::query::batch::run_batch(
+        &state,
         crate::query::types::BatchInput {
             conn_id,
             statements,
             cursor_for_last,
         },
-)
+    )
     .await
 }
 
 #[tauri::command]
-pub async fn query_explain_cost(    state: State<'_, AppState>,
+pub async fn query_explain_cost(
+    state: State<'_, AppState>,
     conn_id: String,
     sql: String,
 ) -> Result<f64, ConnectionError> {
@@ -161,7 +172,8 @@ pub async fn query_explain_cost(    state: State<'_, AppState>,
 /// track in-flight pid in `state.explain_in_flight` so that
 /// `query_explain_cancel` can target it.
 #[tauri::command]
-pub async fn query_explain(    state: State<'_, AppState>,
+pub async fn query_explain(
+    state: State<'_, AppState>,
     conn_id: String,
     tab_id: String,
     sql: String,
@@ -194,7 +206,8 @@ pub async fn query_explain(    state: State<'_, AppState>,
 /// — cancel an in-flight EXPLAIN by tab id. No-op when the tab is
 /// already finished (no entry in `explain_in_flight`).
 #[tauri::command]
-pub async fn query_explain_cancel(    state: State<'_, AppState>,
+pub async fn query_explain_cancel(
+    state: State<'_, AppState>,
     conn_id: String,
     tab_id: String,
 ) -> Result<(), ConnectionError> {
@@ -218,7 +231,8 @@ pub async fn query_explain_cancel(    state: State<'_, AppState>,
 /// string so the frontend's fire-and-forget caller treats the no-op the same
 /// way it treats a successful save.
 #[tauri::command]
-pub async fn recent_plans_save(    state: State<'_, AppState>,
+pub async fn recent_plans_save(
+    state: State<'_, AppState>,
     new: crate::query::types::NewRecentPlan,
 ) -> Result<String, QueryError> {
     let exclude = {
@@ -238,7 +252,8 @@ pub async fn recent_plans_save(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn recent_plans_search(    state: State<'_, AppState>,
+pub async fn recent_plans_search(
+    state: State<'_, AppState>,
     filter: crate::query::types::RecentPlansFilter,
 ) -> Result<crate::query::types::RecentPlansSearchResult, QueryError> {
     let store = state.store.lock().await;
@@ -250,7 +265,8 @@ pub async fn recent_plans_search(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn recent_plans_get(    state: State<'_, AppState>,
+pub async fn recent_plans_get(
+    state: State<'_, AppState>,
     id: String,
 ) -> Result<Option<crate::query::types::RecentPlanRow>, QueryError> {
     let store = state.store.lock().await;
@@ -260,7 +276,8 @@ pub async fn recent_plans_get(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn recent_plans_set_pinned(    state: State<'_, AppState>,
+pub async fn recent_plans_set_pinned(
+    state: State<'_, AppState>,
     id: String,
     pinned: bool,
 ) -> Result<(), QueryError> {
@@ -281,7 +298,8 @@ pub async fn recent_plans_delete(state: State<'_, AppState>, id: String) -> Resu
 }
 
 #[tauri::command]
-pub async fn recent_plans_clear_for_connection(    state: State<'_, AppState>,
+pub async fn recent_plans_clear_for_connection(
+    state: State<'_, AppState>,
     connection_id: String,
 ) -> Result<u64, QueryError> {
     let store = state.store.lock().await;
@@ -293,7 +311,8 @@ pub async fn recent_plans_clear_for_connection(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn query_fetch_page(    state: State<'_, AppState>,
+pub async fn query_fetch_page(
+    state: State<'_, AppState>,
     cursor_id: String,
     limit: u32,
 ) -> Result<FetchPage, QueryError> {
@@ -301,7 +320,8 @@ pub async fn query_fetch_page(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn query_close_cursor(    state: State<'_, AppState>,
+pub async fn query_close_cursor(
+    state: State<'_, AppState>,
     cursor_id: String,
 ) -> Result<(), QueryError> {
     state.query_close_cursor(&cursor_id).await
@@ -325,7 +345,8 @@ pub async fn query_cancel(state: State<'_, AppState>, cursor_id: String) -> Resu
 /// case (frontend falls back to the read-only banner with copy-template).
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)] // tauri command invariants
-pub async fn jsonb_resolve_row_key(    state: State<'_, AppState>,
+pub async fn jsonb_resolve_row_key(
+    state: State<'_, AppState>,
     conn_id: String,
     cursor_id: String,
     row_idx: u32,
@@ -365,12 +386,13 @@ pub async fn jsonb_resolve_row_key(    state: State<'_, AppState>,
             });
         };
 
-    crate::query::jsonb::resolve_row_key(        &pool,
+    crate::query::jsonb::resolve_row_key(
+        &pool,
         &column_sources,
         &column_names,
         &row_values,
         ctid_value.as_deref(),
-)
+    )
     .await
 }
 
@@ -379,7 +401,8 @@ pub async fn jsonb_resolve_row_key(    state: State<'_, AppState>,
 /// token) inside `crate::query::jsonb::apply`.
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)] // tauri command invariants
-pub async fn jsonb_save(    state: State<'_, AppState>,
+pub async fn jsonb_save(
+    state: State<'_, AppState>,
     ctx: crate::query::types::JsonbWriteContext,
 ) -> Result<crate::query::types::JsonbSaveResult, QueryError> {
     let pool = require_pool(&state, &ctx.conn_id).await?;
@@ -416,7 +439,8 @@ pub async fn jsonb_save(    state: State<'_, AppState>,
 /// `jsonb-inference-failed` on error.
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)] // tauri command invariants
-pub async fn jsonb_inference_request(    state: State<'_, AppState>,
+pub async fn jsonb_inference_request(
+    state: State<'_, AppState>,
     app: tauri::AppHandle,
     conn_id: String,
     schema: String,
@@ -436,13 +460,14 @@ pub async fn jsonb_inference_request(    state: State<'_, AppState>,
         table,
         column,
     };
-    crate::query::jsonb::inference::request_schema(        state.inference_state.clone(),
+    crate::query::jsonb::inference::request_schema(
+        state.inference_state.clone(),
         app,
         pool,
         state.store.clone(),
         conn_id,
         fqn,
-)
+    )
     .await
 }
 
@@ -451,7 +476,8 @@ pub async fn jsonb_inference_request(    state: State<'_, AppState>,
 /// `jsonb-inference-updated` (or `-failed`) when finished.
 #[tauri::command]
 #[allow(clippy::needless_pass_by_value)] // tauri command invariants
-pub async fn jsonb_inference_invalidate(    state: State<'_, AppState>,
+pub async fn jsonb_inference_invalidate(
+    state: State<'_, AppState>,
     app: tauri::AppHandle,
     conn_id: String,
     schema: String,
@@ -468,13 +494,14 @@ pub async fn jsonb_inference_invalidate(    state: State<'_, AppState>,
         table,
         column,
     };
-    crate::query::jsonb::inference::invalidate(        state.inference_state.clone(),
+    crate::query::jsonb::inference::invalidate(
+        state.inference_state.clone(),
         app,
         pool,
         state.store.clone(),
         conn_id,
         fqn,
-)
+    )
     .await
 }
 
@@ -507,10 +534,11 @@ impl AppState {
 
     /// Original body of `query_execute`. Kept private so the public outer
     /// can wrap it with history recording without reshuffling logic.
-    async fn _query_execute_inner(        &self,
+    async fn _query_execute_inner(
+        &self,
         conn_id: &str,
         sql: &str,
-) -> Result<QueryResult, QueryError> {
+    ) -> Result<QueryResult, QueryError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool.get().await.map_err(|e| QueryError::PoolError {
             message: e.to_string(),
@@ -587,10 +615,11 @@ impl AppState {
     /// captures `sql` + `started_at` on `CursorState` so a subsequent
     /// `query_cancel` can record a faithful Cancelled row without needing
     /// to round-trip through the open-time arguments.
-    pub async fn query_open_cursor(        &self,
+    pub async fn query_open_cursor(
+        &self,
         conn_id: &str,
         sql: &str,
-) -> Result<OpenCursorResult, QueryError> {
+    ) -> Result<OpenCursorResult, QueryError> {
         let started_at = chrono::Utc::now();
         let start = Instant::now();
         let result = self
@@ -611,11 +640,12 @@ impl AppState {
     /// fn already recorded — keeps cancel-history rows aligned with the
     /// open-cursor row written by the wrapper.
     #[allow(clippy::too_many_lines)] // added ctid wrap + per-row strip
-    async fn _query_open_cursor_inner(        &self,
+    async fn _query_open_cursor_inner(
+        &self,
         conn_id: &str,
         sql: &str,
         started_at: chrono::DateTime<chrono::Utc>,
-) -> Result<OpenCursorResult, QueryError> {
+    ) -> Result<OpenCursorResult, QueryError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool.get().await.map_err(|e| QueryError::PoolError {
             message: e.to_string(),
@@ -687,8 +717,9 @@ impl AppState {
         let cursor_sql: &str = injected_sql.as_deref().unwrap_or(sql);
 
         client
-            .batch_execute(&format!(                "BEGIN; DECLARE \"{cursor_id}\" NO SCROLL CURSOR FOR {cursor_sql}"
-))
+            .batch_execute(&format!(
+                "BEGIN; DECLARE \"{cursor_id}\" NO SCROLL CURSOR FOR {cursor_sql}"
+            ))
             .await
             .map_err(map_pg_error)?;
 
@@ -741,7 +772,8 @@ impl AppState {
             // jsonb_resolve_row_key. Fetch is gated by `exhausted`; close
             // is idempotent on a missing-from-open-registry id.
             self.cursors
-                .insert_finished(                    &cursor_id,
+                .insert_finished(
+                    &cursor_id,
                     crate::query::cursor::FinishedCursorMetadata {
                         conn_id: conn_id.to_string(),
                         columns: columns.clone(),
@@ -749,7 +781,7 @@ impl AppState {
                         ctid_values: ctid_values.clone(),
                         last_access: std::time::Instant::now(),
                     },
-)
+                )
                 .await;
             let _ = client
                 .batch_execute(&format!("CLOSE \"{cursor_id}\"; COMMIT;"))
@@ -803,10 +835,11 @@ impl AppState {
     /// fewer rows than requested, the cursor is auto-closed (CLOSE + COMMIT)
     /// and `exhausted=true` is returned — callers should treat the cursor
     /// id as dead from that point on.
-    pub async fn query_fetch_page(        &self,
+    pub async fn query_fetch_page(
+        &self,
         cursor_id: &str,
         limit: u32,
-) -> Result<FetchPage, QueryError> {
+    ) -> Result<FetchPage, QueryError> {
         // Touch first so an in-flight fetch counts as activity even if it
         // ends up failing.
         self.cursors.touch(cursor_id).await;
@@ -866,7 +899,8 @@ impl AppState {
             // on `CursorNotFound` and the modal would render the
             // ReadOnly{NoColumnMetadata} banner.
             self.cursors
-                .insert_finished(                    cursor_id,
+                .insert_finished(
+                    cursor_id,
                     crate::query::cursor::FinishedCursorMetadata {
                         conn_id: entry.conn_id.clone(),
                         columns: entry.columns.clone(),
@@ -874,7 +908,7 @@ impl AppState {
                         ctid_values: entry.ctid_values.clone(),
                         last_access: std::time::Instant::now(),
                     },
-)
+                )
                 .await;
             let _ = entry
                 .client
@@ -940,17 +974,19 @@ impl AppState {
         let _ = entry.cancel_token.cancel_query(tokio_postgres::NoTls).await;
         let _ = entry.client.batch_execute("ROLLBACK").await;
 
-        let elapsed = u64::try_from(            chrono::Utc::now()
+        let elapsed = u64::try_from(
+            chrono::Utc::now()
                 .signed_duration_since(captured_started_at)
                 .num_milliseconds(),
-)
+        )
         .unwrap_or(0);
-        self._record_history(            &captured_conn_id,
+        self._record_history(
+            &captured_conn_id,
             &captured_sql,
             captured_started_at,
             elapsed,
             HistoryOutcome::Cancelled,
-)
+        )
         .await;
 
         Ok(())
@@ -978,9 +1014,10 @@ impl AppState {
     // — Query history
     // -----------------------------------------------------------------------
 
-    pub async fn history_search(        &self,
+    pub async fn history_search(
+        &self,
         filter: &crate::query::types::HistorySearchFilter,
-) -> Result<crate::query::types::HistorySearchResult, QueryError> {
+    ) -> Result<crate::query::types::HistorySearchResult, QueryError> {
         let store = self.store.lock().await;
         crate::query::history::search(store.conn(), filter).map_err(map_storage_error)
     }
@@ -995,10 +1032,11 @@ impl AppState {
         crate::query::history::set_tag(store.conn(), id, tag).map_err(map_storage_error)
     }
 
-    pub async fn history_set_comment(        &self,
+    pub async fn history_set_comment(
+        &self,
         id: &str,
         comment: Option<&str>,
-) -> Result<(), QueryError> {
+    ) -> Result<(), QueryError> {
         let store = self.store.lock().await;
         crate::query::history::set_comment(store.conn(), id, comment).map_err(map_storage_error)
     }
@@ -1008,9 +1046,10 @@ impl AppState {
         crate::query::history::delete(store.conn(), id).map_err(map_storage_error)
     }
 
-    pub async fn history_clear_for_connection(        &self,
+    pub async fn history_clear_for_connection(
+        &self,
         connection_id: &str,
-) -> Result<u64, QueryError> {
+    ) -> Result<u64, QueryError> {
         let store = self.store.lock().await;
         crate::query::history::delete_all_for_connection(store.conn(), connection_id)
             .map_err(map_storage_error)
@@ -1028,10 +1067,11 @@ impl AppState {
     /// held for the whole stream by design — we don't want concurrent
     /// writes to mutate FTS rows mid-export.
     #[allow(clippy::significant_drop_tightening)]
-    pub async fn history_export(        &self,
+    pub async fn history_export(
+        &self,
         filter: &crate::query::types::HistorySearchFilter,
         path: &str,
-) -> Result<crate::query::types::HistoryExportResult, QueryError> {
+    ) -> Result<crate::query::types::HistoryExportResult, QueryError> {
         use std::io::Write;
 
         let store = self.store.lock().await;
@@ -1075,13 +1115,14 @@ impl AppState {
     /// is set; `record` failures are logged via `tracing::warn` rather than
     /// surfaced to the caller — query results must not regress just because
     /// History persistence hiccupped.
-    async fn _record_history(        &self,
+    async fn _record_history(
+        &self,
         conn_id: &str,
         sql: &str,
         started_at: chrono::DateTime<chrono::Utc>,
         duration_ms: u64,
         outcome: HistoryOutcome<'_>,
-) {
+    ) {
         let store = self.store.lock().await;
         let Ok(connection) = store.get_by_id(conn_id) else {
             // Connection vanished mid-flight (deleted between query start
@@ -1105,10 +1146,11 @@ impl AppState {
             error_message: outcome.error_message(),
         };
         if let Err(err) = crate::query::history::record(store.conn(), &input) {
-            tracing::warn!(                ?err,
+            tracing::warn!(
+                ?err,
                 conn_id,
                 "history.record failed; query result unaffected"
-);
+            );
         }
     }
 
@@ -1118,18 +1160,20 @@ impl AppState {
     /// same convention as `query_execute` / `query_open_cursor` above.
     /// Must NOT be `#[cfg(test)]`-gated because `tests/` is a separate
     /// crate that doesn't see test-only items in the lib.
-    pub async fn query_run_batch(        &self,
+    pub async fn query_run_batch(
+        &self,
         conn_id: &str,
         statements: Vec<String>,
         cursor_for_last: bool,
-) -> Result<crate::query::types::BatchResult, crate::query::types::QueryError> {
-        crate::query::batch::run_batch(            self,
+    ) -> Result<crate::query::types::BatchResult, crate::query::types::QueryError> {
+        crate::query::batch::run_batch(
+            self,
             crate::query::types::BatchInput {
                 conn_id: conn_id.to_string(),
                 statements,
                 cursor_for_last,
             },
-)
+        )
         .await
     }
 }
@@ -1278,9 +1322,10 @@ pub(crate) fn is_row_returning_sql(sql: &str) -> bool {
         .next()
         .unwrap_or("")
         .to_ascii_uppercase();
-    matches!(        first.as_str(),
+    matches!(
+        first.as_str(),
         "SELECT" | "WITH" | "VALUES" | "SHOW" | "EXPLAIN" | "TABLE" | "FETCH"
-)
+    )
 }
 
 /// Trim whitespace, `--` line / `/* … */` block comments, and any leading

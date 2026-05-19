@@ -30,7 +30,8 @@ use crate::schema::erd_types::{ErdColumn, ErdForeignKey, ErdSchemaGraph, ErdTabl
 use crate::AppState;
 
 #[tauri::command]
-pub async fn erd_get_schema_graph(    state: State<'_, AppState>,
+pub async fn erd_get_schema_graph(
+    state: State<'_, AppState>,
     conn_id: String,
     schemas: Option<Vec<String>>,
 ) -> Result<ErdSchemaGraph, ConnectionError> {
@@ -40,10 +41,11 @@ pub async fn erd_get_schema_graph(    state: State<'_, AppState>,
 }
 
 impl AppState {
-    pub async fn erd_get_schema_graph(        &self,
+    pub async fn erd_get_schema_graph(
+        &self,
         conn_id: &str,
         schemas: Option<&[String]>,
-) -> Result<ErdSchemaGraph, ConnectionError> {
+    ) -> Result<ErdSchemaGraph, ConnectionError> {
         let started = Instant::now();
 
         let pool = self
@@ -124,13 +126,15 @@ fn assemble_tables(rows: &[Row]) -> Result<Vec<ErdTable>, ConnectionError> {
             }
             "column" => {
                 let last = tables.last_mut().ok_or_else(|| {
-                    ConnectionError::Postgres(                        "erd: column row arrived before any table row".to_string(),
-)
+                    ConnectionError::Postgres(
+                        "erd: column row arrived before any table row".to_string(),
+                    )
                 })?;
                 if last.schema != schema || last.name != name {
-                    return Err(ConnectionError::Postgres(format!(                        "erd: column row for {schema}.{name} does not match cursor table {}.{}",
+                    return Err(ConnectionError::Postgres(format!(
+                        "erd: column row for {schema}.{name} does not match cursor table {}.{}",
                         last.schema, last.name
-)));
+                    )));
                 }
                 last.columns.push(ErdColumn {
                     name: row.get::<_, String>("col_name"),
@@ -142,8 +146,9 @@ fn assemble_tables(rows: &[Row]) -> Result<Vec<ErdTable>, ConnectionError> {
                 });
             }
             other => {
-                return Err(ConnectionError::Postgres(format!(                    "erd: unexpected row kind {other}"
-)));
+                return Err(ConnectionError::Postgres(format!(
+                    "erd: unexpected row kind {other}"
+                )));
             }
         }
     }

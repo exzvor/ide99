@@ -18,7 +18,8 @@ pub struct ExportedHealthConfig {
     pub checks: serde_json::Value,
 }
 
-pub fn to_payload(    label: &str,
+pub fn to_payload(
+    label: &str,
     checks: &serde_json::Value,
 ) -> Result<serde_json::Value, ShareError> {
     let exp = ExportedHealthConfig {

@@ -26,20 +26,24 @@ const MIGRATIONS: &[(i64, &str)] = &[
     (2, include_str!("../../migrations/002_editor_tabs.sql")),
     (3, include_str!("../../migrations/003_query_history.sql")),
     (4, include_str!("../../migrations/004_user_snippets.sql")),
-    (        5,
+    (
+        5,
         include_str!("../../migrations/005_environment_labels.sql"),
-),
+    ),
     (6, include_str!("../../migrations/006_recent_plans.sql")),
-    (        7,
+    (
+        7,
         include_str!("../../migrations/007_editor_tabs_plan_diff.sql"),
-),
+    ),
     (8, include_str!("../../migrations/008_health_snapshots.sql")),
-    (        9,
+    (
+        9,
         include_str!("../../migrations/009_jsonb_inferred_schemas.sql"),
-),
-    (        10,
+    ),
+    (
+        10,
         include_str!("../../migrations/010_migration_settings.sql"),
-),
+    ),
     (11, include_str!("../../migrations/011_squawk_lint.sql")),
     // — MCP authorized clients table. Owned by `mcp::store_migration`;
     // mounted here because all migrations live under one ledger.
@@ -49,9 +53,10 @@ const MIGRATIONS: &[(i64, &str)] = &[
     // — singleton `app_settings` row (privacy + onboarding flags).
     (14, include_str!("../../migrations/014_app_settings.sql")),
     // — release channel + paid-module subscription flags.
-    (        15,
+    (
+        15,
         include_str!("../../migrations/015_release_settings.sql"),
-),
+    ),
 ];
 
 /// Test-only accessor — keeps the embedded MIGRATIONS array private but lets
@@ -107,20 +112,22 @@ impl Store {
         for (version, sql) in MIGRATIONS {
             let table_exists = self
                 .conn
-                .query_row(                    "SELECT 1 FROM sqlite_master WHERE type='table' AND name='schema_migrations'",
+                .query_row(
+                    "SELECT 1 FROM sqlite_master WHERE type='table' AND name='schema_migrations'",
                     [],
                     |_| Ok(true),
-)
+                )
                 .optional()
                 .map_err(|e| map_storage(&e))?
                 .unwrap_or(false);
             let already_applied = table_exists
                 && self
                     .conn
-                    .query_row(                        "SELECT 1 FROM schema_migrations WHERE version = ?1",
+                    .query_row(
+                        "SELECT 1 FROM schema_migrations WHERE version = ?1",
                         params![version],
                         |_| Ok(true),
-)
+                    )
                     .optional()
                     .map_err(|e| map_storage(&e))?
                     .is_some();
@@ -131,9 +138,10 @@ impl Store {
 
             let tx = self.conn.transaction().map_err(|e| map_storage(&e))?;
             tx.execute_batch(sql).map_err(|e| map_storage(&e))?;
-            tx.execute(                "INSERT OR IGNORE INTO schema_migrations (version, applied_at) VALUES (?1, ?2)",
+            tx.execute(
+                "INSERT OR IGNORE INTO schema_migrations (version, applied_at) VALUES (?1, ?2)",
                 params![version, Utc::now().to_rfc3339()],
-)
+            )
             .map_err(|e| map_storage(&e))?;
             tx.commit().map_err(|e| map_storage(&e))?;
         }
@@ -143,14 +151,15 @@ impl Store {
     pub fn list(&self) -> Result<Vec<Connection>, ConnectionError> {
         let mut stmt = self
             .conn
-            .prepare(                "SELECT id, name, host, port, database, username, ssl_mode, has_password, \
+            .prepare(
+                "SELECT id, name, host, port, database, username, ssl_mode, has_password, \
                  created_at, updated_at, last_tested_at, last_test_ok, exclude_from_history, \
                  exclude_from_recent_plans, \
                  environment, read_only, slow_query_warning, confirm_destructive, \
                  migrations_dir, migration_tracking_enabled, migration_snapshots_enabled, \
                  squawk_lint_enabled \
                  FROM connections ORDER BY name",
-)
+            )
             .map_err(|e| map_storage(&e))?;
         let rows = stmt
             .query_map([], row_to_connection)
@@ -164,7 +173,8 @@ impl Store {
 
     pub fn get_by_id(&self, id: &str) -> Result<Connection, ConnectionError> {
         self.conn
-            .query_row(                "SELECT id, name, host, port, database, username, ssl_mode, has_password, \
+            .query_row(
+                "SELECT id, name, host, port, database, username, ssl_mode, has_password, \
                  created_at, updated_at, last_tested_at, last_test_ok, exclude_from_history, \
                  exclude_from_recent_plans, \
                  environment, read_only, slow_query_warning, confirm_destructive, \
@@ -173,17 +183,18 @@ impl Store {
                  FROM connections WHERE id = ?1",
                 params![id],
                 row_to_connection,
-)
+            )
             .map_err(|err| match err {
                 rusqlite::Error::QueryReturnedNoRows => ConnectionError::NotFound(id.to_string()),
                 ref other => map_storage(other),
             })
     }
 
-    pub fn create(        &self,
+    pub fn create(
+        &self,
         input: &NewConnection,
         password_present: bool,
-) -> Result<Connection, ConnectionError> {
+    ) -> Result<Connection, ConnectionError> {
         validate_input(&input.name, &input.host, &input.database, &input.username)?;
         let id = Uuid::new_v4().to_string();
         let now = Utc::now().to_rfc3339();
@@ -224,17 +235,19 @@ impl Store {
         self.get_by_id(&id)
     }
 
-    pub fn update(        &self,
+    pub fn update(
+        &self,
         id: &str,
         input: &UpdateConnection,
         has_password: bool,
-) -> Result<Connection, ConnectionError> {
+    ) -> Result<Connection, ConnectionError> {
         validate_input(&input.name, &input.host, &input.database, &input.username)?;
         let now = Utc::now().to_rfc3339();
 
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET \
+            .execute(
+                "UPDATE connections SET \
                    name = ?1, host = ?2, port = ?3, database = ?4, username = ?5, \
                    ssl_mode = ?6, has_password = ?7, exclude_from_history = ?8, \
                    exclude_from_recent_plans = ?9, updated_at = ?10, \
@@ -265,7 +278,7 @@ impl Store {
                     i64::from(input.squawk_lint_enabled),
                     id,
                 ],
-)
+            )
             .map_err(|err| map_unique(&err, &input.name))?;
 
         if rows == 0 {
@@ -295,9 +308,10 @@ impl Store {
         let now = Utc::now().to_rfc3339();
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET has_password = ?1, updated_at = ?2 WHERE id = ?3",
+            .execute(
+                "UPDATE connections SET has_password = ?1, updated_at = ?2 WHERE id = ?3",
                 params![i64::from(has_password), now, id],
-)
+            )
             .map_err(|e| map_storage(&e))?;
         if rows == 0 {
             return Err(ConnectionError::NotFound(id.to_string()));
@@ -311,9 +325,10 @@ impl Store {
         let now = Utc::now().to_rfc3339();
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET exclude_from_history = ?1, updated_at = ?2 WHERE id = ?3",
+            .execute(
+                "UPDATE connections SET exclude_from_history = ?1, updated_at = ?2 WHERE id = ?3",
                 params![i64::from(value), now, id],
-)
+            )
             .map_err(|e| map_storage(&e))?;
         if rows == 0 {
             return Err(ConnectionError::NotFound(id.to_string()));
@@ -323,17 +338,19 @@ impl Store {
 
     /// — granular setter for the Recent Plans opt-out flag. Mirror
     /// of `set_exclude_from_history` .
-    pub fn set_exclude_from_recent_plans(        &self,
+    pub fn set_exclude_from_recent_plans(
+        &self,
         id: &str,
         value: bool,
-) -> Result<(), ConnectionError> {
+    ) -> Result<(), ConnectionError> {
         let now = Utc::now().to_rfc3339();
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET exclude_from_recent_plans = ?1, updated_at = ?2 \
+            .execute(
+                "UPDATE connections SET exclude_from_recent_plans = ?1, updated_at = ?2 \
                  WHERE id = ?3",
                 params![i64::from(value), now, id],
-)
+            )
             .map_err(|e| map_storage(&e))?;
         if rows == 0 {
             return Err(ConnectionError::NotFound(id.to_string()));
@@ -346,9 +363,10 @@ impl Store {
         let now = Utc::now().to_rfc3339();
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET environment = ?1, updated_at = ?2 WHERE id = ?3",
+            .execute(
+                "UPDATE connections SET environment = ?1, updated_at = ?2 WHERE id = ?3",
                 params![env.as_str(), now, id],
-)
+            )
             .map_err(|e| map_storage(&e))?;
         if rows == 0 {
             return Err(ConnectionError::NotFound(id.to_string()));
@@ -360,9 +378,10 @@ impl Store {
         let now = Utc::now().to_rfc3339();
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET read_only = ?1, updated_at = ?2 WHERE id = ?3",
+            .execute(
+                "UPDATE connections SET read_only = ?1, updated_at = ?2 WHERE id = ?3",
                 params![i64::from(value), now, id],
-)
+            )
             .map_err(|e| map_storage(&e))?;
         if rows == 0 {
             return Err(ConnectionError::NotFound(id.to_string()));
@@ -374,9 +393,10 @@ impl Store {
         let now = Utc::now().to_rfc3339();
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET slow_query_warning = ?1, updated_at = ?2 WHERE id = ?3",
+            .execute(
+                "UPDATE connections SET slow_query_warning = ?1, updated_at = ?2 WHERE id = ?3",
                 params![i64::from(value), now, id],
-)
+            )
             .map_err(|e| map_storage(&e))?;
         if rows == 0 {
             return Err(ConnectionError::NotFound(id.to_string()));
@@ -388,9 +408,10 @@ impl Store {
         let now = Utc::now().to_rfc3339();
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET confirm_destructive = ?1, updated_at = ?2 WHERE id = ?3",
+            .execute(
+                "UPDATE connections SET confirm_destructive = ?1, updated_at = ?2 WHERE id = ?3",
                 params![i64::from(value), now, id],
-)
+            )
             .map_err(|e| map_storage(&e))?;
         if rows == 0 {
             return Err(ConnectionError::NotFound(id.to_string()));
@@ -403,9 +424,10 @@ impl Store {
         let now = Utc::now().to_rfc3339();
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET migrations_dir = ?1, updated_at = ?2 WHERE id = ?3",
+            .execute(
+                "UPDATE connections SET migrations_dir = ?1, updated_at = ?2 WHERE id = ?3",
                 params![value, now, id],
-)
+            )
             .map_err(|e| map_storage(&e))?;
         if rows == 0 {
             return Err(ConnectionError::NotFound(id.to_string()));
@@ -414,17 +436,19 @@ impl Store {
     }
 
     /// — toggle the `ide99_migrations` ledger opt-in.
-    pub fn set_migration_tracking_enabled(        &self,
+    pub fn set_migration_tracking_enabled(
+        &self,
         id: &str,
         value: bool,
-) -> Result<(), ConnectionError> {
+    ) -> Result<(), ConnectionError> {
         let now = Utc::now().to_rfc3339();
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET migration_tracking_enabled = ?1, updated_at = ?2 \
+            .execute(
+                "UPDATE connections SET migration_tracking_enabled = ?1, updated_at = ?2 \
                  WHERE id = ?3",
                 params![i64::from(value), now, id],
-)
+            )
             .map_err(|e| map_storage(&e))?;
         if rows == 0 {
             return Err(ConnectionError::NotFound(id.to_string()));
@@ -433,17 +457,19 @@ impl Store {
     }
 
     /// — toggle schema-snapshot capture on apply.
-    pub fn set_migration_snapshots_enabled(        &self,
+    pub fn set_migration_snapshots_enabled(
+        &self,
         id: &str,
         value: bool,
-) -> Result<(), ConnectionError> {
+    ) -> Result<(), ConnectionError> {
         let now = Utc::now().to_rfc3339();
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET migration_snapshots_enabled = ?1, updated_at = ?2 \
+            .execute(
+                "UPDATE connections SET migration_snapshots_enabled = ?1, updated_at = ?2 \
                  WHERE id = ?3",
                 params![i64::from(value), now, id],
-)
+            )
             .map_err(|e| map_storage(&e))?;
         if rows == 0 {
             return Err(ConnectionError::NotFound(id.to_string()));
@@ -456,9 +482,10 @@ impl Store {
         let now = Utc::now().to_rfc3339();
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET squawk_lint_enabled = ?1, updated_at = ?2 WHERE id = ?3",
+            .execute(
+                "UPDATE connections SET squawk_lint_enabled = ?1, updated_at = ?2 WHERE id = ?3",
                 params![i64::from(value), now, id],
-)
+            )
             .map_err(|e| map_storage(&e))?;
         if rows == 0 {
             return Err(ConnectionError::NotFound(id.to_string()));
@@ -469,9 +496,10 @@ impl Store {
     pub fn record_test_result(&self, id: &str, ok: bool, at: &str) -> Result<(), ConnectionError> {
         let rows = self
             .conn
-            .execute(                "UPDATE connections SET last_tested_at = ?1, last_test_ok = ?2 WHERE id = ?3",
+            .execute(
+                "UPDATE connections SET last_tested_at = ?1, last_test_ok = ?2 WHERE id = ?3",
                 params![at, i64::from(ok), id],
-)
+            )
             .map_err(|e| map_storage(&e))?;
         if rows == 0 {
             return Err(ConnectionError::NotFound(id.to_string()));
@@ -522,7 +550,8 @@ fn row_to_connection(row: &rusqlite::Row<'_>) -> rusqlite::Result<Connection> {
     })
 }
 
-fn validate_input(    name: &str,
+fn validate_input(
+    name: &str,
     host: &str,
     database: &str,
     username: &str,
@@ -531,8 +560,9 @@ fn validate_input(    name: &str,
         return Err(ConnectionError::InvalidInput("name is required".into()));
     }
     if name.chars().count() > 80 {
-        return Err(ConnectionError::InvalidInput(            "name exceeds 80 characters".into(),
-));
+        return Err(ConnectionError::InvalidInput(
+            "name exceeds 80 characters".into(),
+        ));
     }
     if host.trim().is_empty() {
         return Err(ConnectionError::InvalidInput("host is required".into()));
@@ -628,9 +658,10 @@ mod tests {
         store.create(&sample_input("alpha"), false).unwrap();
         store.create(&sample_input("middle"), false).unwrap();
         let listed = store.list().unwrap();
-        assert_eq!(            listed.iter().map(|c| c.name.as_str()).collect::<Vec<_>>(),
+        assert_eq!(
+            listed.iter().map(|c| c.name.as_str()).collect::<Vec<_>>(),
             vec!["alpha", "middle", "zebra"],
-);
+        );
     }
 
     #[test]
@@ -686,9 +717,10 @@ mod tests {
             .record_test_result(&c.id, true, "2026-04-27T00:00:00Z")
             .unwrap();
         let after = store.get_by_id(&c.id).unwrap();
-        assert_eq!(            after.last_tested_at.as_deref(),
+        assert_eq!(
+            after.last_tested_at.as_deref(),
             Some("2026-04-27T00:00:00Z")
-);
+        );
         assert_eq!(after.last_test_ok, Some(true));
     }
 

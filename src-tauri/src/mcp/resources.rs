@@ -10,7 +10,8 @@
 //! - [`list_resources`] — for `resources/list`.
 //! - [`read_resource`] — for `resources/read`.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::doc_markdown,
     clippy::module_name_repetitions
 )]
@@ -67,13 +68,15 @@ pub async fn read_resource(ctx: &ServerContext, uri: &str) -> Result<Value, McpE
     }
     if let Some(conn_id) = uri.strip_prefix(SCHEMA_URI_PREFIX) {
         if conn_id.is_empty() {
-            return Err(McpError::InvalidArgs(format!(                "schema resource URI missing conn_id: {uri}"
-)));
+            return Err(McpError::InvalidArgs(format!(
+                "schema resource URI missing conn_id: {uri}"
+            )));
         }
         return read_schema_snapshot(ctx, conn_id).await;
     }
-    Err(McpError::InvalidArgs(format!(        "unknown resource URI: {uri}"
-)))
+    Err(McpError::InvalidArgs(format!(
+        "unknown resource URI: {uri}"
+    )))
 }
 
 async fn read_active_context(ctx: &ServerContext) -> Result<Value, McpError> {
@@ -152,9 +155,10 @@ async fn read_schema_snapshot(ctx: &ServerContext, conn_id: &str) -> Result<Valu
     let path_array: Vec<&str> = resolved_path.iter().map(String::as_str).collect();
 
     let rows = client
-        .query(            crate::schema::queries::AUTOCOMPLETE_SNAPSHOT_SQL,
+        .query(
+            crate::schema::queries::AUTOCOMPLETE_SNAPSHOT_SQL,
             &[&path_array],
-)
+        )
         .await
         .map_err(|e| McpError::Internal(format!("autocomplete snapshot: {e}")))?;
 
@@ -209,8 +213,9 @@ mod tests {
         store.run_migrations().unwrap();
         let store = Arc::new(Mutex::new(store));
         let pools = Arc::new(crate::connection::PoolRegistry::new());
-        let bridge = Arc::new(RwLock::new(            crate::mcp::ide_bridge::IdeBridgeState::default(),
-));
+        let bridge = Arc::new(RwLock::new(
+            crate::mcp::ide_bridge::IdeBridgeState::default(),
+        ));
         let auth = crate::mcp::auth::AuthState::new();
         let registry = Arc::new(ToolRegistry::new());
         let tmp = tempfile::tempdir().unwrap();

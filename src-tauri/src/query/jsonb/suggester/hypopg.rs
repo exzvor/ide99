@@ -11,7 +11,8 @@
 //! mirrors `RegistryGuard` from `health/actions.rs`).  The primary cleanup is
 //! always done explicitly before `drop`.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::missing_const_for_fn,
     clippy::cast_possible_truncation,
@@ -82,7 +83,8 @@ impl Drop for HypoPgGuard {
 /// Returns a [`HypoPgEstimate`] — either `Computed` with cost data or
 /// `Unavailable` with an explanatory reason (extension missing, PG < 16,
 /// planner error, etc.).
-pub async fn hypothetical_explain(    pool: &Pool,
+pub async fn hypothetical_explain(
+    pool: &Pool,
     recommended_sql: &str,
     representative_query: &str,
 ) -> Result<HypoPgEstimate, SuggesterError> {
@@ -206,7 +208,8 @@ pub async fn hypothetical_explain(    pool: &Pool,
 
 /// Run `EXPLAIN (GENERIC_PLAN, FORMAT JSON) <query>` and extract
 /// `Plan."Total Cost"` from the JSON output.
-async fn explain_generic_plan_cost(    client: &deadpool_postgres::Client,
+async fn explain_generic_plan_cost(
+    client: &deadpool_postgres::Client,
     query: &str,
 ) -> Result<f64, String> {
     let explain_sql = format!("EXPLAIN (GENERIC_PLAN, FORMAT JSON) {query}");

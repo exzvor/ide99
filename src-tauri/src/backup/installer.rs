@@ -12,7 +12,8 @@
 //! `run_crontab_*` / `run_schtasks_*` and dependency-injected via a
 //! trait so integration is possible without crontab/schtasks on the host.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::doc_markdown,
     clippy::must_use_candidate,
@@ -106,9 +107,10 @@ async fn read_crontab() -> Result<String, BackupError> {
     if stderr.contains("no crontab") {
         return Ok(String::new());
     }
-    Err(BackupError::Schedule(format!(        "crontab -l failed (exit {:?}): {stderr}",
+    Err(BackupError::Schedule(format!(
+        "crontab -l failed (exit {:?}): {stderr}",
         out.status.code()
-)))
+    )))
 }
 
 /// Rewrite the crontab from stdin. Calls `crontab -` and writes the
@@ -135,10 +137,11 @@ async fn write_crontab(content: &str) -> Result<(), BackupError> {
         .await
         .map_err(|e| BackupError::Schedule(format!("crontab wait: {e}")))?;
     if !out.status.success() {
-        return Err(BackupError::Schedule(format!(            "crontab - failed (exit {:?}): {}",
+        return Err(BackupError::Schedule(format!(
+            "crontab - failed (exit {:?}): {}",
             out.status.code(),
             String::from_utf8_lossy(&out.stderr)
-)));
+        )));
     }
     Ok(())
 }
@@ -202,7 +205,8 @@ pub fn build_task_xml(entry: &ScheduleEntry) -> String {
     };
     let start_boundary = format!("2026-01-01T{hour:02}:{minute:02}:00");
 
-    format!(        r#"<?xml version="1.0" encoding="UTF-16"?>
+    format!(
+        r#"<?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
     <Description>ide99 backup schedule {id}</Description>
@@ -230,7 +234,7 @@ pub fn build_task_xml(entry: &ScheduleEntry) -> String {
 </Task>"#,
         id = entry.id,
         start = start_boundary,
-)
+    )
 }
 
 #[cfg(target_os = "windows")]
@@ -264,10 +268,11 @@ pub async fn install_windows(data_dir: &Path, id: &str) -> Result<(), BackupErro
         .await
         .map_err(|e| BackupError::Schedule(format!("schtasks /Create spawn: {e}")))?;
     if !out.status.success() {
-        return Err(BackupError::Schedule(format!(            "schtasks /Create failed (exit {:?}): {}",
+        return Err(BackupError::Schedule(format!(
+            "schtasks /Create failed (exit {:?}): {}",
             out.status.code(),
             String::from_utf8_lossy(&out.stderr)
-)));
+        )));
     }
     if let Some(target) = all.iter_mut().find(|e| e.id == id) {
         target.installed = true;
@@ -287,9 +292,10 @@ pub async fn uninstall_windows(data_dir: &Path, id: &str) -> Result<(), BackupEr
     // idempotency, so we ignore "ERROR: The system cannot find the file".
     let stderr = String::from_utf8_lossy(&out.stderr);
     if !out.status.success() && !stderr.contains("cannot find") {
-        return Err(BackupError::Schedule(format!(            "schtasks /Delete failed (exit {:?}): {stderr}",
+        return Err(BackupError::Schedule(format!(
+            "schtasks /Delete failed (exit {:?}): {stderr}",
             out.status.code()
-)));
+        )));
     }
     let mut all = schedule::read_all(data_dir)?;
     if let Some(target) = all.iter_mut().find(|e| e.id == id) {

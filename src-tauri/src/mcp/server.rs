@@ -8,7 +8,8 @@
 //! - audit log + scope checking + IDE bridge are our own requirements
 //!   that an SDK does not cover anyway.
 
-#![allow(    clippy::missing_errors_doc,
+#![allow(
+    clippy::missing_errors_doc,
     clippy::module_name_repetitions,
     clippy::doc_markdown,
     clippy::doc_overindented_list_items,
@@ -124,10 +125,11 @@ impl McpServerStatus {
 /// `ctx` carries shared resources (store, pools, bridge); `client` is the
 /// authorized caller (tools may use scope or audit per-client).
 pub type ToolFn = Arc<
-    dyn for<'a> Fn(            &'a ServerContext,
+    dyn for<'a> Fn(
+            &'a ServerContext,
             &'a AuthorizedClient,
             Value,
-) -> Pin<
+        ) -> Pin<
             Box<dyn std::future::Future<Output = Result<Value, McpError>> + Send + 'a>,
         > + Send
         + Sync,
@@ -344,9 +346,10 @@ impl std::fmt::Debug for ServerContext {
 pub async fn dispatch(ctx: &ServerContext, bearer: Option<&str>, req: &RpcRequest) -> RpcResponse {
     let id = req.id.clone();
     if req.jsonrpc != "2.0" {
-        return RpcResponse::err(            id,
+        return RpcResponse::err(
+            id,
             &McpError::InvalidArgs(format!("unsupported jsonrpc version: {}", req.jsonrpc)),
-);
+        );
     }
 
     let result = handle_method(ctx, bearer, req).await;
@@ -356,7 +359,8 @@ pub async fn dispatch(ctx: &ServerContext, bearer: Option<&str>, req: &RpcReques
     }
 }
 
-async fn handle_method(    ctx: &ServerContext,
+async fn handle_method(
+    ctx: &ServerContext,
     bearer: Option<&str>,
     req: &RpcRequest,
 ) -> Result<Value, McpError> {
@@ -530,7 +534,8 @@ impl McpServerHandle {
 /// the IPC endpoint, and spawns both transports.
 ///
 /// Returns a handle that the caller stows in `AppState::mcp_server`.
-pub async fn start(    store: Arc<Mutex<crate::connection::Store>>,
+pub async fn start(
+    store: Arc<Mutex<crate::connection::Store>>,
     pools: Arc<crate::connection::PoolRegistry>,
     bridge: Arc<RwLock<IdeBridgeState>>,
     app_handle: Option<tauri::AppHandle>,
@@ -586,10 +591,11 @@ pub async fn start(    store: Arc<Mutex<crate::connection::Store>>,
     });
 
     let store_g = store.lock().await;
-    let authorized_clients = u32::try_from(        crate::mcp::store_migration::list_clients(store_g.conn())
+    let authorized_clients = u32::try_from(
+        crate::mcp::store_migration::list_clients(store_g.conn())
             .map(|v| v.len())
             .unwrap_or(0),
-)
+    )
     .unwrap_or(0);
     drop(store_g);
 
@@ -662,7 +668,8 @@ mod tests {
     #[tokio::test]
     async fn dispatch_initialize_returns_protocol_version() {
         let ctx = test_ctx();
-        let resp = dispatch(            &ctx,
+        let resp = dispatch(
+            &ctx,
             None,
             &RpcRequest {
                 jsonrpc: "2.0".into(),
@@ -670,7 +677,7 @@ mod tests {
                 method: "initialize".into(),
                 params: None,
             },
-)
+        )
         .await;
         assert!(resp.error.is_none(), "got error: {:?}", resp.error);
         let result = resp.result.unwrap();
@@ -680,7 +687,8 @@ mod tests {
     #[tokio::test]
     async fn dispatch_tools_call_without_token_is_unauthorized() {
         let ctx = test_ctx();
-        let resp = dispatch(            &ctx,
+        let resp = dispatch(
+            &ctx,
             None,
             &RpcRequest {
                 jsonrpc: "2.0".into(),
@@ -688,7 +696,7 @@ mod tests {
                 method: "tools/call".into(),
                 params: Some(json!({ "name": "list_connections", "arguments": {} })),
             },
-)
+        )
         .await;
         assert!(resp.error.is_some());
         assert_eq!(resp.error.unwrap().code, -32001);
@@ -697,7 +705,8 @@ mod tests {
     #[tokio::test]
     async fn dispatch_tools_list_works_without_token() {
         let ctx = test_ctx();
-        let resp = dispatch(            &ctx,
+        let resp = dispatch(
+            &ctx,
             None,
             &RpcRequest {
                 jsonrpc: "2.0".into(),
@@ -705,7 +714,7 @@ mod tests {
                 method: "tools/list".into(),
                 params: None,
             },
-)
+        )
         .await;
         assert!(resp.error.is_none());
         let result = resp.result.unwrap();
@@ -720,14 +729,16 @@ mod tests {
         let kc: Box<dyn crate::connection::Keychain> =
             Box::new(crate::connection::keychain::MemoryKeychain::new());
         let store_lock = ctx.store.lock().await;
-        let (_id, token) = crate::mcp::auth::issue_token(            store_lock.conn(),
+        let (_id, token) = crate::mcp::auth::issue_token(
+            store_lock.conn(),
             kc.as_ref(),
             "test-client",
             &McpScope::default_grant(),
-)
+        )
         .unwrap();
         drop(store_lock);
-        let resp = dispatch(            &ctx,
+        let resp = dispatch(
+            &ctx,
             Some(&token),
             &RpcRequest {
                 jsonrpc: "2.0".into(),
@@ -735,7 +746,7 @@ mod tests {
                 method: "tools/call".into(),
                 params: Some(json!({ "name": "get_current_query", "arguments": {} })),
             },
-)
+        )
         .await;
         // Default registry returns ToolNotFound for placeholders; that's
         // expected until rust-mcp-tools wires real impls.
@@ -746,7 +757,8 @@ mod tests {
     #[tokio::test]
     async fn dispatch_invalid_method_is_method_not_found() {
         let ctx = test_ctx();
-        let resp = dispatch(            &ctx,
+        let resp = dispatch(
+            &ctx,
             None,
             &RpcRequest {
                 jsonrpc: "2.0".into(),
@@ -754,7 +766,7 @@ mod tests {
                 method: "bogus/thing".into(),
                 params: None,
             },
-)
+        )
         .await;
         assert!(resp.error.is_some());
         assert_eq!(resp.error.unwrap().code, -32601);

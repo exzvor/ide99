@@ -74,18 +74,20 @@ pub fn summary(value: &serde_json::Value) -> Result<String, ShareError> {
         .iter()
         .filter(|c| matches!(c, Cell::Markdown { .. }))
         .count();
-    Ok(format!(        "{} ({} cells: {} SQL, {} Markdown)",
+    Ok(format!(
+        "{} ({} cells: {} SQL, {} Markdown)",
         nb.name,
         nb.cells.len(),
         sql_count,
         md_count
-))
+    ))
 }
 
 /// Apply: insert a fresh notebook row with a new id; never overwrite an
 /// existing one (the imported notebook lives alongside any local one with the
 /// same name — UI may rename it later).
-pub fn apply(    conn: &rusqlite::Connection,
+pub fn apply(
+    conn: &rusqlite::Connection,
     payload: &serde_json::Value,
 ) -> Result<Notebook, ShareError> {
     let exp = from_payload(payload)?;
@@ -171,8 +173,9 @@ mod tests {
     fn summary_breaks_down_cell_kinds() {
         let nb = sample_nb_with_results();
         let payload = to_payload(&nb).unwrap();
-        assert_eq!(            summary(&payload).unwrap(),
+        assert_eq!(
+            summary(&payload).unwrap(),
             "Investigation (2 cells: 1 SQL, 1 Markdown)"
-);
+        );
     }
 }

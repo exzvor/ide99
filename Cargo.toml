@@ -6,7 +6,9 @@ members = ["src-tauri"]
 version = "1.0.2"
 edition = "2021"
 authors = ["exzvor <exzvor@gmail.com>"]
-repository = "https://github.com/exzvor/ide"
+license = "Apache-2.0"
+repository = "https://github.com/exzvor/ide99"
+homepage = "https://ide99.ru"
 publish = false
 
 [workspace.lints.rust]

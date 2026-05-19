@@ -35,12 +35,13 @@ async fn try_pg_pool() -> Option<(ContainerAsync<Postgres>, Pool)> {
         .dbname("postgres")
         .user("postgres")
         .password("postgres");
-    let mgr = Manager::from_config(        cfg,
+    let mgr = Manager::from_config(
+        cfg,
         NoTls,
         ManagerConfig {
             recycling_method: RecyclingMethod::Fast,
         },
-);
+    );
     let pool = Pool::builder(mgr)
         .max_size(4)
         .runtime(Runtime::Tokio1)
@@ -63,12 +64,13 @@ async fn fetch_fdw_server_with_user_mapping_roundtrips() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec(        &pool,
+    exec(
+        &pool,
         "CREATE EXTENSION postgres_fdw;
          CREATE SERVER s1 FOREIGN DATA WRAPPER postgres_fdw \
              OPTIONS (host 'h', dbname 'd', port '5432');
          CREATE USER MAPPING FOR PUBLIC SERVER s1 OPTIONS (\"user\" 'u', password 'p');",
-)
+    )
     .await;
 
     let def = get_fdw_server_definition(&pool, "s1").await.expect("ok");
@@ -92,12 +94,13 @@ async fn fetch_publication_for_table_list_roundtrips() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec(        &pool,
+    exec(
+        &pool,
         "CREATE TABLE public.t1 (id int);
          CREATE TABLE public.t2 (id int);
          CREATE PUBLICATION p1 FOR TABLE public.t1, public.t2 \
              WITH (publish = 'insert,update', publish_via_partition_root = true);",
-)
+    )
     .await;
 
     let def = get_publication_definition(&pool, "p1").await.expect("ok");
@@ -136,10 +139,11 @@ async fn fetch_publication_for_schemas_returns_schema_list() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec(        &pool,
+    exec(
+        &pool,
         "CREATE SCHEMA s1; CREATE SCHEMA s2;
          CREATE PUBLICATION p_sch FOR TABLES IN SCHEMA s1, s2;",
-)
+    )
     .await;
 
     let def = get_publication_definition(&pool, "p_sch")
@@ -157,10 +161,11 @@ async fn list_publishable_tables_excludes_system_schemas() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec(        &pool,
+    exec(
+        &pool,
         "CREATE TABLE public.user_table (id int); \
          CREATE TEMP TABLE temp_table (id int);",
-)
+    )
     .await;
 
     let tables = list_publishable_tables(&pool).await.expect("ok");
@@ -177,11 +182,12 @@ async fn list_publications_returns_summary() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec(        &pool,
+    exec(
+        &pool,
         "CREATE PUBLICATION p_a FOR ALL TABLES;
          CREATE TABLE t (id int);
          CREATE PUBLICATION p_b FOR TABLE t;",
-)
+    )
     .await;
     let list = list_publications(&pool).await.expect("ok");
     assert_eq!(list.len(), 2);
@@ -216,10 +222,11 @@ async fn fetch_subscription_permission_denied_when_non_superuser() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec(        &pool,
+    exec(
+        &pool,
         "CREATE ROLE non_super NOLOGIN; \
          REVOKE ALL ON pg_subscription FROM non_super;",
-)
+    )
     .await;
     // Re-pool as non_super.
     // We can't easily SET ROLE inside a single fetch call — instead, simulate
@@ -242,11 +249,12 @@ async fn fetch_role_returns_attributes_and_memberships() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec(        &pool,
+    exec(
+        &pool,
         "CREATE ROLE parent_a; CREATE ROLE parent_b; \
          CREATE ROLE child_role WITH LOGIN CREATEDB CONNECTION LIMIT 5; \
          GRANT parent_a TO child_role; GRANT parent_b TO child_role;",
-)
+    )
     .await;
 
     let def = get_role_definition(&pool, "child_role").await.expect("ok");
@@ -280,9 +288,10 @@ async fn fetch_enum_type_roundtrips_values_in_order() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec(        &pool,
+    exec(
+        &pool,
         "CREATE TYPE public.color AS ENUM ('red','green','blue');",
-)
+    )
     .await;
     let def = get_custom_type_definition(&pool, "public", "color")
         .await
@@ -321,10 +330,11 @@ async fn fetch_domain_type_roundtrips_constraints_and_default() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec(        &pool,
+    exec(
+        &pool,
         "CREATE DOMAIN public.pos_int AS int NOT NULL DEFAULT 1 \
              CONSTRAINT positive CHECK (VALUE > 0);",
-)
+    )
     .await;
     let def = get_custom_type_definition(&pool, "public", "pos_int")
         .await
@@ -348,9 +358,10 @@ async fn fetch_range_type_roundtrips_subtype() {
         eprintln!("[skip] docker / testcontainers not available");
         return;
     };
-    exec(        &pool,
+    exec(
+        &pool,
         "CREATE TYPE public.intspan AS RANGE (subtype = int4);",
-)
+    )
     .await;
     let def = get_custom_type_definition(&pool, "public", "intspan")
         .await

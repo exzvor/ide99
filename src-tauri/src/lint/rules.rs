@@ -87,9 +87,10 @@ mod tests {
             {"name": "ban-drop-database", "description": "Don't drop databases."}
         ]"#;
         let parsed = parse_rules_json(json).unwrap();
-        assert_eq!(            parsed.get("prefer-text-field"),
+        assert_eq!(
+            parsed.get("prefer-text-field"),
             Some(&"Use text instead of varchar.".to_string())
-);
+        );
         assert_eq!(parsed.len(), 2);
     }
 

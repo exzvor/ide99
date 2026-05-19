@@ -566,9 +566,10 @@ mod query_error_tests {
     #[test]
     fn cancelled_serializes_with_only_kind() {
         let e = QueryError::Cancelled;
-        assert_eq!(            serde_json::to_value(&e).unwrap(),
+        assert_eq!(
+            serde_json::to_value(&e).unwrap(),
             json!({"kind": "cancelled"})
-);
+        );
     }
 
     #[test]
@@ -576,9 +577,10 @@ mod query_error_tests {
         let e = QueryError::CursorNotFound {
             cursor_id: "abc-123".into(),
         };
-        assert_eq!(            serde_json::to_value(&e).unwrap(),
+        assert_eq!(
+            serde_json::to_value(&e).unwrap(),
             json!({"kind": "cursorNotFound", "cursorId": "abc-123"})
-);
+        );
     }
 
     #[test]

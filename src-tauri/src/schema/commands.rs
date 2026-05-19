@@ -32,14 +32,16 @@ use crate::AppState;
 // ---------------------------------------------------------------------------
 
 #[tauri::command]
-pub async fn schema_list_schemas(    state: State<'_, AppState>,
+pub async fn schema_list_schemas(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<Vec<SchemaInfo>, ConnectionError> {
     state.schema_list_schemas(&conn_id).await
 }
 
 #[tauri::command]
-pub async fn schema_list_tables(    state: State<'_, AppState>,
+pub async fn schema_list_tables(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
 ) -> Result<Vec<TableInfo>, ConnectionError> {
@@ -47,7 +49,8 @@ pub async fn schema_list_tables(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_views(    state: State<'_, AppState>,
+pub async fn schema_list_views(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
 ) -> Result<Vec<ViewInfo>, ConnectionError> {
@@ -55,7 +58,8 @@ pub async fn schema_list_views(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_columns(    state: State<'_, AppState>,
+pub async fn schema_list_columns(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     table: String,
@@ -64,7 +68,8 @@ pub async fn schema_list_columns(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_indexes(    state: State<'_, AppState>,
+pub async fn schema_list_indexes(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     table: String,
@@ -73,7 +78,8 @@ pub async fn schema_list_indexes(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_foreign_keys(    state: State<'_, AppState>,
+pub async fn schema_list_foreign_keys(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     table: String,
@@ -84,7 +90,8 @@ pub async fn schema_list_foreign_keys(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_get_autocomplete_snapshot(    state: State<'_, AppState>,
+pub async fn schema_get_autocomplete_snapshot(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<AutocompleteSnapshot, ConnectionError> {
     state.schema_get_autocomplete_snapshot(&conn_id).await
@@ -102,7 +109,8 @@ use crate::schema::types::{
     TableDefinition, ViewDefinition,
 };
 
-async fn require_pool_introspect(    state: &State<'_, AppState>,
+async fn require_pool_introspect(
+    state: &State<'_, AppState>,
     conn_id: &str,
 ) -> Result<Pool, IntrospectError> {
     state
@@ -113,7 +121,8 @@ async fn require_pool_introspect(    state: &State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_get_table_definition(    state: State<'_, AppState>,
+pub async fn schema_get_table_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     table: String,
@@ -123,7 +132,8 @@ pub async fn schema_get_table_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_get_view_definition(    state: State<'_, AppState>,
+pub async fn schema_get_view_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     view: String,
@@ -133,7 +143,8 @@ pub async fn schema_get_view_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_get_matview_definition(    state: State<'_, AppState>,
+pub async fn schema_get_matview_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     matview: String,
@@ -143,7 +154,8 @@ pub async fn schema_get_matview_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_get_index_definition(    state: State<'_, AppState>,
+pub async fn schema_get_index_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     index: String,
@@ -153,7 +165,8 @@ pub async fn schema_get_index_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_get_sequence_definition(    state: State<'_, AppState>,
+pub async fn schema_get_sequence_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     sequence: String,
@@ -163,7 +176,8 @@ pub async fn schema_get_sequence_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_matviews(    state: State<'_, AppState>,
+pub async fn schema_list_matviews(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
 ) -> Result<Vec<MatviewSummary>, IntrospectError> {
@@ -172,7 +186,8 @@ pub async fn schema_list_matviews(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_sequences(    state: State<'_, AppState>,
+pub async fn schema_list_sequences(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
 ) -> Result<Vec<SequenceSummary>, IntrospectError> {
@@ -190,7 +205,8 @@ use crate::schema::types::{
 };
 
 #[tauri::command]
-pub async fn schema_get_function_definition(    state: State<'_, AppState>,
+pub async fn schema_get_function_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     fn_name: String,
@@ -201,7 +217,8 @@ pub async fn schema_get_function_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_get_procedure_definition(    state: State<'_, AppState>,
+pub async fn schema_get_procedure_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     proc_name: String,
@@ -212,7 +229,8 @@ pub async fn schema_get_procedure_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_get_trigger_definition(    state: State<'_, AppState>,
+pub async fn schema_get_trigger_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     table: String,
@@ -223,7 +241,8 @@ pub async fn schema_get_trigger_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_functions(    state: State<'_, AppState>,
+pub async fn schema_list_functions(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     trigger_only: bool,
@@ -233,7 +252,8 @@ pub async fn schema_list_functions(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_procedures(    state: State<'_, AppState>,
+pub async fn schema_list_procedures(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
 ) -> Result<Vec<ProcedureSummary>, IntrospectError> {
@@ -242,7 +262,8 @@ pub async fn schema_list_procedures(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_triggers(    state: State<'_, AppState>,
+pub async fn schema_list_triggers(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     table: Option<String>,
@@ -261,7 +282,8 @@ use crate::schema::types::{
 };
 
 #[tauri::command]
-pub async fn schema_get_fdw_server_definition(    state: State<'_, AppState>,
+pub async fn schema_get_fdw_server_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     server_name: String,
 ) -> Result<FdwServerDefinition, IntrospectError> {
@@ -270,7 +292,8 @@ pub async fn schema_get_fdw_server_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_get_publication_definition(    state: State<'_, AppState>,
+pub async fn schema_get_publication_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     pub_name: String,
 ) -> Result<PublicationDefinition, IntrospectError> {
@@ -279,7 +302,8 @@ pub async fn schema_get_publication_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_get_subscription_definition(    state: State<'_, AppState>,
+pub async fn schema_get_subscription_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     sub_name: String,
 ) -> Result<SubscriptionDefinition, IntrospectError> {
@@ -288,7 +312,8 @@ pub async fn schema_get_subscription_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_get_role_definition(    state: State<'_, AppState>,
+pub async fn schema_get_role_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     role_name: String,
 ) -> Result<RoleDefinition, IntrospectError> {
@@ -297,7 +322,8 @@ pub async fn schema_get_role_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_get_custom_type_definition(    state: State<'_, AppState>,
+pub async fn schema_get_custom_type_definition(
+    state: State<'_, AppState>,
     conn_id: String,
     schema: String,
     name: String,
@@ -307,7 +333,8 @@ pub async fn schema_get_custom_type_definition(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_publishable_tables(    state: State<'_, AppState>,
+pub async fn schema_list_publishable_tables(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<Vec<QualifiedName>, IntrospectError> {
     let pool = require_pool_introspect(&state, &conn_id).await?;
@@ -315,7 +342,8 @@ pub async fn schema_list_publishable_tables(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_publications(    state: State<'_, AppState>,
+pub async fn schema_list_publications(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<Vec<PublicationSummary>, IntrospectError> {
     let pool = require_pool_introspect(&state, &conn_id).await?;
@@ -323,7 +351,8 @@ pub async fn schema_list_publications(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_collations(    state: State<'_, AppState>,
+pub async fn schema_list_collations(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<Vec<String>, IntrospectError> {
     let pool = require_pool_introspect(&state, &conn_id).await?;
@@ -331,7 +360,8 @@ pub async fn schema_list_collations(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn schema_list_roles(    state: State<'_, AppState>,
+pub async fn schema_list_roles(
+    state: State<'_, AppState>,
     conn_id: String,
 ) -> Result<Vec<RoleSummary>, IntrospectError> {
     let pool = require_pool_introspect(&state, &conn_id).await?;
@@ -344,9 +374,10 @@ pub async fn schema_list_roles(    state: State<'_, AppState>,
 // ---------------------------------------------------------------------------
 
 impl AppState {
-    pub async fn schema_list_schemas(        &self,
+    pub async fn schema_list_schemas(
+        &self,
         conn_id: &str,
-) -> Result<Vec<SchemaInfo>, ConnectionError> {
+    ) -> Result<Vec<SchemaInfo>, ConnectionError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool
             .get()
@@ -359,10 +390,11 @@ impl AppState {
         Ok(rows.iter().map(map_schema).collect())
     }
 
-    pub async fn schema_list_tables(        &self,
+    pub async fn schema_list_tables(
+        &self,
         conn_id: &str,
         schema: &str,
-) -> Result<Vec<TableInfo>, ConnectionError> {
+    ) -> Result<Vec<TableInfo>, ConnectionError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool
             .get()
@@ -375,10 +407,11 @@ impl AppState {
         Ok(rows.iter().map(map_table).collect())
     }
 
-    pub async fn schema_list_views(        &self,
+    pub async fn schema_list_views(
+        &self,
         conn_id: &str,
         schema: &str,
-) -> Result<Vec<ViewInfo>, ConnectionError> {
+    ) -> Result<Vec<ViewInfo>, ConnectionError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool
             .get()
@@ -391,11 +424,12 @@ impl AppState {
         Ok(rows.iter().map(map_view).collect())
     }
 
-    pub async fn schema_list_columns(        &self,
+    pub async fn schema_list_columns(
+        &self,
         conn_id: &str,
         schema: &str,
         table: &str,
-) -> Result<Vec<ColumnInfo>, ConnectionError> {
+    ) -> Result<Vec<ColumnInfo>, ConnectionError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool
             .get()
@@ -408,11 +442,12 @@ impl AppState {
         Ok(rows.iter().map(map_column).collect())
     }
 
-    pub async fn schema_list_indexes(        &self,
+    pub async fn schema_list_indexes(
+        &self,
         conn_id: &str,
         schema: &str,
         table: &str,
-) -> Result<Vec<IndexInfo>, ConnectionError> {
+    ) -> Result<Vec<IndexInfo>, ConnectionError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool
             .get()
@@ -425,11 +460,12 @@ impl AppState {
         Ok(rows.iter().map(map_index).collect())
     }
 
-    pub async fn schema_list_foreign_keys(        &self,
+    pub async fn schema_list_foreign_keys(
+        &self,
         conn_id: &str,
         schema: &str,
         table: &str,
-) -> Result<Vec<ForeignKeyInfo>, ConnectionError> {
+    ) -> Result<Vec<ForeignKeyInfo>, ConnectionError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool
             .get()
@@ -442,9 +478,10 @@ impl AppState {
         Ok(rows.iter().map(map_foreign_key).collect())
     }
 
-    pub async fn schema_get_autocomplete_snapshot(        &self,
+    pub async fn schema_get_autocomplete_snapshot(
+        &self,
         conn_id: &str,
-) -> Result<AutocompleteSnapshot, ConnectionError> {
+    ) -> Result<AutocompleteSnapshot, ConnectionError> {
         let pool = require_pool(self, conn_id).await?;
         let client = pool
             .get()
@@ -485,8 +522,9 @@ impl AppState {
                     "view" => AutocompleteRelKind::View,
                     "matview" => AutocompleteRelKind::Matview,
                     other => {
-                        return Err(ConnectionError::Postgres(format!(                            "unexpected relkind {other}"
-)));
+                        return Err(ConnectionError::Postgres(format!(
+                            "unexpected relkind {other}"
+                        )));
                     }
                 };
                 relations.push(AutocompleteRelation {
@@ -501,8 +539,9 @@ impl AppState {
                 let nullable: bool = row.get("col_nullable");
                 let is_jsonb: bool = row.get("col_is_jsonb");
                 let last = relations.last_mut().ok_or_else(|| {
-                    ConnectionError::Postgres(                        "snapshot column row arrived before any relation row".to_string(),
-)
+                    ConnectionError::Postgres(
+                        "snapshot column row arrived before any relation row".to_string(),
+                    )
                 })?;
                 debug_assert_eq!(last.schema, schema);
                 debug_assert_eq!(last.name, name);

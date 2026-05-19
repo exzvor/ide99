@@ -26,7 +26,8 @@ pub async fn snippets_list(state: State<'_, AppState>) -> Result<Vec<UserSnippet
 }
 
 #[tauri::command]
-pub async fn snippets_create(    state: State<'_, AppState>,
+pub async fn snippets_create(
+    state: State<'_, AppState>,
     input: NewUserSnippet,
 ) -> Result<UserSnippet, SnippetError> {
     let guard = state.store.lock().await;
@@ -34,7 +35,8 @@ pub async fn snippets_create(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn snippets_update(    state: State<'_, AppState>,
+pub async fn snippets_update(
+    state: State<'_, AppState>,
     id: i64,
     input: UpdateUserSnippet,
 ) -> Result<UserSnippet, SnippetError> {
@@ -49,7 +51,8 @@ pub async fn snippets_delete(state: State<'_, AppState>, id: i64) -> Result<(), 
 }
 
 #[tauri::command]
-pub async fn snippets_export(    state: State<'_, AppState>,
+pub async fn snippets_export(
+    state: State<'_, AppState>,
     path: String,
 ) -> Result<SnippetExportBundle, SnippetError> {
     let bundle = {
@@ -69,7 +72,8 @@ pub async fn snippets_export(    state: State<'_, AppState>,
 }
 
 #[tauri::command]
-pub async fn snippets_import(    state: State<'_, AppState>,
+pub async fn snippets_import(
+    state: State<'_, AppState>,
     path: String,
 ) -> Result<Vec<UserSnippet>, SnippetError> {
     let text = std::fs::read_to_string(PathBuf::from(&path))
@@ -77,14 +81,16 @@ pub async fn snippets_import(    state: State<'_, AppState>,
     let bundle: SnippetExportBundle =
         serde_json::from_str(&text).map_err(|e| SnippetError::InvalidBundle(e.to_string()))?;
     if bundle.kind != "snippets" {
-        return Err(SnippetError::InvalidBundle(format!(            "expected kind='snippets', got '{}'",
+        return Err(SnippetError::InvalidBundle(format!(
+            "expected kind='snippets', got '{}'",
             bundle.kind
-)));
+        )));
     }
     if bundle.version != 1 {
-        return Err(SnippetError::InvalidBundle(format!(            "unsupported bundle version {}",
+        return Err(SnippetError::InvalidBundle(format!(
+            "unsupported bundle version {}",
             bundle.version
-)));
+        )));
     }
     let guard = state.store.lock().await;
     let store = SnippetStore::new(guard.conn());

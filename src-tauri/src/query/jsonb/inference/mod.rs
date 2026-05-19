@@ -43,7 +43,8 @@ pub enum InferenceResponse {
 /// # Errors
 ///
 /// Returns `InferenceError::Sqlite` on cache read failure.
-pub async fn request_schema(    state: Arc<InferenceState>,
+pub async fn request_schema(
+    state: Arc<InferenceState>,
     app: AppHandle,
     pool: Pool,
     store: Arc<Mutex<Store>>,
@@ -88,7 +89,8 @@ pub async fn request_schema(    state: Arc<InferenceState>,
 /// # Errors
 ///
 /// Returns `InferenceError::Sqlite` on cache delete failure.
-pub async fn invalidate(    state: Arc<InferenceState>,
+pub async fn invalidate(
+    state: Arc<InferenceState>,
     app: AppHandle,
     pool: Pool,
     store: Arc<Mutex<Store>>,

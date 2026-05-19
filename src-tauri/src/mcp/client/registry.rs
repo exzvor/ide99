@@ -58,9 +58,10 @@ impl ClientRegistry {
                 if let Some(c) = g.remove(name) {
                     let _ = c.disconnect().await;
                 }
-                g.insert(                    name.clone(),
+                g.insert(
+                    name.clone(),
                     Arc::new(ClientConnection::new(name.clone(), entry.clone())),
-);
+                );
             }
         }
         Ok(())

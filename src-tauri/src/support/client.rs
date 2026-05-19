@@ -50,7 +50,8 @@ fn build_client() -> Result<reqwest::Client, SupportError> {
         .map_err(|e| SupportError::Network(format!("build client: {e}")))
 }
 
-pub async fn send_feedback(    locale: &str,
+pub async fn send_feedback(
+    locale: &str,
     email: &str,
     message: &str,
     screenshots: &[Screenshot],
