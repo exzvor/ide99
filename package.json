@@ -76,7 +76,7 @@
     "@types/react-dom": "^18.3",
     "@vitejs/plugin-react": "^4",
     "@vitejs/plugin-vue": "^6.0.6",
-    "fast-check": "^3.23.2",
+    "fast-check": "^4.8.0",
     "jest-axe": "^10.0.0",
     "jsdom": "^25",
     "tailwindcss": "^4",
