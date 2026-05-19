@@ -9,6 +9,10 @@ export default defineConfig({
     globals: true,
     // Vitest discovers tests/e2e by default; Playwright owns those files.
     exclude: ["**/node_modules/**", "**/dist/**", "tests/e2e/**"],
+    // Hard per-test timeouts so a hanging test fails loudly with a stack
+    // trace instead of stalling the run for hours.
+    testTimeout: 30000,
+    hookTimeout: 30000,
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "json-summary"],
