@@ -5,26 +5,32 @@ on:
     tags:
       - "v*"
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to (re)build (e.g. v1.0.2)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
 
 jobs:
   build:
-    permissions:
-      contents: write
     strategy:
       fail-fast: false
       matrix:
         include:
           - platform: macos-latest
-            args: "--target aarch64-apple-darwin"
-          - platform: macos-latest
-            args: "--target x86_64-apple-darwin"
+            target: aarch64-apple-darwin
           - platform: ubuntu-22.04
-            args: ""
+            target: ""
           - platform: windows-latest
-            args: ""
+            target: ""
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
 
       - uses: actions/setup-node@v4
         with:
@@ -33,7 +39,7 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
         with:
-          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+          targets: ${{ matrix.target }}
 
       - uses: Swatinem/rust-cache@v2
         with:
@@ -53,13 +59,73 @@ jobs:
 
       - run: npm ci
 
+      - name: Resolve tag name
+        id: tag
+        shell: bash
+        run: |
+          tag="${{ github.event.inputs.tag || github.ref_name }}"
+          version="${tag#v}"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      # Build via tauri-action — also creates a draft GH release and uploads
+      # the standard Tauri artifacts (.dmg / .deb / .AppImage / .nsis .exe).
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ github.ref_name }}
-          releaseName: "ide99 ${{ github.ref_name }}"
-          releaseBody: "See CHANGELOG.md for details."
+          tagName: ${{ steps.tag.outputs.tag }}
+          releaseName: "ide99 ${{ steps.tag.outputs.tag }}"
+          releaseBody: "See [CHANGELOG.md](https://github.com/exzvor/ide99/blob/main/CHANGELOG.md) for details."
           releaseDraft: true
           prerelease: false
-          args: ${{ matrix.args }}
+          args: ${{ matrix.target && format('--target {0}', matrix.target) || '' }}
+
+      # Wrap target/release/bundle/macos/ide99.app into a .pkg installer
+      # whose postinstall strips com.apple.quarantine and re-applies the
+      # ad-hoc seal. Avoids per-launch Gatekeeper warnings under ad-hoc
+      # signing while a Developer ID cert is unavailable.
+      - name: Build macOS .pkg
+        if: matrix.platform == 'macos-latest'
+        run: bash scripts/release/build-macos-pkg.sh
+
+      - name: Upload macOS .pkg to release
+        if: matrix.platform == 'macos-latest'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ steps.tag.outputs.tag }}" \
+            "target/release/bundle/pkg/ide99_${{ steps.tag.outputs.version }}_aarch64.pkg" \
+            --clobber
+
+      # Flat portable .zip of the Windows binary. Dodges browser-level
+      # download reputation gates that hide the NSIS .exe outright while
+      # an EV signing cert is unavailable.
+      - name: Build Windows portable .zip
+        if: matrix.platform == 'windows-latest'
+        shell: pwsh
+        run: ./scripts/release/build-windows-portable.ps1
+
+      - name: Upload Windows portable .zip to release
+        if: matrix.platform == 'windows-latest'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: |
+          gh release upload "${{ steps.tag.outputs.tag }}" `
+            "target/release/bundle/portable/ide99_${{ steps.tag.outputs.version }}_x64-portable.zip" `
+            --clobber
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Promote draft release to published
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${{ github.event.inputs.tag || github.ref_name }}"
+          gh release edit "$tag" --draft=false
