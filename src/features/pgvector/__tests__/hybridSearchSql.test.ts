@@ -33,18 +33,22 @@ describe("buildHybridSearchSql", () => {
     expect(sql).toMatchInlineSnapshot(`
       "-- pgvector hybrid search (RRF)
 
-      WITH vec_ranked AS (        SELECT id, ROW_NUMBER() OVER (                 ORDER BY embedding <-> '[0.1,0.2]'::vector
-) AS rnk
+      WITH vec_ranked AS (
+        SELECT id, ROW_NUMBER() OVER (
+                 ORDER BY embedding <-> '[0.1,0.2]'::vector
+      ) AS rnk
         FROM public.items
         ORDER BY embedding <-> '[0.1,0.2]'::vector
         LIMIT 200
-),
-      ts_ranked AS (        SELECT id, ROW_NUMBER() OVER (                 ORDER BY ts_rank_cd(title_ts, plainto_tsquery('hello')) DESC
-) AS rnk
+      ),
+      ts_ranked AS (
+        SELECT id, ROW_NUMBER() OVER (
+                 ORDER BY ts_rank_cd(title_ts, plainto_tsquery('hello')) DESC
+      ) AS rnk
         FROM public.items
         WHERE title_ts @@ plainto_tsquery('hello')
         LIMIT 200
-)
+      )
       SELECT t.*,
              (COALESCE(0.5 / (60 + v.rnk)::float, 0)
             + COALESCE(0.5 / (60 + s.rnk)::float, 0)) AS score
@@ -71,18 +75,22 @@ describe("buildHybridSearchSql", () => {
     expect(sql).toMatchInlineSnapshot(`
       "-- pgvector hybrid search (RRF)
 
-      WITH vec_ranked AS (        SELECT id, ROW_NUMBER() OVER (                 ORDER BY embedding <-> '[0.1,0.2]'::vector
-) AS rnk
+      WITH vec_ranked AS (
+        SELECT id, ROW_NUMBER() OVER (
+                 ORDER BY embedding <-> '[0.1,0.2]'::vector
+      ) AS rnk
         FROM public.items
         ORDER BY embedding <-> '[0.1,0.2]'::vector
         LIMIT 200
-),
-      ts_ranked AS (        SELECT id, ROW_NUMBER() OVER (                 ORDER BY ts_rank_cd(title_ts, plainto_tsquery('hello')) DESC
-) AS rnk
+      ),
+      ts_ranked AS (
+        SELECT id, ROW_NUMBER() OVER (
+                 ORDER BY ts_rank_cd(title_ts, plainto_tsquery('hello')) DESC
+      ) AS rnk
         FROM public.items
         WHERE title_ts @@ plainto_tsquery('hello')
         LIMIT 200
-)
+      )
       SELECT t.*,
              (COALESCE(0.7 / (20 + v.rnk)::float, 0)
             + COALESCE(0.3 / (20 + s.rnk)::float, 0)) AS score
@@ -106,18 +114,22 @@ describe("buildHybridSearchSql", () => {
     expect(sql).toMatchInlineSnapshot(`
       "-- pgvector hybrid search (RRF)
 
-      WITH vec_ranked AS (        SELECT id, ROW_NUMBER() OVER (                 ORDER BY embedding <-> embed('hi')
-) AS rnk
+      WITH vec_ranked AS (
+        SELECT id, ROW_NUMBER() OVER (
+                 ORDER BY embedding <-> embed('hi')
+      ) AS rnk
         FROM public.items
         ORDER BY embedding <-> embed('hi')
         LIMIT 200
-),
-      ts_ranked AS (        SELECT id, ROW_NUMBER() OVER (                 ORDER BY ts_rank_cd(title_ts, plainto_tsquery('hello')) DESC
-) AS rnk
+      ),
+      ts_ranked AS (
+        SELECT id, ROW_NUMBER() OVER (
+                 ORDER BY ts_rank_cd(title_ts, plainto_tsquery('hello')) DESC
+      ) AS rnk
         FROM public.items
         WHERE title_ts @@ plainto_tsquery('hello')
         LIMIT 200
-)
+      )
       SELECT t.*,
              (COALESCE(0.5 / (60 + v.rnk)::float, 0)
             + COALESCE(0.5 / (60 + s.rnk)::float, 0)) AS score
