@@ -42,7 +42,7 @@
     "bootstrap": "^5.3.8",
     "dagre": "^0.8.5",
     "date-fns": "^4.1.0",
-    "i18next": "^23",
+    "i18next": "^26",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.460",
     "monaco-sql-languages": "^1.0.0",
