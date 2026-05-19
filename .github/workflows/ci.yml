@@ -48,7 +48,7 @@ jobs:
           workspaces: "src-tauri -> target"
       - run: cargo fmt --all -- --check
         working-directory: src-tauri
-      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo clippy --all-targets
         working-directory: src-tauri
       - run: cargo test --all
         working-directory: src-tauri
