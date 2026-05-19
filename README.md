@@ -20,9 +20,7 @@ PostgreSQL IDE for developers. Cross-platform desktop application (macOS, Linux,
 - **Backup / Restore** workflows
 - **MCP server** — expose ide99 to AI agents (Claude Code, Cursor, Windsurf, Cline) for context-aware SQL assistance
 
-### Optional paid module
-
-- **Instant DB** (currently **free beta**) — on-demand throwaway PostgreSQL instances for SQL prototyping, migration dry-runs, and extension probes. Backend at [api.spg99.ru](https://api.spg99.ru). The IDE works fully without it.
+**Instant DB** (free beta) — on-demand throwaway PostgreSQL instances for SQL prototyping, migration dry-runs, and extension probes.
 
 ## Install
 
