@@ -1,0 +1,23 @@
+title = "ide99 gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Vendor + generated paths + i18n labelKey false positives"
+paths = [
+  '''node_modules/.*''',
+  '''target/.*''',
+  '''src-tauri/target/.*''',
+  '''src-tauri/gen/.*''',
+  '''dist/.*''',
+  '''package-lock\.json$''',
+  '''Cargo\.lock$''',
+]
+# i18n translation key literals (labelKey: "feature.section.name") trip the
+# generic-api-key heuristic. They are not secrets — match against the
+# surrounding line so the allowlist actually catches them.
+regexTarget = "line"
+regexes = [
+  '''labelKey:\s*"[a-z0-9_.]+"''',
+]

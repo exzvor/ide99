@@ -1,0 +1,2483 @@
+/* ==========================================================================
+   ide99 — Quiet Redesign · Design System
+   --------------------------------------------------------------------------
+   This file is imported AFTER tokens.css/themes.css and overrides them —
+   legacy variables (--gray-*, --brand-*) are mapped onto the new quiet
+   tokens so legacy components keep visual consistency with the new style.
+   ========================================================================== */
+
+:root {
+  /* ─── Light palette ─── */
+  --bg: #fafaf9;
+  --bg-elev: #ffffff;
+  --bg-sunken: #f4f4f2;
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-strong: rgba(255, 255, 255, 0.92);
+  --border-q: rgba(15, 17, 21, 0.07);
+  --border-strong-q: rgba(15, 17, 21, 0.12);
+  --hairline: rgba(15, 17, 21, 0.05);
+
+  --ink: #0f1115;
+  --ink-2: #2a2d33;
+  --ink-3: #5b5f66;
+  --ink-4: #8b8f96;
+  --ink-5: #b8bcc2;
+
+  /* warm charcoal instead of pure ink — quiet primary */
+  --btn-primary-bg: #2c2925;
+  --btn-primary-bg-hover: #3a3631;
+  --btn-primary-fg: #f3efe7;
+
+  /* brand cyan from the "99" in the icon */
+  --brand-q: #00b3ff;
+  --brand-q-2: #38c5ff;
+  --brand-q-soft: rgba(0, 179, 255, 0.1);
+
+  /* emerald accent — success / focus / selection */
+  --accent: #10b981;
+  --accent-2: #34d399;
+  --accent-soft: rgba(16, 185, 129, 0.1);
+  --accent-strong: #059669;
+
+  /* status */
+  --warn-q: #b45309;
+  --warn-q-soft: rgba(245, 158, 11, 0.1);
+  --danger-q: #b91c1c;
+  --danger-q-soft: rgba(220, 38, 38, 0.08);
+
+  /* mesh blobs (cyan / indigo / pink) */
+  --mesh-1: rgba(0, 179, 255, 0.14);
+  --mesh-2: rgba(99, 102, 241, 0.1);
+  --mesh-3: rgba(244, 114, 182, 0.06);
+
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+
+  --shadow-q-sm: 0 1px 2px rgba(15, 17, 21, 0.04);
+  --shadow-q-md: 0 4px 16px -4px rgba(15, 17, 21, 0.08), 0 1px 2px rgba(15, 17, 21, 0.04);
+  --shadow-q-lg: 0 18px 50px -12px rgba(15, 17, 21, 0.18), 0 2px 6px rgba(15, 17, 21, 0.05);
+
+  --font-sans-q: "Inter", "Inter Display", -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    system-ui, sans-serif;
+  --font-mono-q: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+
+  /* type scale */
+  --t-11: 11px;
+  --t-115: 11.5px;
+  --t-12: 12px;
+  --t-125: 12.5px;
+  --t-13: 13px;
+  --t-135: 13.5px;
+  --t-14: 14px;
+  --t-32: 32px;
+}
+
+/* ── Override legacy palette so existing tailwind-based UI inherits quiet look ── */
+:root {
+  --gray-0: var(--bg);
+  --gray-50: var(--bg-sunken);
+  --gray-100: var(--bg-sunken);
+  --gray-200: rgba(15, 17, 21, 0.07);
+  --gray-300: rgba(15, 17, 21, 0.12);
+  --gray-400: var(--ink-4);
+  --gray-500: var(--ink-3);
+  --gray-600: var(--ink-3);
+  --gray-700: var(--ink-2);
+  --gray-800: var(--ink-2);
+  --gray-900: var(--ink);
+  --gray-950: var(--ink);
+
+  /* brand → cyan from logo */
+  --brand-50: rgba(0, 179, 255, 0.1);
+  --brand-100: rgba(0, 179, 255, 0.14);
+  --brand-200: rgba(0, 179, 255, 0.2);
+  --brand-300: #7fd6ff;
+  --brand-400: #38c5ff;
+  --brand-500: #00b3ff;
+  --brand-600: #009ee0;
+  --brand-700: #0086c0;
+  --brand-800: #006a99;
+  --brand-900: #004f73;
+
+  /* success → emerald accent */
+  --success-50: rgba(16, 185, 129, 0.1);
+  --success-500: #10b981;
+  --success-600: #059669;
+  --success-700: #047857;
+
+  /* warning → quiet amber */
+  --warning-50: rgba(245, 158, 11, 0.1);
+  --warning-500: #d97706;
+  --warning-600: #b45309;
+  --warning-700: #92400e;
+
+  /* error → quiet red */
+  --error-50: rgba(220, 38, 38, 0.08);
+  --error-500: #dc2626;
+  --error-600: #b91c1c;
+  --error-700: #991b1b;
+}
+
+[data-theme="dark"] {
+  --bg: #0a0b0e;
+  --bg-elev: #111317;
+  --bg-sunken: #07080a;
+  --surface: rgba(20, 22, 27, 0.7);
+  --surface-strong: rgba(24, 26, 31, 0.92);
+  --border-q: rgba(255, 255, 255, 0.06);
+  --border-strong-q: rgba(255, 255, 255, 0.1);
+  --hairline: rgba(255, 255, 255, 0.04);
+
+  --ink: #f5f6f7;
+  --ink-2: #e2e4e8;
+  --ink-3: #a8acb3;
+  --ink-4: #6c7079;
+  --ink-5: #3f434b;
+
+  /* warm putty primary in dark */
+  --btn-primary-bg: #c9c3b6;
+  --btn-primary-bg-hover: #d6d1c5;
+  --btn-primary-fg: #15161a;
+
+  --brand-q: #38c5ff;
+  --brand-q-2: #5fd2ff;
+  --brand-q-soft: rgba(56, 197, 255, 0.14);
+
+  /* In dark theme accent === brand cyan: success/focus/selection are cool blues.
+     In light theme it stays emerald. */
+  --accent: #38c5ff;
+  --accent-2: #5fd2ff;
+  --accent-soft: rgba(56, 197, 255, 0.16);
+  --accent-strong: #00b3ff;
+
+  --warn-q: #f59e0b;
+  --warn-q-soft: rgba(245, 158, 11, 0.1);
+  --danger-q: #f87171;
+  --danger-q-soft: rgba(239, 68, 68, 0.1);
+
+  --mesh-1: rgba(0, 179, 255, 0.18);
+  --mesh-2: rgba(99, 102, 241, 0.18);
+  --mesh-3: rgba(244, 114, 182, 0.1);
+
+  --shadow-q-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-q-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --shadow-q-lg: 0 24px 60px rgba(0, 0, 0, 0.5);
+
+  /* legacy palette mapping in dark */
+  --gray-0: var(--bg);
+  --gray-50: var(--bg-elev);
+  --gray-100: var(--bg-elev);
+  --gray-200: rgba(255, 255, 255, 0.06);
+  --gray-300: rgba(255, 255, 255, 0.1);
+  --gray-400: var(--ink-4);
+  --gray-500: var(--ink-3);
+  --gray-600: var(--ink-3);
+  --gray-700: var(--ink-2);
+  --gray-800: var(--ink-2);
+  --gray-900: var(--ink);
+  --gray-950: var(--ink);
+
+  --brand-500: #38c5ff;
+  --brand-600: #00b3ff;
+  --brand-700: #0086c0;
+
+  --success-50: rgba(56, 197, 255, 0.16);
+  --success-500: #38c5ff;
+  --success-600: #00b3ff;
+  --success-700: #5fd2ff;
+
+  --warning-50: rgba(245, 158, 11, 0.14);
+  --warning-500: #f59e0b;
+  --warning-600: #d97706;
+  --warning-700: #fcd34d;
+
+  --error-50: rgba(248, 113, 113, 0.14);
+  --error-500: #f87171;
+  --error-600: #ef4444;
+  --error-700: #fca5a5;
+}
+
+/* ==========================================================================
+   App frame
+   ========================================================================== */
+
+html,
+body,
+#root {
+  height: 100%;
+  /* Inner panes (`.q-scroll`, editor, snippet palette) draw their own
+     scrollbars where needed. A body-level scroll always indicates a height
+     mismatch (e.g. a 3px env-strip on top of `app-frame: height 100%`) and
+     appears as a stray bar to the right of Welcome / Workspace. */
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans-q);
+  font-feature-settings: "cv11", "ss01", "ss03";
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  overflow: hidden;
+  font-family: var(--font-sans-q);
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+}
+
+/* ── Titlebar (macOS-style) ────────────────────────────────────────────── */
+.q-titlebar {
+  height: 36px;
+  flex: 0 0 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--hairline);
+  position: relative;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.04), transparent);
+  z-index: 10;
+  -webkit-app-region: drag;
+}
+.q-titlebar button,
+.q-titlebar [role="button"],
+.q-titlebar input {
+  -webkit-app-region: no-drag;
+}
+[data-theme="dark"] .q-titlebar {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.02), transparent);
+}
+
+.tl-dots {
+  display: flex;
+  gap: 8px;
+  -webkit-app-region: no-drag;
+}
+.tl-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: default;
+}
+.tl-dot.r {
+  background: #ff5f57;
+}
+.tl-dot.y {
+  background: #febc2e;
+}
+.tl-dot.g {
+  background: #28c840;
+}
+
+.tl-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-3);
+  letter-spacing: -0.005em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  font-family: var(--font-sans-q);
+}
+.tl-center .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.tl-center .sep {
+  color: var(--ink-5);
+  font-weight: 400;
+}
+.tl-center .ctx {
+  color: var(--ink-4);
+  font-weight: 400;
+  font-family: var(--font-mono-q);
+}
+
+/* ── Mesh background (slow-drifting blobs) ─────────────────────────────── */
+.q-mesh {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.q-mesh::before,
+.q-mesh::after,
+.q-mesh > i {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform;
+}
+.q-mesh::before {
+  width: 60%;
+  height: 60%;
+  left: -10%;
+  top: -20%;
+  background: var(--mesh-1);
+  animation: drift1 38s ease-in-out infinite alternate;
+}
+.q-mesh::after {
+  width: 55%;
+  height: 55%;
+  right: -15%;
+  top: 30%;
+  background: var(--mesh-2);
+  animation: drift2 46s ease-in-out infinite alternate;
+}
+.q-mesh > i {
+  width: 50%;
+  height: 50%;
+  left: 30%;
+  bottom: -20%;
+  background: var(--mesh-3);
+  animation: drift3 54s ease-in-out infinite alternate;
+}
+@keyframes drift1 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(20%, 15%) scale(1.15);
+  }
+}
+@keyframes drift2 {
+  0% {
+    transform: translate(0, 0) scale(1.05);
+  }
+  100% {
+    transform: translate(-15%, -10%) scale(0.95);
+  }
+}
+@keyframes drift3 {
+  0% {
+    transform: translate(0, 0) scale(0.9);
+  }
+  100% {
+    transform: translate(-10%, -20%) scale(1.1);
+  }
+}
+.q-mesh.subtle::before,
+.q-mesh.subtle::after,
+.q-mesh.subtle > i {
+  opacity: 0.55;
+}
+.q-mesh.off {
+  display: none;
+}
+
+/* ==========================================================================
+   Components
+   ========================================================================== */
+
+/* ── Buttons ───────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: var(--r-md);
+  font-family: var(--font-sans-q);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  border: 1px solid var(--border-strong-q);
+  background: var(--bg-elev);
+  color: var(--ink-2);
+  cursor: default;
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease, box-shadow
+    0.12s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+.btn:hover:not(:disabled) {
+  background: var(--bg-sunken);
+  border-color: var(--ink-5);
+  color: var(--ink);
+}
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  border-color: var(--accent);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+  border-color: var(--btn-primary-bg);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--btn-primary-bg-hover);
+  border-color: var(--btn-primary-bg-hover);
+  color: var(--btn-primary-fg);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+[data-theme="dark"] .btn-accent {
+  color: #04293d;
+}
+.btn-accent:hover:not(:disabled) {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+}
+
+/* when an accent/primary button is disabled, opacity:0.5 alone
+   leaves it looking like an active CTA (e.g. cached EXPLAIN's Re-run). Flatten
+   the colored fill to the neutral button surface so disabled is visually
+   unambiguous. */
+.btn-accent:disabled,
+.btn-primary:disabled {
+  background: var(--bg-elev);
+  color: var(--ink-3);
+  border-color: var(--border-strong-q);
+}
+[data-theme="dark"] .btn-accent:disabled,
+[data-theme="dark"] .btn-primary:disabled {
+  color: var(--ink-3);
+}
+
+.btn-danger {
+  color: var(--danger-q);
+  border-color: var(--border-strong-q);
+  background: transparent;
+}
+.btn-danger:hover:not(:disabled) {
+  background: var(--danger-q-soft);
+  border-color: var(--danger-q);
+}
+
+.btn-ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--ink-3);
+}
+.btn-ghost:hover:not(:disabled) {
+  background: var(--bg-sunken);
+  color: var(--ink);
+}
+
+.btn-sm {
+  height: 26px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+.btn-cta {
+  height: 38px;
+  padding: 0 22px;
+  font-size: 13.5px;
+  border-radius: 10px;
+}
+
+.btn-icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--ink-3);
+  border-radius: var(--r-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.btn-icon:hover:not(:disabled) {
+  background: var(--bg-sunken);
+  color: var(--ink);
+}
+.btn-icon:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.btn-icon:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Inputs ────────────────────────────────────────────────────────────── */
+.q-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.q-field label,
+.q-label {
+  font-family: var(--font-sans-q);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+  letter-spacing: 0.005em;
+}
+.q-field label .req,
+.q-label .req {
+  color: var(--accent);
+}
+
+/* ── Environment select (Radix Select trigger inside ConnectionForm) ──────
+   Without an explicit ruleset Radix renders the trigger as a UA-default
+   <button> (text-align: center, intrinsic chrome). Inside a `.q-field`
+   column the badge+label end up floating in the middle of the field
+   instead of sitting in a real form control like every sibling select.
+   This rule normalises it to the same shape as `.q-input` / `.q-select`
+   so the Environment row reads as one coherent control. */
+.env-select-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--border-strong-q);
+  background: var(--bg-elev);
+  border-radius: var(--r-md);
+  font-family: var(--font-sans-q);
+  font-size: 13px;
+  color: var(--ink);
+  text-align: left;
+  cursor: default;
+  transition: border-color 0.12s, box-shadow 0.12s;
+  box-sizing: border-box;
+}
+.env-select-trigger:hover:not(:disabled) {
+  border-color: var(--ink-5);
+}
+.env-select-trigger:focus-visible,
+.env-select-trigger[data-state="open"] {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.env-select-trigger[data-disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Dropdown panel + items — keep the visual language of the form. */
+.env-select-content {
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong-q);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-q-lg);
+  padding: 4px;
+  z-index: 80;
+  min-width: var(--radix-select-trigger-width, 200px);
+}
+.env-select-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  font-family: var(--font-sans-q);
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  cursor: default;
+  user-select: none;
+}
+.env-select-item[data-highlighted] {
+  background: var(--bg-sunken);
+}
+.env-select-item[data-state="checked"] {
+  color: var(--ink);
+}
+
+.q-input,
+.q-select {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--border-strong-q);
+  background: var(--bg-elev);
+  border-radius: var(--r-md);
+  font-family: var(--font-sans-q);
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.12s, box-shadow 0.12s;
+  width: 100%;
+  box-sizing: border-box;
+}
+.q-input:focus,
+.q-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.q-input::placeholder {
+  color: var(--ink-4);
+}
+.q-input.mono {
+  font-family: var(--font-mono-q);
+  font-size: 12.5px;
+}
+.q-input.warn {
+  border-color: var(--warn-q);
+  box-shadow: 0 0 0 3px var(--warn-q-soft);
+}
+.q-input.err {
+  border-color: var(--danger-q);
+  box-shadow: 0 0 0 3px var(--danger-q-soft);
+}
+.q-input:disabled,
+.q-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.q-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans-q);
+  font-size: 12.5px;
+  color: var(--ink-2);
+  cursor: default;
+}
+.q-checkbox input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent);
+  cursor: default;
+}
+
+/* ── Object editor "● Unsaved" badge ─────────────────────────────────────
+   Used in every object editor header (table / function / index / etc.) so
+   the indication of unsaved changes reads identically everywhere. Designed
+   to live inline after Schema/Name fields with `align-items: flex-end`,
+   hence the `paddingBottom: 8` matching the q-input baseline. */
+.q-dirty-badge {
+  font-size: 11px;
+  color: var(--accent);
+  padding-bottom: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Pills ─────────────────────────────────────────────────────────────── */
+.q-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  font-family: var(--font-sans-q);
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 999px;
+  background: var(--bg-sunken);
+  color: var(--ink-3);
+  letter-spacing: 0.01em;
+}
+.q-pill.ok {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+.q-pill.warn {
+  background: var(--warn-q-soft);
+  color: var(--warn-q);
+}
+.q-pill.err {
+  background: var(--danger-q-soft);
+  color: var(--danger-q);
+}
+[data-theme="dark"] .q-pill.ok {
+  color: var(--accent-2);
+}
+
+/* ── Cards ─────────────────────────────────────────────────────────────── */
+.q-card {
+  background: var(--surface-strong);
+  border: 1px solid var(--border-q);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-q-sm);
+}
+
+/* ── Hairline ──────────────────────────────────────────────────────────── */
+.q-hr {
+  height: 1px;
+  background: var(--hairline);
+  border: 0;
+  margin: 0;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────────────────── */
+.q-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.q-scroll::-webkit-scrollbar-thumb {
+  background: var(--ink-5);
+  border-radius: 4px;
+}
+.q-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Tab strip — native horizontal scrollbar fully hidden. macOS WKWebView
+   (Tauri's webview) renders system overlay scrollbars and silently ignores
+   `height` on `::-webkit-scrollbar`, so the previous attempt to render a
+   3 px native bar always came out at the system minimum (~10 px). Instead
+   we hide the native bar entirely and render a JS-driven custom thumb
+   (`.q-tab-scrollbar-thumb` below) — that gives us pixel-precise control
+   over thickness. flex-shrink:0 on .q-tab keeps each tab at its natural
+   width so adding/removing/scrolling tabs never reshuffles the row. */
+.q-tab-strip {
+  scrollbar-width: none; /* Firefox */
+}
+.q-tab-strip::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Wrapper around .q-tab-strip — host for the absolutely positioned custom
+   scrollbar overlay. Takes the same flex slot as the old bare strip, so
+   layout in .q-tabbar (strip + action buttons) doesn't change. */
+.q-tab-strip-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+}
+
+/* Custom thin scrollbar overlay — 3 px line at the bottom of the strip,
+   thumb position + width are computed in JS from scrollLeft/scrollWidth.
+   The track itself is `pointer-events: none` so clicks fall through to the
+   tabs above; only the thumb intercepts events (grabbable for drag). The
+   track is 6 px tall to give the thumb room to grow on hover (3 → 5 px)
+   without re-flowing layout — visually the empty 3 px above the thumb is
+   transparent. */
+.q-tab-scrollbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 6px;
+  pointer-events: none;
+  z-index: 1;
+}
+.q-tab-scrollbar-thumb {
+  position: absolute;
+  bottom: 0;
+  height: 3px;
+  background: rgba(127, 127, 127, 0.32);
+  border-radius: 2px;
+  pointer-events: auto;
+  cursor: grab;
+  transition: background 120ms ease, height 120ms ease;
+  touch-action: none;
+}
+.q-tab-strip-wrap:hover .q-tab-scrollbar-thumb {
+  background: rgba(127, 127, 127, 0.55);
+  height: 5px;
+}
+.q-tab-scrollbar-thumb:active,
+.q-tab-scrollbar-thumb.is-dragging {
+  cursor: grabbing;
+  background: rgba(127, 127, 127, 0.72);
+  height: 5px;
+}
+
+/* ── Tabs (file tabs) ──────────────────────────────────────────────────── */
+.q-tabbar {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--hairline);
+  background: var(--bg);
+  height: 34px;
+  flex: 0 0 34px;
+}
+.q-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  font-family: var(--font-sans-q);
+  font-size: 12.5px;
+  color: var(--ink-3);
+  border-right: 1px solid var(--hairline);
+  position: relative;
+  cursor: default;
+  background: transparent;
+  border-top: none;
+  border-left: none;
+  border-bottom: none;
+  height: 100%;
+  white-space: nowrap;
+  user-select: none;
+  flex-shrink: 0;
+}
+.q-tab:hover {
+  background: var(--bg-sunken);
+  color: var(--ink-2);
+}
+.q-tab.active {
+  color: var(--ink);
+  background: var(--bg);
+}
+.q-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1.5px;
+  background: var(--accent);
+}
+.q-tab .x {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-4);
+  font-size: 11px;
+  background: transparent;
+  border: 0;
+  cursor: default;
+}
+.q-tab .x:hover {
+  background: var(--bg-sunken);
+  color: var(--ink-2);
+}
+.q-tab.active .x {
+  color: var(--ink-3);
+}
+
+/* ── Tree (schema browser) ─────────────────────────────────────────────── */
+.q-tree-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font-family: var(--font-sans-q);
+  font-size: 12.5px;
+  color: var(--ink-2);
+  cursor: default;
+  user-select: none;
+}
+.q-tree-row:hover {
+  background: var(--bg-sunken);
+}
+.q-tree-row.selected {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+[data-theme="dark"] .q-tree-row.selected {
+  color: var(--accent-2);
+}
+.q-tree-row .caret {
+  width: 12px;
+  color: var(--ink-4);
+  font-size: 9px;
+  flex: 0 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.q-tree-row .icon {
+  color: var(--ink-4);
+  flex: 0 0 14px;
+  display: inline-flex;
+}
+.q-tree-row.selected .icon {
+  color: var(--accent);
+}
+.q-tree-row .ident {
+  font-family: var(--font-mono-q);
+  font-size: 12px;
+}
+.q-tree-row mark {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+/* ── Result grid ───────────────────────────────────────────────────────── */
+.q-grid {
+  font-family: var(--font-mono-q);
+  font-size: 12px;
+  width: 100%;
+  border-collapse: collapse;
+}
+.q-grid thead th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-sunken);
+  font-family: var(--font-sans-q);
+  font-weight: 500;
+  color: var(--ink-3);
+  text-align: left;
+  padding: 6px 10px;
+  font-size: 11px;
+  border-bottom: 1px solid var(--border-q);
+  letter-spacing: 0.01em;
+  text-transform: lowercase;
+}
+.q-grid tbody td {
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink-2);
+  vertical-align: middle;
+}
+.q-grid tbody tr:hover td {
+  background: var(--bg-sunken);
+}
+.q-grid td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.q-grid td.null {
+  color: var(--ink-5);
+  font-style: italic;
+}
+.q-grid td.json {
+  color: var(--ink-3);
+  cursor: default;
+}
+.q-grid td.selected {
+  background: var(--accent-soft) !important;
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+}
+
+/* ── Editor lines (for empty/idle preview only — Monaco handles real editor) ── */
+.q-editor {
+  font-family: var(--font-mono-q);
+  font-size: 13px;
+}
+.q-editor-line {
+  display: flex;
+  padding: 1px 12px 1px 56px;
+  position: relative;
+  color: var(--ink-2);
+  white-space: pre;
+}
+.q-editor-line::before {
+  content: attr(data-n);
+  position: absolute;
+  left: 12px;
+  width: 32px;
+  color: var(--ink-5);
+  text-align: right;
+  font-size: 11.5px;
+}
+.q-editor-line.active {
+  background: linear-gradient(90deg, var(--accent-soft), transparent);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+/* ── Mono code inline ──────────────────────────────────────────────────── */
+.q-code {
+  font-family: var(--font-mono-q);
+  font-size: 12px;
+  color: var(--ink-2);
+  white-space: pre;
+}
+
+/* ── Footer chip / status bar item ─────────────────────────────────────── */
+.q-fchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-family: var(--font-sans-q);
+  font-size: 11px;
+  color: var(--ink-4);
+  cursor: default;
+  background: transparent;
+  border: 0;
+  user-select: none;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.q-fchip:hover:not(:disabled) {
+  background: var(--bg-sunken);
+  color: var(--ink-2);
+}
+.q-fchip:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Welcome typography ────────────────────────────────────────────────── */
+.q-welcome-headline {
+  font-family: var(--font-sans-q);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0;
+}
+.q-welcome-sub {
+  font-family: var(--font-sans-q);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink-3);
+  letter-spacing: -0.005em;
+  margin: 0;
+}
+.q-welcome-eyebrow {
+  font-family: var(--font-sans-q);
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--ink-4);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 0;
+}
+
+/* ── Wordmark "[ide99]" ──────────────────────────────────────────────────
+   SVG wordmark: "ide" is rendered via currentColor (driven by
+   `color: var(--ink)`), brackets/"99" via `var(--brand-q)`.
+   Heights are tuned to match the previous font-sizes. */
+.q-wordmark {
+  display: inline-block;
+  width: auto;
+  height: 48px;
+  color: var(--ink);
+  vertical-align: middle;
+  user-select: none;
+  overflow: visible;
+}
+.q-wordmark.sm {
+  height: 18px;
+}
+.q-wordmark.md {
+  height: 22px;
+}
+
+/* Calm blink of the dot above "i": 7 blinks per 50s cycle,
+   6–8 s intervals, ~350 ms each (50 ms dim + 300 ms return). */
+.q-wordmark-dot {
+  animation: q-wordmark-blink 50s linear infinite;
+  will-change: opacity;
+}
+@keyframes q-wordmark-blink {
+  0%,
+  11.9%,
+  12.6%,
+  25.9%,
+  26.6%,
+  41.9%,
+  42.6%,
+  53.9%,
+  54.6%,
+  69.9%,
+  70.6%,
+  83.9%,
+  84.6%,
+  97.9%,
+  98.6%,
+  100% {
+    opacity: 1;
+  }
+  12%,
+  26%,
+  42%,
+  54%,
+  70%,
+  84%,
+  98% {
+    opacity: 0.22;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .q-wordmark-dot {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ── Popover / context menu ──────────────────────────────────────────────
+   Floats over Workspace mesh blobs and the editor surface, so the panel
+   needs higher contrast than `--bg-elev` alone provides — without it the
+   menu visually melts into the cyan/indigo mesh underneath. We layer a
+   slight backdrop blur + opaque-leaning surface fill + sturdier border. */
+.q-popover {
+  position: absolute;
+  min-width: 220px;
+  background: var(--surface-strong);
+  border: 1px solid var(--border-strong-q);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-q-lg);
+  padding: 4px;
+  font-size: 12.5px;
+  z-index: 60;
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+}
+[data-theme="dark"] .q-popover {
+  /* On dark themes `--surface-strong` is a translucent ink that still
+     reads transparent over the mesh — pin a near-opaque fill so the menu
+     becomes a real "card", and brighten the border by a notch. */
+  background: rgba(20, 22, 27, 0.96);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+.q-popover-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Was a fixed `height: 28px` — broke multi-word i18n labels that wrap
+     onto two lines: the second line was visually clipped against the next
+     item. Switching to min-height + vertical padding lets the row grow
+     when the label wraps and keeps single-line items unchanged. */
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  cursor: default;
+  background: transparent;
+  border: 0;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-sans-q);
+  font-size: 12.5px;
+  line-height: 1.35;
+  user-select: none;
+}
+.q-popover-item:hover:not(:disabled) {
+  background: var(--bg-sunken);
+  color: var(--ink);
+}
+.q-popover-item.danger {
+  color: var(--danger-q);
+}
+.q-popover-item.danger:hover:not(:disabled) {
+  background: var(--danger-q-soft);
+}
+.q-popover-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.q-popover-item .kbd {
+  margin-left: auto;
+  font-family: var(--font-mono-q);
+  font-size: 11px;
+  color: var(--ink-4);
+}
+.q-popover-sep {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--hairline);
+  border: 0;
+}
+
+/* ── Modal backdrop & shell ───────────────────────────────────────────── */
+.q-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 17, 21, 0.4);
+  backdrop-filter: blur(8px);
+  z-index: 80;
+}
+.q-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-elev);
+  border: 1px solid var(--border-q);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-q-lg);
+  padding: 24px 28px;
+  z-index: 90;
+  /* On a 1280×800 window the previous `100vh - 80px` left the connection
+   * form too little room: 8 fields + 5 checkboxes + success/error block
+   * overflowed the modal bottom (the footer covered the last checkboxes).
+   * Raise the cap to `100vh - 32px` so the form fits whole on mid-sized
+   * screens; on short screens .q-modal-body still scrolls (overflow: auto). */
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  width: 540px;
+  max-width: calc(100vw - 40px);
+}
+.q-modal.sm {
+  width: 420px;
+  padding: 22px;
+}
+.q-modal.lg {
+  width: 600px;
+  padding: 0;
+}
+/* JSONB editor needs more horizontal room (tree mode at depth
+ * 4–5 already tight at 600px). `xl` clamps to viewport-minus-margins so
+ * the modal never overflows on 1280×800 laptops. Outer padding is 0 so
+ * the editor body can stretch full-width; the header gets its own inset
+ * so the title + close X aren't flush against the rounded corner. */
+.q-modal.xl {
+  width: min(960px, calc(100vw - 80px));
+  padding: 0;
+}
+.q-modal.xl .q-modal-header {
+  padding: 18px 20px 0;
+  margin-bottom: 0;
+}
+.q-modal.xl .q-modal-body {
+  padding: 0;
+}
+
+/* segmented control for the JSONB editor's view-mode tabs.
+ * Renders three buttons (Text / Tree / Table) as a single rounded
+ * group with hairline dividers between, a clear selected state
+ * (filled background + accent text), and a disabled state for the
+ * Table tab when the value isn't an array of objects. */
+.jsonb-mode-toggle {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--border-q);
+  border-radius: var(--r-md, 6px);
+  background: var(--bg-elev);
+  overflow: hidden;
+  /* Inline-flex needs a baseline so buttons don't wrap on narrow modals. */
+  flex-shrink: 0;
+}
+.jsonb-mode-toggle__btn {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-left: 1px solid var(--border-q);
+  color: var(--ink-3);
+  cursor: pointer;
+  font-family: var(--font-sans-q);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 5px 12px;
+  height: 26px;
+  transition: background 80ms ease, color 80ms ease;
+}
+.jsonb-mode-toggle__btn:first-child {
+  border-left: 0;
+}
+.jsonb-mode-toggle__btn:hover:not([disabled]):not([aria-selected="true"]) {
+  background: var(--bg-sunken);
+  color: var(--ink-2);
+}
+.jsonb-mode-toggle__btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  z-index: 1;
+}
+.jsonb-mode-toggle__btn[aria-selected="true"] {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+.jsonb-mode-toggle__btn[disabled] {
+  color: var(--ink-4);
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.q-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.q-modal-title {
+  font-family: var(--font-sans-q);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.q-modal-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  /* Thin gutter so the scrollbar doesn't overlap input/checkbox controls. */
+  padding-right: 4px;
+  scrollbar-gutter: stable;
+}
+.q-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+/* ── Inline answer card (success / warning / danger) ──────────────────── */
+.q-answer {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  align-items: flex-start;
+}
+.q-answer.ok {
+  background: var(--accent-soft);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: var(--accent-strong);
+}
+[data-theme="dark"] .q-answer.ok {
+  color: var(--accent-2);
+}
+.q-answer.warn {
+  background: var(--warn-q-soft);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: var(--warn-q);
+}
+.q-answer.err {
+  background: var(--danger-q-soft);
+  border-left: 3px solid var(--danger-q);
+  color: var(--danger-q);
+  padding-left: 14px;
+}
+.q-answer .title {
+  font-weight: 500;
+  font-size: 12.5px;
+}
+.q-answer .sub {
+  font-family: var(--font-mono-q);
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+
+/* ── Pulse animation ──────────────────────────────────────────────────── */
+@keyframes pulseGreen {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgba(16, 185, 129, 0);
+  }
+}
+.pulse-once {
+  animation: pulseGreen 1.4s ease-out 1;
+}
+
+/* ── Row reveal for grid ──────────────────────────────────────────────── */
+@keyframes rowReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.q-spin {
+  animation: spin 0.9s linear infinite;
+}
+
+/* ── Skeleton ─────────────────────────────────────────────────────────── */
+.q-skel {
+  background: var(--bg-sunken);
+  border-radius: 4px;
+  height: 10px;
+  animation: pulseSkel 1.6s ease-in-out infinite;
+}
+@keyframes pulseSkel {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* ── Statusbar (bottom of workspace) ──────────────────────────────────── */
+.q-statusbar {
+  height: 24px;
+  flex: 0 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 10px;
+  border-top: 1px solid var(--hairline);
+  background: var(--bg);
+  z-index: 5;
+}
+
+/* ── Sidebar ──────────────────────────────────────────────────────────── */
+.q-sidebar {
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  min-height: 0;
+  position: relative;
+}
+.q-sidebar.left {
+  border-right: 1px solid var(--hairline);
+}
+.q-sidebar.right {
+  border-left: 1px solid var(--hairline);
+}
+
+/* ── Connection row card (sidebar list) ──────────────────────────────── */
+.q-conn-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: default;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+  user-select: none;
+  margin: 0 1px; /* room for the box-shadow halo on the dot */
+}
+.q-conn-row:hover {
+  background: var(--bg-sunken);
+}
+.q-conn-row.selected {
+  background: var(--bg-elev);
+  border-color: var(--border-q);
+  box-shadow: var(--shadow-q-sm);
+}
+.q-conn-row .name {
+  font-family: var(--font-sans-q);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.q-conn-row .name > .name-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.q-conn-row .meta {
+  font-family: var(--font-mono-q);
+  font-size: 10.5px;
+  color: var(--ink-4);
+  padding-left: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.q-conn-row .name .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-5);
+  flex-shrink: 0;
+  display: inline-block;
+}
+.q-conn-row.selected .name .dot {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* ── Section eyebrow heading ──────────────────────────────────────────── */
+.q-eyebrow {
+  font-family: var(--font-sans-q);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-4);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── Connection details key-value table ───────────────────────────────── */
+.q-kv {
+  font-family: var(--font-sans-q);
+  font-size: 12.5px;
+  border-collapse: collapse;
+}
+.q-kv td {
+  vertical-align: top;
+}
+.q-kv td.k {
+  padding: 6px 32px 6px 0;
+  color: var(--ink-4);
+  font-weight: 400;
+}
+.q-kv td.v {
+  padding: 6px 0;
+  color: var(--ink);
+  font-weight: 500;
+  font-family: var(--font-mono-q);
+  font-size: 12px;
+}
+.q-kv td.v.sans {
+  font-family: var(--font-sans-q);
+  font-size: 12.5px;
+  font-weight: 400;
+}
+
+/* ── Subtab bar (inside object details / result panel) ────────────────── */
+.q-subtabbar {
+  display: flex;
+  align-items: stretch;
+  height: 32px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--hairline);
+  flex: 0 0 32px;
+}
+.q-subtab {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  font-family: var(--font-sans-q);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-4);
+  border-bottom: 1.5px solid transparent;
+  margin-bottom: -1px;
+  cursor: default;
+  background: transparent;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  height: 100%;
+  user-select: none;
+}
+.q-subtab:hover {
+  color: var(--ink-2);
+}
+.q-subtab.active {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+/* ── Run-bar buttons gap helper ──────────────────────────────────────── */
+.q-runbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--hairline);
+  background: transparent;
+}
+
+/* ── Misc helpers ─────────────────────────────────────────────────────── */
+.mono {
+  font-family: var(--font-mono-q);
+}
+.sans {
+  font-family: var(--font-sans-q);
+}
+.q-muted {
+  color: var(--ink-4);
+}
+.q-text-2 {
+  color: var(--ink-2);
+}
+.q-text-3 {
+  color: var(--ink-3);
+}
+.q-text-ink {
+  color: var(--ink);
+}
+
+/* ── Reset for default focus rings to the quiet variant where applied ── */
+*:focus-visible {
+  outline: none;
+}
+
+/* ==========================================================================
+   Diagnostics quiet-redesign
+   --------------------------------------------------------------------------
+   Layout primitives shared by EXPLAIN, Recent Plans, Plan Diff, Health,
+   Live Ops. Built strictly on existing tokens — no new hex values.
+   ========================================================================== */
+
+/* ── Eyebrow group title used to chunk health groups, lane labels, etc. ── */
+.q-eyebrow-sm {
+  font-size: 11px;
+  color: var(--ink-4);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  margin: 0 0 10px;
+}
+
+/* ── Metric "chip" with label / value (Execution 2 844 ms etc.) ────────── */
+.q-metric-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--r-sm);
+  background: var(--bg-sunken);
+  font-family: var(--font-mono-q);
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.q-metric-bar .v {
+  color: var(--ink);
+  font-weight: 500;
+}
+.q-metric-bar.hot .v {
+  color: var(--warn-q);
+}
+.q-metric-bar.crit .v {
+  color: var(--danger-q);
+}
+
+/* ── Severity pills (info / warn / crit / brand / ok) ────────────────── */
+.q-pill.info {
+  background: rgba(107, 114, 128, 0.1);
+  color: var(--ink-3);
+}
+.q-pill.crit {
+  background: var(--danger-q-soft);
+  color: var(--danger-q);
+}
+.q-pill.brand {
+  background: var(--brand-q-soft);
+  color: var(--brand-q);
+}
+[data-theme="dark"] .q-pill.brand {
+  color: var(--brand-q-2);
+}
+
+/* ── Plan tree (compact node list, sorted by cost) ─────────────────────── */
+.q-plan-tree {
+  font-family: var(--font-mono-q);
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.q-plan-node {
+  display: grid;
+  grid-template-columns: 36px 1fr 80px 64px;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  position: relative;
+  cursor: default;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  width: 100%;
+}
+.q-plan-node:hover {
+  background: var(--bg-sunken);
+}
+.q-plan-node.active {
+  background: var(--brand-q-soft);
+}
+.q-plan-node.active .pn-name {
+  color: var(--brand-q);
+}
+[data-theme="dark"] .q-plan-node.active .pn-name {
+  color: var(--brand-q-2);
+}
+.q-plan-node .pn-idx {
+  color: var(--ink-5);
+  font-size: 11px;
+  text-align: right;
+}
+.q-plan-node .pn-name {
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.q-plan-node .pn-name .indent {
+  color: var(--ink-5);
+  margin-right: 4px;
+}
+.q-plan-node .pn-name .rel {
+  color: var(--ink-5);
+}
+.q-plan-node .pn-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--bg-sunken);
+  overflow: hidden;
+  position: relative;
+}
+.q-plan-node .pn-bar > span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--brand-q);
+  border-radius: 999px;
+}
+.q-plan-node.hot .pn-bar > span {
+  background: var(--warn-q);
+}
+.q-plan-node.crit .pn-bar > span {
+  background: var(--danger-q);
+}
+.q-plan-node .pn-cost {
+  font-size: 11px;
+  color: var(--ink-3);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+}
+.q-plan-node .pn-flag {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.q-plan-node.hot .pn-flag {
+  background: var(--warn-q);
+}
+.q-plan-node.crit .pn-flag {
+  background: var(--danger-q);
+}
+
+/* ── Insight cards (right rail) ────────────────────────────────────────── */
+.q-insight {
+  display: grid;
+  grid-template-columns: 4px 1fr;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--hairline);
+  cursor: default;
+  background: transparent;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-sans-q);
+}
+.q-insight:hover {
+  background: var(--bg-sunken);
+}
+.q-insight .marker {
+  border-radius: 2px;
+  align-self: stretch;
+}
+.q-insight.crit .marker {
+  background: var(--danger-q);
+}
+.q-insight.warn .marker {
+  background: var(--warn-q);
+}
+.q-insight.info .marker {
+  background: var(--ink-4);
+}
+.q-insight .body .ttl {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.q-insight .body .desc {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.q-insight .body .meta {
+  font-size: 11px;
+  color: var(--ink-4);
+  margin-top: 6px;
+  font-family: var(--font-mono-q);
+}
+.q-insight .body .acts {
+  margin-top: 8px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.q-insight-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--hairline);
+  background: var(--bg);
+  flex: 0 0 auto;
+}
+.q-insight-header .ttl {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ── Plan canvas (DAG) — used by EXPLAIN graph + diff sides ────────────── */
+.q-plan-canvas {
+  position: relative;
+  background: linear-gradient(      to bottom,
+      transparent 0,
+      transparent calc(100% - 1px),
+      var(--hairline) 100%
+),
+    repeating-linear-gradient(      0deg,
+      transparent 0,
+      transparent 39px,
+      rgba(15, 17, 21, 0.025) 39px,
+      rgba(15, 17, 21, 0.025) 40px
+);
+}
+[data-theme="dark"] .q-plan-canvas {
+  background: linear-gradient(      to bottom,
+      transparent 0,
+      transparent calc(100% - 1px),
+      var(--hairline) 100%
+),
+    repeating-linear-gradient(      0deg,
+      transparent 0,
+      transparent 39px,
+      rgba(255, 255, 255, 0.025) 39px,
+      rgba(255, 255, 255, 0.025) 40px
+);
+}
+
+/*
+ * SQL editor canvas — outer column that holds the optional CoachMark + the
+ * Monaco wrapper. Kept intentionally bare; the ruled-paper effect lives on
+ * `.q-editor-rules` so it tracks Monaco's content area regardless of how
+ * tall the CoachMark above is.
+ */
+.q-editor-canvas {
+  position: relative;
+}
+
+/*
+ * Ruled-paper background applied directly to the Monaco wrapper. Monaco's
+ * lineHeight is 22px and padding.top is 10px (see MonacoEditor.tsx options) —
+ * the gradient repeats at the same 22px and is shifted down 10px so each
+ * stripe lands exactly under one row of code (no off-by-one drift).
+ *
+ * --editor-line-h / --editor-pad-top let callers re-tune the offset if Monaco
+ * options ever change without touching this file.
+ */
+.q-editor-rules {
+  --editor-line-h: 22px;
+  --editor-pad-top: 10px;
+  background-image: repeating-linear-gradient(    to bottom,
+    transparent 0,
+    transparent calc(var(--editor-line-h) - 1px),
+    rgba(15, 17, 21, 0.04) calc(var(--editor-line-h) - 1px),
+    rgba(15, 17, 21, 0.04) var(--editor-line-h)
+);
+  background-position: 0 var(--editor-pad-top);
+  background-repeat: repeat;
+}
+[data-theme="dark"] .q-editor-rules {
+  background-image: repeating-linear-gradient(    to bottom,
+    transparent 0,
+    transparent calc(var(--editor-line-h) - 1px),
+    rgba(255, 255, 255, 0.035) calc(var(--editor-line-h) - 1px),
+    rgba(255, 255, 255, 0.035) var(--editor-line-h)
+);
+}
+
+/* When applied directly to a <textarea> (object editors' SQL body fields,
+   notebook plaintext views, etc.), align the caret rows with the rules and
+   take care of focus / surface defaults so callers don't have to repeat
+   them inline. Monaco wrappers ignore these (they manage their own internal
+   layout), so it's safe to share the class between both. */
+/* When applied to a <textarea>, all we add are the bits required to make
+   the caret rows line up with the gradient. Everything else inherits the
+   main editor's look — no border, no focus halo, no rounded corners.
+   `background-color: transparent` is critical: the main MonacoEditor's
+   theme uses `editor.background: #...00` (alpha 0) so the Workspace mesh
+   (cyan/indigo drift) shows through. Solid `var(--bg)` here flattened
+   the textarea into a dark slab disconnected from the rest of the UI. */
+textarea.q-editor-rules {
+  line-height: var(--editor-line-h);
+  padding-top: var(--editor-pad-top);
+  background-color: transparent;
+  color: var(--ink);
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  caret-color: var(--accent);
+}
+
+/* ── Quiet plan node card (mockup .pn-card) ────────────────────────────── */
+.pn-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong-q);
+  border-radius: var(--r-md);
+  padding: 8px 10px;
+  font-family: var(--font-mono-q);
+  font-size: 11px;
+  box-shadow: var(--shadow-q-sm);
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  transition: box-shadow 120ms ease, border-color 120ms ease;
+  color: var(--ink);
+  overflow: hidden;
+  min-width: 0;
+}
+.pn-card .pn-h,
+.pn-card .pn-meta,
+.pn-card .pn-stats {
+  min-width: 0;
+  max-width: 100%;
+}
+.pn-card .pn-h .ttl {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.pn-card:hover {
+  box-shadow: var(--shadow-q-md);
+}
+.pn-card.active {
+  border-color: var(--brand-q);
+  box-shadow: 0 0 0 3px var(--brand-q-soft);
+}
+.pn-card.hot {
+  border-left: 3px solid var(--warn-q);
+}
+.pn-card.crit {
+  border-left: 3px solid var(--danger-q);
+}
+.pn-card .pn-h {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.pn-card .pn-h .idx {
+  color: var(--ink-5);
+  font-size: 10px;
+  font-weight: 500;
+}
+.pn-card .pn-h .ttl {
+  color: var(--ink);
+}
+.pn-card .pn-meta {
+  color: var(--ink-3);
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+}
+.pn-card .pn-stats {
+  font-size: 11px;
+}
+.pn-card .pn-stats .stat .l {
+  font-size: 10.5px;
+}
+.pn-card .pn-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 10px;
+}
+.pn-card .pn-stat .v {
+  color: var(--ink);
+  font-weight: 600;
+}
+.pn-card .pn-stat .l {
+  color: var(--ink-5);
+}
+.pn-card.crit .pn-stat .v:first-of-type {
+  color: var(--danger-q);
+}
+
+/* ── Card stat row (time / rows / cost / buf) ──────────────────────────── */
+.pn-card .pn-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px 8px;
+  font-size: 10px;
+  margin-top: auto;
+}
+.pn-card .pn-stats .stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pn-card .pn-stats .stat .v {
+  color: var(--ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.pn-card .pn-stats .stat .v.crit {
+  color: var(--danger-q);
+}
+.pn-card .pn-stats .stat .l {
+  color: var(--ink-5);
+  font-size: 9.5px;
+}
+.pn-card .pn-h .badge {
+  font-size: 9px;
+  font-weight: 500;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--brand-q-soft);
+  color: var(--brand-q);
+  letter-spacing: 0.02em;
+}
+[data-theme="dark"] .pn-card .pn-h .badge {
+  color: var(--brand-q-2);
+}
+.pn-card .pn-h .badge.muted {
+  background: var(--bg-sunken);
+  color: var(--ink-4);
+}
+.pn-card.never-exec {
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+/* ── Explain view-mode toggle (Quiet / pev2 / Raw) ─────────────────────── */
+.q-view-toggle {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--bg-sunken);
+  border-radius: var(--r-sm);
+}
+.q-view-toggle button {
+  height: 24px;
+  padding: 0 10px;
+  font-size: 11.5px;
+  font-family: var(--font-sans-q);
+  background: transparent;
+  color: var(--ink-3);
+  border: 0;
+  border-radius: var(--r-sm);
+  cursor: default;
+}
+.q-view-toggle button:hover {
+  color: var(--ink);
+}
+.q-view-toggle button[aria-pressed="true"] {
+  background: var(--bg-elev);
+  color: var(--ink);
+  box-shadow: var(--shadow-q-sm);
+}
+
+/* ── Live Ops sub-tab pill toggle (Sessions / Slow / Replication) ─────── */
+.q-pill-toggle {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--bg-sunken);
+  border-radius: var(--r-sm);
+}
+.q-pill-toggle .btn {
+  height: 26px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+.q-pill-toggle .btn[aria-pressed="true"],
+.q-pill-toggle .btn.active {
+  background: var(--ink);
+  color: var(--bg-elev);
+  border-color: var(--ink);
+}
+[data-theme="dark"] .q-pill-toggle .btn[aria-pressed="true"],
+[data-theme="dark"] .q-pill-toggle .btn.active {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* ── Live Ops session card / DAG node ──────────────────────────────────── */
+.q-session-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong-q);
+  border-radius: var(--r-md);
+  padding: 8px 10px;
+  font-size: 11px;
+  width: 230px;
+  box-shadow: var(--shadow-q-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.q-session-card.blocked {
+  border-left: 3px solid var(--danger-q);
+}
+.q-session-card.waiting {
+  border-left: 3px solid var(--warn-q);
+}
+.q-session-card.idle-tx {
+  border-left: 3px solid var(--ink-4);
+}
+.q-session-card .h {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono-q);
+  font-size: 10.5px;
+}
+.q-session-card .h .pid {
+  color: var(--ink);
+  font-weight: 600;
+}
+.q-session-card .h .state {
+  color: var(--ink-4);
+}
+.q-session-card .h .state.crit {
+  color: var(--danger-q);
+}
+.q-session-card .h .state.warn {
+  color: var(--warn-q);
+}
+.q-session-card .who {
+  color: var(--ink-3);
+  font-family: var(--font-mono-q);
+  font-size: 10.5px;
+}
+.q-session-card .wait {
+  font-size: 10.5px;
+  color: var(--ink-4);
+  font-family: var(--font-mono-q);
+}
+.q-session-card .qry {
+  font-family: var(--font-mono-q);
+  font-size: 10.5px;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.q-session-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.q-dag-canvas {
+  position: relative;
+  flex: 1;
+  background: repeating-linear-gradient(    0deg,
+    transparent 0,
+    transparent 23px,
+    rgba(15, 17, 21, 0.03) 23px,
+    rgba(15, 17, 21, 0.03) 24px
+);
+}
+[data-theme="dark"] .q-dag-canvas {
+  background: repeating-linear-gradient(    0deg,
+    transparent 0,
+    transparent 23px,
+    rgba(255, 255, 255, 0.025) 23px,
+    rgba(255, 255, 255, 0.025) 24px
+);
+}
+
+/* ── Slow queries quiet table ──────────────────────────────────────────── */
+.q-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-family: var(--font-sans-q);
+}
+.q-tbl th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--ink-4);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--hairline);
+  background: var(--bg-sunken);
+  cursor: default;
+  user-select: none;
+}
+.q-tbl th[aria-sort] {
+  cursor: default;
+}
+.q-tbl td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.q-tbl td.mono,
+.q-tbl td.num {
+  font-family: var(--font-mono-q);
+}
+.q-tbl td.num {
+  text-align: right;
+}
+.q-tbl tr:hover td {
+  background: var(--bg-sunken);
+}
+.q-tbl td.query {
+  font-family: var(--font-mono-q);
+  color: var(--ink-2);
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Replication slot card ─────────────────────────────────────────────── */
+.q-slot-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border-q);
+  border-radius: var(--r-md);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.q-slot-card.danger {
+  border-left: 3px solid var(--danger-q);
+}
+.q-slot-card.ok {
+  border-left: 3px solid var(--accent);
+}
+.q-slot-card.warn {
+  border-left: 3px solid var(--warn-q);
+}
+.q-progress {
+  height: 4px;
+  background: var(--bg-sunken);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.q-progress > span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.q-progress.warn > span {
+  background: var(--warn-q);
+}
+.q-progress.danger > span {
+  background: var(--danger-q);
+}
+
+/* ── Recent Plans card row ─────────────────────────────────────────────── */
+.q-plan-row {
+  background: var(--bg-elev);
+  border: 1px solid var(--border-q);
+  border-radius: var(--r-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: default;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.q-plan-row:hover {
+  border-color: var(--border-strong-q);
+}
+.q-plan-row.selected {
+  border-color: var(--brand-q);
+  box-shadow: 0 0 0 3px var(--brand-q-soft);
+}
+.q-plan-row .head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.q-plan-row .head .meta {
+  color: var(--ink-4);
+  font-size: 11px;
+}
+.q-plan-row .sql {
+  font-family: var(--font-mono-q);
+  font-size: 11.5px;
+  color: var(--ink);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.q-plan-row.dim .sql {
+  color: var(--ink-3);
+}
+.q-plan-row .footer {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.q-plan-row .footer .cost {
+  margin-left: auto;
+  font-family: var(--font-mono-q);
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.q-plan-row .footer .cost b {
+  color: var(--ink);
+}
+
+/* KPI / hotspot stat card (Recent Plans preview, Plan Diff summary) ──── */
+.q-stat-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border-q);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.q-stat-card .lbl {
+  font-size: 10.5px;
+  color: var(--ink-4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.q-stat-card .val {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.q-stat-card .val.warn {
+  color: var(--warn-q);
+}
+.q-stat-card .val.crit {
+  color: var(--danger-q);
+}
+.q-stat-card .val.ok {
+  color: var(--accent-strong);
+}
+
+/* ── Section card (with header eyebrow + body) ─────────────────────────── */
+.q-section-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border-q);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.q-section-card .hd {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 11.5px;
+  color: var(--ink-3);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Plan-diff change-list filter chips ────────────────────────────────── */
+.q-filter-chips {
+  display: flex;
+  gap: 6px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--hairline);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.q-filter-chips .btn[aria-pressed="true"] {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  border-color: var(--accent-soft);
+}
+[data-theme="dark"] .q-filter-chips .btn[aria-pressed="true"] {
+  color: var(--accent-2);
+}
+
+/* ── Plan-diff Δ-headline strip ────────────────────────────────────────── */
+.q-diff-headline {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--hairline);
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  background: var(--bg-elev);
+  flex-wrap: wrap;
+}
+.q-diff-headline .meta-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.q-diff-headline .meta-block .lbl {
+  font-size: 10.5px;
+  color: var(--ink-4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.q-diff-headline .meta-block .val {
+  font-family: var(--font-mono-q);
+  font-size: 12px;
+  color: var(--ink);
+}
+.q-diff-headline .meta-block .delta {
+  font-family: var(--font-mono-q);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.q-diff-headline .meta-block .delta.crit {
+  color: var(--danger-q);
+}
+.q-diff-headline .meta-block .delta.ok {
+  color: var(--accent-strong);
+}
+.q-diff-headline .arrow {
+  font-size: 18px;
+  color: var(--ink-5);
+}
+
+/* ── ERD: Radix popover item highlight ───────────────────────── */
+[data-testid="erd-schema-filter-option-all"][data-highlighted],
+[data-testid^="erd-schema-filter-option-"][data-highlighted],
+[data-testid="erd-export-png"][data-highlighted],
+[data-testid="erd-export-svg"][data-highlighted] {
+  background: var(--bg-sunken);
+  color: var(--ink);
+}

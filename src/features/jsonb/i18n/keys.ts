@@ -1,0 +1,92 @@
+/** Single source of truth for jsonb.* i18n keys. Used to keep
+ * Phase C/D in sync with locales/{ru,en}/jsonb.json. */
+export const KEYS = {
+  modal: {
+    title: "jsonb.modal.title",
+    titleNoPk: "jsonb.modal.titleNoPk",
+    save: "jsonb.modal.save",
+    cancel: "jsonb.modal.cancel",
+    discardConfirm: "jsonb.modal.discardConfirm",
+  },
+  mode: {
+    text: "jsonb.mode.text",
+    tree: "jsonb.mode.tree",
+    table: "jsonb.mode.table",
+    tableDisabledTooltip: "jsonb.mode.tableDisabledTooltip",
+  },
+  tree: {
+    addKey: "jsonb.tree.addKey",
+    addItem: "jsonb.tree.addItem",
+    delete: "jsonb.tree.delete",
+    canonicalNote: "jsonb.tree.canonicalNote",
+    typeBadge: {
+      string: "jsonb.tree.type.string",
+      number: "jsonb.tree.type.number",
+      boolean: "jsonb.tree.type.boolean",
+      null: "jsonb.tree.type.null",
+      object: "jsonb.tree.type.object",
+      array: "jsonb.tree.type.array",
+    },
+  },
+  text: {
+    invalidJson: "jsonb.text.invalidJson",
+  },
+  diff: {
+    willSaveAs: "jsonb.diff.willSaveAs",
+    setOps: "jsonb.diff.setOps",
+    fullReplace: "jsonb.diff.fullReplace",
+    noChanges: "jsonb.diff.noChanges",
+  },
+  readonly: {
+    banner: "jsonb.readonly.banner",
+    copyTemplate: "jsonb.readonly.copyTemplate",
+    reason: {
+      noBaseTable: "jsonb.readonly.reason.noBaseTable",
+      multipleTables: "jsonb.readonly.reason.multipleTables",
+      matview: "jsonb.readonly.reason.matview",
+      foreignTable: "jsonb.readonly.reason.foreignTable",
+      viewWithoutPk: "jsonb.readonly.reason.viewWithoutPk",
+      partitionedNoPk: "jsonb.readonly.reason.partitionedNoPk",
+      noColumnMetadata: "jsonb.readonly.reason.noColumnMetadata",
+    },
+  },
+  prod: {
+    confirmTitle: "jsonb.prod.confirmTitle",
+    confirmBody: "jsonb.prod.confirmBody",
+    confirmInputLabel: "jsonb.prod.confirmInputLabel",
+    apply: "jsonb.prod.apply",
+  },
+  toast: {
+    saved: "jsonb.toast.saved",
+    rowVanished: "jsonb.toast.rowVanished",
+    saveFailed: "jsonb.toast.saveFailed",
+  },
+  inference: {
+    panel: {
+      title: "jsonb.inference.panel.title",
+      sampledRowsCount: "jsonb.inference.panel.sampledRowsCount",
+      keysCount: "jsonb.inference.panel.keysCount",
+      ago: "jsonb.inference.panel.ago",
+      agoNow: "jsonb.inference.panel.agoNow",
+      agoSeconds: "jsonb.inference.panel.agoSeconds",
+      agoMinutes: "jsonb.inference.panel.agoMinutes",
+      agoHours: "jsonb.inference.panel.agoHours",
+      agoDays: "jsonb.inference.panel.agoDays",
+      agoUnknown: "jsonb.inference.panel.agoUnknown",
+      headerSummary: "jsonb.inference.panel.headerSummary",
+      staleBadge: "jsonb.inference.panel.staleBadge",
+      staleTooltip: "jsonb.inference.panel.staleTooltip",
+      reinferAction: "jsonb.inference.panel.reinferAction",
+      empty: "jsonb.inference.panel.empty",
+      error: "jsonb.inference.panel.error",
+      retryAction: "jsonb.inference.panel.retryAction",
+      statusPending: "jsonb.inference.panel.statusPending",
+      ariaRegion: "jsonb.inference.panel.ariaRegion",
+      togglePanel: "jsonb.inference.panel.togglePanel",
+      modalSection: {
+        expand: "jsonb.inference.panel.modalSection.expand",
+        collapse: "jsonb.inference.panel.modalSection.collapse",
+      },
+    },
+  },
+} as const;

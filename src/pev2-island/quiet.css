@@ -1,0 +1,618 @@
+/* ==========================================================================
+   pev2 island · Quiet-redesign overrides
+   --------------------------------------------------------------------------
+   Loaded AFTER bootstrap.min.css and pev2.css to win the cascade. Maps
+   Bootstrap CSS-vars to ide99 quiet tokens (mirrors src/styles/design.css)
+   then patches a small set of pev2-specific selectors that don't read from
+   --bs-* directly. No JS changes — pev2's Vue tree is untouched.
+
+   Light/dark switching is driven by the same `data-bs-theme` attribute the
+   island already sets on <html>; Bootstrap dark inverts the palette via the
+   `[data-bs-theme=dark]` block below.
+   ========================================================================== */
+
+/* ── 1. Quiet palette (mirrors src/styles/design.css) ─────────────────── */
+:root {
+  --q-bg: #fafaf9;
+  --q-bg-elev: #ffffff;
+  --q-bg-sunken: #f4f4f2;
+  --q-ink: #0f1115;
+  --q-ink-2: #2a2d33;
+  --q-ink-3: #5b5f66;
+  --q-ink-4: #8b8f96;
+  --q-ink-5: #b8bcc2;
+  --q-border: rgba(15, 17, 21, 0.07);
+  --q-border-strong: rgba(15, 17, 21, 0.12);
+  --q-hairline: rgba(15, 17, 21, 0.05);
+
+  --q-brand: #00b3ff;
+  --q-brand-soft: rgba(0, 179, 255, 0.1);
+
+  --q-accent: #10b981;
+  --q-accent-soft: rgba(16, 185, 129, 0.1);
+  --q-accent-strong: #059669;
+
+  --q-warn: #b45309;
+  --q-warn-soft: rgba(245, 158, 11, 0.12);
+  --q-danger: #b91c1c;
+  --q-danger-soft: rgba(220, 38, 38, 0.1);
+
+  --q-shadow-sm: 0 1px 2px rgba(15, 17, 21, 0.04);
+  --q-shadow-md: 0 4px 16px -4px rgba(15, 17, 21, 0.08), 0 1px 2px rgba(15, 17, 21, 0.04);
+
+  --q-font-sans: "Inter", "Inter Display", -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    system-ui, sans-serif;
+  --q-font-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+}
+
+[data-bs-theme="dark"] {
+  --q-bg: #0a0b0e;
+  --q-bg-elev: #111317;
+  --q-bg-sunken: #07080a;
+  --q-ink: #f5f6f7;
+  --q-ink-2: #e2e4e8;
+  --q-ink-3: #a8acb3;
+  --q-ink-4: #6c7079;
+  --q-ink-5: #3f434b;
+  --q-border: rgba(255, 255, 255, 0.06);
+  --q-border-strong: rgba(255, 255, 255, 0.1);
+  --q-hairline: rgba(255, 255, 255, 0.04);
+
+  --q-brand: #38c5ff;
+  --q-brand-soft: rgba(56, 197, 255, 0.14);
+
+  --q-accent: #34d399;
+  --q-accent-soft: rgba(52, 211, 153, 0.14);
+  --q-accent-strong: #10b981;
+
+  --q-warn: #f59e0b;
+  --q-warn-soft: rgba(245, 158, 11, 0.14);
+  --q-danger: #f87171;
+  --q-danger-soft: rgba(239, 68, 68, 0.14);
+
+  --q-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --q-shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ── 2. Override Bootstrap CSS variables ──────────────────────────────── */
+:root,
+[data-bs-theme="light"] {
+  --bs-body-bg: var(--q-bg);
+  --bs-body-color: var(--q-ink);
+  --bs-secondary-color: var(--q-ink-3);
+  --bs-tertiary-color: var(--q-ink-4);
+  --bs-tertiary-bg: var(--q-bg-sunken);
+  --bs-secondary-bg: var(--q-bg-sunken);
+  --bs-secondary-bg-subtle: var(--q-bg-sunken);
+  --bs-info-bg-subtle: var(--q-brand-soft);
+  --bs-border-color: var(--q-border);
+  --bs-border-color-translucent: var(--q-border);
+  --bs-primary: var(--q-ink);
+  --bs-primary-rgb: 15, 17, 21;
+  --bs-info: var(--q-brand);
+  --bs-info-rgb: 0, 179, 255;
+  --bs-link-color: var(--q-brand);
+  --bs-link-hover-color: var(--q-brand);
+  --bs-emphasis-color: var(--q-ink);
+  --bs-box-shadow: var(--q-shadow-md);
+  --bs-box-shadow-sm: var(--q-shadow-sm);
+}
+
+[data-bs-theme="dark"] {
+  --bs-body-bg: var(--q-bg);
+  --bs-body-color: var(--q-ink);
+  --bs-secondary-color: var(--q-ink-3);
+  --bs-tertiary-color: var(--q-ink-4);
+  --bs-tertiary-bg: var(--q-bg-sunken);
+  --bs-secondary-bg: var(--q-bg-sunken);
+  --bs-secondary-bg-subtle: var(--q-bg-sunken);
+  --bs-info-bg-subtle: var(--q-brand-soft);
+  --bs-border-color: var(--q-border);
+  --bs-border-color-translucent: var(--q-border);
+  --bs-primary: var(--q-ink);
+  --bs-info: var(--q-brand);
+  --bs-link-color: var(--q-brand);
+  --bs-link-hover-color: var(--q-brand);
+  --bs-emphasis-color: var(--q-ink);
+  --bs-box-shadow: var(--q-shadow-md);
+  --bs-box-shadow-sm: var(--q-shadow-sm);
+}
+
+/* ── 3. Body / typography baseline ────────────────────────────────────── */
+html,
+body {
+  background: var(--q-bg);
+  color: var(--q-ink);
+  font-family: var(--q-font-sans);
+  font-feature-settings: "cv11", "ss01", "ss03";
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.plan-container,
+.plan-stats,
+.plan-diagram {
+  font-family: var(--q-font-sans);
+  color: var(--q-ink-2);
+}
+
+.plan-tree,
+.plan-grid .tree-lines,
+.plan-diagram .tree-lines,
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--q-font-mono);
+}
+
+/* ── 4. Plan node cards ───────────────────────────────────────────────── */
+.plan-node {
+  font-size: 12px;
+  width: 240px;
+  font-family: var(--q-font-sans);
+}
+
+.plan-node .plan-node-body {
+  border-radius: 8px;
+  box-shadow: var(--q-shadow-sm);
+  background: var(--q-bg-elev) !important;
+  border: 1px solid var(--q-border) !important;
+}
+
+.plan-node:hover .plan-node-body,
+.plan-node.highlight .plan-node-body {
+  box-shadow: var(--q-shadow-md);
+  border-color: var(--q-border-strong) !important;
+}
+
+.plan-node.selected .plan-node-body {
+  border-color: var(--q-brand) !important;
+  box-shadow: 0 0 0 3px var(--q-brand-soft);
+}
+
+.plan-node.selected .workers > div {
+  border-color: var(--q-brand-soft);
+}
+
+.plan-node header h4 {
+  font-family: var(--q-font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--q-ink);
+  letter-spacing: -0.005em;
+}
+
+.plan-node header .node-duration {
+  font-family: var(--q-font-mono);
+  font-size: 12px;
+  color: var(--q-ink-3);
+}
+
+.plan-node .node-description {
+  font-style: normal;
+  color: var(--q-ink-3);
+}
+
+.plan-node .node-description .node-type {
+  background: var(--q-ink) !important;
+  color: var(--q-bg-elev) !important;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-family: var(--q-font-sans);
+}
+
+[data-bs-theme="dark"] .plan-node .node-description .node-type {
+  background: #c9c3b6 !important;
+  color: #15161a !important;
+}
+
+.plan-node .prop-list {
+  color: var(--q-ink-2);
+  font-size: 11.5px;
+}
+
+.plan-node .prop-list th {
+  color: var(--q-ink-4);
+  font-weight: 500;
+}
+
+.plan-node .node-detail-toggle:hover {
+  background: var(--q-bg-sunken) !important;
+}
+
+/* ── 5. Severity scale (alert.c-1..c-4 + progress-bar.c-1..c-4) ──────── */
+/* pev2 colors nodes by relative cost: c-1 cheapest → c-4 hottest. Remap to
+   our quiet status palette so the same severity reads as ide99 status. */
+.alert.c-1 {
+  background: var(--q-bg-sunken) !important;
+  color: var(--q-ink-3) !important;
+  border-color: var(--q-border) !important;
+  font-weight: 500;
+}
+.alert.c-2 {
+  background: var(--q-accent-soft) !important;
+  color: var(--q-accent-strong) !important;
+  border-color: var(--q-accent-soft) !important;
+  font-weight: 500;
+}
+.alert.c-3 {
+  background: var(--q-warn-soft) !important;
+  color: var(--q-warn) !important;
+  border-color: var(--q-warn-soft) !important;
+  font-weight: 500;
+}
+.alert.c-4 {
+  background: var(--q-danger-soft) !important;
+  color: var(--q-danger) !important;
+  border-color: var(--q-danger-soft) !important;
+  font-weight: 500;
+}
+
+[data-bs-theme="dark"] .alert.c-2 {
+  color: #6ee7b7 !important;
+}
+[data-bs-theme="dark"] .alert.c-3 {
+  color: #fcd34d !important;
+}
+[data-bs-theme="dark"] .alert.c-4 {
+  color: #fca5a5 !important;
+}
+
+.progress-bar.c-1 {
+  background: var(--q-ink-5) !important;
+  border-color: var(--q-ink-5) !important;
+}
+.progress-bar.c-2 {
+  background: var(--q-accent) !important;
+  border-color: var(--q-accent) !important;
+}
+.progress-bar.c-3 {
+  background: var(--q-warn) !important;
+  border-color: var(--q-warn) !important;
+}
+.progress-bar.c-4 {
+  background: var(--q-danger) !important;
+  border-color: var(--q-danger) !important;
+}
+
+.text-c-1 {
+  color: var(--q-ink-3) !important;
+}
+.text-c-2 {
+  color: var(--q-accent-strong) !important;
+}
+.text-c-3 {
+  color: var(--q-warn) !important;
+}
+.text-c-4 {
+  color: var(--q-danger) !important;
+}
+
+svg circle.c-1 {
+  fill: var(--q-ink-5) !important;
+}
+svg circle.c-2 {
+  fill: var(--q-accent) !important;
+}
+svg circle.c-3 {
+  fill: var(--q-warn) !important;
+}
+svg circle.c-4 {
+  fill: var(--q-danger) !important;
+}
+
+/* ── 6. Buffer chips (hit / read / dirtied / written) ─────────────────── */
+.bg-hit {
+  background: var(--q-bg-sunken) !important;
+  color: var(--q-ink-3) !important;
+}
+.border-hit {
+  border-color: var(--q-ink-5) !important;
+}
+.bg-read {
+  background: var(--q-accent-soft) !important;
+  color: var(--q-accent-strong) !important;
+}
+.border-read {
+  border-color: var(--q-accent) !important;
+}
+.bg-dirtied {
+  background: var(--q-warn-soft) !important;
+  color: var(--q-warn) !important;
+}
+.border-dirtied {
+  border-color: var(--q-warn) !important;
+}
+.bg-written {
+  background: var(--q-danger-soft) !important;
+  color: var(--q-danger) !important;
+}
+.border-written {
+  border-color: var(--q-danger) !important;
+}
+
+[data-bs-theme="dark"] .bg-read {
+  color: #6ee7b7 !important;
+}
+[data-bs-theme="dark"] .bg-dirtied {
+  color: #fcd34d !important;
+}
+[data-bs-theme="dark"] .bg-written {
+  color: #fca5a5 !important;
+}
+
+/* ── 7. Plan diagram (mini-map) ──────────────────────────────────────── */
+.plan-diagram {
+  font-family: var(--q-font-sans);
+  background: var(--q-bg-elev);
+  border-bottom: 1px solid var(--q-hairline);
+}
+
+.plan-diagram th,
+.plan-diagram td {
+  font-size: 12px;
+  color: var(--q-ink-2);
+  border-color: var(--q-hairline) !important;
+}
+
+.plan-diagram tr.node {
+  cursor: default;
+}
+.plan-diagram tr.node:hover td {
+  background: var(--q-bg-sunken) !important;
+}
+.plan-diagram tr.selected {
+  outline: 1px solid var(--q-brand) !important;
+  box-shadow: 0 0 0 3px var(--q-brand-soft) !important;
+  background: var(--q-bg-elev) !important;
+}
+
+.plan-diagram .legend ul li {
+  font-size: 11.5px;
+  color: var(--q-ink-3);
+}
+
+/* ── 8. Plan grid view ────────────────────────────────────────────────── */
+.plan-grid > table > tbody > tr > th,
+.plan-grid > table > tbody > tr > td,
+.plan-grid > table > thead > tr > th,
+.plan-grid > table > thead > tr > td {
+  font-size: 12px;
+  color: var(--q-ink-2);
+  border-color: var(--q-hairline) !important;
+}
+
+.plan-grid tr.node {
+  cursor: default;
+}
+.plan-grid tr.node:hover td {
+  background: var(--q-bg-sunken) !important;
+}
+
+/* ── 9. Plan stats top bar (Execution / Planning / Settings) ─────────── */
+.plan-stats {
+  font-size: 12px;
+  color: var(--q-ink-3);
+  background: var(--q-bg-elev);
+  border-bottom: 1px solid var(--q-hairline);
+  padding: 6px 12px;
+}
+
+.plan-stats .stat-dropdown-container {
+  background: var(--q-bg-elev);
+  border-color: var(--q-border);
+  border-radius: 8px;
+  box-shadow: var(--q-shadow-md);
+}
+
+.plan-stats .stat-dropdown-container h3,
+.plan-node .plan-query-container h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--q-ink);
+  border-bottom-color: var(--q-hairline);
+}
+
+/* ── 10. Buttons ──────────────────────────────────────────────────────── */
+.btn {
+  font-family: var(--q-font-sans);
+  font-size: 12.5px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: var(--q-ink) !important;
+  border-color: var(--q-ink) !important;
+  color: var(--q-bg-elev) !important;
+}
+.btn-primary:hover {
+  background: var(--q-ink-2) !important;
+  border-color: var(--q-ink-2) !important;
+}
+[data-bs-theme="dark"] .btn-primary {
+  background: #c9c3b6 !important;
+  border-color: #c9c3b6 !important;
+  color: #15161a !important;
+}
+
+.btn-default,
+.btn-outline-secondary {
+  background: var(--q-bg-elev) !important;
+  border-color: var(--q-border-strong) !important;
+  color: var(--q-ink-2) !important;
+}
+.btn-default:hover,
+.btn-outline-secondary:hover {
+  background: var(--q-bg-sunken) !important;
+  color: var(--q-ink) !important;
+}
+
+.btn-link {
+  color: var(--q-brand) !important;
+  text-decoration: none;
+}
+.btn-link:hover {
+  color: var(--q-brand) !important;
+  text-decoration: underline;
+}
+
+/* ── 11. Tabs (card header tabs) ──────────────────────────────────────── */
+.nav-tabs {
+  border-bottom: 1px solid var(--q-hairline);
+}
+.nav-link {
+  font-family: var(--q-font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--q-ink-3) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  border-bottom: 1.5px solid transparent !important;
+  margin-bottom: -1px !important;
+  padding: 4px 10px !important;
+}
+.nav-link:hover {
+  color: var(--q-ink-2) !important;
+  background: transparent !important;
+}
+.nav-link.active {
+  color: var(--q-ink) !important;
+  border-bottom-color: var(--q-accent) !important;
+  background: transparent !important;
+}
+
+/* ── 12. Tooltips (tippy.js) ──────────────────────────────────────────── */
+.tippy-box {
+  background: var(--q-bg-elev) !important;
+  color: var(--q-ink) !important;
+  border: 1px solid var(--q-border-strong) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--q-shadow-md) !important;
+  font-family: var(--q-font-sans);
+  font-size: 12px;
+}
+.tippy-box[data-theme~="bootstrap"] {
+  background: var(--q-bg-elev) !important;
+  color: var(--q-ink) !important;
+  border-color: var(--q-border-strong) !important;
+}
+.tippy-arrow {
+  color: var(--q-bg-elev) !important;
+}
+.tippy-content {
+  padding: 8px 10px;
+}
+
+/* ── 13. Splitpanes ────────────────────────────────────────────────────── */
+.splitpanes.default-theme .splitpanes__pane {
+  background: var(--q-bg) !important;
+}
+.splitpanes.default-theme .splitpanes__splitter {
+  background: var(--q-bg) !important;
+}
+.splitpanes.default-theme .splitpanes__splitter::before,
+.splitpanes.default-theme .splitpanes__splitter::after {
+  background: var(--q-ink-5) !important;
+}
+.splitpanes.default-theme.splitpanes--vertical > .splitpanes__splitter,
+.splitpanes.default-theme .splitpanes--vertical > .splitpanes__splitter {
+  border-left-color: var(--q-hairline);
+}
+.splitpanes.default-theme.splitpanes--horizontal > .splitpanes__splitter,
+.splitpanes.default-theme .splitpanes--horizontal > .splitpanes__splitter {
+  border-top-color: var(--q-hairline);
+}
+
+/* ── 14. SQL syntax highlighting (replace StackOverflow theme) ────────── */
+.hljs {
+  background: var(--q-bg-sunken) !important;
+  color: var(--q-ink) !important;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-meta .hljs-keyword,
+.hljs-doctag,
+.hljs-section,
+.hljs-attr {
+  color: #7c3aed !important;
+}
+.hljs-string,
+.hljs-regexp,
+.hljs-symbol {
+  color: var(--q-accent-strong) !important;
+}
+.hljs-number,
+.hljs-literal {
+  color: var(--q-brand) !important;
+}
+.hljs-comment {
+  color: var(--q-ink-4) !important;
+  font-style: italic;
+}
+[data-bs-theme="dark"] .hljs {
+  background: var(--q-bg-sunken) !important;
+  color: var(--q-ink) !important;
+}
+[data-bs-theme="dark"] .hljs-keyword,
+[data-bs-theme="dark"] .hljs-selector-tag,
+[data-bs-theme="dark"] .hljs-attr {
+  color: #c4b5fd !important;
+}
+[data-bs-theme="dark"] .hljs-string {
+  color: #86efac !important;
+}
+[data-bs-theme="dark"] .hljs-number {
+  color: #93c5fd !important;
+}
+
+/* ── 15. Misc cleanup ─────────────────────────────────────────────────── */
+.never-executed,
+.bg-hatched {
+  --hatched-color: var(--q-bg-sunken);
+  background-image: linear-gradient(    45deg,
+    var(--q-bg-sunken) 25%,
+    var(--q-bg-elev) 25%,
+    var(--q-bg-elev) 50%,
+    var(--q-bg-sunken) 50%,
+    var(--q-bg-sunken) 75%,
+    var(--q-bg-elev) 75%,
+    var(--q-bg-elev)
+);
+}
+
+.more-info[title] {
+  text-decoration-color: var(--q-ink-5);
+}
+
+/* Card body / header padding tighten so chips don't crowd. */
+.plan-node .plan-node-body.card .card-body,
+.plan-node .plan-node-body.card .card-header {
+  padding: 8px 12px;
+}
+
+/* SVG arrows / connectors between nodes. */
+path[data-v-d27c671f] {
+  stroke: var(--q-ink-5) !important;
+  stroke-linecap: round;
+}
+path.never-executed[data-v-d27c671f] {
+  stroke: var(--q-ink-5) !important;
+  stroke-opacity: 0.5;
+}
+
+/* Custom scrollbars to match the host. */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--q-ink-5);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

@@ -1,0 +1,2947 @@
+{
+  "welcome": {
+    "tagline": "Connect to a database to begin",
+    "headline": "Welcome back.",
+    "no_connections": {
+      "title": "No connections yet",
+      "body": "Add your first PostgreSQL connection to start querying",
+      "add": "New connection",
+      "uri_label": "or paste a connection string",
+      "uri_placeholder": "postgresql://user:password@host:5432/database",
+      "instant_db_label": "or spin up a temporary test DB in seconds"
+    }
+  },
+  "theme": {
+    "toggle": {
+      "label": "Switch theme (current: {{current}})"
+    },
+    "light": "light",
+    "dark": "dark",
+    "system": "system",
+    "high-contrast": "high contrast"
+  },
+  "language": {
+    "switch": "Switch language"
+  },
+  "connection": {
+    "action": {
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "other_in_flight": "Another connection is being established. Hold on."
+    },
+    "connecting": "Connecting…",
+    "banner": {
+      "edit": "Edit",
+      "disconnect": "Disconnect",
+      "connected": "Connected",
+      "disconnected": "Not connected"
+    },
+    "form": {
+      "title": {
+        "create": "Add new connection",
+        "edit": "Edit connection"
+      },
+      "description": {
+        "create": "Fill in the PostgreSQL connection parameters and test before saving.",
+        "edit": "Update the connection parameters and save your changes."
+      },
+      "field": {
+        "name": "Name",
+        "host": "Host",
+        "port": "Port",
+        "database": "Database",
+        "username": "User",
+        "password": "Password",
+        "ssl_mode": "SSL mode",
+        "environment": "Environment",
+        "name.placeholder": "My PostgreSQL",
+        "host.placeholder": "localhost",
+        "port.placeholder": "5432",
+        "database.placeholder": "postgres",
+        "username.placeholder": "postgres",
+        "password.placeholder": "Leave blank to keep current"
+      },
+      "read_only": {
+        "label": "Read-only mode (block writes)"
+      },
+      "confirm_destructive": {
+        "label": "Confirm destructive ops (DROP / TRUNCATE / DELETE without WHERE)"
+      },
+      "slow_query_warning": {
+        "label": "Warn before running slow queries (cost > 100K)"
+      },
+      "warning": {
+        "ssl_disable_remote": "Plain-text connection over network. Most clouds reject it. Use prefer instead."
+      },
+      "action": {
+        "test": "Test connection",
+        "save": "Save",
+        "cancel": "Cancel",
+        "save_without_testing": "Save without testing"
+      },
+      "discard": {
+        "title": "Discard changes?",
+        "body": "You have unsaved changes in the connection form. Closing now will lose them.",
+        "confirm": "Discard changes",
+        "cancel": "Keep editing"
+      },
+      "password": {
+        "show": "Show password",
+        "hide": "Hide password"
+      },
+      "instant_db": {
+        "managed_notice": "Connection details are managed by Instant DB and cannot be changed. You can rename the row above."
+      },
+      "test": {
+        "testing": "Testing...",
+        "success": "Connection successful",
+        "success_meta": "{{ms}} ms",
+        "success_meta_with_version": "{{ms}} ms · {{version}}",
+        "failure": "Connection failed"
+      },
+      "error": {
+        "name_required": "Name is required",
+        "name_taken": "A connection with this name already exists",
+        "host_required": "Host is required",
+        "port_invalid": "Port must be between 1 and 65535",
+        "database_required": "Database is required",
+        "user_required": "User is required"
+      },
+      "exclude_history": {
+        "label": "Don't record queries from this connection in History",
+        "help": "Useful for prod or sensitive connections."
+      },
+      "exclude_from_recent_plans": {
+        "label": "Save EXPLAIN plans",
+        "help": "When off, EXPLAIN plans from this connection are not saved to Recent Plans"
+      }
+    },
+    "list": {
+      "aria_label": "Connections list",
+      "context": {
+        "edit": "Edit",
+        "duplicate": "Duplicate",
+        "delete": "Delete"
+      },
+      "search_placeholder": "Search connections…",
+      "search_no_results": "No connections match",
+      "search_aria_label": "Search connections"
+    },
+    "delete": {
+      "confirm": {
+        "title": "Delete connection?",
+        "body": "This permanently removes the connection and its stored password. This action cannot be undone.",
+        "type_to_confirm": "Type {{name}} to confirm",
+        "name_label": "Connection name:",
+        "type_prompt": "Type the name above to confirm:"
+      }
+    },
+    "details": {
+      "last_test": {
+        "ok": "OK",
+        "failed": "Failed",
+        "never": "Never tested"
+      },
+      "no_selection": "Select a connection in the sidebar.",
+      "host": "Host",
+      "port": "Port",
+      "database": "Database",
+      "username": "User",
+      "ssl_mode": "SSL mode",
+      "last_test_label": "Last test",
+      "test_now": "Test now",
+      "edit": "Edit",
+      "delete": "Delete",
+      "connect_failed": "Could not connect to the database"
+    }
+  },
+  "schema": {
+    "browser_aria": "Schema browser",
+    "empty": {
+      "title": "No active connection",
+      "body": "Select a connection on the left and click Connect to view its schema."
+    },
+    "connecting": "Loading schema…",
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "search": {
+      "placeholder": "Search by name",
+      "empty_results": "Nothing matches “{{query}}”",
+      "loading": "Loading schemas for search…"
+    },
+    "tree": {
+      "tables_group": "Tables",
+      "views_group": "Views",
+      "expand": "Expand",
+      "collapse": "Collapse",
+      "copy_name": "Copy name",
+      "menu": {
+        "view_data": "View data",
+        "edit_structure": "Edit structure",
+        "drop": "Drop",
+        "truncate": "Truncate",
+        "generate_insert": "Generate INSERT",
+        "soon": "Coming in S{{sprint}}",
+        "suggestGinIndex": "Suggest GIN index…",
+        "buildJsonbQuery": "Build query…"
+      },
+      "badge": {
+        "hypertable": "Hypertable",
+        "partman": "Partition set (pg_partman)"
+      },
+      "toggle_inferred_schema": "Toggle inferred schema"
+    },
+    "browser": {
+      "open_pgss": "Open pg_stat_statements",
+      "pgss_title": "pg_stat_statements"
+    }
+  },
+  "object_details": {
+    "no_selection": "Select an object in the schema",
+    "empty": "No data",
+    "section": {
+      "columns": "Columns",
+      "indexes": "Indexes",
+      "foreign_keys": "Foreign keys",
+      "definition": "Definition"
+    },
+    "column": {
+      "name": "Name",
+      "type": "Type",
+      "nullable": "Nullable",
+      "default": "Default",
+      "comment": "Comment"
+    }
+  },
+  "editor": {
+    "tab": {
+      "plan_diff_title": "Diff: {{left}} vs {{right}}"
+    },
+    "tabs": {
+      "new": "New tab",
+      "close": "Close {{name}}",
+      "untitled": "untitled-{{n}}",
+      "rename_hint": "Double-click to rename",
+      "rename_aria": "Tab name",
+      "confirm_discard": {
+        "title": "Close tab?",
+        "body": "Unsaved changes in \"{{name}}\" will be lost.",
+        "confirm": "Discard changes",
+        "cancel": "Cancel"
+      }
+    },
+    "empty": {
+      "title": "No open tabs",
+      "body": "Press {{cmd}}+T to start a query"
+    },
+    "run": {
+      "button": "Run",
+      "spinner": "Running…",
+      "cancel": "Cancel",
+      "no_connection": "Connect to a database first",
+      "no_selection": "Select text to execute",
+      "connection_dropdown_label": "Tab connection",
+      "caption_run_one": "run: {{snippet}}",
+      "caption_run_n": "run: {{snippet}}  ({{count}} statements)",
+      "shortcut_run_all": "Run all",
+      "empty_file": "Editor is empty"
+    },
+    "batch": {
+      "tab_label_rowset": "#{{idx}} {{verb}} {{rows}} rows",
+      "tab_label_dml": "#{{idx}} {{verb}} {{rows}} affected",
+      "tab_label_error": "#{{idx}} error",
+      "summary_ok": "Done · {{ok}}/{{total}} OK · {{ms}} ms",
+      "summary_failed": "Statement {{idx}}/{{total}} failed: {{code}}",
+      "intermediate_truncated": "Showing first 500 rows. Intermediate results are not paginated — select this statement and run it on its own for the full result set.",
+      "confirm": {
+        "title": "Confirm dangerous batch",
+        "lead_one": "Will run {{total}} statements on {{env}}, {{count}} of them dangerous:",
+        "lead_few": "Will run {{total}} statements on {{env}}, {{count}} of them dangerous:",
+        "lead_many": "Will run {{total}} statements on {{env}}, {{count}} of them dangerous:",
+        "type_db_prompt": "Type the database name to confirm:",
+        "confirm_button": "Run {{total}} statements",
+        "cancel_button": "Cancel"
+      },
+      "read_only_blocked": "Statement {{idx}} is a write but the connection is read-only"
+    },
+    "result": {
+      "rows": "{{count}} rows",
+      "rows_loading": "{{n}} / unknown rows · loading",
+      "rows_prefetching": "{{n}} / unknown rows · prefetching…",
+      "rows_paused": "{{n}} rows loaded · scroll to load more",
+      "rows_done": "{{n}} rows",
+      "rows_returned": "{{n}} rows returned · {{cols}} columns",
+      "rows_affected": "{{n}} rows affected",
+      "duration": "{{ms}} ms",
+      "truncated": "Showing first {{n}} rows. Add LIMIT to your query for an exact range.",
+      "affected": "{{n}} rows affected",
+      "empty": "Query returned no rows",
+      "cancelled_title": "Query cancelled",
+      "cancelled_body": "Press Run to retry.",
+      "sort_subset": "Sorted by {{col}} {{dir}} (loaded subset)",
+      "error": {
+        "title": "Query error",
+        "position": "↳ at line {{line}}, col {{col}}",
+        "code": {
+          "no_connection": "Connect to a database before running queries",
+          "not_connected": "Connection is no longer active. Reconnect and retry.",
+          "pool_error": "Connection pool error",
+          "storage_error": "Internal storage error",
+          "postgres_error": "PostgreSQL error",
+          "unknown": "Unexpected error",
+          "cancelled": "Query cancelled",
+          "cursor_lost": "Result session expired — re-run the query",
+          "read_only_blocked": "Connection is read-only. Toggle off in Settings to allow writes."
+        }
+      },
+      "ready": "Ready",
+      "no_connection": "No connection"
+    },
+    "value_modal": {
+      "title_json": "JSON value",
+      "title_text": "Cell value"
+    },
+    "explain": {
+      "tab": {
+        "title": "EXPLAIN — {{source}}"
+      },
+      "toolbar": {
+        "mode_explain": "EXPLAIN",
+        "mode_analyze": "EXPLAIN ANALYZE",
+        "option_verbose": "VERBOSE",
+        "option_wal": "WAL",
+        "option_timing": "TIMING",
+        "rerun": "Re-run",
+        "cancel": "Cancel",
+        "cached": {
+          "no_rerun": "Open SQL in editor to re-run",
+          "no_options": "Options are baked into the stored plan"
+        },
+        "open_sql": "Open SQL in editor",
+        "diff_with": "Diff with…"
+      },
+      "footer": {
+        "summary": "Duration · {{duration}}ms · {{nodes}} nodes"
+      },
+      "error": {
+        "no_connection": "Connect a database to get a plan",
+        "not_connected": "Connection inactive",
+        "postgres": "Postgres: {{detail}}",
+        "read_only_blocked": "EXPLAIN ANALYZE blocked: connection is read-only",
+        "parse": "Plan returned in unexpected format",
+        "source_closed": "Source tab was closed",
+        "open_in_editor": "Open in editor",
+        "unknown": "Unknown error"
+      },
+      "empty": "Press Re-run to get a plan",
+      "spinner": "Fetching plan…",
+      "insights": {
+        "title": "Insights ({{count}})",
+        "empty": "No issues found in this plan",
+        "collapse": "Hide insights panel",
+        "expand": "Show insights panel",
+        "action": {
+          "open_in_editor": "Open in editor",
+          "copy_sql": "Copy SQL"
+        },
+        "copied_toast": "SQL copied to clipboard",
+        "rule": {
+          "r1": {
+            "title": "Sequential scan on a large table",
+            "body": "{{node}} reads {{rows}} rows. A B-tree index on {{column}} would let Postgres skip the full scan."
+          },
+          "r2": {
+            "title": "Hash Join spilled to disk",
+            "body": "{{node}} used {{disk}} of disk for the hash. Increase work_mem or build an index on the join key so the planner picks Merge Join."
+          },
+          "r3": {
+            "title": "Hot Nested Loop",
+            "body": "{{node}} ran {{loops}} iterations. An index on {{column}} of {{innerRel}} would push planner toward Hash Join."
+          },
+          "r4": {
+            "title": "Stale statistics on {{relation}}",
+            "body": "Estimate {{estRows}} vs actual {{actualRows}} ({{ratio}}× off). Run ANALYZE to refresh planner stats."
+          }
+        }
+      },
+      "diff": {
+        "picker": {
+          "title": "Pick a plan to compare with",
+          "description": "Choose a saved plan from Recent Plans to diff against the current one.",
+          "scope_current_conn": "Same connection only",
+          "scope_all": "All connections",
+          "empty": "No saved plans found",
+          "cancel": "Cancel"
+        },
+        "toolbar": {
+          "swap": "Swap sides",
+          "open_a": "Open A in editor",
+          "open_b": "Open B in editor"
+        },
+        "summary": {
+          "cost": "ΔCost: {{leftCost}} → {{rightCost}} ({{deltaPct}})",
+          "time": "ΔTime: {{leftMs}}ms → {{rightMs}}ms ({{deltaPct}})",
+          "shape": "+{{added}} added, -{{removed}} removed, {{matched}} unchanged",
+          "no_shared": "Plans share no common nodes — likely different queries."
+        },
+        "panel": {
+          "tab": {
+            "matched": "Matched ({{count}})",
+            "added": "Added ({{count}})",
+            "removed": "Removed ({{count}})"
+          },
+          "row": {
+            "delta_cost": "Δcost {{value}} ({{pct}})",
+            "delta_time": "Δtime {{value}}ms",
+            "delta_rows": "Δrows {{value}}",
+            "node_type_changed": "{{from}} → {{to}}",
+            "click_hint": "Click to highlight in plan"
+          }
+        },
+        "placeholder": {
+          "left_gone": "Plan A no longer exists",
+          "right_gone": "Plan B no longer exists",
+          "both_gone": "Both plans no longer exist",
+          "parse_error": "Plan data corrupted — cannot diff",
+          "close": "Close diff"
+        }
+      },
+      "iframe_title": "EXPLAIN visualization",
+      "node_details": {
+        "close": "Close details"
+      },
+      "nodes_table": {
+        "expand": "Expand",
+        "collapse": "Collapse",
+        "highlight_active_title": "Node highlighted in plan. Click to clear highlight.",
+        "highlight_inactive_title": "Highlight node in the plan behind the inspector"
+      },
+      "inspector": {
+        "title": "Plan Inspector",
+        "description": "Full plan breakdown: node table · raw JSON · query SQL{{insightsExtra}}",
+        "description_insights_extra": " · {{count}} insights",
+        "tab": {
+          "table": "Node table",
+          "raw": "Raw JSON",
+          "query": "Query"
+        },
+        "duration_label": "Time · {{ms}} ms",
+        "copy_json": "Copy JSON",
+        "copy_sql": "Copy SQL",
+        "toast": {
+          "json_copied": "JSON copied",
+          "sql_copied": "SQL copied",
+          "copy_failed": "Could not copy"
+        },
+        "close": "Close",
+        "open_button": "Inspector",
+        "open_button_title": "Open node table, raw JSON and query SQL"
+      },
+      "diff_panel": {
+        "col": {
+          "node": "node",
+          "type": "type",
+          "note": "note"
+        },
+        "no_changes": "✓ Plans are identical in structure and cost. Differences are timing only (one side is missing ANALYZE) — click a row to inspect concrete values.",
+        "type_pill": {
+          "modified": "modified",
+          "added": "added",
+          "removed": "removed",
+          "unchanged": "unchanged"
+        },
+        "note": {
+          "switch_to_full_scan": "switched to full scan",
+          "switch_to_index": "added index access",
+          "stale_stats": "stale statistics",
+          "same_key": "same key",
+          "no_change": "node unchanged",
+          "cost_up": "cost increased",
+          "cost_down": "cost dropped",
+          "added_full_scan": "new full scan",
+          "added_index": "new index access",
+          "added_generic": "node added",
+          "removed_full_scan": "removed full scan",
+          "removed_generic": "node removed"
+        }
+      }
+    },
+    "snippets": {
+      "select_from_where": {
+        "doc": "SELECT … FROM … WHERE — basic single-table query template."
+      },
+      "select_group_having": {
+        "doc": "SELECT … GROUP BY … HAVING — aggregation with a post-filter."
+      },
+      "inner_join": {
+        "doc": "INNER JOIN … ON — standard equijoin between two tables."
+      },
+      "left_join": {
+        "doc": "LEFT JOIN … ON — keep all rows from the left side, NULL on the right when no match."
+      },
+      "insert_into": {
+        "doc": "INSERT INTO … VALUES — single-row insert template."
+      },
+      "update_set_where": {
+        "doc": "UPDATE … SET … WHERE — guarded update template; never omit the WHERE."
+      },
+      "create_table": {
+        "doc": "CREATE TABLE — basic table with a BIGSERIAL primary key."
+      },
+      "create_index": {
+        "doc": "CREATE INDEX — single-column B-tree index template."
+      },
+      "cte": {
+        "doc": "WITH name AS (…) — common table expression skeleton."
+      },
+      "cte_recursive": {
+        "doc": "WITH RECURSIVE — base + step + JOIN tree-walk pattern."
+      },
+      "window_row_number": {
+        "doc": "ROW_NUMBER() OVER (PARTITION … ORDER BY …) — sequence within partition."
+      },
+      "window_lag": {
+        "doc": "LAG(col) OVER (…) — value of a previous row in the partition."
+      },
+      "jsonb_get": {
+        "doc": "col->>'key' — extract a text value from jsonb."
+      },
+      "jsonb_contains": {
+        "doc": "col @> '{...}'::jsonb — containment match."
+      },
+      "case_when": {
+        "doc": "CASE WHEN … THEN … ELSE … END — conditional expression."
+      },
+      "union_all": {
+        "doc": "UNION ALL — concatenate rows; faster than UNION (no dedupe)."
+      },
+      "truncate": {
+        "doc": "TRUNCATE TABLE … RESTART IDENTITY CASCADE — fast wipe with FK cascade."
+      }
+    },
+    "functions": {
+      "count": {
+        "doc": "Count rows. count(*) counts all; count(expr) counts non-NULL."
+      },
+      "sum": {
+        "doc": "Sum of values; ignores NULL."
+      },
+      "avg": {
+        "doc": "Average of values; ignores NULL."
+      },
+      "min": {
+        "doc": "Minimum value."
+      },
+      "max": {
+        "doc": "Maximum value."
+      },
+      "array_agg": {
+        "doc": "Aggregate input values into an array."
+      },
+      "string_agg": {
+        "doc": "Concatenate input values with a delimiter."
+      },
+      "jsonb_agg": {
+        "doc": "Aggregate values into a jsonb array."
+      },
+      "jsonb_object_agg": {
+        "doc": "Aggregate key/value pairs into a jsonb object."
+      },
+      "bool_and": {
+        "doc": "True when every input is true."
+      },
+      "bool_or": {
+        "doc": "True when at least one input is true."
+      },
+      "bit_or": {
+        "doc": "Bitwise OR of all inputs."
+      },
+      "row_number": {
+        "doc": "Sequential number per partition."
+      },
+      "rank": {
+        "doc": "Rank within partition; gaps for ties."
+      },
+      "dense_rank": {
+        "doc": "Rank within partition; no gaps for ties."
+      },
+      "percent_rank": {
+        "doc": "Relative rank in [0, 1]."
+      },
+      "cume_dist": {
+        "doc": "Cumulative distribution."
+      },
+      "ntile": {
+        "doc": "Distribute rows into N buckets."
+      },
+      "lag": {
+        "doc": "Value of a previous row in the partition."
+      },
+      "lead": {
+        "doc": "Value of a following row in the partition."
+      },
+      "first_value": {
+        "doc": "Value of the first row in the window frame."
+      },
+      "last_value": {
+        "doc": "Value of the last row in the window frame."
+      },
+      "nth_value": {
+        "doc": "Value of the Nth row in the window frame."
+      },
+      "length": {
+        "doc": "Number of characters in a text value."
+      },
+      "substring": {
+        "doc": "Extract a substring."
+      },
+      "trim": {
+        "doc": "Strip leading/trailing characters."
+      },
+      "ltrim": {
+        "doc": "Strip leading characters."
+      },
+      "rtrim": {
+        "doc": "Strip trailing characters."
+      },
+      "lower": {
+        "doc": "Lowercase a text value."
+      },
+      "upper": {
+        "doc": "Uppercase a text value."
+      },
+      "replace": {
+        "doc": "Replace all occurrences of a substring."
+      },
+      "split_part": {
+        "doc": "Split on delimiter and return the Nth piece."
+      },
+      "regexp_replace": {
+        "doc": "Regex-based replacement."
+      },
+      "regexp_matches": {
+        "doc": "Return matched groups as a text array."
+      },
+      "format": {
+        "doc": "Printf-style text formatter."
+      },
+      "now": {
+        "doc": "Current transaction start timestamp (timestamptz)."
+      },
+      "current_timestamp": {
+        "doc": "Current transaction start timestamp (timestamptz)."
+      },
+      "current_date": {
+        "doc": "Current date."
+      },
+      "age": {
+        "doc": "Difference between two timestamps as an interval."
+      },
+      "date_trunc": {
+        "doc": "Truncate a timestamp to a field (year, month, day…)."
+      },
+      "extract": {
+        "doc": "Extract a field (year, month, dow…) from a date/time."
+      },
+      "to_char": {
+        "doc": "Format a value as text using the given format pattern."
+      },
+      "to_date": {
+        "doc": "Parse text into a date using the given format."
+      },
+      "to_timestamp": {
+        "doc": "Parse text into a timestamp using the given format."
+      },
+      "make_date": {
+        "doc": "Build a date from year/month/day."
+      },
+      "make_timestamp": {
+        "doc": "Build a timestamp from numeric components."
+      },
+      "justify_interval": {
+        "doc": "Normalize an interval (carry months/days/hours)."
+      },
+      "abs": {
+        "doc": "Absolute value."
+      },
+      "ceil": {
+        "doc": "Smallest integer ≥ value."
+      },
+      "floor": {
+        "doc": "Largest integer ≤ value."
+      },
+      "round": {
+        "doc": "Round to the nearest integer or N places."
+      },
+      "mod": {
+        "doc": "Modulo (remainder)."
+      },
+      "power": {
+        "doc": "base raised to exp."
+      },
+      "jsonb_build_object": {
+        "doc": "Build a jsonb object from alternating key/value args."
+      },
+      "jsonb_build_array": {
+        "doc": "Build a jsonb array from the args."
+      },
+      "jsonb_set": {
+        "doc": "Replace or insert a value at a path inside a jsonb document."
+      },
+      "jsonb_strip_nulls": {
+        "doc": "Remove keys whose value is null from a jsonb object."
+      },
+      "jsonb_object_keys": {
+        "doc": "Return the top-level keys of a jsonb object."
+      },
+      "jsonb_typeof": {
+        "doc": "Return the type of a jsonb value as text."
+      },
+      "to_jsonb": {
+        "doc": "Convert any value to jsonb."
+      },
+      "jsonb_array_elements": {
+        "doc": "Expand a jsonb array into a set of jsonb values."
+      },
+      "jsonb_path_query": {
+        "doc": "Run a jsonpath query and return matching values."
+      },
+      "jsonb_pretty": {
+        "doc": "Pretty-print a jsonb value."
+      },
+      "array_length": {
+        "doc": "Length of a given array dimension."
+      },
+      "array_position": {
+        "doc": "Index of an element within an array."
+      },
+      "array_remove": {
+        "doc": "Remove all matching elements from an array."
+      },
+      "array_replace": {
+        "doc": "Replace all matching elements in an array."
+      },
+      "unnest": {
+        "doc": "Expand an array into rows."
+      },
+      "array_to_string": {
+        "doc": "Concatenate array elements into a single text."
+      },
+      "coalesce": {
+        "doc": "Return the first non-NULL argument."
+      },
+      "nullif": {
+        "doc": "Return NULL when the two args are equal, else the first."
+      },
+      "greatest": {
+        "doc": "Greatest non-NULL value."
+      },
+      "least": {
+        "doc": "Least non-NULL value."
+      },
+      "cast": {
+        "doc": "Convert a value to another type."
+      },
+      "generate_series": {
+        "doc": "Generate a series of integers, dates, or timestamps."
+      },
+      "pg_typeof": {
+        "doc": "Type name of an expression."
+      },
+      "pg_column_size": {
+        "doc": "Storage size of a value in bytes."
+      }
+    }
+  },
+  "erd": {
+    "tab": {
+      "title": "ERD — {{connection}}",
+      "title_filtered": "ERD — {{connection}} ({{schemas}})",
+      "aria_open": "Open ERD diagram for {{connection}}"
+    },
+    "browser": {
+      "open_button": "Generate ERD",
+      "open_button_aria": "Generate ERD for the connected database",
+      "open_button_disabled": "Connect to a database first"
+    },
+    "loading": "Loading schema graph…",
+    "empty": {
+      "title": "No tables to render",
+      "body": "The selected schema(s) have no relations. Try a different filter."
+    },
+    "error": {
+      "title": "Couldn't generate ERD",
+      "retry": "Retry"
+    },
+    "toolbar": {
+      "filter_label": "Schema",
+      "filter_all": "All schemas",
+      "fit": "Fit to screen",
+      "fit_aria": "Fit diagram to screen",
+      "zoom_in": "Zoom in",
+      "zoom_out": "Zoom out",
+      "zoom_reset": "Reset zoom (100%)",
+      "export": "Export ▾",
+      "export_png": "Export as PNG",
+      "export_svg": "Export as SVG",
+      "stats": "{{tableCount}} tables · {{fkCount}} FKs · laid out in {{layoutMs}} ms"
+    },
+    "node": {
+      "pk_aria": "Primary key",
+      "fk_aria": "Foreign key",
+      "nullable_aria": "Nullable",
+      "more_columns": "+{{count}} more",
+      "card_aria": "Table {{schema}}.{{table}} — {{columnCount}} columns; {{pkCount}} primary keys; {{fkCount}} foreign keys"
+    },
+    "canvas": {
+      "aria_label": "ERD diagram"
+    },
+    "edit": {
+      "toggle": {
+        "label": "Edit mode",
+        "tooltip": "Edit schema (⌘E)"
+      },
+      "new_table": "+ New table",
+      "add_column": "+ Add column",
+      "apply": "Apply",
+      "discard": "Discard",
+      "cancel": "Cancel",
+      "undo": "Undo",
+      "redo": "Redo",
+      "reset_layout": "Reset layout",
+      "preview": {
+        "title": "DDL preview",
+        "statement_count": "{{n}} statements",
+        "empty": "No pending changes",
+        "warning_count": "{{n}} warnings",
+        "error": {
+          "title": "Apply failed"
+        }
+      },
+      "confirm": {
+        "apply": {
+          "title": "Apply schema changes?",
+          "body": "{{n}} statements will be applied to {{conn}} in a single transaction. If any statement fails, none will be applied."
+        },
+        "discard": {
+          "title": "Discard schema edits?",
+          "body": "You have {{n}} unapplied changes in the ERD editor. Closing now will discard them."
+        },
+        "reset_layout": "Reset all table positions to auto-layout?"
+      },
+      "fk": {
+        "modal": {
+          "title": "Add foreign key",
+          "from": "From",
+          "to": "To",
+          "constraint_name": "Constraint name",
+          "add": "Add FK",
+          "not_pk_unique": "not PK/UNIQUE"
+        }
+      },
+      "validation": {
+        "empty_name": "Name is required",
+        "duplicate_table": "Table {{name}} already exists in schema {{schema}}",
+        "duplicate_column": "Column {{name}} already exists in table",
+        "fk_type_mismatch": "Type mismatch: {{source}} → {{target}}",
+        "fk_target_not_unique": "Target column is not PRIMARY KEY or UNIQUE",
+        "no_columns": "Table has no columns"
+      },
+      "toast": {
+        "apply_success": "Schema updated ({{n}} statements, {{ms}} ms)"
+      }
+    }
+  },
+  "toast": {
+    "connection": {
+      "saved": "Connection saved",
+      "deleted": "Connection deleted",
+      "duplicated": "Connection duplicated",
+      "test_failed": "Connection test failed",
+      "test_succeeded": "Connection successful · {{ms}} ms",
+      "test_succeeded_with_version": "Connection successful · {{ms}} ms · {{version}}",
+      "uri_invalid": "Invalid connection string",
+      "delete_failed": "Could not delete connection",
+      "error": {
+        "notFound": "Connection not found",
+        "duplicateName": "A connection with this name already exists",
+        "invalidInput": "Invalid input: {{detail}}",
+        "invalidUri": "Invalid connection string",
+        "storage": "Local storage error",
+        "keychain": "OS keychain access failed: {{detail}}",
+        "passwordMissing": "No saved password for “{{name}}” — enter one to connect.",
+        "postgres": "PostgreSQL error: {{detail}}",
+        "notConnected": "Connection is no longer active",
+        "io": "I/O error"
+      }
+    }
+  },
+  "history": {
+    "tab": {
+      "title": "History"
+    },
+    "search": {
+      "placeholder": "Search SQL…",
+      "aria": "Search query history by SQL"
+    },
+    "filter": {
+      "connection": {
+        "all": "All connections",
+        "deleted": "(deleted)"
+      },
+      "status": {
+        "all": "All statuses",
+        "ok": "OK",
+        "error": "Error",
+        "cancelled": "Cancelled"
+      },
+      "pinned_only": "Pinned only"
+    },
+    "menu": {
+      "refresh": "Refresh",
+      "clear_for_connection": "Clear history for this connection…",
+      "export": "Export to .ide99…"
+    },
+    "row": {
+      "replay": "Replay",
+      "pin": "Pin",
+      "unpin": "Unpin",
+      "copy_sql": "Copy SQL",
+      "delete": "Delete"
+    },
+    "empty": {
+      "title": "No queries yet",
+      "body": "Run something to populate history."
+    },
+    "error": {
+      "title": "Could not load history",
+      "retry": "Retry"
+    },
+    "replay": {
+      "connection_deleted": "The connection for this query no longer exists."
+    },
+    "export": {
+      "dialog_title": "Export query history",
+      "success": "Exported {{count}} queries to {{path}}"
+    },
+    "pagination": {
+      "showing": "Showing {{shown}} of {{total}}",
+      "load_more": "Load more"
+    },
+    "confirm": {
+      "clear_for_connection": "Clear all history rows for this connection? This cannot be undone.",
+      "delete_row": "Delete this history entry?"
+    }
+  },
+  "recent_plans": {
+    "tab": {
+      "title": "Recent Plans"
+    },
+    "empty": "No plans saved yet",
+    "empty_filtered": "No plans match the current filter",
+    "row": {
+      "cost": "cost {{cost}}",
+      "no_cost": "—",
+      "action": {
+        "open": "Open",
+        "menu": "More",
+        "delete": "Delete",
+        "copy_sql": "Copy SQL"
+      },
+      "toggle_pin": "Pin (won't be evicted by LRU cap)",
+      "unpin": "Unpin"
+    },
+    "preview": {
+      "placeholder": "Select a plan to preview",
+      "open": "Open in plan editor view",
+      "open_sql": "Open SQL in editor",
+      "slow": "slow",
+      "kpi": {
+        "execution": "Execution",
+        "planning": "Planning",
+        "total_cost": "Total cost",
+        "nodes": "Nodes"
+      },
+      "hotspots": {
+        "title": "Top 3 hotspots"
+      },
+      "compare": {
+        "title": "Compare with previous run",
+        "cost_label": "ΔCost",
+        "time_label": "ΔTime",
+        "changes_label": "Changes",
+        "added_count": "+{{count}} added",
+        "removed_count": "−{{count}} removed",
+        "modified_count": "~{{count}} cost",
+        "identical": "structure and metrics match"
+      }
+    },
+    "filter": {
+      "search": "Search SQL…",
+      "table_any": "Any table",
+      "cost_min": "Min cost",
+      "cost_max": "Max cost",
+      "conn_all": "All connections",
+      "reset": "Reset"
+    },
+    "load_more": "Load more",
+    "delete_confirm": "Delete this saved plan?",
+    "deleted": "Plan deleted",
+    "toast": {
+      "connection_gone": "Connection «{{name}}» no longer exists",
+      "plan_gone": "Plan no longer exists"
+    },
+    "compare": {
+      "toggle": "Compare",
+      "selected_count": "Selected {{count}} / 2",
+      "cancel": "Cancel",
+      "run": "Compare 2 plans",
+      "row_label_a": "A:",
+      "row_label_b": "B:"
+    }
+  },
+  "health": {
+    "tab": {
+      "title": "Health: {{connection}}",
+      "aria_open": "Open Health for {{connection}}"
+    },
+    "header": {
+      "title": "Health: {{connection}}",
+      "title_inline": "Health · {{connection}}",
+      "last_refreshed_never": "Never refreshed",
+      "last_refreshed": "Last refreshed: {{relative}}",
+      "auto_refresh_summary": "auto-refresh {{interval}}",
+      "auto_refresh_off": "off",
+      "auto_refresh_value": "{{seconds}}s",
+      "refresh_now": "Refresh now",
+      "refresh_now_aria": "Refresh now (Cmd+R / Ctrl+R)",
+      "auto_refresh_label": "Auto-refresh:",
+      "refreshing": "Refreshing…",
+      "pill_critical": "{{count}} critical",
+      "pill_warning": "{{count}} warning",
+      "pill_ok": "{{count}} ok"
+    },
+    "refresh": {
+      "off": "Off",
+      "5s": "5 seconds",
+      "10s": "10 seconds",
+      "30s": "30 seconds",
+      "1m": "1 minute",
+      "5m": "5 minutes",
+      "cap_tooltip": "Polling faster than {{minMs}}ms is disabled on {{env}} connections to avoid log spam"
+    },
+    "group": {
+      "storage": "Storage",
+      "connections_cache": "Connections & cache",
+      "queries_replication": "Queries & replication",
+      "other": "Other"
+    },
+    "card": {
+      "db_size": {
+        "title": "Database size",
+        "explanation": "Total on-disk size of the current database via pg_database_size(). The 7-day sparkline tracks growth from snapshots taken when you open this Health tab.",
+        "growth": "{{delta}} / 7d ({{pct}})",
+        "growth_collecting": "Collecting trend ({{points}}/7 days)"
+      },
+      "bloat": {
+        "title": "Table bloat",
+        "explanation": "Estimated dead-tuple percentage per table from a pure-SQL bloat heuristic (no pgstattuple required). Higher = more wasted space; consider VACUUM FULL or REINDEX.",
+        "row": "{{schema}}.{{table}}: {{pct}} bloat ({{size}})",
+        "more": "+{{count}} more"
+      },
+      "slow_queries": {
+        "title": "Slow queries",
+        "explanation": "Top queries from pg_stat_statements ordered by total execution time. Requires the pg_stat_statements extension.",
+        "row": "avg {{mean}}ms · {{calls}} calls"
+      },
+      "missing_indexes": {
+        "title": "Possibly missing indexes",
+        "explanation": "Tables with high seq_scan-to-idx_scan ratios from pg_stat_user_tables — candidates for adding an index. Verify with EXPLAIN before acting.",
+        "row": "{{schema}}.{{table}}: {{seq}} seq vs {{idx}} idx"
+      },
+      "unused_indexes": {
+        "title": "Unused indexes",
+        "explanation": "Indexes with zero scans since stats were last reset, excluding primary keys. Drop only after verifying the index isn't used by background jobs.",
+        "row": "{{schema}}.{{index}} on {{table}} ({{size}})"
+      },
+      "cache_hit": {
+        "title": "Cache hit ratio",
+        "explanation": "Fraction of buffer reads served from shared_buffers. Below 95% suggests shared_buffers is too small or workload is scan-heavy."
+      },
+      "active_connections": {
+        "title": "Active connections",
+        "explanation": "Current connections to this database vs max_connections. Monitor for connection-pool starvation; idle-in-transaction is a problem signal.",
+        "current": "{{current}} / {{max}}",
+        "by_state": "{{state}}: {{count}}",
+        "state": {
+          "active": "active",
+          "idle": "idle",
+          "idle_in_transaction": "idle-in-tx",
+          "idle_in_transaction_aborted": "idle-in-tx (aborted)",
+          "fastpath_function_call": "fastpath",
+          "disabled": "disabled"
+        }
+      },
+      "long_running": {
+        "title": "Long-running queries (>30s)",
+        "explanation": "Active queries running for more than 30 seconds. Long-running transactions block VACUUM and prevent stats updates.",
+        "row": "PID {{pid}} · {{duration}}s · {{state}}"
+      },
+      "vacuum_status": {
+        "title": "Vacuum status",
+        "explanation": "Tables not vacuumed (manual or auto) in the last 7 days. Stale stats cause poor query plans; consider scheduling a manual VACUUM.",
+        "row": "{{schema}}.{{table}}: {{days}}d ago",
+        "row_never": "{{schema}}.{{table}}: never"
+      },
+      "replication_lag": {
+        "title": "Replication lag",
+        "explanation": "Replication slots and their byte/time lag from pg_replication_slots and pg_stat_replication. Requires pg_monitor role to read slot details.",
+        "slot": "{{slot}}: {{lag_bytes}} ({{lag_seconds}}s)",
+        "no_replicas": "No replication configured"
+      },
+      "wal_throughput": {
+        "title": "WAL throughput",
+        "explanation": "WAL write rate (average since pg_stat_wal stats_reset). Requires PostgreSQL 14+.",
+        "since_reset": "avg since reset {{relative}}",
+        "no_data": "no stats yet"
+      },
+      "jsonb_index_suggestions": {
+        "title": "JSONB index suggestions",
+        "explanation": "Top GIN index recommendations mined from pg_stat_statements JSONB operator patterns. Requires pg_stat_statements extension.",
+        "row": "{{schema}}.{{table}}.{{column}}  {{op}}  ·  {{calls}} calls · {{time}} total",
+        "viewAction": "View",
+        "empty": "No JSONB ops detected in pg_stat_statements"
+      }
+    },
+    "status": {
+      "ok": "Healthy",
+      "warn": "Needs attention",
+      "danger": "Problem"
+    },
+    "empty": {
+      "no_data": "No issues found ✓",
+      "no_replicas": "No replication configured"
+    },
+    "unavailable": {
+      "title": "Extension {{extension}} not installed",
+      "body": "Install to enable this card:",
+      "copy": "Copy SQL"
+    },
+    "forbidden": {
+      "title": "Insufficient privileges",
+      "body": "This card requires the {{required_role}} role. Ask your DBA to run:",
+      "copy": "Copy SQL"
+    },
+    "error": {
+      "title": "Failed to load",
+      "details": "Show details",
+      "retry": "Retry"
+    },
+    "tooltip": {
+      "what_does_this_mean": "What does this mean?"
+    },
+    "actions": {
+      "label": {
+        "reindexTable": "REINDEX",
+        "vacuum": "VACUUM",
+        "analyze": "ANALYZE",
+        "dropIndex": "DROP INDEX",
+        "killPid": "Cancel session",
+        "explain": "EXPLAIN"
+      },
+      "tooltip": {
+        "reindexTable": "Rebuild index concurrently — brief lock",
+        "vacuum": "Reclaim dead tuples — minimal locking",
+        "analyze": "Refresh planner statistics",
+        "dropIndex": "Drop this unused index (concurrently)",
+        "killPid": "Cancel this session (pg_cancel_backend)",
+        "explain": "Open this query in an EXPLAIN tab"
+      },
+      "title": {
+        "reindexTable": "Reindex table?",
+        "vacuum": "Vacuum table?",
+        "analyze": "Analyze table?",
+        "dropIndex": "Drop index?",
+        "killPid": "Cancel session?"
+      },
+      "run": {
+        "reindexTable": "Run REINDEX",
+        "vacuum": "Run VACUUM",
+        "analyze": "Run ANALYZE",
+        "dropIndex": "Drop",
+        "killPid": "Cancel session"
+      },
+      "running": {
+        "reindexTable": "Reindexing…",
+        "vacuum": "Vacuuming…",
+        "analyze": "Analyzing…",
+        "dropIndex": "Dropping…",
+        "killPid": "Cancelling…",
+        "indeterminate": "Working…"
+      },
+      "phase": {
+        "starting": "starting",
+        "scanning_heap": "scanning heap",
+        "vacuuming_indexes": "vacuuming indexes",
+        "vacuuming_heap": "vacuuming heap",
+        "cleaning_up_indexes": "cleaning up indexes",
+        "truncating_heap": "truncating heap",
+        "performing_final_cleanup": "performing final cleanup",
+        "building_index": "building index",
+        "validating_index": "validating index",
+        "waiting_for_writers_to_finish": "waiting for writers to finish",
+        "loading_tuples_in_tree": "loading tuples in tree",
+        "swapping_relation_files": "swapping relation files"
+      },
+      "impact": {
+        "reindex": "Brief lock; size before: {{size}}.",
+        "vacuum": "May take minutes for {{size}}; minimal locking.",
+        "analyze": "Refreshes planner stats; ShareUpdateExclusiveLock.",
+        "drop_index": "Reclaims {{size}} after drop; concurrently to avoid blocking writes.",
+        "kill_cancel": "Sends pg_cancel_backend({{pid}}). If the session ignores the signal, you'll be asked again to terminate.",
+        "kill_terminate": "Forcefully terminates session {{pid}}."
+      },
+      "confirm": {
+        "body": "This {{environment}} connection requires you to type the target ({{target}}) to confirm.",
+        "inputLabel": "Type the target to confirm"
+      },
+      "fallback": {
+        "title": "Cancel didn't stop the session",
+        "body": "Session {{pid}} is still active after pg_cancel_backend. Send pg_terminate_backend? Type {{pid}} again to confirm.",
+        "confirm": "Terminate"
+      },
+      "toast": {
+        "completed": "{{label}} completed in {{duration}}.",
+        "notFound": "Session {{pid}} already finished.",
+        "terminated": "Session {{pid}} terminated in {{duration}}.",
+        "failed": "{{label}} failed: {{message}}"
+      },
+      "duration": {
+        "ms": "{{ms}} ms",
+        "s": "{{s}} s"
+      }
+    }
+  },
+  "live_ops": {
+    "tab": {
+      "title": "Live Ops",
+      "name_with_conn": "Live Ops · {{name}}"
+    },
+    "header": {
+      "interval_label": "Refresh",
+      "interval_off": "Off",
+      "interval_1s": "1 s",
+      "interval_2s": "2 s",
+      "interval_5s": "5 s",
+      "interval_10s": "10 s",
+      "env_capped_tooltip": "Min {{min}}s on {{env}} (env-cap)",
+      "last_refresh": "Last refreshed: {{relative}}",
+      "x_ago": "{{seconds}}s ago",
+      "refreshing": "Refreshing…",
+      "refresh_now": "Refresh now"
+    },
+    "subtab": {
+      "sessions": "Sessions",
+      "slow": "Slow queries",
+      "replication": "Replication"
+    },
+    "sessions": {
+      "mode": {
+        "blocked": "Blocked only",
+        "all": "All"
+      },
+      "view": {
+        "dag": "DAG",
+        "list": "List"
+      },
+      "level": {
+        "blockers": "L0 · BLOCKERS",
+        "waiters_n": "L{{n}} · WAITERS",
+        "others": "OTHERS"
+      },
+      "summary": {
+        "sessions_one": "{{count}} session",
+        "sessions_few": "{{count}} sessions",
+        "sessions_many": "{{count}} sessions",
+        "blocked_count_one": "{{count}} blocked",
+        "blocked_count_few": "{{count}} blocked",
+        "blocked_count_many": "{{count}} blocked"
+      },
+      "aria": {
+        "chain_idle": "{{count}} active sessions, no blocking",
+        "chain_active": "{{sessions}} active sessions, PID {{blockerPid}} blocking {{blocked}} others"
+      },
+      "actions": {
+        "terminate": "Terminate",
+        "cancel": "Cancel query",
+        "highlight_blocker": "highlight blocker"
+      },
+      "blocked_by": "from pid {{pid}}",
+      "lock": "{{type}}",
+      "wait_short": "wait:",
+      "hint": "Right-click a session for actions",
+      "cancel": "Cancel session (pg_cancel_backend)",
+      "terminate": "Terminate session (pg_terminate_backend, force)",
+      "empty_blocked": "No blocking right now ✓",
+      "empty_all": "No active sessions",
+      "truncated": "Showing first 200 sessions",
+      "list": {
+        "col": {
+          "pid": "pid",
+          "user": "user",
+          "state": "state",
+          "duration": "duration",
+          "wait": "wait",
+          "query": "query"
+        }
+      },
+      "node": {
+        "wait": "wait: {{type}}/{{event}}"
+      },
+      "state": {
+        "active": "active",
+        "idle": "idle",
+        "idle_in_transaction": "idle-in-tx",
+        "idle_in_transaction_aborted": "idle-in-tx (aborted)",
+        "fastpath_function_call": "fastpath",
+        "disabled": "disabled"
+      }
+    },
+    "slow": {
+      "col": {
+        "mean": "Mean",
+        "total": "Total",
+        "calls": "×",
+        "rows": "Rows",
+        "query": "Query"
+      },
+      "search_placeholder": "Search by query…",
+      "time_range": {
+        "label": "Period",
+        "1h": "Last hour",
+        "24h": "Last 24h",
+        "all": "All time"
+      },
+      "summary": {
+        "queries_one": "{{count}} query",
+        "queries_few": "{{count}} queries",
+        "queries_many": "{{count}} queries",
+        "p99": "{{ms}} ms p99"
+      },
+      "rows_per_call": "{{count}} / call",
+      "explain": "EXPLAIN",
+      "empty": "No queries in pg_stat_statements",
+      "empty_filtered": "No queries match the filter",
+      "click_hint": "Click a row to open in editor"
+    },
+    "replication": {
+      "no_replication": "No replication configured ✓",
+      "slots": "Replication slots ({{count}})",
+      "publications": "Publications ({{count}})",
+      "subscriptions": "Subscriptions ({{count}})",
+      "show_empty": "Show empty sections ({{count}})",
+      "inactive": "inactive",
+      "slot_growth_warn": "Slot retention exceeds 1 GB; check if subscriber is alive",
+      "slot_growth_danger": "Slot retention exceeds 5 GB; subscriber may have failed",
+      "summary": {
+        "slots_one": "{{count}} slot",
+        "slots_few": "{{count}} slots",
+        "slots_many": "{{count}} slots",
+        "critical": "{{count}} critical",
+        "warn": "{{count}} warn"
+      },
+      "lag_seconds": "{{seconds}} s lag",
+      "lag_seconds_short": "{{seconds}} s",
+      "drop_slot": "DROP slot",
+      "tables_count_one": "{{count}} table",
+      "tables_count_few": "{{count}} tables",
+      "tables_count_many": "{{count}} tables",
+      "tables_list_label": "tables:",
+      "last_msg_label": "last_msg",
+      "publications_label": "publications:"
+    },
+    "error": {
+      "forbidden": "Insufficient privileges (requires {{role}})",
+      "forbidden_grant": "GRANT {{role}} TO current_user;",
+      "unavailable": "Extension {{extension}} not installed",
+      "query_failed": "Query failed: {{message}}",
+      "retry": "Retry",
+      "details": "Details"
+    }
+  },
+  "jsonb": {
+    "modal": {
+      "title": "Edit JSONB: {{table}}.{{column}} (row {{rowSummary}})",
+      "titleNoPk": "Edit JSONB: {{table}}.{{column}} (row {{rowIdx}})",
+      "titleV2": "Edit JSONB: {{target}} · row {{row}}",
+      "save": "Save changes",
+      "cancel": "Cancel",
+      "close": "Close",
+      "discardConfirm": "Discard unsaved changes?"
+    },
+    "mode": {
+      "text": "Text",
+      "tree": "Tree",
+      "table": "Table",
+      "tableDisabledTooltip": "Table mode requires an array of objects with up to 12 unique keys",
+      "tablistLabel": "View mode"
+    },
+    "tree": {
+      "addKey": "+ Add key",
+      "addItem": "+ Add item",
+      "delete": "Delete",
+      "canonicalNote": "PostgreSQL stores jsonb in canonical key order; this view shows your edit order, but storage order is normalized.",
+      "type": {
+        "string": "string",
+        "number": "number",
+        "boolean": "boolean",
+        "null": "null",
+        "object": "object",
+        "array": "array, {{count}} items"
+      }
+    },
+    "text": {
+      "invalidJson": "Invalid JSON: {{message}}"
+    },
+    "diff": {
+      "willSaveAs": "Will save as",
+      "setOps": "{{count}} jsonb_set ops",
+      "fullReplace": "full replace",
+      "noChanges": "No changes"
+    },
+    "readonly": {
+      "banner": "Read-only result. Copy SQL update template:",
+      "copyTemplate": "Copy template",
+      "reason": {
+        "noBaseTable": "result has no base table (computed columns only)",
+        "multipleTables": "result joins multiple tables",
+        "matview": "materialized view (use REFRESH MATERIALIZED VIEW)",
+        "foreignTable": "foreign table (not supported in S15)",
+        "viewWithoutPk": "view without underlying primary key",
+        "partitionedNoPk": "partitioned table without primary key",
+        "noColumnMetadata": "missing column source metadata"
+      }
+    },
+    "prod": {
+      "confirmTitle": "Confirm write to production database",
+      "confirmBody": "You are about to UPDATE {{table}} on a production connection. Review the SQL above and type the table name to confirm:",
+      "confirmInputLabel": "Type {{table}}",
+      "apply": "Apply"
+    },
+    "inference": {
+      "panel": {
+        "title": "Inferred schema",
+        "sampledRowsCount": "{{count}} sampled rows",
+        "keysCount": "{{count}} keys",
+        "ago": "{{relative}} ago",
+        "agoNow": "just now",
+        "agoSeconds": "{{count}}s ago",
+        "agoMinutes": "{{count}}m ago",
+        "agoHours": "{{count}}h ago",
+        "agoDays": "{{count}}d ago",
+        "agoUnknown": "—",
+        "headerSummary": "{{title}} · {{rows}} · {{keys}} · {{ago}}",
+        "staleBadge": "Stale",
+        "staleTooltip": "Stats indicate the table has changed — refresh in progress.",
+        "reinferAction": "Re-infer",
+        "empty": "No keys detected (column may be all NULL or scalar).",
+        "error": "Schema inference failed: {{message}}",
+        "retryAction": "Retry",
+        "statusPending": "Inferring schema from sampled rows…",
+        "ariaRegion": "Inferred JSONB schema for {{column}}",
+        "togglePanel": "Toggle inferred schema",
+        "modalSection": {
+          "expand": "Inferred schema",
+          "collapse": "Inferred schema"
+        }
+      }
+    },
+    "builder": {
+      "title": "Query Builder: {{table}}.{{column}}",
+      "operatorLabel": "Operator",
+      "operator": {
+        "existence": "? — existence",
+        "containment": "@> — containment",
+        "pathExtract": "#> — path extract",
+        "pathPredicate": "@? — path predicate"
+      },
+      "pathLabel": "Path",
+      "pathPlaceholder": "Pick a path from the inferred schema on the left",
+      "valueLabel": "Value",
+      "extractMode": {
+        "projection": "As SELECT projection",
+        "comparison": "As WHERE comparison"
+      },
+      "comparator": {
+        "eq": "==",
+        "ne": "!=",
+        "gt": ">",
+        "lt": "<",
+        "ge": ">=",
+        "le": "<=",
+        "likeRegex": "like_regex"
+      },
+      "previewLabel": "Generated SQL",
+      "warning": {
+        "existenceTopLevel": "? matches only top-level keys of the object at this path.",
+        "pathTooDeep": "Path depth limit reached ({{limit}})."
+      },
+      "error": {
+        "invalidJson": "Invalid JSON: {{message}}",
+        "typeMismatch": "Expected {{expected}}, got {{got}}"
+      },
+      "actions": {
+        "generate": "Generate → New tab",
+        "cancel": "Cancel"
+      },
+      "buildFromCellTitle": "Build query"
+    },
+    "suggester": {
+      "title": "Suggested GIN index: {{table}}.{{column}}",
+      "recommendedHeader": "Recommended index",
+      "rationale": {
+        "header": "Why {{opClass}}",
+        "minedSummary": "Saw {{calls}} calls · {{time}} total — using {{ops}} operators.",
+        "jsonbOpsBenefit": "jsonb_ops covers {{ops}} and is the safest default.",
+        "jsonbPathOpsBenefit": "jsonb_path_ops is ~30% smaller than jsonb_ops and faster for path queries.",
+        "expressionBenefit": "Expression index targets a single key — smallest and fastest for equality."
+      },
+      "rationaleGeneric": "No usage data — recommending the safest default for this column.",
+      "sizeEstimateLabel": "Estimated index size",
+      "sizeEstimateValue": "~{{size}} (heuristic: pg_class × 0.3)",
+      "speedupLabel": "Estimated speedup",
+      "speedupComputing": "Computing…",
+      "speedupComputed": "Baseline cost: {{baseline}} → With hypothetical index: {{hypothetical}} (~{{pct}}% reduction)",
+      "speedupUnavailable": {
+        "hypopgMissing": "Install HypoPG to see hypothetical cost reduction:",
+        "hypopgInstallSql": "CREATE EXTENSION hypopg;",
+        "pgTooOld": "Hypothetical EXPLAIN requires PostgreSQL 16+ (current: {{actual}})",
+        "noRepresentativeQuery": "No usage data — install pg_stat_statements to enable cost estimation",
+        "plannerError": "Planner error: {{message}}"
+      },
+      "representativeQueryLabel": "Representative query (from pg_stat_statements):",
+      "actions": {
+        "copy": "Copy SQL",
+        "openInEditor": "Open in editor",
+        "close": "Close",
+        "retry": "Retry",
+        "copied": "Copied"
+      },
+      "extensions": {
+        "pgStatStatementsRequiredCard": "pg_stat_statements not installed",
+        "pgStatStatementsRequiredColumn": "Showing generic recommendation — install pg_stat_statements for usage-based ranking."
+      }
+    },
+    "toast": {
+      "saved": "Saved ({{rows}} row, {{duration}} ms)",
+      "rowVanished": "Row not found — result may be stale",
+      "saveFailed": "Save failed: {{message}}"
+    }
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "snippets": {
+    "palette": {
+      "title": "Snippet palette",
+      "searchPlaceholder": "Search snippets…"
+    },
+    "badge": {
+      "builtin": "Built-in",
+      "user": "User",
+      "overridden": "Override"
+    },
+    "toolbar": {
+      "new": "New",
+      "import": "Import…",
+      "export": "Export…"
+    },
+    "editor": {
+      "newTitle": "New snippet",
+      "editTitle": "Edit snippet",
+      "label": "Label",
+      "prefix": "Prefix",
+      "body": "Body",
+      "documentation": "Documentation"
+    }
+  },
+  "easyMode": {
+    "toggle": {
+      "easyOn": "Easy",
+      "standardOn": "Standard",
+      "hint": "Switch between Easy and Standard mode (Cmd+Shift+E)"
+    },
+    "bidi": {
+      "title": "Generated SQL",
+      "toggle": "Toggle Generated SQL panel",
+      "hint": "Edit this SQL to update the GUI above."
+    },
+    "help": {
+      "restartTour": "Restart onboarding tour"
+    }
+  },
+  "conceptTooltip": {
+    "trigger": "What is this?",
+    "transactionHint": "Runs in a single"
+  },
+  "easyLinter": {
+    "headline": "Common mistake",
+    "fixLabel": "Suggested fix",
+    "ruleLabel": "Rule",
+    "source": "easy-mistakes"
+  },
+  "onboardingTour": {
+    "skip": "Skip tour",
+    "next": "Next",
+    "previous": "Back",
+    "finish": "Finish",
+    "stepProgress": "Step {{current}} of {{total}}"
+  },
+  "errorExplain": {
+    "button": "Explain in plain English",
+    "title": "Error explanation",
+    "codeLabel": "SQLSTATE {{code}}",
+    "originalMessage": "Original PostgreSQL message",
+    "explanationHeading": "What this means",
+    "classExplanationHeading": "Error class (no exact match)",
+    "suggestedFix": "Suggested fix",
+    "close": "Close",
+    "askAgent": {
+      "headline": "No exact match in our table. Copy the error context and paste it into your connected AI agent (Claude Code, Cursor, …) — it has full IDE context via the ide99 MCP server.",
+      "copy": "Copy error context",
+      "copied": "Copied!"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "snippets": "Snippets",
+      "mcp": "AI / MCP",
+      "privacy": "Privacy",
+      "modules": "Modules",
+      "updates": "Updates",
+      "keymap": "Keymap",
+      "sharing": "Import / Export"
+    },
+    "snippets": {
+      "title": "SQL snippets",
+      "builtins": "Built-ins ({{count}})",
+      "mySnippets": "My snippets ({{count}})",
+      "empty": "No user snippets yet. Click + New to create one."
+    },
+    "mcp": {
+      "title": "MCP server (connect your AI agent)",
+      "description": "Expose ide99 to your AI agent (Claude Code, Cursor, Windsurf, …) over the Model Context Protocol. Your agent will see your active connection, current query and last result, and can run safe queries on your behalf.",
+      "loading": "Loading MCP status…",
+      "enableLabel": "Enable MCP server",
+      "runningOnPort": "Running on 127.0.0.1:{{port}}",
+      "authorizedClients": "Authorized clients",
+      "noClients": "No clients connected yet. Use \"Connect agent\" below to add one.",
+      "revoke": "Revoke",
+      "lastUsed": "Last used: {{when}}",
+      "lastUsedNever": "Never used",
+      "connectAgent": "Connect your agent",
+      "connectAgentHint": "Add ide99 as an MCP server to Claude Code, Cursor, or another supported AI agent. Each agent connects once and asks for permission inside ide99 the first time.",
+      "authorize": {
+        "title": "Authorize MCP client",
+        "requesting": "{{client}} is requesting access",
+        "scopesHeading": "Requested scopes",
+        "allow": "Allow",
+        "allowReadOnly": "Allow read-only",
+        "allowWithWrite": "Allow with write",
+        "deny": "Deny"
+      },
+      "writeConfirm": {
+        "title": "Approve write operation?",
+        "kindQuery": "query",
+        "kindMigration": "migration",
+        "clientWants": "{{client}} wants to run a {{kind}}",
+        "approve": "Approve",
+        "reject": "Reject",
+        "approveAllForNext": "Approve all writes from this client for the next {{minutes}} minutes"
+      },
+      "connect": {
+        "claudeCode": "Add to Claude Code",
+        "cursor": "Add to Cursor",
+        "manualConfig": "Manual configuration",
+        "copy": "Copy",
+        "copied": "Copied!",
+        "commandNotFound": "Claude CLI not found in PATH. Copy the configuration above into your client manually.",
+        "addedSuccessfully": "Added to {{client}} successfully",
+        "enableFirst": "Enable the MCP server above to see configuration snippets.",
+        "readGuide": "Read the full MCP guide"
+      },
+      "audit": {
+        "title": "Audit log",
+        "viewLog": "View recent audit entries"
+      },
+      "external": {
+        "title": "External MCP servers",
+        "description": "Connect ide99 to external MCP servers (Linear, GitHub, …) so v1.1+ AI features can read context from them. Read-only in v1.0 — ide99 lists available tools/resources but never calls write-tagged tools.",
+        "loading": "Loading external servers…",
+        "empty": "No external MCP servers configured. Edit ~/.config/ide99/mcp-servers.json to add one (see the MCP guide).",
+        "reload": "Reload config",
+        "reloaded": "Config reloaded.",
+        "configPath": "Config: {{path}}",
+        "connect": "Connect",
+        "disconnect": "Disconnect",
+        "statusDisconnected": "Disconnected",
+        "statusConnecting": "Connecting…",
+        "statusConnected": "Connected",
+        "statusError": "Error",
+        "toolsCount_one": "{{count}} tool",
+        "toolsCount_other": "{{count}} tools",
+        "resourcesCount_one": "{{count}} resource",
+        "resourcesCount_other": "{{count}} resources"
+      }
+    },
+    "title": "Settings",
+    "open": "Open settings (Cmd/Ctrl+,)"
+  },
+  "env": {
+    "label": {
+      "local": "Local",
+      "dev": "Dev",
+      "stage": "Stage",
+      "prod": "Prod"
+    }
+  },
+  "connections": {
+    "form": {
+      "environment": "Environment",
+      "readOnly": "Read-only mode (block writes)",
+      "confirmDestructive": "Confirm destructive ops (DROP / TRUNCATE / DELETE without WHERE)",
+      "slowQueryWarning": "Warn before running slow queries (cost > 100K)"
+    }
+  },
+  "safety": {
+    "confirm": {
+      "title": "Confirm {{action}} on {{target}}",
+      "body": "You're about to {{action}} on \"{{target}}\" in {{environment}} environment. Type the target name below to confirm.",
+      "inputLabel": "Confirmation text",
+      "confirmButton": "Confirm"
+    },
+    "slow": {
+      "title": "Estimated query is slow",
+      "body": "PostgreSQL estimates this query will cost ~{{cost}} units. Likely a sequential scan or missing index. Run anyway?",
+      "dontAsk": "Don't ask again for this connection",
+      "runAnyway": "Run anyway"
+    },
+    "easy": {
+      "cross-join": {
+        "title": "Possible cross join",
+        "body": "Your query joins {{tableCount}} tables with commas but no WHERE clause linking them. PostgreSQL will return every combination of rows (a Cartesian product). Did you mean to add a JOIN condition? Run anyway?"
+      },
+      "slow-preview": {
+        "title": "This loads the entire table",
+        "body": "SELECT * with no WHERE / LIMIT will read every row. On a large table this can be slow. Add a LIMIT to preview a few rows. Run anyway?"
+      }
+    },
+    "readOnlyBlocked": "Connection is read-only. Toggle off in Settings to allow writes."
+  },
+  "parser": {
+    "ddl": {
+      "error": "Parse error",
+      "warningTitle": "Some statements not yet representable in ERD"
+    },
+    "select": {
+      "error": "Parse error in query",
+      "restored_invalid": "Restored query has a parse error (line {{line}}:{{column}} — {{message}}). It may have been corrupted on autosave.",
+      "reset": "Clear and start fresh"
+    }
+  },
+  "filter": {
+    "title": "Filter column",
+    "aria": "Filter column",
+    "apply": "Apply",
+    "clear": "Clear",
+    "rerunHint": "Filter applied. Re-run query?",
+    "rerun": "Re-run",
+    "dismiss": "Dismiss",
+    "unrepresentable": "Column filters inactive",
+    "unrepresentableHint": "This query uses {{reason}} — column filters are inactive. Edit the WHERE clause manually.",
+    "unrepresentableReason": {
+      "group_by": "GROUP BY",
+      "having": "HAVING",
+      "window": "window functions",
+      "with_cte": "WITH / CTE",
+      "multiple_from": "multiple FROM tables",
+      "complex_from": "a non-standard FROM",
+      "non_flat_from": "a JOIN, subquery, or table alias",
+      "multi_column_order": "multi-column ORDER BY",
+      "order_shape": "a non-standard ORDER BY",
+      "order_expr": "an ORDER BY expression",
+      "where_expr": "a complex WHERE expression"
+    },
+    "operator": "Operator",
+    "value": "Value",
+    "column_button_title": "Filter column",
+    "column_button_aria": "Filter column {{column}}"
+  },
+  "migrations": {
+    "tab": {
+      "title": "Migrations — {{connection}}",
+      "aria_open": "Open migrations panel for {{connection}}"
+    },
+    "panel": {
+      "title": "Migrations",
+      "directory": "Directory",
+      "directoryNotSet": "Not set",
+      "change": "Change…",
+      "clear": "Clear",
+      "trackingTable": "Create tracking table",
+      "snapshots": "Capture schema snapshots",
+      "trackingMissing": "Tracking table not present in target database — first apply will create it."
+    },
+    "toolbar": {
+      "applyAll": "Apply all pending",
+      "applySingle": "Apply single",
+      "applyRange": "Apply range",
+      "rollback": "Rollback",
+      "diff": "Diff…"
+    },
+    "timeline": {
+      "summary": "{{applied}} applied · {{pending}} pending · {{dirty}} dirty",
+      "empty": "No migrations discovered. Set a directory containing .up.sql / .down.sql files.",
+      "applied": "applied",
+      "pending": "pending",
+      "dirty": "dirty",
+      "noRollbackFile": "No rollback file",
+      "duplicateVersion": "Duplicate version",
+      "orphanRollback": "Orphan rollback file",
+      "checksumMismatch": "Checksum mismatch",
+      "fileMissing": "File missing"
+    },
+    "apply": {
+      "title": "Apply migrations",
+      "modeSingle": "Single",
+      "modeRange": "Range",
+      "modeAllPending": "All pending",
+      "from": "From",
+      "to": "To",
+      "version": "Version",
+      "rangeError": "Range must be contiguous and contain only pending migrations",
+      "noPending": "No pending migrations to apply",
+      "selectVersion": "Select a version",
+      "previewLoading": "Loading preview…",
+      "previewError": "Failed to load preview: {{error}}",
+      "prodBanner": "Applying {{count}} migrations on production connection «{{name}}»",
+      "applying": "Applying…",
+      "apply": "Apply {{count}} migration",
+      "apply_other": "Apply {{count}} migrations",
+      "cancel": "Cancel",
+      "pendingCount": "{{count}} pending migration",
+      "pendingCount_other": "{{count}} pending migrations"
+    },
+    "rollback": {
+      "title": "Rollback migration {{version}}",
+      "noDownFile": "No rollback file (.down.sql missing)",
+      "previewLoading": "Loading preview…",
+      "previewError": "Failed to load preview: {{error}}",
+      "prodTitle": "Rollback on production connection",
+      "prodDescription": "Rolling back «{{version}}» on the production connection «{{name}}». Type the connection name to confirm.",
+      "prodInputLabel": "Type connection name",
+      "rollback": "Rollback",
+      "rollingBack": "Rolling back…",
+      "cancel": "Cancel"
+    },
+    "diff": {
+      "title": "Schema diff",
+      "from": "From",
+      "to": "To",
+      "noSnapshots": "No migrations have stored snapshots. Enable «Capture schema snapshots» and re-run migrations.",
+      "loading": "Loading diff…",
+      "error": "Failed to load diff: {{error}}",
+      "noChanges": "No changes between snapshots",
+      "selectBoth": "Select two versions to compare"
+    },
+    "selector": {
+      "title": "Migrations directory",
+      "openDialog": "Pick migrations directory"
+    },
+    "browser": {
+      "open_button": "Open migrations",
+      "open_button_aria": "Open migrations panel for the connected database"
+    },
+    "squawk": {
+      "installBanner": {
+        "title": "Squawk linter not installed",
+        "body": "Install for inline migration lint:",
+        "copy": "Copy",
+        "copied": "Copied",
+        "dismiss": "Hide"
+      },
+      "badge": {
+        "tooltip_one": "{{count}} Squawk finding",
+        "tooltip_other": "{{count}} Squawk findings"
+      }
+    },
+    "dryrun": {
+      "checkbox": "Dry-run on disposable DB first",
+      "running": "Dry-run running…",
+      "phase": {
+        "pulling": "Pulling postgres:17-alpine",
+        "starting": "Starting container",
+        "seeding": "Seeding ledger",
+        "running": "Running migrations",
+        "done": "Done",
+        "failed": "Failed"
+      },
+      "succeeded": "Dry-run succeeded in {{ms}}ms",
+      "failed": "Dry-run failed at {{version}}",
+      "containerStats": "Container: pull {{pull}}ms, start {{start}}ms, run {{run}}ms",
+      "applyForReal": "Apply for real",
+      "close": "Close",
+      "findings_one": "Squawk: {{count}} finding",
+      "findings_other": "Squawk: {{count}} findings",
+      "errorPrefix": "error:",
+      "hintFix": "Fix the migration and re-open Apply",
+      "error": {
+        "dockerUnavailable": "Docker unavailable",
+        "imagePullFailed": "Image pull failed",
+        "containerStartFailed": "Container start failed",
+        "ledgerSeedFailed": "Ledger seed failed",
+        "migrationFailed": "Dry-run failed at {{version}}",
+        "cancelled": "Dry-run cancelled",
+        "internal": "Internal error"
+      }
+    },
+    "error": {
+      "connectionNotFound": "Connection not found",
+      "notConnected": "Connect to a database first",
+      "io": "File I/O error: {{detail}}",
+      "invalidFilename": "Invalid migration filename: {{detail}}",
+      "duplicateVersion": "Duplicate version: {{detail}}",
+      "notFound": "Migration not found: {{detail}}",
+      "alreadyApplied": "Migration already applied: {{detail}}",
+      "notApplied": "Migration not yet applied: {{detail}}",
+      "rollbackFileMissing": "Rollback file missing: {{detail}}",
+      "snapshotMissing": "Schema snapshot missing for version {{detail}}",
+      "snapshotsDisabled": "Schema snapshots disabled — diff unavailable",
+      "postgres": "PostgreSQL error: {{detail}}",
+      "storage": "Storage error: {{detail}}",
+      "rangeNonContiguous": "Range is not contiguous",
+      "watcher": "Directory watcher error: {{detail}}",
+      "hasParseError": "Migration {{detail}} has a parse error",
+      "fallback": "Could not load migrations: {{detail}}"
+    }
+  },
+  "object_editor": {
+    "tab": {
+      "title": "{{kind}} · {{schema}}.{{name}}",
+      "new_suffix": "(new)"
+    },
+    "tree_menu": {
+      "new_table": "New table…",
+      "new_view": "New view…",
+      "new_matview": "New materialized view…",
+      "new_sequence": "New sequence…",
+      "new_index": "New index on this table…",
+      "edit_table": "Edit table…",
+      "edit_view": "Edit definition…"
+    },
+    "toolbar": {
+      "new_dropdown": "+ New",
+      "new_table": "Table…",
+      "new_view": "View…",
+      "new_matview": "Materialized view…",
+      "new_index": "Index…",
+      "new_sequence": "Sequence…",
+      "new_function": "Function…",
+      "new_procedure": "Procedure…",
+      "new_trigger": "Trigger…",
+      "new_fdw_server": "FDW server…",
+      "new_publication": "Publication…",
+      "new_subscription": "Subscription…",
+      "new_role": "Role…",
+      "new_type": "Type…",
+      "new_enum_type": "Enum",
+      "new_composite_type": "Composite",
+      "new_domain_type": "Domain",
+      "new_range_type": "Range",
+      "back": "Back"
+    },
+    "stub": {
+      "rls_advanced": "Only enabling and disabling Row-Level Security is available right now. Creating and editing policies is coming in a future update.",
+      "partition_advanced": "Creating and editing partitioning is coming in a future update. For now, use the SQL editor.",
+      "matview_recreate_warning": "Editing the body of a materialized view requires DROP MATERIALIZED VIEW followed by CREATE. Dependent indexes will need to be recreated."
+    },
+    "actions": {
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "help": "PostgreSQL docs",
+      "no_changes": "-- No changes",
+      "discard_changes_title": "Discard changes?",
+      "discard_changes_body": "You have unsaved changes in this editor. Closing the tab will discard them.",
+      "discard": "Discard",
+      "keep_editing": "Keep editing",
+      "prod_confirm_title": "Apply DDL to PRODUCTION database",
+      "prod_confirm_body": "About to run {{n}} statement(s) against {{conn}}. This is a production-tagged connection. Type the database name to enable the Apply button.",
+      "prod_confirm_input_label": "Type {{db}} to confirm"
+    },
+    "warnings": {
+      "name_required": "Name is required.",
+      "duplicate_column": "Column names must be unique.",
+      "duplicate_param_name": "Parameter names must be unique.",
+      "pk_unknown_column": "Primary-key column does not exist on the table.",
+      "empty_check": "CHECK expression is empty.",
+      "body_required": "Body cannot be empty.",
+      "return_type_required": "Return type is required.",
+      "function_required": "Trigger function is required.",
+      "language_other_required": "Language name is required when 'other' is selected.",
+      "at_least_one_event": "At least one trigger event must be selected.",
+      "instead_of_typically_views": "INSTEAD OF triggers are typically defined on views.",
+      "variadic_not_last": "VARIADIC parameter must be the last one.",
+      "when_requires_for_each_row": "WHEN clause requires FOR EACH ROW.",
+      "matview_recreate": "Body change requires DROP MATERIALIZED VIEW + CREATE; dependent indexes will be lost.",
+      "index_recreate": "Index method/columns change requires DROP + CREATE.",
+      "trigger_recreate": "Trigger event/timing/function change requires DROP + CREATE.",
+      "function_signature_changed": "Function signature changed — emitting DROP + CREATE to avoid creating an overload.",
+      "procedure_signature_changed": "Procedure signature changed — emitting DROP + CREATE to avoid creating an overload.",
+      "enum_recreate_required": "Postgres cannot reorder/rename enum values in place; falling back to DROP + CREATE — dependent columns will be dropped (CASCADE).",
+      "fdw_recreate_required": "Changing the FDW or server type requires DROP + CREATE; dependent foreign tables will be lost (CASCADE).",
+      "publication_recreate_required": "Switching publication target mode requires DROP + CREATE.",
+      "range_recreate_required": "Postgres cannot ALTER range types in place; non-rename changes require DROP + CREATE.",
+      "role_password_visible": "Password visible in DDL preview.",
+      "subscription_password_visible": "Connection string contains password in plain text — do not commit DDL preview to version control.",
+      "subscription_slot_rename_blocked": "Cannot rename slot of a running subscription. Disable the subscription first."
+    },
+    "errors": {
+      "name_required": "Name is required.",
+      "duplicate_column": "Column names must be unique.",
+      "duplicate_param_name": "Parameter names must be unique.",
+      "pk_unknown_column": "Primary-key column does not exist.",
+      "empty_check": "CHECK expression is empty.",
+      "body_required": "Body cannot be empty.",
+      "return_type_required": "Return type is required.",
+      "function_required": "Trigger function is required.",
+      "language_other_required": "Language name is required when 'other' is selected.",
+      "at_least_one_event": "At least one trigger event must be selected.",
+      "variadic_not_last": "VARIADIC parameter must be the last one."
+    },
+    "common": {
+      "schema": "Schema",
+      "name": "Name",
+      "dirty": "Unsaved",
+      "ddl_preview": "DDL preview",
+      "loading": "Loading…",
+      "load_error": "Failed to load definition",
+      "add": "Add"
+    },
+    "table": {
+      "tab_columns": "Columns",
+      "tab_constraints": "Constraints",
+      "tab_indexes": "Indexes",
+      "tab_rls": "RLS",
+      "tab_partition": "Partition",
+      "rls_label": "Enable Row Level Security",
+      "partition_none": "This table is not partitioned.",
+      "partition_strategy": "Strategy",
+      "partition_key": "Partition key"
+    },
+    "columns": {
+      "column": "Column",
+      "type": "Type",
+      "nullable": "Nullable",
+      "default": "Default",
+      "comment": "Comment",
+      "generated": "Generated",
+      "generated_expr": "Expression",
+      "add_column": "Add column",
+      "remove_column": "Remove column"
+    },
+    "constraints": {
+      "kind": "Kind",
+      "constraint_name": "Constraint name",
+      "columns": "Columns",
+      "ref_schema": "Ref. schema",
+      "ref_table": "Ref. table",
+      "ref_columns": "Ref. columns",
+      "expression": "Expression",
+      "add_pk": "Primary key",
+      "add_unique": "Unique",
+      "add_fk": "Foreign key",
+      "add_check": "Check",
+      "add_constraint": "Add constraint",
+      "remove": "Remove"
+    },
+    "indexes": {
+      "index_name": "Index name",
+      "table": "Table",
+      "method": "Method",
+      "unique": "Unique",
+      "include": "Include columns",
+      "predicate": "Where predicate",
+      "column_expr": "Expression",
+      "direction": "Direction",
+      "nulls": "Nulls",
+      "opclass": "Operator class",
+      "add_index": "Add index",
+      "asc": "Ascending",
+      "desc": "Descending",
+      "nulls_first": "First",
+      "nulls_last": "Last",
+      "recreate_warning": "Index method/columns/predicate changes require DROP + CREATE."
+    },
+    "view": {
+      "body": "View definition (SELECT)"
+    },
+    "matview": {
+      "body": "Materialized view definition (SELECT)",
+      "with_data": "Populate immediately (WITH DATA)"
+    },
+    "sequence": {
+      "data_type": "Data type",
+      "start": "Start value",
+      "increment": "Increment",
+      "min_value": "Min value",
+      "max_value": "Max value",
+      "cache": "Cache",
+      "cycle": "Cycle",
+      "owned_by": "Owned by",
+      "owned_schema": "Schema",
+      "owned_table": "Table",
+      "owned_column": "Column"
+    },
+    "function": {
+      "schema_label": "Schema",
+      "name_label": "Function name",
+      "language_label": "Language",
+      "languages_sql": "sql",
+      "languages_plpgsql": "plpgsql",
+      "languages_other": "other…",
+      "language_other_placeholder": "e.g. plpython3u",
+      "language_other_warning": "Highlighting is limited; install the language extension for full editor support.",
+      "parameters_section": "Parameters",
+      "return_type_section": "Return type",
+      "body_section": "Body",
+      "attributes_section": "Attributes",
+      "comment_label": "Comment",
+      "volatility": "Volatility",
+      "volatility_volatile": "VOLATILE",
+      "volatility_stable": "STABLE",
+      "volatility_immutable": "IMMUTABLE",
+      "parallel_safety": "Parallel safety",
+      "parallel_unsafe": "UNSAFE",
+      "parallel_restricted": "RESTRICTED",
+      "parallel_safe": "SAFE",
+      "security_definer": "SECURITY DEFINER",
+      "cost": "Cost",
+      "cost_placeholder": "100 (default)",
+      "rows": "Estimated rows",
+      "rows_placeholder": "(setof only)",
+      "add_parameter": "Add parameter",
+      "remove_parameter": "Remove",
+      "param_name": "Name",
+      "param_mode": "Mode",
+      "param_type": "Type",
+      "param_default": "Default",
+      "mode_in": "IN",
+      "mode_out": "OUT",
+      "mode_inout": "INOUT",
+      "mode_variadic": "VARIADIC",
+      "return_kind": "Return kind",
+      "return_scalar": "Scalar",
+      "return_setof": "SETOF",
+      "return_void": "void",
+      "return_trigger": "TRIGGER",
+      "return_type_input": "Type"
+    },
+    "procedure": {
+      "schema_label": "Schema",
+      "name_label": "Procedure name",
+      "language_label": "Language",
+      "languages_sql": "sql",
+      "languages_plpgsql": "plpgsql",
+      "languages_other": "other…",
+      "language_other_placeholder": "e.g. plpython3u",
+      "language_other_warning": "Highlighting is limited; install the language extension for full editor support.",
+      "parameters_section": "Parameters",
+      "body_section": "Body",
+      "attributes_section": "Attributes",
+      "comment_label": "Comment",
+      "security_definer": "SECURITY DEFINER",
+      "add_parameter": "Add parameter",
+      "remove_parameter": "Remove",
+      "param_name": "Name",
+      "param_mode": "Mode",
+      "param_type": "Type",
+      "param_default": "Default"
+    },
+    "trigger": {
+      "schema_label": "Schema",
+      "name_label": "Trigger name",
+      "table_section": "Target table",
+      "table_schema": "Table schema",
+      "table_name": "Table name",
+      "timing_section": "Timing",
+      "timing_before": "BEFORE",
+      "timing_after": "AFTER",
+      "timing_instead_of": "INSTEAD OF",
+      "events_section": "Events",
+      "event_insert": "INSERT",
+      "event_update": "UPDATE",
+      "event_delete": "DELETE",
+      "event_truncate": "TRUNCATE",
+      "update_columns_label": "UPDATE OF columns (comma-separated)",
+      "update_columns_placeholder": "col1, col2",
+      "for_each_section": "Granularity",
+      "for_each_row": "FOR EACH ROW",
+      "for_each_statement": "FOR EACH STATEMENT",
+      "when_label": "WHEN clause",
+      "when_placeholder": "NEW.status IS DISTINCT FROM OLD.status",
+      "function_section": "Trigger function",
+      "function_picker_search": "Search functions",
+      "function_picker_loading": "Loading…",
+      "function_picker_empty": "No trigger functions found.",
+      "function_picker_selected_outside": "Selected: {{schema}}.{{name}} (not in current list)",
+      "enabled": "Enabled",
+      "instead_of_warning": "INSTEAD OF triggers normally apply to views; ensure the target object is a view."
+    },
+    "fdw_server": {
+      "title_new": "New FDW server",
+      "title_edit": "Edit FDW server",
+      "name_label": "Server name",
+      "fdw_label": "FDW",
+      "type_label": "Server type (optional)",
+      "version_label": "Version (optional)",
+      "options_section": "Options",
+      "add_option": "+ Add option",
+      "option_key": "Key",
+      "option_value": "Value",
+      "user_mappings_section": "User mappings",
+      "add_mapping": "+ Add mapping",
+      "mapping_role": "Role",
+      "mapping_role_public": "PUBLIC",
+      "fdw_change_warning": "Changing the FDW or server type requires DROP+CREATE; dependent foreign tables will be lost (CASCADE).",
+      "comment_label": "Comment"
+    },
+    "publication": {
+      "title_new": "New publication",
+      "title_edit": "Edit publication",
+      "name_label": "Publication name",
+      "mode_label": "Target",
+      "mode_all_tables": "FOR ALL TABLES",
+      "mode_schemas": "TABLES IN SCHEMA",
+      "mode_tables": "TABLE list",
+      "tables_section": "Tables",
+      "schemas_section": "Schemas",
+      "publish_ops_section": "Operations",
+      "publish_insert": "INSERT",
+      "publish_update": "UPDATE",
+      "publish_delete": "DELETE",
+      "publish_truncate": "TRUNCATE",
+      "publish_via_partition_root": "publish_via_partition_root",
+      "all_tables_change_warning": "Switching publication target mode requires DROP+CREATE.",
+      "no_publishable_tables": "No regular tables available to publish.",
+      "comment_label": "Comment"
+    },
+    "subscription": {
+      "title_new": "New subscription",
+      "title_edit": "Edit subscription",
+      "name_label": "Subscription name",
+      "conninfo_label": "Connection string",
+      "conninfo_password_warning": "Connection string contains a password in plain text. Postgres stores it as plain text in pg_subscription. Do not commit this DDL preview to version control.",
+      "publications_label": "Publications (comma-separated)",
+      "enabled_label": "Enabled",
+      "copy_data_label": "copy_data",
+      "create_slot_label": "create_slot",
+      "slot_name_label": "Slot name (optional)",
+      "synchronous_commit_label": "synchronous_commit",
+      "slot_rename_warning": "Cannot rename slot of a running subscription. Disable the subscription first.",
+      "comment_label": "Comment"
+    },
+    "role": {
+      "title_new": "New role",
+      "title_edit": "Edit role",
+      "name_label": "Role name",
+      "attributes_section": "Attributes",
+      "login_label": "LOGIN",
+      "superuser_label": "SUPERUSER",
+      "createdb_label": "CREATEDB",
+      "createrole_label": "CREATEROLE",
+      "replication_label": "REPLICATION",
+      "bypassrls_label": "BYPASSRLS",
+      "inherit_label": "INHERIT",
+      "connection_limit_label": "Connection limit (-1 = unlimited)",
+      "valid_until_label": "Valid until (timestamp, optional)",
+      "password_label": "Password",
+      "password_is_hash_label": "Use existing hash (ENCRYPTED PASSWORD)",
+      "password_warning": "Password is visible in DDL preview.",
+      "member_of_section": "Member of",
+      "member_of_picker_placeholder": "Select parent role…",
+      "comment_label": "Comment"
+    },
+    "type": {
+      "enum_title_new": "New enum type",
+      "enum_title_edit": "Edit enum type",
+      "enum_values_section": "Values",
+      "enum_add_value": "+ Add value",
+      "enum_value_label": "Value",
+      "enum_recreate_warning": "Reordering or renaming enum values is not supported by Postgres in place; falling back to DROP+CREATE — dependent columns will be dropped (CASCADE).",
+      "composite_title_new": "New composite type",
+      "composite_title_edit": "Edit composite type",
+      "composite_fields_section": "Fields",
+      "composite_add_field": "+ Add field",
+      "composite_field_name": "Name",
+      "composite_field_type": "Type",
+      "composite_field_collation": "Collation (optional)",
+      "domain_title_new": "New domain",
+      "domain_title_edit": "Edit domain",
+      "domain_base_type_label": "Base type",
+      "domain_default_label": "Default (optional expression)",
+      "domain_not_null_label": "NOT NULL",
+      "domain_collation_label": "Collation (optional)",
+      "domain_constraints_section": "CHECK constraints",
+      "domain_add_constraint": "+ Add constraint",
+      "domain_constraint_name": "Constraint name (optional)",
+      "domain_constraint_check": "CHECK expression",
+      "domain_constraint_not_valid": "NOT VALID",
+      "range_title_new": "New range type",
+      "range_title_edit": "Edit range type",
+      "range_subtype_label": "Subtype",
+      "range_subtype_opclass_label": "Subtype opclass (optional)",
+      "range_collation_label": "Collation (optional)",
+      "range_canonical_label": "Canonical function (optional)",
+      "range_subtype_diff_label": "Subtype diff function (optional)",
+      "range_multirange_type_name_label": "Multirange type name (optional)",
+      "range_recreate_warning": "Postgres does not allow ALTER on range types in place; non-rename changes require DROP+CREATE."
+    }
+  },
+  "notebook": {
+    "tab": {
+      "title": "Notebook"
+    },
+    "untitled": "Untitled notebook",
+    "loading": "Loading notebook…",
+    "empty": "Notebook is empty. Add a cell to begin.",
+    "no_connection_hint": "Pick a connection to enable Run.",
+    "cell_count_one": "{{count}} cell",
+    "cell_count_other": "{{count}} cells",
+    "cell_count": "{{count}} cells",
+    "cell_kind": {
+      "sql": "SQL",
+      "markdown": "Markdown",
+      "result": "Result"
+    },
+    "field": {
+      "name": "Notebook name"
+    },
+    "action": {
+      "add_sql": "+ SQL cell",
+      "add_markdown": "+ Markdown",
+      "delete": "Delete",
+      "duplicate": "Duplicate",
+      "drag": "Drag to reorder",
+      "move_up": "Move up",
+      "move_down": "Move down",
+      "run_cell": "Run cell",
+      "run_cell_icon": "▶ Run",
+      "run_from": "Run from here",
+      "run_all": "Run all",
+      "save": "Save",
+      "save_as": "Save as…",
+      "open": "Open…",
+      "import": "Import…"
+    },
+    "status": {
+      "idle": "Idle",
+      "running": "Running…",
+      "ok": "OK · {{ms}} ms",
+      "error": "Error"
+    },
+    "cte": {
+      "share_label": "Share as CTE",
+      "name_label": "CTE name",
+      "help": "Make this query's result available to downstream cells as a CTE"
+    },
+    "markdown": {
+      "edit": "Edit",
+      "preview": "Preview",
+      "empty_hint": "Empty markdown cell — click to edit"
+    },
+    "result": {
+      "row_count_one": "{{count}} row",
+      "row_count_other": "{{count}} rows",
+      "row_count": "{{count}} rows",
+      "duration": "{{ms}} ms",
+      "truncated": "Truncated",
+      "empty": "Query returned no rows.",
+      "show_all": "Show all {{count}}",
+      "show_less": "Show less"
+    },
+    "autosave": {
+      "pending": "Pending…",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "error": "Save failed"
+    },
+    "dialog": {
+      "save_as_title": "Save notebook as…",
+      "open_title": "Open notebook"
+    }
+  },
+  "paid_modules": {
+    "loading": "Loading subscription state…",
+    "settings": {
+      "title": "Modules"
+    },
+    "status": {
+      "active": "active",
+      "inactive": "not subscribed"
+    },
+    "action": {
+      "manage": "Manage subscription",
+      "upgrade": "Upgrade →"
+    },
+    "spg99": {
+      "short_name": "Instant DB",
+      "full_name": "ide99 Instant DB",
+      "description": "One-shot disposable PostgreSQL databases — provisioned in seconds, auto-stopped on idle. Perfect for migration dry-runs, bug repro on a real schema, and AI-agent sandboxing without touching your dev or prod DB.",
+      "cta_subscribed": "+ Instant DB",
+      "cta_upgrade": "Try Instant DB",
+      "status_bar": "{{template}} · auto-stop in {{minutes}}m",
+      "status_bar_full": {
+        "label": "Instant DB: {{template}}",
+        "auto_stop": "Auto-stop in {{minutes}}m",
+        "cost": "Cost: ₽{{amount}}",
+        "menu_extend": "Extend TTL",
+        "menu_stop": "Stop now",
+        "menu_console": "Open in console"
+      },
+      "template_picker": {
+        "title": "New Instant DB",
+        "description": "Spin up a fresh PostgreSQL in seconds. Choose a template, set auto-stop and TTL.",
+        "template_label": "Template",
+        "template": {
+          "clean": "Clean PostgreSQL (latest)",
+          "pgvector": "PostgreSQL + pgvector",
+          "postgis": "PostgreSQL + PostGIS",
+          "timescale": "PostgreSQL + TimescaleDB",
+          "project": "Project schema (apply current migrations)",
+          "custom": "Custom (.ide99-template file)"
+        },
+        "auto_stop_label": "Auto-stop after idle (minutes)",
+        "ttl_label": "Maximum lifetime (hours)",
+        "create": "Create",
+        "cancel": "Cancel",
+        "v1_disabled_note": "Cloud provisioning ships in v1.1. Enable the Instant DB module under Settings → Modules to activate this slot end-to-end.",
+        "preset_health_repro": "Project schema + sample data (slow-query repro)"
+      },
+      "dry_run": {
+        "target_legend": "Dry-run target",
+        "target_spg99": "Instant DB (recommended)",
+        "target_spg99_hint": "Faster than Docker, real PostgreSQL, auto-cleaned",
+        "target_docker": "Local Docker (slower)",
+        "target_locked_tooltip": "Subscribe to Instant DB to enable this option",
+        "upgrade_hint": "Faster dry-runs with Instant DB — upgrade →"
+      },
+      "reproduce": {
+        "button_label": "Reproduce on disposable",
+        "aria_label": "Reproduce slow query on a disposable Instant DB",
+        "upgrade_tooltip": "Instant DB required — opens upgrade page"
+      },
+      "cta": "Instant DB",
+      "cta_pending": "Creating…",
+      "free_beta_badge": "Free Beta",
+      "connection_name_prefix": "Instant DB",
+      "create_ok": "Instant DB ready — review and save",
+      "create_error": "Failed to create Instant DB: {{msg}}"
+    },
+    "vibepg": {
+      "short_name": "vibepg",
+      "full_name": "vibepg AI agent",
+      "description": "AI agent that doesn't just generate SQL — it iteratively applies, tests, and refines on a disposable database.",
+      "explain_optimize": {
+        "label": "🤖 vibepg optimize",
+        "full_label": "🤖 vibepg: measure-based optimize"
+      },
+      "migration_review": {
+        "label": "🤖 vibepg review",
+        "full_label": "🤖 vibepg: review this migration"
+      },
+      "agent_mode": {
+        "label": "🤖 Agent mode"
+      },
+      "command_palette": {
+        "label": "🤖 vibepg"
+      },
+      "result_dialog": {
+        "title": "🤖 vibepg result",
+        "close": "Close",
+        "cancel": "Cancel",
+        "apply": "Apply to current connection",
+        "apply_done": "Recommendation copied to clipboard",
+        "connecting": "Connecting to vibepg cloud…",
+        "v1_1_note": "v1.1 will run a real measure-based optimization on a disposable database. v1.0 shows this preview.",
+        "iteration_log": "Agent iteration log",
+        "step_generate": "Generated SQL",
+        "step_apply": "Applied on disposable DB",
+        "step_error": "Got error",
+        "step_refine": "Refined",
+        "step_retry": "Retry",
+        "step_success": "Success",
+        "field_tested": "Tested",
+        "field_plan_before": "Plan before",
+        "field_plan_after": "Plan after",
+        "field_speedup": "Speedup",
+        "field_index_size": "Index size",
+        "field_recommendation": "Recommendation",
+        "recommendation_create": "✅ create this index",
+        "recommendation_skip": "⊘ skip — no measurable gain"
+      },
+      "agent_mode_toggle": {
+        "aria_label": "AI mode",
+        "quick": "Quick (free AI)",
+        "quick_hint": "One-shot. No execution.",
+        "agent": "Agent (vibepg)",
+        "agent_hint": "Iterative. Tests on a disposable DB.",
+        "agent_locked_tooltip": "Requires vibepg subscription"
+      },
+      "command_palette_items": {
+        "title": "Command palette",
+        "search_placeholder": "Find a connection or command…",
+        "no_results": "No matches",
+        "open_palette": "Open command palette",
+        "close": "Close",
+        "section_connections": "Connections",
+        "section_commands": "vibepg commands",
+        "check_migration": "🤖 vibepg: check migration",
+        "check_migration_hint": "Agent verifies migration on a disposable DB",
+        "fix_sql_error": "🤖 vibepg: fix this SQL error",
+        "fix_sql_error_hint": "Agent fixes the last error iteratively",
+        "explain_query": "🤖 vibepg: explain query",
+        "explain_query_hint": "Deep explanation with real metrics",
+        "suggest_index": "🤖 vibepg: suggest index",
+        "suggest_index_hint": "Measure-based, not hypothetical",
+        "generate_seed_data": "🤖 vibepg: generate seed data",
+        "generate_seed_data_hint": "AI fills your schema with realistic data",
+        "compare_plans": "🤖 vibepg: compare plans",
+        "compare_plans_hint": "Two query variants, side by side",
+        "rollback_plan": "🤖 vibepg: rollback plan",
+        "rollback_plan_hint": "Build a rollback for an applied migration"
+      }
+    },
+    "upgrade": {
+      "spg99": {
+        "cta": "Try Instant DB →"
+      },
+      "vibepg": {
+        "cta": "Try vibepg →"
+      }
+    }
+  },
+  "updater": {
+    "title": "Updates",
+    "check_now": "Check for updates",
+    "checking": "Checking…",
+    "loading": "Reading current version…",
+    "current_version": "Current version: {{version}}",
+    "up_to_date": "You're up to date — version {{version}}.",
+    "available": "Update available: {{from}} → {{to}}",
+    "error": "Couldn't check for updates: {{message}}",
+    "channel": {
+      "label": "Release channel",
+      "stable": "Stable (recommended)",
+      "beta": "Beta",
+      "nightly": "Nightly"
+    },
+    "release_notes": "Release notes",
+    "approve": "Install update",
+    "defer": "Remind me later",
+    "deferred": "Deferred — you can run the check again any time.",
+    "installing": "Installing…",
+    "progress": {
+      "started": "Starting download…",
+      "downloading": "Downloading {{percent}}%",
+      "downloading_unknown": "Downloading… ({{kb}} KB)",
+      "installing": "Verifying signature and installing…",
+      "done": "Update installed. Restart ide99 to apply."
+    }
+  },
+  "privacy": {
+    "loading": "Loading settings…",
+    "title": "Privacy & Telemetry",
+    "telemetry": {
+      "title": "Anonymous usage stats",
+      "description": "Counts only — no queries, schemas, connections, or data values. You can disable any time.",
+      "enable": "Send anonymous feature usage counters",
+      "endpoint": "Endpoint",
+      "endpoint_none": "none (disable transport)"
+    },
+    "crash": {
+      "title": "Crash reports",
+      "description": "When ide99 crashes, you can preview the report (stack + system info) and approve before send. Never auto-sent.",
+      "enable": "Send crash reports (with preview)",
+      "dialog": {
+        "title": "ide99 crashed — send the report?",
+        "preview_header": "Preview the captured stack and system info before sending. Nothing is sent without your approval.",
+        "field_message": "Message",
+        "field_stack": "Stack trace",
+        "field_platform": "Platform",
+        "field_app_version": "App version",
+        "field_captured_at": "Captured at",
+        "stack_empty": "(no stack captured)",
+        "approve": "Send report",
+        "cancel": "Don't send",
+        "footer": "You can disable crash reports any time in Settings → Privacy."
+      }
+    },
+    "clear_all": "Clear my data",
+    "clear_all_confirm": {
+      "title": "Clear all local privacy data?",
+      "body": "This wipes the device ID and resets telemetry/crash settings. The action cannot be undone.",
+      "type_prompt": "Type CLEAR to confirm",
+      "expected_token": "CLEAR",
+      "confirm": "Clear data",
+      "cancel": "Cancel",
+      "success": "Privacy data cleared.",
+      "error": "Could not clear privacy data."
+    },
+    "device_uuid": "Device ID: {{uuid}}",
+    "opt_in": {
+      "title": "Help improve ide99?",
+      "body": "Anonymous usage stats only — no queries, schemas, or connections. This helps us prioritize what to build. You can change this anytime in Settings.",
+      "what_we_collect": "What we collect",
+      "decline": "No, just open",
+      "accept": "Yes, send anonymous stats",
+      "footer": "You can review the full list and toggle later in Settings → Privacy."
+    },
+    "what_we_collect": {
+      "button": "What we collect",
+      "title": "What we collect",
+      "body": "Exhaustive list of every event ide99 may send when telemetry is enabled. No queries, schemas, connections, or row data ever leave your machine.",
+      "close": "Close"
+    },
+    "events": {
+      "app_launched": "App started — counts launches per day.",
+      "session_ended": "App closed — measures session length bucket.",
+      "feature_used": "A named feature was used (categorical id only).",
+      "tab_opened": "An editor tab was opened (kind only — query/explain/etc.).",
+      "query_executed": "A query was executed — counter only, no SQL.",
+      "explain_opened": "EXPLAIN visualizer was opened.",
+      "health_check_run": "A health check finished (id only).",
+      "live_ops_opened": "Live Ops dashboard was opened.",
+      "erd_opened": "ERD diagram was opened.",
+      "object_editor_opened": "An object editor was opened (kind only).",
+      "migration_applied": "A migration was applied (counter only).",
+      "notebook_created": "A notebook was created.",
+      "backup_started": "A backup job was started.",
+      "restore_started": "A restore job was started.",
+      "mode_switched": "UI mode toggled (Easy / Standard).",
+      "theme_switched": "Theme toggled (light / dark / system).",
+      "language_switched": "UI language toggled (en / ru).",
+      "onboarding_started": "First-run onboarding was started.",
+      "onboarding_completed": "Onboarding finished.",
+      "mcp_server_enabled": "Built-in MCP server toggled on.",
+      "mcp_client_connected": "An external AI agent connected via MCP.",
+      "privacy_choice_made": "User made the first-run telemetry choice."
+    }
+  },
+  "onboarding": {
+    "step": {
+      "welcome": {
+        "title": "Welcome to ide99"
+      },
+      "connection": {
+        "title": "Pick a connection profile"
+      },
+      "tour-handoff": {
+        "title": "You're all set"
+      }
+    },
+    "progress": "Step {{current}} of {{total}}",
+    "welcome": {
+      "title": "Welcome to ide99",
+      "body": "Standard mode is currently available. Full PostgreSQL toolset.",
+      "standard": "Standard",
+      "standard_desc": "If you've worked with PostgreSQL before. Full set: Monaco, EXPLAIN, JSONB, Live Ops.",
+      "easy": "Easy",
+      "easy_desc": "If you're just starting. Plain-English errors, GUI ↔ SQL, short guided tour.",
+      "skip": "Just open the IDE — set up later"
+    },
+    "connection": {
+      "body": "Where does your PostgreSQL live? Pick a profile so we can skip generic config.",
+      "selected_help": "We'll open the connection form pre-filled for {{profile}}. You can edit anything before saving.",
+      "open_form": "Open connection form",
+      "skip_help": "You can add a connection any time from the left rail."
+    },
+    "profile": {
+      "local": "Local PostgreSQL",
+      "local_desc": "ide99 will probe localhost:5432 with pg_isready. Works out of the box if PG is running locally.",
+      "supabase": "Supabase",
+      "supabase_desc": "Paste the connection string from Project Settings → Database. SSL: require.",
+      "neon": "Neon",
+      "neon_desc": "Paste the pooled connection string from your Neon dashboard. SSL: require.",
+      "railway": "Railway",
+      "railway_desc": "Paste the connection string from Variables → DATABASE_URL. SSL: require.",
+      "rds": "AWS RDS",
+      "rds_desc": "RDS host with password auth works today. Full IAM-auth wizard lands in v1.1.",
+      "spg99": "Instant DB",
+      "spg99_desc": "Connect to your ide99 Instant DB. Pulls credentials from your ide99 account.",
+      "custom": "Custom",
+      "custom_desc": "Empty form — fill in host, port, database, user, password manually.",
+      "skip": "Skip — set up later",
+      "skip_desc": "Jump straight into ide99 and add a connection later from the left rail."
+    },
+    "tour_handoff": {
+      "body": "Mode: {{mode}}, sample DB: {{sample}}. Click finish to enter ide99 and start the guided tour.",
+      "body_easy": "In Easy mode, the guided tour walks you through ide99 step by step. It's a 5-minute orientation you can revisit any time from the Help button.",
+      "body_standard": "Want a 5-minute walkthrough of every panel? You can also skip and explore on your own.",
+      "finish": "Finish setup",
+      "finish_with_tour": "Finish & start tour",
+      "skip_tour": "Skip tour"
+    },
+    "action": {
+      "back": "← Back",
+      "skip": "Skip",
+      "next": "Next",
+      "close": "Close"
+    },
+    "test": {
+      "running": "Testing connection…",
+      "success": "Connected ({{ms}} ms).",
+      "failed": "Connection failed.",
+      "skipped": "Skipped — you can test inside the form."
+    }
+  },
+  "coach": {
+    "dismiss": "Got it",
+    "empty_connections": {
+      "title": "Tip",
+      "body": "The + button has templates for Supabase / Neon / Railway / RDS — they'll prefill the form. Or paste a connection string above."
+    },
+    "editor_shortcuts": {
+      "title": "Editor shortcuts",
+      "body": "Cmd/Ctrl+Enter — run query. Cmd/Ctrl+E — EXPLAIN. Autocomplete fires as you type."
+    }
+  },
+  "file_sharing": {
+    "import": {
+      "title": "Import .ide99 file",
+      "pick": "Pick a .ide99 file…",
+      "picking": "Opening…",
+      "kind": "Kind",
+      "may_collide": "Names may collide with existing items — review carefully.",
+      "cancel": "Cancel",
+      "apply": "Apply"
+    },
+    "export": {
+      "connection": "Export connection (.ide99)",
+      "connection_bundle": "Export connection bundle (.ide99)",
+      "snippet": "Export snippet (.ide99)",
+      "snippet_bundle": "Export snippet bundle (.ide99)",
+      "query": "Export query (.ide99)",
+      "notebook": "Export notebook (.ide99)",
+      "migration_set": "Export migration set (.ide99)",
+      "erd_layout": "Export ERD layout (.ide99)",
+      "theme": "Export theme (.ide99)",
+      "keymap": "Export keymap (.ide99)",
+      "health_config": "Export Health config (.ide99)",
+      "saved": "Saved to {{path}}"
+    },
+    "summary": {
+      "connection": "{{name}} ({{host}}:{{port}} / {{database}})",
+      "connection_bundle": "{{name}} ({{count}} connections)",
+      "snippet": "{{label}} (:{{prefix}})",
+      "snippet_bundle": "{{name}} ({{count}} snippets)",
+      "query": "{{name}} ({{chars}} chars)",
+      "notebook": "{{name}} ({{count}} cells: {{sql}} SQL, {{md}} Markdown)",
+      "migration_set": "{{label}} ({{count}} migrations)",
+      "erd_layout": "{{label}} ({{count}} nodes)",
+      "theme": "{{name}} ({{count}} tokens)",
+      "keymap": "{{name}} ({{count}} bindings)",
+      "health_config": "{{label}} ({{count}} checks)"
+    },
+    "apply": {
+      "success": "Imported ({{count}} item)",
+      "error": {
+        "invalid_file": "File is not a valid .ide99 envelope.",
+        "unsupported_version": "This .ide99 file uses an unsupported format version.",
+        "not_implemented": "This kind cannot be applied yet.",
+        "storage_error": "Failed to write to local storage.",
+        "io_error": "Could not read or write the file.",
+        "no_dest": "No destination directory was selected."
+      }
+    }
+  },
+  "keymap_import": {
+    "title": "Import keymap",
+    "field": {
+      "format": "Source format",
+      "raw": "Paste keymap content"
+    },
+    "action": {
+      "parse": "Parse",
+      "parsing": "Parsing…",
+      "reset": "Reset"
+    },
+    "preview": {
+      "title": "Parsed bindings ({{count}})",
+      "empty": "No bindings extracted yet."
+    },
+    "parser_warning": {
+      "json_parse": "Could not parse JSON: {{detail}}",
+      "root_must_be_array": "VS Code keymap root must be an array of {key, command, when?}",
+      "root_must_be_keymap": "Expected <keymap> root, got <{{tag}}>",
+      "root_must_be_bindings": "Expected <bindings> root, got <{{tag}}>",
+      "entry_not_object": "Entry {{idx}}: not an object — skipped",
+      "missing_key_or_command": "Entry {{idx}}: missing key or command — skipped",
+      "vscode_unbind": "Entry {{idx}}: VS Code unbind '{{command}}' — skipped",
+      "missing_first_keystroke": "<action id=\"{{id}}\">: missing first-keystroke — skipped",
+      "action_missing_id": "<action> missing id attribute — skipped",
+      "binding_missing_command_id": "<binding>: missing commandId — skipped",
+      "binding_missing_trigger": "<binding commandId=\"{{command}}\">: missing triggerSequence — skipped",
+      "binding_empty_trigger": "<binding commandId=\"{{command}}\">: empty triggerSequence (unbind) — skipped",
+      "xml_parse": "XML parse error: {{detail}}",
+      "dom_parser_unavailable": "DOMParser is not available in this runtime"
+    }
+  },
+  "backup": {
+    "tab": {
+      "title": "Backup ({{connection}})"
+    },
+    "section": {
+      "backup": "Backup",
+      "restore": "Restore",
+      "basebackup": "Base backup",
+      "schedule": "Schedule",
+      "nav_label": "Backup center sections"
+    },
+    "field": {
+      "format": "Format",
+      "scope": "Scope",
+      "output_path": "Output file",
+      "compress_level": "Compression level",
+      "parallel_jobs": "Parallel jobs",
+      "include_schemas": "Schemas",
+      "include_tables": "Tables",
+      "all_schemas": "All schemas",
+      "all_tables_hint": "Leave all unchecked in a schema to include every table",
+      "include_create_db": "Include CREATE DATABASE (--create)",
+      "browse": "Browse…",
+      "estimate": "Estimate size",
+      "estimating": "Estimating…",
+      "source_path": "Backup file",
+      "clean_before_restore": "Drop existing objects first (--clean)",
+      "clean_warning": "destructive",
+      "create_database": "Create target database (--create)",
+      "no_owner": "Skip ownership commands (--no-owner)"
+    },
+    "format": {
+      "custom": "custom (-Fc)",
+      "plain": "plain (-Fp)",
+      "directory": "directory (-Fd)",
+      "tar": "tar (-Ft)",
+      "help": {
+        "custom": "Compressed archive readable by pg_restore. Recommended default.",
+        "plain": "SQL text. Re-load with psql. No selective restore.",
+        "directory": "One file per object; works with parallel jobs.",
+        "tar": "Tar archive; readable by pg_restore but no compression."
+      }
+    },
+    "scope": {
+      "both": "Schema + data",
+      "data_only": "Data only",
+      "schema_only": "Schema only"
+    },
+    "preview": {
+      "title": "Command preview",
+      "hint": "Fill in the output file to see the resolved command."
+    },
+    "run": {
+      "start": "Run backup",
+      "in_progress": "Running…",
+      "cancel": "Cancel",
+      "cancelled": "Job cancelled.",
+      "success": "Backup finished successfully.",
+      "output_path": "Saved to {{path}}",
+      "failure": "Backup failed.",
+      "failure_with_tail": "Backup failed: {{tail}}"
+    },
+    "progress": {
+      "phase": {
+        "starting": "Starting",
+        "dumping": "Dumping",
+        "restoring": "Restoring",
+        "reading": "Reading",
+        "finished": "Finished",
+        "log": "Log",
+        "compressing": "Compressing",
+        "writing": "Writing"
+      }
+    },
+    "restore": {
+      "selective_deferred": "Selective restore (pg_restore --list) is coming in a future update.",
+      "confirm_title": "Confirm destructive restore",
+      "confirm_body": "About to drop existing objects in {{target}} before restoring. Type RESTORE to proceed.",
+      "confirm_input_label": "Type {{token}} to confirm",
+      "confirm_apply": "Restore",
+      "confirm_cancel": "Cancel"
+    },
+    "basebackup": {
+      "output_dir": "Output directory",
+      "compression": "Compression",
+      "compression_none": "None",
+      "incremental": "Incremental",
+      "incremental_hint": "Pass the parent backup_manifest to take an incremental backup (PG 17+ only).",
+      "incremental_enable": "Take an incremental backup",
+      "manifest_required": "Parent manifest is required when incremental is enabled."
+    },
+    "schedule": {
+      "list": "Scheduled backups",
+      "empty": "No scheduled backups yet.",
+      "add": "Add schedule",
+      "add_title": "Add schedule",
+      "edit": "Edit",
+      "edit_title": "Edit schedule",
+      "id": "ID",
+      "label": "Label",
+      "cron": "Cron expression",
+      "output_path": "Output file",
+      "save": "Save schedule",
+      "cancel": "Cancel",
+      "close": "Close",
+      "remove": "Remove",
+      "preview_cron": "Preview cron line",
+      "install": "Install",
+      "uninstall": "Uninstall",
+      "installed_badge": "installed",
+      "run_now": "Run now",
+      "run_started": "Job dispatched: {{jobId}}"
+    }
+  },
+  "support": {
+    "button": "Support",
+    "dialog": {
+      "title": "Support",
+      "description": "Questions, ideas, or found a bug — write to us. Attach screenshots if it helps tell the story.",
+      "close": "Close",
+      "cancel": "Cancel",
+      "send": "Send",
+      "sending": "Sending…",
+      "success": "Sent — thanks, we'll get back to you.",
+      "remove_screenshot": "Remove {{name}}",
+      "field": {
+        "email": "Your email",
+        "email_placeholder": "you@example.com",
+        "message": "Message",
+        "message_placeholder": "What happened? What did you expect to happen?",
+        "screenshots": "Screenshots (optional, up to {{n}})",
+        "attach": "Attach images"
+      },
+      "error": {
+        "email_required": "Please enter a valid email so we can reply.",
+        "message_required": "Tell us what's going on so we can help.",
+        "too_many": "Maximum {{n}} screenshots",
+        "bad_type": "Unsupported file: {{name}}",
+        "too_large": "{{name}} is over {{limit}}",
+        "read_failed": "Failed to read {{name}}",
+        "send_failed": "Couldn't send: {{msg}}"
+      }
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "organizeImports": { "enabled": true },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": {
+        "useButtonType": "error",
+        "useKeyWithClickEvents": "warn",
+        "useValidAriaProps": "error",
+        "useValidAriaValues": "error",
+        "useValidAriaRole": "error",
+        "useAriaPropsForRole": "error",
+        "useSemanticElements": "warn",
+        "useFocusableInteractive": "warn"
+      },
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error",
+        "useExhaustiveDependencies": "warn"
+      },
+      "complexity": {
+        "noForEach": "warn"
+      },
+      "style": {
+        "noDefaultExport": "off",
+        "useConst": "error",
+        "useImportType": "error",
+        "noNonNullAssertion": "warn",
+        "noParameterAssign": "warn"
+      },
+      "suspicious": {
+        "noExplicitAny": "warn",
+        "noArrayIndexKey": "warn",
+        "noAssignInExpressions": "warn",
+        "noShadowRestrictedNames": "warn"
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "lineEnding": "lf"
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "trailingCommas": "all",
+      "semicolons": "always"
+    }
+  },
+  "files": {
+    "ignore": [
+      "node_modules",
+      "dist",
+      "src-tauri/target",
+      "target",
+      "src-tauri/gen",
+      "test-results",
+      "playwright-report",
+      "**/*.lock",
+      "package-lock.json",
+      "src-tauri/benches/fixtures/**"
+    ]
+  },
+  "overrides": [
+    {
+      "include": ["src/features/editor/ResultGrid.tsx"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useSemanticElements": "off",
+            "useFocusableInteractive": "off",
+            "useKeyWithClickEvents": "off",
+            "noNoninteractiveTabindex": "off",
+            "noInteractiveElementToNoninteractiveRole": "off"
+          },
+          "nursery": {
+            "noStaticElementInteractions": "off"
+          }
+        }
+      }
+    }
+  ]
+}

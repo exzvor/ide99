@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/src/fonts/Inter-Regular.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/src/fonts/JetBrainsMono-Regular.woff2"
+      crossorigin
+    />
+    <title>ide99</title>
+    <script>
+      // Resolve theme + lang on the very first paint so the boot screen
+      // matches the user's saved preferences. Mirrors useTheme + i18n keys.
+      (function () {
+        try {
+          var t = localStorage.getItem("ide99:theme") || "system";
+          var resolved = t;
+          if (t === "system") {
+            resolved = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+          }
+          document.documentElement.dataset.theme = resolved;
+        } catch (e) {
+          document.documentElement.dataset.theme = "light";
+        }
+        try {
+          var l = localStorage.getItem("ide99:lang");
+          if (l !== "en" && l !== "ru") {
+            // First launch: honour browser/OS language tag if it maps to a
+            // supported locale; otherwise default to English.
+            var nav = (navigator.language || "").toLowerCase().split("-")[0];
+            l = (nav === "en" || nav === "ru") ? nav : "en";
+          }
+          document.documentElement.lang = l;
+        } catch (e) {
+          document.documentElement.lang = "en";
+        }
+      })();
+    </script>
+    <style>
+      /* ---------- Boot / loading overlay (inline so it shows on first paint) ----------
+         Tokens are duplicated locally because design.css ships with the JS
+         bundle; the boot must render before that bundle has loaded. Kept
+         intentionally lean — no fonts fetched, no scripts blocked. */
+      #boot {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        color: #f5f6f7;
+        background: linear-gradient(180deg, #14161a 0%, #0a0b0e 100%);
+        transition: opacity 0.45s ease, visibility 0.45s ease;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      }
+      html[data-theme="light"] #boot {
+        background: linear-gradient(180deg, #ffffff 0%, #f4f4f2 100%);
+        color: #0f1115;
+      }
+      #boot.is-hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      #boot .boot-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(56, 197, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(56, 197, 255, 0.05) 1px, transparent 1px);
+        background-size: 36px 36px;
+        -webkit-mask-image: radial-gradient(
+          ellipse 60% 60% at 50% 50%,
+          #000 30%,
+          transparent 75%
+        );
+        mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000 30%, transparent 75%);
+        animation: bootGridShift 12s linear infinite;
+      }
+      html[data-theme="light"] #boot .boot-grid {
+        background-image:
+          linear-gradient(rgba(0, 179, 255, 0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 179, 255, 0.06) 1px, transparent 1px);
+      }
+      @keyframes bootGridShift {
+        0% { background-position: 0 0, 0 0; }
+        100% { background-position: 36px 36px, 36px 36px; }
+      }
+      #boot .boot-logo {
+        position: relative;
+        z-index: 1;
+        height: 48px;
+        width: auto;
+        color: #f5f6f7;
+        user-select: none;
+        overflow: visible;
+        --boot-cyan: #38c5ff;
+      }
+      html[data-theme="light"] #boot .boot-logo {
+        color: #0f1115;
+        --boot-cyan: #00b3ff;
+      }
+      #boot .boot-logo .boot-cyan { fill: var(--boot-cyan); stroke: var(--boot-cyan); }
+      #boot .boot-logo .boot-dot { animation: bootDotBlink 50s linear infinite; }
+      @keyframes bootDotBlink {
+        0%, 11.9%, 12.6%, 25.9%, 26.6%, 41.9%, 42.6%,
+        53.9%, 54.6%, 69.9%, 70.6%, 83.9%, 84.6%,
+        97.9%, 98.6%, 100% { opacity: 1; }
+        12%, 26%, 42%, 54%, 70%, 84%, 98% { opacity: 0.22; }
+      }
+      #boot .boot-status {
+        position: relative;
+        z-index: 1;
+        margin-top: 32px;
+        font-family: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+        font-size: 12px;
+        color: #6c7079;
+        letter-spacing: 0.04em;
+        text-align: center;
+        min-height: 18px;
+      }
+      html[data-theme="light"] #boot .boot-status {
+        color: #8b8f96;
+      }
+      #boot .boot-bar {
+        position: relative;
+        z-index: 1;
+        margin-top: 20px;
+        width: 280px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.06);
+        overflow: hidden;
+        border-radius: 2px;
+      }
+      html[data-theme="light"] #boot .boot-bar {
+        background: rgba(15, 17, 21, 0.06);
+      }
+      #boot .boot-bar .fill {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, #38c5ff, transparent);
+        background-size: 200% 100%;
+        animation: bootShimmer 1.4s linear infinite;
+      }
+      @keyframes bootShimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+      #boot .boot-version {
+        position: absolute;
+        bottom: 22px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-family: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+        font-size: 11px;
+        color: #3f434b;
+      }
+      html[data-theme="light"] #boot .boot-version {
+        color: #b8bcc2;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #boot .boot-grid,
+        #boot .boot-logo .boot-dot,
+        #boot .boot-bar .fill {
+          animation: none !important;
+        }
+      }
+      /* Hide the React tree until the boot fades out so the empty white root
+         doesn't flash behind the overlay during transitions. */
+      #root {
+        opacity: 0;
+        transition: opacity 0.5s ease 0.05s;
+      }
+      html.app-ready #root {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="boot" role="status" aria-live="polite" aria-label="ide99 loading" data-testid="boot">
+      <div class="boot-grid" aria-hidden="true"></div>
+      <svg class="boot-logo" viewBox="528 192 1000 290" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="currentColor" fill-rule="evenodd" d="M 662 283 L 659 286 L 659 431 L 662 434 L 695 434 L 697 432 L 697 285 L 695 283 Z M 978 271 L 957 280 L 947 287 L 933 301 L 925 313 L 917 333 L 915 344 L 915 366 L 917 376 L 921 387 L 932 406 L 945 419 L 959 428 L 973 434 L 994 438 L 1007 438 L 1026 435 L 1039 430 L 1053 422 L 1069 406 L 1070 402 L 1045 386 L 1042 386 L 1029 398 L 1017 403 L 987 403 L 974 397 L 959 382 L 954 369 L 1075 368 L 1078 367 L 1080 364 L 1080 346 L 1077 330 L 1072 316 L 1061 298 L 1050 287 L 1037 278 L 1022 272 L 1008 269 L 989 269 Z M 954 336 L 963 320 L 975 310 L 991 304 L 1005 304 L 1017 307 L 1028 314 L 1038 326 L 1042 335 L 1042 339 L 955 340 Z M 890 218 L 861 217 L 856 221 L 855 294 L 841 281 L 826 273 L 811 269 L 791 269 L 775 273 L 756 283 L 739 299 L 732 309 L 726 321 L 721 336 L 721 372 L 725 386 L 733 402 L 740 411 L 755 424 L 767 431 L 778 435 L 793 438 L 808 438 L 829 433 L 835 430 L 855 414 L 856 432 L 858 434 L 892 433 L 893 221 Z M 796 307 L 813 306 L 829 311 L 847 327 L 853 339 L 856 352 L 856 359 L 851 377 L 839 392 L 824 401 L 816 403 L 800 403 L 785 398 L 768 383 L 760 366 L 759 347 L 766 329 L 782 313 Z"/>
+        <path class="boot-cyan" fill-rule="evenodd" d="M 1372 255 L 1352 250 L 1335 250 L 1309 258 L 1296 266 L 1284 278 L 1273 298 L 1271 307 L 1272 333 L 1277 346 L 1285 358 L 1297 369 L 1310 376 L 1324 380 L 1342 381 L 1307 429 L 1307 434 L 1349 433 L 1392 373 L 1406 351 L 1410 342 L 1415 320 L 1414 304 L 1410 290 L 1404 279 L 1398 272 L 1386 262 Z M 1330 286 L 1338 284 L 1350 284 L 1357 286 L 1364 290 L 1374 301 L 1378 313 L 1377 324 L 1370 336 L 1362 343 L 1356 346 L 1348 348 L 1330 346 L 1320 340 L 1315 335 L 1310 326 L 1309 311 L 1313 300 L 1318 294 Z M 1199 252 L 1189 250 L 1169 250 L 1142 259 L 1127 270 L 1119 279 L 1112 291 L 1108 302 L 1107 330 L 1111 342 L 1119 356 L 1130 367 L 1149 377 L 1163 380 L 1179 380 L 1143 430 L 1143 434 L 1184 434 L 1191 426 L 1232 367 L 1243 349 L 1249 334 L 1251 324 L 1251 311 L 1249 298 L 1243 284 L 1238 277 L 1222 262 Z M 1166 286 L 1173 284 L 1190 285 L 1200 290 L 1210 301 L 1214 313 L 1213 323 L 1211 329 L 1205 337 L 1196 344 L 1184 348 L 1169 347 L 1157 341 L 1148 331 L 1144 319 L 1146 306 L 1151 297 L 1157 291 Z"/>
+        <path class="boot-cyan" fill="none" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" d="M 590 206 H 542 V 468 H 590"/>
+        <path class="boot-cyan" fill="none" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" d="M 1464 206 H 1514 V 468 H 1464"/>
+        <circle class="boot-dot" cx="679" cy="239.5" r="22.8" fill="currentColor"/>
+      </svg>
+      <div class="boot-status" id="boot-status">› initializing runtime</div>
+      <div class="boot-bar" aria-hidden="true"><div class="fill"></div></div>
+      <div class="boot-version" aria-hidden="true">v0.1.0</div>
+    </div>
+    <div id="root"></div>
+    <script>
+      // Cycle a few status lines while the bundle loads. Pure cosmetic — the
+      // real "ready" signal is React mount in main.tsx.
+      //
+      // Inherit the language already resolved by the top-of-head script
+      // (storage → navigator → en). Single source of truth so RU OS users
+      // get RU lines and EN OS users get EN lines.
+      (function () {
+        var lang = document.documentElement.lang === "ru" ? "ru" : "en";
+        var lines = lang === "ru"
+          ? [
+              "› инициализация среды",
+              "› загрузка драйверов",
+              "› прогрев sql-движка",
+              "› восстановление сессии",
+            ]
+          : [
+              "› initializing runtime",
+              "› loading drivers",
+              "› warming up sql engine",
+              "› restoring last session",
+            ];
+        var el = document.getElementById("boot-status");
+        var i = 0;
+        if (!el) return;
+        // Override the static HTML text so RU returning users don't see the
+        // English first line for ~750ms before the cycle catches up.
+        el.textContent = lines[0];
+        var id = setInterval(function () {
+          i = (i + 1) % lines.length;
+          el.textContent = lines[i];
+        }, 750);
+        // main.tsx sets `app-ready` on <html> once React has mounted; stop the
+        // cycle then so we don't keep mutating DOM after the overlay is gone.
+        var stop = setInterval(function () {
+          if (document.documentElement.classList.contains("app-ready")) {
+            clearInterval(id);
+            clearInterval(stop);
+          }
+        }, 200);
+      })();
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

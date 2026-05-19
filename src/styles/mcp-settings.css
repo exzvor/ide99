@@ -1,0 +1,331 @@
+/* Settings → AI / MCP panel.
+   The JSX (src/features/mcp/SettingsMcp.tsx, ExternalServers.tsx) carries
+   semantic class names but had no styling, so the whole tab rendered as one
+   wall of unstyled prose — section headings looked like body text and the
+   toggle row, toolbar, and empty states ran into each other. */
+
+.settings-mcp {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 4px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.settings-mcp > header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.settings-mcp > header h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.settings-mcp .mcp-description {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-3);
+  max-width: 64ch;
+}
+
+/* Subsection headings (Authorized clients / Connect agent / External). */
+.mcp-clients h3,
+.mcp-onboarding h3,
+.mcp-external-header h3 {
+  margin: 0 0 4px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.003em;
+}
+.mcp-clients,
+.mcp-onboarding,
+.mcp-external {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mcp-external {
+  margin-top: 4px;
+  padding-top: 18px;
+  border-top: 1px solid var(--hairline);
+}
+.mcp-external-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mcp-onboarding > p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-3);
+  max-width: 64ch;
+}
+
+/* ── Enable toggle row ─────────────────────────────────────────────────── */
+.mcp-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: var(--bg-elev);
+}
+.mcp-toggle-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  user-select: none;
+}
+.mcp-toggle-row input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+.mcp-port-info {
+  font-size: 11.5px;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  color: var(--ink-3);
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--bg-sunken);
+  border: 1px solid var(--hairline);
+}
+
+/* ── Authorized clients list ───────────────────────────────────────────── */
+.mcp-clients ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.mcp-client-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) minmax(80px, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 12.5px;
+}
+.mcp-client-row:last-child {
+  border-bottom: 0;
+}
+.mcp-client-name {
+  color: var(--ink);
+  font-weight: 500;
+}
+.mcp-scopes {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+.mcp-last-used {
+  font-size: 11.5px;
+  color: var(--ink-4);
+  white-space: nowrap;
+}
+
+/* ── Connect agent: config snippets ────────────────────────────────────── */
+.mcp-config-blocks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 720px) {
+  .mcp-config-blocks {
+    grid-template-columns: 1fr;
+  }
+}
+.mcp-config-block {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: var(--bg-elev);
+  overflow: hidden;
+}
+.mcp-config-block > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-sunken);
+  border-bottom: 1px solid var(--hairline);
+}
+.mcp-config-block > header strong {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-2);
+  letter-spacing: 0.01em;
+}
+.mcp-config-json {
+  margin: 0;
+  padding: 10px 12px;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  background: transparent;
+  white-space: pre;
+  overflow-x: auto;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.mcp-help-link {
+  margin: 4px 0 0 0;
+  font-size: 12.5px;
+}
+.mcp-help-link a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--accent-soft);
+  padding-bottom: 1px;
+}
+.mcp-help-link a:hover {
+  border-bottom-color: var(--accent);
+}
+
+/* ── External servers ──────────────────────────────────────────────────── */
+.mcp-external-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+.mcp-external-config-path {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+.mcp-external-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.mcp-external-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 1.2fr) minmax(120px, 1.5fr) minmax(120px, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 12.5px;
+}
+.mcp-external-row:last-child {
+  border-bottom: 0;
+}
+.mcp-external-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.mcp-external-name strong {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 12.5px;
+}
+.mcp-external-transport {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10.5px;
+  color: var(--ink-4);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mcp-external-target {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 11.5px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.mcp-external-status {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 0;
+}
+.mcp-external-status[data-status="connected"] {
+  color: var(--accent-strong, var(--accent));
+}
+.mcp-external-status[data-status="connecting"] {
+  color: var(--ink-3);
+}
+.mcp-external-status[data-status="disconnected"] {
+  color: var(--ink-4);
+}
+.mcp-external-status[data-status="error"] {
+  color: var(--danger-q, #f43f5e);
+}
+.mcp-external-counts {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ink-4);
+}
+.mcp-external-error {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ink-4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mcp-external-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+/* ── Empty + loading states ────────────────────────────────────────────── */
+.mcp-empty {
+  margin: 0;
+  padding: 12px;
+  font-size: 12.5px;
+  color: var(--ink-4);
+  background: var(--bg-sunken);
+  border: 1px dashed var(--hairline);
+  border-radius: 8px;
+  text-align: center;
+}
+.mcp-loading {
+  padding: 16px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  text-align: center;
+}

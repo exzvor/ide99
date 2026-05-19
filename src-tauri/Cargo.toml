@@ -1,0 +1,128 @@
+[package]
+name = "ide99"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+publish.workspace = true
+description = "ide99 — PostgreSQL IDE"
+# Two bin targets (`ide99` + `ide99-mcp`) break a bare `cargo run` and,
+# transitively, `npm run tauri dev`. Pin the desktop app as the default
+# so `tauri dev` launches the window; `ide99-mcp` remains available via
+# `cargo run --bin ide99-mcp`.
+default-run = "ide99"
+
+[lib]
+name = "ide99"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[[bin]]
+name = "ide99"
+path = "src/main.rs"
+
+# stdio MCP proxy for Claude Code / Cursor / Windsurf.
+# Launched by an external AI tool as a subprocess; proxies MCP frames
+# to the IPC socket of the running ide99 instance.
+[[bin]]
+name = "ide99-mcp"
+path = "src/bin/ide99_mcp.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+tracing-appender = "0.2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "1"
+rusqlite = { version = "0.32", features = ["bundled"] }
+keyring = "3"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "net", "io-util", "io-std", "time", "fs", "process"] }
+# MCP server stack. axum + tower are already in Cargo.lock via
+# testcontainers→bollard→tonic; duplicated as a top-level dep so we can
+# use routing/middleware from our own code.
+axum = { version = "0.8", default-features = false, features = ["http1", "json", "tokio"] }
+tower = { version = "0.5", default-features = false }
+rand = "0.8"
+tokio-postgres = { version = "0.7", features = ["with-uuid-1", "with-chrono-0_4", "with-serde_json-1"] }
+deadpool-postgres = "0.14"
+tokio-postgres-rustls = "0.13"
+rustls = { version = "0.23", features = ["ring"] }
+rustls-pki-types = "1"
+webpki-roots = "0.26"
+url = "2"
+uuid = { version = "1", features = ["v4", "serde"] }
+directories = "5"
+chrono = { version = "0.4", features = ["serde"] }
+async-trait = "0.1"
+futures-util = { version = "0.3", default-features = false }
+tauri-plugin-dialog = "2.7.0"
+# Auto-updater plugin (channel-aware fetch + signed install).
+# Pinned to 2.x line which matches our `tauri = "2"` runtime; minor floats so
+# minor patch bumps come along with `cargo update`.
+tauri-plugin-updater = "2"
+regex = "1"
+pg_query = "6"
+notify = "6"
+flate2 = "1"
+sha2 = "0.10"
+hmac = "0.12"
+similar = "2"
+hex = "0.4"
+testcontainers = "0.27"
+testcontainers-modules = { version = "0.15", features = ["postgres"] }
+which = "6"
+# Telemetry HTTP client (PostHog + Sentry envelope POST).
+# rustls-only build keeps bundle small and avoids OpenSSL system dep.
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "rustls-native-certs", "json"] }
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+tempfile = "3"
+proptest = "1"
+# wiremock for telemetry HTTP integration tests (no real network).
+wiremock = "0.6"
+
+# Windows-only production dep — `backup::installer` writes a Task Scheduler
+# XML via `schtasks /Create /XML <file>` and uses `tempfile::NamedTempFile`
+# to drop the XML on disk. The `[dev-dependencies]` entry above pulls
+# tempfile in for tests on every platform; this target table promotes it to
+# a runtime dependency on Windows only so the production build links.
+[target.'cfg(windows)'.dependencies]
+tempfile = "3"
+
+[[bench]]
+name = "cold_start"
+harness = false
+
+[[bench]]
+name = "schema_introspection"
+harness = false
+
+[[bench]]
+name = "history_search"
+harness = false
+
+[[bench]]
+name = "parser_bench"
+harness = false
+
+[[bench]]
+name = "autocomplete_latency"
+harness = false
+
+[[bench]]
+name = "explain_render"
+harness = false
+
+[[bench]]
+name = "result_grid_format"
+harness = false
+
+[lints]
+workspace = true

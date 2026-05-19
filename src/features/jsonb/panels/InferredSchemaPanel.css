@@ -1,0 +1,313 @@
+/*
+ * — InferredSchemaPanel styles.
+ *
+ * Two callers (variant=browser inside SchemaTree, variant=modal inside
+ * JsonbEditorModal). Both rely on the same row layout (label · type ·
+ * freq · samples) but differ in container chrome — the modal version
+ * shows a header, the browser version is rendered inside a floating
+ * box below the tree.
+ *
+ * Theme tokens come from src/styles/{tokens,themes,design}.css.
+ */
+
+/* ---------- container + variants ---------- */
+
+.ide99-jsonb-inference-panel {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  color: var(--ink-2);
+  background: var(--bg-elev);
+  border: 1px solid var(--border-q);
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 1px 2px rgba(15, 17, 21, 0.04);
+}
+
+.ide99-jsonb-inference-panel--browser {
+  margin: 4px 8px 8px 8px;
+}
+
+.ide99-jsonb-inference-panel--modal {
+  margin-top: 6px;
+}
+
+/* ---------- header ---------- */
+
+.ide99-jsonb-inference-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink-3);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.ide99-jsonb-inference-header > span {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ide99-jsonb-inference-stale {
+  color: #b45309; /* amber-700 */
+  font-weight: 600;
+}
+
+.ide99-jsonb-inference-reinfer {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--border-q);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.ide99-jsonb-inference-reinfer:hover {
+  background: var(--bg-sunken);
+  border-color: var(--border-strong-q);
+}
+
+.ide99-jsonb-inference-reinfer:focus-visible {
+  outline: 2px solid var(--brand-q);
+  outline-offset: 1px;
+}
+
+/* ---------- tree ---------- */
+
+.ide99-jsonb-inference-tree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-mono, monospace);
+}
+
+.ide99-jsonb-inference-tree li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ide99-jsonb-inference-children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------- row ---------- */
+
+.ide99-jsonb-inference-row {
+  display: grid;
+  grid-template-columns:
+    minmax(120px, max-content) /* label */
+    minmax(110px, max-content) /* type */
+    44px /* freq % */
+    28px /* freq rail */
+    1fr; /* samples */
+  align-items: center;
+  gap: 8px;
+  padding: 3px 4px;
+  border-radius: 4px;
+}
+
+.ide99-jsonb-inference-row:hover {
+  background: var(--bg-sunken);
+}
+
+.ide99-jsonb-inference-label {
+  color: var(--ink);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ide99-jsonb-inference-type {
+  color: var(--ink-3);
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ide99-jsonb-inference-freq {
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.ide99-jsonb-inference-freq-rail {
+  display: inline-block;
+  height: 4px;
+  background: var(--brand-q);
+  border-radius: 2px;
+  opacity: 0.55;
+  align-self: center;
+}
+
+.ide99-jsonb-inference-samples {
+  color: var(--ink-4);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- skeleton (pending state) ---------- */
+
+.ide99-jsonb-inference-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 4px;
+}
+
+.ide99-jsonb-inference-skeleton-row {
+  height: 10px;
+  background: linear-gradient(    90deg,
+    var(--bg-sunken) 0%,
+    rgba(15, 17, 21, 0.06) 50%,
+    var(--bg-sunken) 100%
+);
+  background-size: 200% 100%;
+  border-radius: 3px;
+  animation: ide99-jsonb-shimmer 1.4s ease-in-out infinite;
+}
+
+.ide99-jsonb-inference-skeleton-row:nth-child(2) {
+  animation-delay: 120ms;
+}
+.ide99-jsonb-inference-skeleton-row:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+@keyframes ide99-jsonb-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* sr-only text for the aria-live region */
+.ide99-jsonb-inference-panel .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- empty / error ---------- */
+
+.ide99-jsonb-inference-empty {
+  padding: 6px 4px;
+  color: var(--ink-4);
+  font-style: italic;
+}
+
+.ide99-jsonb-inference-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 4px;
+  color: #b91c1c; /* red-700 */
+}
+
+.ide99-jsonb-inference-error button {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--border-q);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.ide99-jsonb-inference-error button:hover {
+  background: var(--bg-sunken);
+}
+
+/* ---------- modal section toggle ---------- */
+
+.jsonb-modal-inference {
+  border-top: 1px solid var(--border-q);
+  padding-top: 8px;
+}
+
+.jsonb-modal-inference-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  font-size: 12px;
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  text-align: left;
+}
+
+.jsonb-modal-inference-toggle:hover {
+  color: var(--ink);
+}
+
+.jsonb-modal-inference-toggle:focus-visible {
+  outline: 2px solid var(--brand-q);
+  outline-offset: 1px;
+}
+
+/* ---------- schema browser overlay ---------- */
+
+.schema-tree-jsonb-overlay {
+  margin: 4px 0;
+  padding: 0 12px 0 28px;
+}
+
+.schema-tree-jsonb-overlay__caption {
+  font-size: 11px;
+  color: var(--ink-4);
+  margin-bottom: 4px;
+  font-family: var(--font-mono, monospace);
+}
+
+/* ---------- S17 picker mode ---------- */
+
+.ide99-jsonb-inference-row-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.ide99-jsonb-inference-row-button:focus-visible {
+  outline: 2px solid var(--brand-q);
+  outline-offset: -2px;
+}
+
+.ide99-jsonb-inference-row-button.is-selected {
+  background: var(--bg-sunken);
+}

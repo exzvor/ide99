@@ -1,0 +1,125 @@
+{
+  "_comment": "Sprint 37 \u2014 re-captured on GH-hosted ubuntu-22.04 after the Tier 1 migration off self-hosted Mac. Tolerance set to 100%: GH-hosted shared runners produce \u00b170% variance between consecutive runs on the result-grid serialise bench (1.87ms vs 3.22ms back-to-back), so 30% threshold flapped. The order-of-magnitude protection from the 100% gate is still meaningful; product perf budgets are enforced separately via per-bench target_max_ns. Refresh recipe: docs/engineering/17-benchmarks.md. Skip-gate via commit message tag bench-allow-regression: <reason>.",
+  "schema_version": 1,
+  "captured_at": "2026-05-07T14:42:00Z",
+  "captured_on": "GH-hosted ubuntu-22.04 / Standard_D4ads_v5 / 4 vCPU / 16GB RAM",
+  "captured_by": "ci-rebaseline-after-runner-migration",
+  "tolerance_pct": 100,
+  "benches": {
+    "autocomplete_latency::autocomplete_parse_64_join_query": {
+      "median_ns": 1160000,
+      "target_max_ns": 50000000,
+      "notes": "Adversarial 64-table JOIN; worst-case probe."
+    },
+    "autocomplete_latency::autocomplete_parse_corpus/all_queries": {
+      "median_ns": 513700,
+      "target_max_ns": 50000000,
+      "notes": "Parse all 10 corpus queries once. Target: <50ms autocomplete budget (06-perf-targets \u00a72). Backend share is dominant parser cost; FE walk + Monaco render eat the rest."
+    },
+    "autocomplete_latency::autocomplete_parse_corpus/query/0": {
+      "median_ns": 40300,
+      "target_max_ns": 10000000,
+      "notes": "Per-query parse (corpus index 0). Captured on GH-hosted ubuntu-22.04. <10ms target keeps autocomplete keystroke responsive."
+    },
+    "autocomplete_latency::autocomplete_parse_corpus/query/1": {
+      "median_ns": 45400,
+      "target_max_ns": 10000000,
+      "notes": "Per-query parse (corpus index 1). GH-hosted ubuntu-22.04 capture."
+    },
+    "autocomplete_latency::autocomplete_parse_corpus/query/2": {
+      "median_ns": 78800,
+      "target_max_ns": 10000000,
+      "notes": "Slowest single corpus query (3-table JOIN with aliases + qualified columns). Single-keystroke parse must stay <10ms. GH-hosted ubuntu-22.04 capture supersedes the earlier darwin-arm64 number."
+    },
+    "autocomplete_latency::autocomplete_parse_corpus/query/3": {
+      "median_ns": 57500,
+      "target_max_ns": 10000000,
+      "notes": "Per-query parse (corpus index 3). GH-hosted ubuntu-22.04 capture."
+    },
+    "autocomplete_latency::autocomplete_parse_corpus/query/4": {
+      "median_ns": 64300,
+      "target_max_ns": 10000000,
+      "notes": "Per-query parse (corpus index 4). GH-hosted ubuntu-22.04 capture."
+    },
+    "autocomplete_latency::autocomplete_parse_corpus/query/5": {
+      "median_ns": 33200,
+      "target_max_ns": 10000000,
+      "notes": "Per-query parse (corpus index 5). GH-hosted ubuntu-22.04 capture."
+    },
+    "autocomplete_latency::autocomplete_parse_corpus/query/6": {
+      "median_ns": 36900,
+      "target_max_ns": 10000000,
+      "notes": "Per-query parse (corpus index 6). GH-hosted ubuntu-22.04 capture."
+    },
+    "autocomplete_latency::autocomplete_parse_corpus/query/7": {
+      "median_ns": 39700,
+      "target_max_ns": 10000000,
+      "notes": "Per-query parse (corpus index 7). GH-hosted ubuntu-22.04 capture."
+    },
+    "autocomplete_latency::autocomplete_parse_corpus/query/8": {
+      "median_ns": 40700,
+      "target_max_ns": 10000000,
+      "notes": "Per-query parse (corpus index 8). GH-hosted ubuntu-22.04 capture."
+    },
+    "autocomplete_latency::autocomplete_parse_corpus/query/9": {
+      "median_ns": 36300,
+      "target_max_ns": 10000000,
+      "notes": "Per-query parse (corpus index 9). GH-hosted ubuntu-22.04 capture."
+    },
+    "autocomplete_latency::autocomplete_scope_extraction_corpus": {
+      "median_ns": 520400,
+      "target_max_ns": 50000000,
+      "notes": "Parse + walk QueryShape (mirrors FE Monaco scope-collection step)."
+    },
+    "explain_render::explain_insights_500_nodes_fixture": {
+      "median_ns": 1020000,
+      "target_max_ns": 500000000,
+      "notes": "Parse + insights walk (slowest node, highest cost, rows-removed, missing-index hints)."
+    },
+    "explain_render::explain_parse_25_nodes": {
+      "median_ns": 16300,
+      "target_max_ns": 50000000,
+      "notes": "25-node linear synthetic plan."
+    },
+    "explain_render::explain_parse_500_nodes_fixture": {
+      "median_ns": 923100,
+      "target_max_ns": 500000000,
+      "notes": "571-node real-world EXPLAIN JSON parse only. Target: render 1000 nodes <500ms (06-perf-targets \u00a72)."
+    },
+    "explain_render::explain_parse_50_nodes": {
+      "median_ns": 31600,
+      "target_max_ns": 50000000,
+      "notes": "50-node linear synthetic plan."
+    },
+    "explain_render::explain_walk_500_nodes_fixture": {
+      "median_ns": 27900,
+      "target_max_ns": 500000000,
+      "notes": "Pre-parsed walk only \u2014 counts nodes."
+    },
+    "parser_bench::parse_ddl_100lines": {
+      "median_ns": 834700,
+      "target_max_ns": 50000000,
+      "notes": "100-line DDL mix (ALTER ADD/DROP COLUMN + CREATE TABLE). Target: p95 <50ms (Sprint 20 spec)."
+    },
+    "parser_bench::parse_select_typical": {
+      "median_ns": 45700,
+      "target_max_ns": 10000000,
+      "notes": "Typical SELECT with WHERE + ORDER BY + LIMIT. Target: p95 <10ms (Sprint 20 spec)."
+    },
+    "result_grid_format::result_grid_serialize/query_result_to_json/1000": {
+      "median_ns": 186100,
+      "target_max_ns": 500000000,
+      "notes": "1k rows \u00d7 10 cols (mixed types incl. JSONB) \u2014 typical first-page payload. Target: result-grid first page <500ms (06-perf-targets \u00a72)."
+    },
+    "result_grid_format::result_grid_serialize/query_result_to_json/10000": {
+      "median_ns": 3220000,
+      "target_max_ns": 500000000,
+      "notes": "10k rows \u2014 virtualisation buffer."
+    },
+    "result_grid_format::result_grid_serialize/query_result_to_json/100000": {
+      "median_ns": 45000000,
+      "target_max_ns": 500000000,
+      "notes": "100k rows \u2014 upper bound for a single page render. 1M+ rows is virtualised. Re-baselined for the Mac shell runner: observed median 22-58ms across pipelines #31-#43; 45ms covers the typical CI value, 100% tolerance soaks the remaining \u00b130% jitter without losing the absolute-budget gate (target_max_ns=500ms)."
+    }
+  }
+}

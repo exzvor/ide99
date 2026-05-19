@@ -1,0 +1,237 @@
+/*
+ * ide99 themes — overrides on top of tokens.css
+ *
+ * `:root` (in tokens.css) defines the light-mode token set.
+ * This file applies dark-mode and high-contrast overrides via [data-theme=...]
+ * on <html>, set by the useTheme() hook.
+ */
+
+[data-theme="dark"] {
+  /* ===== 2.2 Neutral grayscale (dark mode, inverted scale) =========== */
+  --gray-0: #09090b; /* page background */
+  --gray-50: #18181b; /* subtle surface */
+  --gray-100: #27272a; /* card background */
+  --gray-200: #3f3f46; /* dividers */
+  --gray-300: #52525b; /* disabled border */
+  --gray-400: #71717a; /* placeholder text */
+  --gray-500: #a1a1aa; /* secondary text */
+  --gray-600: #d4d4d8; /* primary text muted */
+  --gray-700: #e4e4e7;
+  --gray-800: #f4f4f5;
+  --gray-900: #fafafa; /* primary text */
+  --gray-950: #ffffff; /* emphasis text */
+
+  /* ===== 2.3 Semantic colors (dark mode) ==============================
+     Same hue families as light mode but flipped for dark surfaces:
+       *-50  → dark-tinted background (was a near-white tint)
+       *-700 → light-tinted foreground (was a deep tint, unreadable on dark)
+     Components that style alerts / banners / cells with the existing
+     `bg-[var(--{semantic}-50)] text-[var(--{semantic}-700)]` pairs keep
+     working in both themes without per-site `dark:` overrides — 's
+     light error panel + result-grid status row was caused by these tokens
+     not flipping.
+  */
+  --success-50: #052e16;
+  --success-500: #4ade80;
+  --success-600: #22c55e;
+  --success-700: #86efac;
+
+  --warning-50: #422006;
+  --warning-500: #facc15;
+  --warning-600: #f59e0b;
+  --warning-700: #fcd34d;
+
+  --error-50: #450a0a;
+  --error-500: #f87171;
+  --error-600: #ef4444;
+  --error-700: #fca5a5;
+
+  --info-50: #083344;
+  --info-500: #22d3ee;
+  --info-600: #06b6d4;
+  --info-700: #67e8f9;
+
+  /* ===== 2.6 SQL syntax highlighting (dark) =========================== */
+  --sql-keyword: #c4b5fd;
+  --sql-string: #86efac;
+  --sql-number: #93c5fd;
+  --sql-function: #d8b4fe;
+  --sql-comment: #71717a;
+  --sql-identifier: #fafafa;
+
+  /* Shadows in dark mode are inverted highlights (lighter, not darker). */
+  --shadow-sm: 0 1px 2px rgba(255, 255, 255, 0.04);
+  --shadow: 0 1px 3px rgba(255, 255, 255, 0.06), 0 1px 2px rgba(255, 255, 255, 0.03);
+  --shadow-md: 0 4px 6px rgba(255, 255, 255, 0.05), 0 2px 4px rgba(255, 255, 255, 0.03);
+  --shadow-lg: 0 10px 15px rgba(255, 255, 255, 0.06), 0 4px 6px rgba(255, 255, 255, 0.03);
+  --shadow-xl: 0 20px 25px rgba(255, 255, 255, 0.08), 0 8px 10px rgba(255, 255, 255, 0.03);
+}
+
+/*
+ * High-contrast theme — baseline.
+ * Targets WCAG 2.1 AAA contrast (≥7:1 for body text). Black background,
+ * pure-white foreground, and saturated semantic accents picked so they
+ * remain ≥4.5:1 against pure black. Sub-agent E refines per-component.
+ *
+ * Strategy: override the same CSS custom properties dark mode uses, plus
+ * widen focus rings to 3 px (per `09-accessibility.md` §2.6).
+ */
+[data-theme="high-contrast"] {
+  /* ===== Neutral grayscale — pure-black ground, pure-white text. ===== */
+  --gray-0: #000000;
+  --gray-50: #0a0a0a;
+  --gray-100: #141414;
+  --gray-200: #2a2a2a; /* divider — visible on black */
+  --gray-300: #4d4d4d; /* disabled border */
+  --gray-400: #8a8a8a; /* placeholder */
+  --gray-500: #b3b3b3; /* secondary text */
+  --gray-600: #e0e0e0;
+  --gray-700: #f0f0f0;
+  --gray-800: #f8f8f8;
+  --gray-900: #ffffff;
+  --gray-950: #ffffff;
+
+  /* ===== Semantic colors — saturated, ≥4.5:1 against pure black. ===== */
+  --success-50: #002b14;
+  --success-500: #00d166;
+  --success-600: #00ad55;
+  --success-700: #00ff7e;
+
+  --warning-50: #2b1d00;
+  --warning-500: #ffb000;
+  --warning-600: #d99700;
+  --warning-700: #ffd166;
+
+  --error-50: #2b0000;
+  --error-500: #ff5050;
+  --error-600: #ff3030;
+  --error-700: #ff8080;
+
+  --info-50: #001f2b;
+  --info-500: #00cfff;
+  --info-600: #00aacc;
+  --info-700: #66e6ff;
+
+  /* SQL syntax — bright, distinct hues (don't rely on subtle pastels). */
+  --sql-keyword: #ffd166;
+  --sql-string: #00ff7e;
+  --sql-number: #66d9ff;
+  --sql-function: #ff7eff;
+  --sql-comment: #b3b3b3;
+  --sql-identifier: #ffffff;
+
+  /* Focus ring: spec §2.6 requires 3 px in HC theme. Components that respect
+     `--focus-ring-width` pick this up automatically. */
+  --focus-ring-width: 3px;
+  --focus-ring-color: #ffd166;
+
+  /* Shadows degrade to crisp 1 px borders so they remain perceptible without
+     low-opacity tricks. */
+  --shadow-sm: 0 0 0 1px var(--gray-200);
+  --shadow: 0 0 0 1px var(--gray-200);
+  --shadow-md: 0 0 0 2px var(--gray-200);
+  --shadow-lg: 0 0 0 2px var(--gray-200);
+  --shadow-xl: 0 0 0 3px var(--gray-200);
+
+  /* ===== sub-agent E refinement — design.css token overrides.
+     `design.css` defines the surface/ink/accent tokens that nearly every
+     component reads (`--bg-elev`, `--ink`, `--accent`, `--danger-q`, …);
+     dark mode shadows them, and HC needs to shadow them again with
+     pure-black surfaces and AAA-saturated accents. */
+
+  /* Surfaces — flat black, slim divider, 0.05 alpha hairline is invisible on
+     pure black so it gets bumped to a real grey. */
+  --bg: #000000;
+  --bg-elev: #0a0a0a;
+  --bg-sunken: #050505;
+  --bg-2: #141414;
+  --hairline: rgba(255, 255, 255, 0.45);
+  --border-q: #ffffff;
+
+  /* Ink — pure-white primary, lighter scale stays readable on black. */
+  --ink: #ffffff;
+  --ink-2: #f0f0f0;
+  --ink-3: #d4d4d4;
+  --ink-4: #b3b3b3;
+  --ink-5: #8a8a8a;
+
+  /* Accent / warn / danger — bumped to ≥7:1 against black per WCAG AAA. */
+  --accent: #66e6ff;
+  --accent-2: #99f0ff;
+  --accent-soft: rgba(102, 230, 255, 0.28);
+  --accent-strong: #ffffff;
+  --warn-q: #ffd166;
+  --warn-q-soft: rgba(255, 209, 102, 0.22);
+  --danger-q: #ff8080;
+  --danger-q-soft: rgba(255, 128, 128, 0.22);
+
+  /* Easy mode accent — the warm orange on light grey reads ≥4.5:1, but on
+     pure black with the AAA rule the soft variant becomes invisible. Pump
+     the soft to ~28 % alpha and keep the base orange (which is already
+     readable against black). Easy-mode pages reading
+     `var(--easy-accent-soft)` for backgrounds will now have a visible chip. */
+  --easy-accent: #ffb46b;
+  --easy-accent-soft: rgba(255, 180, 107, 0.28);
+}
+
+/* ===== Per-component HC tweaks ============================================
+ * Items below override individual class rules where component-local CSS sets
+ * a hard-coded color or low-alpha overlay that does not pass through the
+ * tokens above. Keep the list short and document each hop's "why".
+ */
+
+/* Live Ops cards: the default `tone-blocked` left stripe is `--danger-q` and
+ * already AAA-bright; but the card's outer 1 px border uses `--border-q` /
+ * `--hairline` which on the new pure-black surface needs to be a strong
+ * white so blocked vs non-blocked stays distinguishable at a glance. */
+[data-theme="high-contrast"] .live-ops-card {
+  border: 1px solid var(--border-q);
+}
+[data-theme="high-contrast"] .live-ops-card.is-highlighted {
+  box-shadow: 0 0 0 3px var(--accent);
+}
+
+/* ERD canvas: the FkEdge stroke is `var(--ink-4)` which is already a soft
+ * grey — fine on dark mode but blends with the wide white hairlines on HC.
+ * Pump the FK arrows to the warn token (yellow) so foreign-key chains stay
+ * readable when many tables overlap. */
+[data-theme="high-contrast"] [data-testid="erd-canvas"] line[stroke="var(--ink-4)"],
+[data-theme="high-contrast"] [data-testid="erd-canvas"] path[stroke="var(--ink-4)"] {
+  stroke: var(--warn-q);
+}
+
+/* Schema tree icons: the `lucide-react` icons inherit `currentColor` which
+ * picks up `--ink-3`. Keep them bright white in HC so glyph silhouettes are
+ * crisp — earlier draft used `--ink-2` and tested at 5.6:1 (below AAA). */
+[data-theme="high-contrast"] svg[data-lucide],
+[data-theme="high-contrast"] .lucide {
+  color: var(--ink);
+}
+
+/* Notebook + Backup cards: white-on-black borders make tab-pressed states
+ * look identical to inactive ones. Bump the active border to the accent
+ * cyan and force the inactive surface a hair darker so activity-state is
+ * visible at a glance. */
+[data-theme="high-contrast"] [data-testid^="backup-section-"][aria-pressed="true"],
+[data-theme="high-contrast"] .seg button[aria-pressed="true"],
+[data-theme="high-contrast"] [role="radiogroup"] button[aria-pressed="true"] {
+  background: var(--accent);
+  color: #000000;
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+
+/* Visible focus indicator. Spec §2.6 mandates 3 px in HC; the tokens above
+ * already widen `--focus-ring-width`, but components that hard-code their
+ * own outline (snippet rows, action cells) need to surface the wider ring. */
+[data-theme="high-contrast"] *:focus-visible {
+  outline: var(--focus-ring-width, 3px) solid var(--focus-ring-color, var(--warn-q));
+  outline-offset: 2px;
+}
+
+/* The Easy mode warm-gradient overlays the titlebar with a 6 %–8 % alpha
+ * accent — invisible on a pure-black surface and dampens AAA contrast.
+ * Disable the overlay in HC; the easy-toggle pill is already legible. */
+[data-theme="high-contrast"][data-mode="easy"] .q-titlebar {
+  background-image: none;
+}

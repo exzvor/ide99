@@ -1,0 +1,22 @@
+// — pgvector power-pack barrel.
+export { detectVectorColumns } from "./pgvectorDetect";
+export type { DetectedVectorColumn, DetectedVectors } from "./pgvectorDetect";
+export { recommend } from "./vectorIndexRecommender";
+export type { Recommendation } from "./vectorIndexRecommender";
+export { VectorIndexWizard } from "./VectorIndexWizard";
+export type { VectorIndexWizardProps } from "./VectorIndexWizard";
+export { KnnBrowseDialog } from "./KnnBrowseDialog";
+export type { KnnBrowseDialogProps } from "./KnnBrowseDialog";
+export { KnnBrowseResultPane } from "./KnnBrowseResultPane";
+export type { KnnBrowseResultPaneProps } from "./KnnBrowseResultPane";
+export { VectorProjectionView } from "./VectorProjectionView";
+export type { VectorProjectionViewProps } from "./VectorProjectionView";
+export { HybridSearchWizard } from "./HybridSearchWizard";
+export type { HybridSearchWizardProps } from "./HybridSearchWizard";
+export { PgvectorTablePanel } from "./PgvectorTablePanel";
+export type { PgvectorTablePanelProps } from "./PgvectorTablePanel";
+export { VectorValueInput } from "./VectorValueInput";
+export type { VectorValueInputProps, VectorValue, VectorValueMode } from "./VectorValueInput";
+export { isPgvectorInstalled, _clearPgvectorProbeCache } from "./extensionProbe";
+export { buildHybridSearchSql } from "./hybridSearchSql";
+export type { DistanceOp, HybridSearchInput } from "./hybridSearchSql";

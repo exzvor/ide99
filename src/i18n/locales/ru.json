@@ -1,0 +1,2955 @@
+{
+  "welcome": {
+    "tagline": "Подключитесь к базе, чтобы начать",
+    "headline": "С возвращением.",
+    "no_connections": {
+      "title": "Подключений ещё нет",
+      "body": "Добавьте первое подключение к PostgreSQL, чтобы начать работу",
+      "add": "Новое подключение",
+      "uri_label": "или вставьте строку подключения",
+      "uri_placeholder": "postgresql://user:password@host:5432/database",
+      "instant_db_label": "или поднимите тестовую БД за секунды"
+    }
+  },
+  "theme": {
+    "toggle": {
+      "label": "Сменить тему (сейчас: {{current}})"
+    },
+    "light": "светлая",
+    "dark": "тёмная",
+    "system": "системная",
+    "high-contrast": "высокий контраст"
+  },
+  "language": {
+    "switch": "Сменить язык"
+  },
+  "connection": {
+    "action": {
+      "connect": "Подключиться",
+      "disconnect": "Отключиться",
+      "other_in_flight": "Сейчас устанавливается другое подключение. Подождите."
+    },
+    "connecting": "Подключаемся…",
+    "banner": {
+      "edit": "Изменить",
+      "disconnect": "Отключить",
+      "connected": "Подключено",
+      "disconnected": "Не подключено"
+    },
+    "form": {
+      "title": {
+        "create": "Новое подключение",
+        "edit": "Изменить подключение"
+      },
+      "description": {
+        "create": "Заполните параметры подключения к PostgreSQL и проверьте перед сохранением.",
+        "edit": "Измените параметры подключения и сохраните изменения."
+      },
+      "field": {
+        "name": "Название",
+        "host": "Хост",
+        "port": "Порт",
+        "database": "База данных",
+        "username": "Пользователь",
+        "password": "Пароль",
+        "ssl_mode": "Режим SSL",
+        "environment": "Окружение",
+        "name.placeholder": "Мой PostgreSQL",
+        "host.placeholder": "localhost",
+        "port.placeholder": "5432",
+        "database.placeholder": "postgres",
+        "username.placeholder": "postgres",
+        "password.placeholder": "Оставьте пустым, чтобы не менять"
+      },
+      "read_only": {
+        "label": "Read-only режим (запретить запись)"
+      },
+      "confirm_destructive": {
+        "label": "Подтверждение для DROP / TRUNCATE / DELETE без WHERE"
+      },
+      "slow_query_warning": {
+        "label": "Предупреждение перед медленными запросами (cost > 100K)"
+      },
+      "warning": {
+        "ssl_disable_remote": "Незашифрованное подключение по сети. Большинство облачных провайдеров его отклонят. Используйте режим prefer."
+      },
+      "action": {
+        "test": "Проверить подключение",
+        "save": "Сохранить",
+        "cancel": "Отмена",
+        "save_without_testing": "Сохранить без проверки"
+      },
+      "discard": {
+        "title": "Отменить изменения?",
+        "body": "В форме подключения есть несохранённые изменения. При закрытии они будут потеряны.",
+        "confirm": "Отменить изменения",
+        "cancel": "Продолжить редактирование"
+      },
+      "password": {
+        "show": "Показать",
+        "hide": "Скрыть"
+      },
+      "instant_db": {
+        "managed_notice": "Параметры подключения управляются Instant DB и не редактируются. Можно изменить только название строки выше."
+      },
+      "test": {
+        "testing": "Проверяем...",
+        "success": "Подключение успешно",
+        "success_meta": "{{ms}} мс",
+        "success_meta_with_version": "{{ms}} мс · {{version}}",
+        "failure": "Не удалось подключиться"
+      },
+      "error": {
+        "name_required": "Укажите название",
+        "name_taken": "Подключение с таким названием уже есть",
+        "host_required": "Укажите хост",
+        "port_invalid": "Порт должен быть от 1 до 65535",
+        "database_required": "Укажите базу данных",
+        "user_required": "Укажите пользователя"
+      },
+      "exclude_history": {
+        "label": "Не сохранять запросы этого подключения в History",
+        "help": "Полезно для prod или чувствительных подключений."
+      },
+      "exclude_from_recent_plans": {
+        "label": "Сохранять EXPLAIN-планы",
+        "help": "Если выключено, EXPLAIN-планы из этого подключения не сохраняются в Recent Plans"
+      }
+    },
+    "list": {
+      "aria_label": "Список подключений",
+      "context": {
+        "edit": "Изменить",
+        "duplicate": "Дублировать",
+        "delete": "Удалить"
+      },
+      "search_placeholder": "Поиск по подключениям…",
+      "search_no_results": "Ничего не найдено",
+      "search_aria_label": "Поиск по подключениям"
+    },
+    "delete": {
+      "confirm": {
+        "title": "Удалить подключение?",
+        "body": "Подключение и сохранённый пароль будут удалены безвозвратно.",
+        "type_to_confirm": "Введите {{name}} для подтверждения",
+        "name_label": "Имя подключения:",
+        "type_prompt": "Введите имя выше для подтверждения:"
+      }
+    },
+    "details": {
+      "last_test": {
+        "ok": "Успешно",
+        "failed": "Ошибка",
+        "never": "Не проверялось"
+      },
+      "no_selection": "Выберите подключение в боковой панели.",
+      "host": "Хост",
+      "port": "Порт",
+      "database": "База данных",
+      "username": "Пользователь",
+      "ssl_mode": "Режим SSL",
+      "last_test_label": "Последняя проверка",
+      "test_now": "Проверить",
+      "edit": "Изменить",
+      "delete": "Удалить",
+      "connect_failed": "Не удалось подключиться к базе данных"
+    }
+  },
+  "schema": {
+    "browser_aria": "Браузер схемы",
+    "empty": {
+      "title": "Нет активного подключения",
+      "body": "Выберите подключение слева и нажмите «Подключиться», чтобы увидеть схему."
+    },
+    "connecting": "Загружаем схему…",
+    "refresh": "Обновить",
+    "retry": "Повторить",
+    "search": {
+      "placeholder": "Поиск по имени",
+      "empty_results": "Ничего не найдено по запросу «{{query}}»",
+      "loading": "Загружаем схемы для поиска…"
+    },
+    "tree": {
+      "tables_group": "Таблицы",
+      "views_group": "Представления",
+      "expand": "Раскрыть",
+      "collapse": "Свернуть",
+      "copy_name": "Копировать имя",
+      "menu": {
+        "view_data": "Просмотр данных",
+        "edit_structure": "Изменить структуру",
+        "drop": "Удалить",
+        "truncate": "Очистить",
+        "generate_insert": "Сгенерировать INSERT",
+        "soon": "Появится в S{{sprint}}",
+        "suggestGinIndex": "Предложить GIN-индекс…",
+        "buildJsonbQuery": "Построить запрос…"
+      },
+      "badge": {
+        "hypertable": "Hypertable",
+        "partman": "Партиционированный набор (pg_partman)"
+      },
+      "toggle_inferred_schema": "Показать выведенную схему"
+    },
+    "browser": {
+      "open_pgss": "Открыть pg_stat_statements",
+      "pgss_title": "pg_stat_statements"
+    }
+  },
+  "object_details": {
+    "no_selection": "Выберите объект в схеме",
+    "empty": "Нет данных",
+    "section": {
+      "columns": "Колонки",
+      "indexes": "Индексы",
+      "foreign_keys": "Внешние ключи",
+      "definition": "Определение"
+    },
+    "column": {
+      "name": "Имя",
+      "type": "Тип",
+      "nullable": "Nullable",
+      "default": "По умолчанию",
+      "comment": "Комментарий"
+    }
+  },
+  "editor": {
+    "tab": {
+      "plan_diff_title": "Diff: {{left}} vs {{right}}"
+    },
+    "tabs": {
+      "new": "Новая вкладка",
+      "close": "Закрыть {{name}}",
+      "untitled": "untitled-{{n}}",
+      "rename_hint": "Двойной клик — переименовать",
+      "rename_aria": "Имя вкладки",
+      "confirm_discard": {
+        "title": "Закрыть вкладку?",
+        "body": "Несохранённые изменения в \"{{name}}\" будут потеряны.",
+        "confirm": "Закрыть без сохранения",
+        "cancel": "Отмена"
+      }
+    },
+    "empty": {
+      "title": "Нет открытых вкладок",
+      "body": "Нажмите {{cmd}}+T, чтобы начать запрос"
+    },
+    "run": {
+      "button": "Выполнить",
+      "spinner": "Выполняем…",
+      "cancel": "Отменить",
+      "no_connection": "Подключитесь к базе сначала",
+      "no_selection": "Выделите текст для выполнения",
+      "connection_dropdown_label": "Подключение для вкладки",
+      "caption_run_one": "выполнить: {{snippet}}",
+      "caption_run_n": "выполнить: {{snippet}}  ({{count}} запросов)",
+      "shortcut_run_all": "Выполнить всё",
+      "empty_file": "Редактор пуст"
+    },
+    "batch": {
+      "tab_label_rowset": "#{{idx}} {{verb}} · {{rows}} строк",
+      "tab_label_dml": "#{{idx}} {{verb}} · {{rows}} затронуто",
+      "tab_label_error": "#{{idx}} ошибка",
+      "summary_ok": "Готов · {{ok}}/{{total}} OK · {{ms}} мс",
+      "summary_failed": "Запрос {{idx}}/{{total}} упал: {{code}}",
+      "intermediate_truncated": "Показано первые 500 строк. Промежуточные результаты не пагинируются — выделите этот запрос и запустите отдельно для полной выборки.",
+      "confirm": {
+        "title": "Подтвердить опасный батч",
+        "lead_one": "Будет выполнено {{total}} запросов на {{env}}, из них {{count}} опасный:",
+        "lead_few": "Будет выполнено {{total}} запросов на {{env}}, из них {{count}} опасных:",
+        "lead_many": "Будет выполнено {{total}} запросов на {{env}}, из них {{count}} опасных:",
+        "type_db_prompt": "Введите имя БД для подтверждения:",
+        "confirm_button": "Выполнить {{total}} запросов",
+        "cancel_button": "Отмена"
+      },
+      "read_only_blocked": "Запрос {{idx}} — запись, но подключение в режиме read-only"
+    },
+    "result": {
+      "rows": "{{count}} строк",
+      "rows_loading": "{{n}} / неизвестно строк · загрузка",
+      "rows_prefetching": "{{n}} / неизвестно строк · подгружаем…",
+      "rows_paused": "{{n}} строк загружено · прокрутите для следующей страницы",
+      "rows_done": "{{n}} строк",
+      "rows_returned": "{{n}} строк возвращено · {{cols}} колонок",
+      "rows_affected": "{{n}} строк изменено",
+      "duration": "{{ms}} мс",
+      "truncated": "Показаны первые {{n}} строк. Добавьте LIMIT в запрос для точного диапазона.",
+      "affected": "{{n}} строк изменено",
+      "empty": "Запрос не вернул результата",
+      "cancelled_title": "Запрос отменён",
+      "cancelled_body": "Нажмите Run чтобы повторить.",
+      "sort_subset": "Сортировка: {{col}} {{dir}} (по загруженным)",
+      "error": {
+        "title": "Ошибка запроса",
+        "position": "↳ строка {{line}}, столбец {{col}}",
+        "code": {
+          "no_connection": "Сначала подключитесь к базе данных",
+          "not_connected": "Подключение больше не активно. Переподключитесь и повторите.",
+          "pool_error": "Ошибка пула подключений",
+          "storage_error": "Внутренняя ошибка хранилища",
+          "postgres_error": "Ошибка PostgreSQL",
+          "unknown": "Непредвиденная ошибка",
+          "cancelled": "Запрос отменён",
+          "cursor_lost": "Сессия результата истекла — запустите запрос заново",
+          "read_only_blocked": "Подключение в режиме read-only. Отключите в настройках для разрешения записи."
+        }
+      },
+      "ready": "Готов",
+      "no_connection": "Нет подключения"
+    },
+    "value_modal": {
+      "title_json": "JSON-значение",
+      "title_text": "Значение ячейки"
+    },
+    "explain": {
+      "tab": {
+        "title": "EXPLAIN — {{source}}"
+      },
+      "toolbar": {
+        "mode_explain": "EXPLAIN",
+        "mode_analyze": "EXPLAIN ANALYZE",
+        "option_verbose": "VERBOSE",
+        "option_wal": "WAL",
+        "option_timing": "TIMING",
+        "rerun": "Перезапустить",
+        "cancel": "Отмена",
+        "cached": {
+          "no_rerun": "Откройте SQL в редакторе чтобы перезапустить",
+          "no_options": "Опции зашиты в сохранённый план"
+        },
+        "open_sql": "Открыть SQL в редакторе",
+        "diff_with": "Сравнить с…"
+      },
+      "footer": {
+        "summary": "Время · {{duration}} мс · узлов · {{nodes}}"
+      },
+      "error": {
+        "no_connection": "Подключитесь к базе, чтобы получить план",
+        "not_connected": "Подключение неактивно",
+        "postgres": "Postgres: {{detail}}",
+        "read_only_blocked": "EXPLAIN ANALYZE заблокирован: подключение в режиме read-only",
+        "parse": "План вернулся в неожиданном формате",
+        "source_closed": "Исходная вкладка закрыта",
+        "open_in_editor": "Открыть в редакторе",
+        "unknown": "Неизвестная ошибка"
+      },
+      "empty": "Нажмите «Перезапустить» чтобы получить план",
+      "spinner": "Получаем план…",
+      "insights": {
+        "title": "Подсказки ({{count}})",
+        "empty": "В этом плане нет проблем",
+        "collapse": "Скрыть панель подсказок",
+        "expand": "Показать панель подсказок",
+        "action": {
+          "open_in_editor": "Открыть в редакторе",
+          "copy_sql": "Скопировать SQL"
+        },
+        "copied_toast": "SQL скопирован в буфер обмена",
+        "rule": {
+          "r1": {
+            "title": "Последовательное сканирование большой таблицы",
+            "body": "{{node}} читает {{rows}} строк. B-tree индекс на {{column}} позволил бы Postgres пропустить полное сканирование."
+          },
+          "r2": {
+            "title": "Hash Join сбросил данные на диск",
+            "body": "{{node}} использовал {{disk}} диска для хэша. Увеличьте work_mem или создайте индекс на ключе JOIN — планировщик выберет Merge Join."
+          },
+          "r3": {
+            "title": "Горячий Nested Loop",
+            "body": "{{node}} выполнен {{loops}} раз. Индекс на {{column}} в {{innerRel}} подтолкнёт планировщик к Hash Join."
+          },
+          "r4": {
+            "title": "Устаревшая статистика для {{relation}}",
+            "body": "Оценка {{estRows}} против фактических {{actualRows}} (расхождение в {{ratio}}×). Запустите ANALYZE, чтобы обновить статистику планировщика."
+          }
+        }
+      },
+      "diff": {
+        "picker": {
+          "title": "Выберите план для сравнения",
+          "description": "Выберите сохранённый план из Recent Plans для сравнения с текущим.",
+          "scope_current_conn": "Только текущее подключение",
+          "scope_all": "Все подключения",
+          "empty": "Нет сохранённых планов",
+          "cancel": "Отмена"
+        },
+        "toolbar": {
+          "swap": "Поменять местами",
+          "open_a": "Открыть A в редакторе",
+          "open_b": "Открыть B в редакторе"
+        },
+        "summary": {
+          "cost": "ΔCost: {{leftCost}} → {{rightCost}} ({{deltaPct}})",
+          "time": "ΔTime: {{leftMs}}мс → {{rightMs}}мс ({{deltaPct}})",
+          "shape": "+{{added}} добавлено, -{{removed}} удалено, {{matched}} без изменений",
+          "no_shared": "Планы не имеют общих узлов — вероятно, разные запросы."
+        },
+        "panel": {
+          "tab": {
+            "matched": "Совпавшие ({{count}})",
+            "added": "Добавлены ({{count}})",
+            "removed": "Удалены ({{count}})"
+          },
+          "row": {
+            "delta_cost": "Δcost {{value}} ({{pct}})",
+            "delta_time": "Δtime {{value}}мс",
+            "delta_rows": "Δrows {{value}}",
+            "node_type_changed": "{{from}} → {{to}}",
+            "click_hint": "Нажмите, чтобы подсветить в плане"
+          }
+        },
+        "placeholder": {
+          "left_gone": "План A больше не существует",
+          "right_gone": "План B больше не существует",
+          "both_gone": "Оба плана больше не существуют",
+          "parse_error": "Данные плана повреждены — diff невозможен",
+          "close": "Закрыть diff"
+        }
+      },
+      "iframe_title": "Визуализация EXPLAIN",
+      "node_details": {
+        "close": "Закрыть детали"
+      },
+      "nodes_table": {
+        "expand": "Развернуть",
+        "collapse": "Свернуть",
+        "highlight_active_title": "Узел подсвечен в плане. Кликни, чтобы снять подсветку.",
+        "highlight_inactive_title": "Подсветить узел в плане за инспектором"
+      },
+      "inspector": {
+        "title": "Инспектор плана",
+        "description": "Полная разбивка плана: таблица узлов · raw JSON · SQL запроса{{insightsExtra}}",
+        "description_insights_extra": " · {{count}} подсказок",
+        "tab": {
+          "table": "Таблица узлов",
+          "raw": "Raw JSON",
+          "query": "Запрос"
+        },
+        "duration_label": "Время · {{ms}} мс",
+        "copy_json": "Копировать JSON",
+        "copy_sql": "Копировать SQL",
+        "toast": {
+          "json_copied": "JSON скопирован",
+          "sql_copied": "SQL скопирован",
+          "copy_failed": "Не удалось скопировать"
+        },
+        "close": "Закрыть",
+        "open_button": "Inspector",
+        "open_button_title": "Открыть таблицу узлов, raw JSON и SQL запроса"
+      },
+      "diff_panel": {
+        "col": {
+          "node": "узел",
+          "type": "тип",
+          "note": "замечание"
+        },
+        "no_changes": "✓ Планы идентичны по структуре и стоимости. Различия только во времени выполнения (одна сторона без ANALYZE) — кликни строку, чтобы посмотреть конкретные значения в плане.",
+        "type_pill": {
+          "modified": "modified",
+          "added": "added",
+          "removed": "removed",
+          "unchanged": "unchanged"
+        },
+        "note": {
+          "switch_to_full_scan": "план перешёл к full scan",
+          "switch_to_index": "появился индексный доступ",
+          "stale_stats": "устаревшая статистика",
+          "same_key": "тот же ключ",
+          "no_change": "узел не менялся",
+          "cost_up": "стоимость выросла",
+          "cost_down": "стоимость упала",
+          "added_full_scan": "новый full scan",
+          "added_index": "новый индексный доступ",
+          "added_generic": "узел добавлен",
+          "removed_full_scan": "убрали full scan",
+          "removed_generic": "узел удалён"
+        }
+      }
+    },
+    "snippets": {
+      "select_from_where": {
+        "doc": "SELECT … FROM … WHERE — базовый запрос к одной таблице."
+      },
+      "select_group_having": {
+        "doc": "SELECT … GROUP BY … HAVING — агрегация с пост-фильтром."
+      },
+      "inner_join": {
+        "doc": "INNER JOIN … ON — стандартный equi-join двух таблиц."
+      },
+      "left_join": {
+        "doc": "LEFT JOIN … ON — сохранить все строки слева, NULL справа при отсутствии совпадения."
+      },
+      "insert_into": {
+        "doc": "INSERT INTO … VALUES — шаблон вставки одной строки."
+      },
+      "update_set_where": {
+        "doc": "UPDATE … SET … WHERE — обновление с обязательным WHERE."
+      },
+      "create_table": {
+        "doc": "CREATE TABLE — таблица с BIGSERIAL первичным ключом."
+      },
+      "create_index": {
+        "doc": "CREATE INDEX — однополевый B-tree индекс."
+      },
+      "cte": {
+        "doc": "WITH name AS (…) — шаблон common table expression."
+      },
+      "cte_recursive": {
+        "doc": "WITH RECURSIVE — base + step + JOIN обход дерева."
+      },
+      "window_row_number": {
+        "doc": "ROW_NUMBER() OVER (PARTITION … ORDER BY …) — порядковый номер в партиции."
+      },
+      "window_lag": {
+        "doc": "LAG(col) OVER (…) — значение предыдущей строки в партиции."
+      },
+      "jsonb_get": {
+        "doc": "col->>'key' — извлечь текстовое значение из jsonb."
+      },
+      "jsonb_contains": {
+        "doc": "col @> '{...}'::jsonb — проверка вхождения."
+      },
+      "case_when": {
+        "doc": "CASE WHEN … THEN … ELSE … END — условное выражение."
+      },
+      "union_all": {
+        "doc": "UNION ALL — объединение строк; быстрее UNION (без дедупа)."
+      },
+      "truncate": {
+        "doc": "TRUNCATE TABLE … RESTART IDENTITY CASCADE — быстрая очистка с каскадом по FK."
+      }
+    },
+    "functions": {
+      "count": {
+        "doc": "Подсчёт строк. count(*) считает все; count(expr) — только не-NULL."
+      },
+      "sum": {
+        "doc": "Сумма значений; игнорирует NULL."
+      },
+      "avg": {
+        "doc": "Среднее значений; игнорирует NULL."
+      },
+      "min": {
+        "doc": "Минимальное значение."
+      },
+      "max": {
+        "doc": "Максимальное значение."
+      },
+      "array_agg": {
+        "doc": "Агрегирует значения в массив."
+      },
+      "string_agg": {
+        "doc": "Конкатенация значений через разделитель."
+      },
+      "jsonb_agg": {
+        "doc": "Агрегирует значения в jsonb-массив."
+      },
+      "jsonb_object_agg": {
+        "doc": "Агрегирует пары ключ/значение в jsonb-объект."
+      },
+      "bool_and": {
+        "doc": "True если все входы true."
+      },
+      "bool_or": {
+        "doc": "True если хотя бы один вход true."
+      },
+      "bit_or": {
+        "doc": "Побитовое ИЛИ всех входов."
+      },
+      "row_number": {
+        "doc": "Порядковый номер строки в партиции."
+      },
+      "rank": {
+        "doc": "Ранг в партиции; пропуски при равенстве."
+      },
+      "dense_rank": {
+        "doc": "Ранг в партиции; без пропусков."
+      },
+      "percent_rank": {
+        "doc": "Относительный ранг в [0, 1]."
+      },
+      "cume_dist": {
+        "doc": "Кумулятивное распределение."
+      },
+      "ntile": {
+        "doc": "Распределить строки по N бакетам."
+      },
+      "lag": {
+        "doc": "Значение предыдущей строки партиции."
+      },
+      "lead": {
+        "doc": "Значение следующей строки партиции."
+      },
+      "first_value": {
+        "doc": "Значение первой строки оконной рамки."
+      },
+      "last_value": {
+        "doc": "Значение последней строки оконной рамки."
+      },
+      "nth_value": {
+        "doc": "Значение N-й строки оконной рамки."
+      },
+      "length": {
+        "doc": "Длина текста в символах."
+      },
+      "substring": {
+        "doc": "Извлечь подстроку."
+      },
+      "trim": {
+        "doc": "Удалить ведущие/завершающие символы."
+      },
+      "ltrim": {
+        "doc": "Удалить ведущие символы."
+      },
+      "rtrim": {
+        "doc": "Удалить завершающие символы."
+      },
+      "lower": {
+        "doc": "Привести текст к нижнему регистру."
+      },
+      "upper": {
+        "doc": "Привести текст к верхнему регистру."
+      },
+      "replace": {
+        "doc": "Заменить все вхождения подстроки."
+      },
+      "split_part": {
+        "doc": "Разделить по делителю и вернуть N-ю часть."
+      },
+      "regexp_replace": {
+        "doc": "Замена по регулярному выражению."
+      },
+      "regexp_matches": {
+        "doc": "Вернуть найденные группы как массив текста."
+      },
+      "format": {
+        "doc": "Форматирование текста в стиле printf."
+      },
+      "now": {
+        "doc": "Время начала транзакции (timestamptz)."
+      },
+      "current_timestamp": {
+        "doc": "Время начала транзакции (timestamptz)."
+      },
+      "current_date": {
+        "doc": "Текущая дата."
+      },
+      "age": {
+        "doc": "Разница между двумя timestamp как interval."
+      },
+      "date_trunc": {
+        "doc": "Усечь timestamp до поля (год, месяц, день…)."
+      },
+      "extract": {
+        "doc": "Извлечь поле (год, месяц, dow…) из даты/времени."
+      },
+      "to_char": {
+        "doc": "Форматирование значения как текста по шаблону."
+      },
+      "to_date": {
+        "doc": "Парсинг текста в дату по шаблону."
+      },
+      "to_timestamp": {
+        "doc": "Парсинг текста в timestamp по шаблону."
+      },
+      "make_date": {
+        "doc": "Собрать дату из year/month/day."
+      },
+      "make_timestamp": {
+        "doc": "Собрать timestamp из числовых компонентов."
+      },
+      "justify_interval": {
+        "doc": "Нормализовать interval (перенос месяцев/дней/часов)."
+      },
+      "abs": {
+        "doc": "Абсолютное значение."
+      },
+      "ceil": {
+        "doc": "Наименьшее целое ≥ значения."
+      },
+      "floor": {
+        "doc": "Наибольшее целое ≤ значения."
+      },
+      "round": {
+        "doc": "Округление до целого или N знаков."
+      },
+      "mod": {
+        "doc": "Модуль (остаток от деления)."
+      },
+      "power": {
+        "doc": "base в степени exp."
+      },
+      "jsonb_build_object": {
+        "doc": "Собрать jsonb-объект из чередующихся ключ/значение."
+      },
+      "jsonb_build_array": {
+        "doc": "Собрать jsonb-массив из аргументов."
+      },
+      "jsonb_set": {
+        "doc": "Установить значение по пути внутри jsonb-документа."
+      },
+      "jsonb_strip_nulls": {
+        "doc": "Удалить ключи со значением null из jsonb-объекта."
+      },
+      "jsonb_object_keys": {
+        "doc": "Вернуть верхнеуровневые ключи jsonb-объекта."
+      },
+      "jsonb_typeof": {
+        "doc": "Вернуть тип jsonb-значения как текст."
+      },
+      "to_jsonb": {
+        "doc": "Преобразовать любое значение в jsonb."
+      },
+      "jsonb_array_elements": {
+        "doc": "Развернуть jsonb-массив в набор jsonb-значений."
+      },
+      "jsonb_path_query": {
+        "doc": "Выполнить jsonpath-запрос и вернуть совпавшие значения."
+      },
+      "jsonb_pretty": {
+        "doc": "Красивая печать jsonb-значения."
+      },
+      "array_length": {
+        "doc": "Длина массива по указанному измерению."
+      },
+      "array_position": {
+        "doc": "Индекс элемента в массиве."
+      },
+      "array_remove": {
+        "doc": "Удалить все совпадающие элементы из массива."
+      },
+      "array_replace": {
+        "doc": "Заменить все совпадающие элементы массива."
+      },
+      "unnest": {
+        "doc": "Развернуть массив в строки."
+      },
+      "array_to_string": {
+        "doc": "Объединить элементы массива в текст."
+      },
+      "coalesce": {
+        "doc": "Первый не-NULL аргумент."
+      },
+      "nullif": {
+        "doc": "NULL если аргументы равны, иначе первый."
+      },
+      "greatest": {
+        "doc": "Наибольшее не-NULL значение."
+      },
+      "least": {
+        "doc": "Наименьшее не-NULL значение."
+      },
+      "cast": {
+        "doc": "Преобразовать значение в другой тип."
+      },
+      "generate_series": {
+        "doc": "Сгенерировать ряд целых, дат или timestamp-ов."
+      },
+      "pg_typeof": {
+        "doc": "Имя типа выражения."
+      },
+      "pg_column_size": {
+        "doc": "Размер хранения значения в байтах."
+      }
+    }
+  },
+  "erd": {
+    "tab": {
+      "title": "ERD — {{connection}}",
+      "title_filtered": "ERD — {{connection}} ({{schemas}})",
+      "aria_open": "Открыть ERD-диаграмму для {{connection}}"
+    },
+    "browser": {
+      "open_button": "Сгенерировать ERD",
+      "open_button_aria": "Сгенерировать ERD для подключённой базы",
+      "open_button_disabled": "Сначала подключитесь к базе"
+    },
+    "loading": "Загрузка графа схемы…",
+    "empty": {
+      "title": "Нечего отрисовывать",
+      "body": "В выбранных схемах нет таблиц. Попробуйте другой фильтр."
+    },
+    "error": {
+      "title": "Не удалось построить ERD",
+      "retry": "Повторить"
+    },
+    "toolbar": {
+      "filter_label": "Схема",
+      "filter_all": "Все схемы",
+      "fit": "Подогнать к экрану",
+      "fit_aria": "Подогнать диаграмму к размерам экрана",
+      "zoom_in": "Приблизить",
+      "zoom_out": "Отдалить",
+      "zoom_reset": "Сбросить масштаб (100%)",
+      "export": "Экспорт ▾",
+      "export_png": "Экспорт в PNG",
+      "export_svg": "Экспорт в SVG",
+      "stats": "Таблиц: {{tableCount}} · FK: {{fkCount}} · раскладка за {{layoutMs}} мс"
+    },
+    "node": {
+      "pk_aria": "Первичный ключ",
+      "fk_aria": "Внешний ключ",
+      "nullable_aria": "NULL допустим",
+      "more_columns": "ещё {{count}}",
+      "card_aria": "Таблица {{schema}}.{{table}} — колонок: {{columnCount}}; первичных ключей: {{pkCount}}; внешних ключей: {{fkCount}}"
+    },
+    "canvas": {
+      "aria_label": "ERD-диаграмма"
+    },
+    "edit": {
+      "toggle": {
+        "label": "Режим редактирования",
+        "tooltip": "Редактировать схему (⌘E)"
+      },
+      "new_table": "+ Новая таблица",
+      "add_column": "+ Добавить колонку",
+      "apply": "Применить",
+      "discard": "Отменить",
+      "cancel": "Отмена",
+      "undo": "Отменить действие",
+      "redo": "Повторить",
+      "reset_layout": "Сбросить раскладку",
+      "preview": {
+        "title": "Предпросмотр DDL",
+        "statement_count": "{{n}} statement(s)",
+        "empty": "Нет ожидающих изменений",
+        "warning_count": "{{n}} предупреждений",
+        "error": {
+          "title": "Применение не удалось"
+        }
+      },
+      "confirm": {
+        "apply": {
+          "title": "Применить изменения схемы?",
+          "body": "{{n}} statement(s) будет применено к {{conn}} в одной транзакции. Если хотя бы один не удастся, ни одно изменение не сохранится."
+        },
+        "discard": {
+          "title": "Отменить изменения схемы?",
+          "body": "В редакторе ERD есть {{n}} неприменённых изменений. Закрытие отменит их."
+        },
+        "reset_layout": "Сбросить позиции всех таблиц к авто-раскладке?"
+      },
+      "fk": {
+        "modal": {
+          "title": "Добавить внешний ключ",
+          "from": "Источник",
+          "to": "Цель",
+          "constraint_name": "Имя ограничения",
+          "add": "Добавить FK",
+          "not_pk_unique": "не PK/UNIQUE"
+        }
+      },
+      "validation": {
+        "empty_name": "Имя обязательно",
+        "duplicate_table": "Таблица {{name}} уже существует в схеме {{schema}}",
+        "duplicate_column": "Колонка {{name}} уже существует в таблице",
+        "fk_type_mismatch": "Несоответствие типов: {{source}} → {{target}}",
+        "fk_target_not_unique": "Целевая колонка не PRIMARY KEY и не UNIQUE",
+        "no_columns": "В таблице нет колонок"
+      },
+      "toast": {
+        "apply_success": "Схема обновлена ({{n}} statement(s), {{ms}} мс)"
+      }
+    }
+  },
+  "toast": {
+    "connection": {
+      "saved": "Подключение сохранено",
+      "deleted": "Подключение удалено",
+      "duplicated": "Подключение дублировано",
+      "test_failed": "Не удалось проверить подключение",
+      "test_succeeded": "Подключение успешно · {{ms}} мс",
+      "test_succeeded_with_version": "Подключение успешно · {{ms}} мс · {{version}}",
+      "uri_invalid": "Некорректная строка подключения",
+      "delete_failed": "Не удалось удалить подключение",
+      "error": {
+        "notFound": "Подключение не найдено",
+        "duplicateName": "Подключение с таким именем уже существует",
+        "invalidInput": "Некорректный ввод: {{detail}}",
+        "invalidUri": "Некорректная строка подключения",
+        "storage": "Ошибка локального хранилища",
+        "keychain": "Нет доступа к keychain: {{detail}}",
+        "passwordMissing": "У подключения «{{name}}» не сохранён пароль — введите его, чтобы подключиться.",
+        "postgres": "Ошибка PostgreSQL: {{detail}}",
+        "notConnected": "Подключение больше не активно",
+        "io": "Ошибка ввода-вывода"
+      }
+    }
+  },
+  "history": {
+    "tab": {
+      "title": "История"
+    },
+    "search": {
+      "placeholder": "Поиск по SQL…",
+      "aria": "Поиск в истории запросов по SQL"
+    },
+    "filter": {
+      "connection": {
+        "all": "Все подключения",
+        "deleted": "(удалено)"
+      },
+      "status": {
+        "all": "Все статусы",
+        "ok": "Успех",
+        "error": "Ошибка",
+        "cancelled": "Отменено"
+      },
+      "pinned_only": "Только закреплённые"
+    },
+    "menu": {
+      "refresh": "Обновить",
+      "clear_for_connection": "Очистить историю для этого подключения…",
+      "export": "Экспортировать в .ide99…"
+    },
+    "row": {
+      "replay": "Повторить",
+      "pin": "Закрепить",
+      "unpin": "Открепить",
+      "copy_sql": "Копировать SQL",
+      "delete": "Удалить"
+    },
+    "empty": {
+      "title": "Запросов пока нет",
+      "body": "Выполните любой запрос — он появится в истории."
+    },
+    "error": {
+      "title": "Не удалось загрузить историю",
+      "retry": "Повторить"
+    },
+    "replay": {
+      "connection_deleted": "Подключение для этого запроса больше не существует."
+    },
+    "export": {
+      "dialog_title": "Экспорт истории запросов",
+      "success": "Экспортировано {{count}} запросов в {{path}}"
+    },
+    "pagination": {
+      "showing": "Показано {{shown}} из {{total}}",
+      "load_more": "Показать ещё"
+    },
+    "confirm": {
+      "clear_for_connection": "Очистить всю историю для этого подключения? Действие необратимо.",
+      "delete_row": "Удалить эту запись из истории?"
+    }
+  },
+  "recent_plans": {
+    "tab": {
+      "title": "Recent Plans"
+    },
+    "empty": "Сохранённых планов пока нет",
+    "empty_filtered": "Под текущий фильтр ничего не найдено",
+    "row": {
+      "cost": "стоимость {{cost}}",
+      "no_cost": "—",
+      "action": {
+        "open": "Открыть",
+        "menu": "Ещё",
+        "delete": "Удалить",
+        "copy_sql": "Скопировать SQL"
+      },
+      "toggle_pin": "Закрепить (не выселяется по LRU-кэпу)",
+      "unpin": "Открепить"
+    },
+    "preview": {
+      "placeholder": "Выберите план для предпросмотра",
+      "open": "Открыть в редакторе плана",
+      "open_sql": "Открыть SQL в редакторе",
+      "slow": "медленный",
+      "kpi": {
+        "execution": "Выполнение",
+        "planning": "Планирование",
+        "total_cost": "Полная стоимость",
+        "nodes": "Узлов"
+      },
+      "hotspots": {
+        "title": "Топ-3 узких места"
+      },
+      "compare": {
+        "title": "Сравнение с предыдущим запуском",
+        "cost_label": "ΔCost",
+        "time_label": "ΔTime",
+        "changes_label": "Изменения",
+        "added_count": "+{{count}} узла",
+        "removed_count": "−{{count}} узла",
+        "modified_count": "~{{count}} cost",
+        "identical": "структура и метрики совпадают"
+      }
+    },
+    "filter": {
+      "search": "Поиск по SQL…",
+      "table_any": "Любая таблица",
+      "cost_min": "Мин. стоимость",
+      "cost_max": "Макс. стоимость",
+      "conn_all": "Все подключения",
+      "reset": "Сброс"
+    },
+    "load_more": "Загрузить ещё",
+    "delete_confirm": "Удалить этот сохранённый план?",
+    "deleted": "План удалён",
+    "toast": {
+      "connection_gone": "Подключение «{{name}}» больше не существует",
+      "plan_gone": "План больше не существует"
+    },
+    "compare": {
+      "toggle": "Сравнить",
+      "selected_count": "Выбрано {{count}} / 2",
+      "cancel": "Отмена",
+      "run": "Сравнить 2 плана",
+      "row_label_a": "A:",
+      "row_label_b": "B:"
+    }
+  },
+  "health": {
+    "tab": {
+      "title": "Здоровье: {{connection}}",
+      "aria_open": "Открыть Health для {{connection}}"
+    },
+    "header": {
+      "title": "Здоровье: {{connection}}",
+      "title_inline": "Здоровье · {{connection}}",
+      "last_refreshed_never": "Никогда не обновлялось",
+      "last_refreshed": "Обновлено: {{relative}}",
+      "auto_refresh_summary": "автообновление {{interval}}",
+      "auto_refresh_off": "выкл",
+      "auto_refresh_value": "{{seconds}} с",
+      "refresh_now": "Обновить сейчас",
+      "refresh_now_aria": "Обновить сейчас (Cmd+R / Ctrl+R)",
+      "auto_refresh_label": "Автообновление:",
+      "refreshing": "Обновляем…",
+      "pill_critical": "{{count}} критично",
+      "pill_warning": "{{count}} предупреждение",
+      "pill_ok": "{{count}} ок"
+    },
+    "refresh": {
+      "off": "Выкл",
+      "5s": "5 секунд",
+      "10s": "10 секунд",
+      "30s": "30 секунд",
+      "1m": "1 минута",
+      "5m": "5 минут",
+      "cap_tooltip": "Опрос чаще {{minMs}}мс отключён на {{env}}-подключениях, чтобы не засорять логи"
+    },
+    "group": {
+      "storage": "Хранилище",
+      "connections_cache": "Подключения и кеш",
+      "queries_replication": "Запросы и репликация",
+      "other": "Другое"
+    },
+    "card": {
+      "db_size": {
+        "title": "Размер базы",
+        "explanation": "Общий размер базы данных на диске через pg_database_size(). Sparkline за 7 дней показывает рост по снимкам, которые делаются при открытии этой вкладки Health.",
+        "growth": "{{delta}} / 7д ({{pct}})",
+        "growth_collecting": "Собираем тренд ({{points}}/7 дней)"
+      },
+      "bloat": {
+        "title": "Раздутие таблиц",
+        "explanation": "Оценка доли мёртвых кортежей в таблице через pure-SQL эвристику (pgstattuple не требуется). Чем больше — тем больше зря занято места; рассмотрите VACUUM FULL или REINDEX.",
+        "row": "{{schema}}.{{table}}: {{pct}} раздутие ({{size}})",
+        "more": "+ ещё {{count}}"
+      },
+      "slow_queries": {
+        "title": "Медленные запросы",
+        "explanation": "Топ запросов из pg_stat_statements по общему времени выполнения. Требует расширения pg_stat_statements.",
+        "row": "avg {{mean}}мс · {{calls}} вызовов"
+      },
+      "missing_indexes": {
+        "title": "Возможно нужны индексы",
+        "explanation": "Таблицы с высоким соотношением seq_scan к idx_scan по pg_stat_user_tables — кандидаты на добавление индекса. Проверьте через EXPLAIN перед действием.",
+        "row": "{{schema}}.{{table}}: {{seq}} seq против {{idx}} idx"
+      },
+      "unused_indexes": {
+        "title": "Неиспользуемые индексы",
+        "explanation": "Индексы с нулём сканов со времени последнего сброса статистики (исключая первичные ключи). Удаляйте только после проверки, что индекс не используется фоновыми задачами.",
+        "row": "{{schema}}.{{index}} на {{table}} ({{size}})"
+      },
+      "cache_hit": {
+        "title": "Попадания в кэш",
+        "explanation": "Доля чтений из shared_buffers вместо диска. Ниже 95% — стоит увеличить shared_buffers или проверить scan-heavy запросы."
+      },
+      "active_connections": {
+        "title": "Активные подключения",
+        "explanation": "Текущие подключения к базе vs max_connections. Следите за исчерпанием пула; idle-in-transaction — тревожный сигнал.",
+        "current": "{{current}} / {{max}}",
+        "by_state": "{{state}}: {{count}}",
+        "state": {
+          "active": "активны",
+          "idle": "простаивают",
+          "idle_in_transaction": "idle-in-tx",
+          "idle_in_transaction_aborted": "idle-in-tx (aborted)",
+          "fastpath_function_call": "fastpath",
+          "disabled": "отключены"
+        }
+      },
+      "long_running": {
+        "title": "Долгие запросы (>30с)",
+        "explanation": "Активные запросы, выполняющиеся более 30 секунд. Долгие транзакции блокируют VACUUM и обновление статистики.",
+        "row": "PID {{pid}} · {{duration}}с · {{state}}"
+      },
+      "vacuum_status": {
+        "title": "Статус VACUUM",
+        "explanation": "Таблицы, не получавшие VACUUM (ручной или авто) последние 7 дней. Устаревшая статистика приводит к плохим планам; рассмотрите запуск VACUUM вручную.",
+        "row": "{{schema}}.{{table}}: {{days}}д назад",
+        "row_never": "{{schema}}.{{table}}: никогда"
+      },
+      "replication_lag": {
+        "title": "Лаг репликации",
+        "explanation": "Слоты репликации и их лаг в байтах/секундах из pg_replication_slots и pg_stat_replication. Для деталей слотов нужна роль pg_monitor.",
+        "slot": "{{slot}}: {{lag_bytes}} ({{lag_seconds}}с)",
+        "no_replicas": "Репликация не настроена"
+      },
+      "wal_throughput": {
+        "title": "WAL throughput",
+        "explanation": "Скорость записи WAL (среднее с момента сброса статистики pg_stat_wal). Доступно с PostgreSQL 14.",
+        "since_reset": "среднее с момента сброса {{relative}}",
+        "no_data": "нет статистики"
+      },
+      "jsonb_index_suggestions": {
+        "title": "Рекомендации по GIN-индексам JSONB",
+        "explanation": "Топ рекомендаций по GIN-индексам добытых из pg_stat_statements JSONB операторов. Требует расширение pg_stat_statements.",
+        "row": "{{schema}}.{{table}}.{{column}}  {{op}}  ·  {{calls}} вызовов · {{time}} суммарно",
+        "viewAction": "Открыть",
+        "empty": "В pg_stat_statements не найдено JSONB-операций"
+      }
+    },
+    "status": {
+      "ok": "Здорово",
+      "warn": "Требует внимания",
+      "danger": "Проблема"
+    },
+    "empty": {
+      "no_data": "Проблем не обнаружено ✓",
+      "no_replicas": "Репликация не настроена"
+    },
+    "unavailable": {
+      "title": "Расширение {{extension}} не установлено",
+      "body": "Установите, чтобы включить эту карточку:",
+      "copy": "Скопировать SQL"
+    },
+    "forbidden": {
+      "title": "Недостаточно прав",
+      "body": "Этой карточке нужна роль {{required_role}}. Попросите DBA выполнить:",
+      "copy": "Скопировать SQL"
+    },
+    "error": {
+      "title": "Не удалось загрузить",
+      "details": "Подробности",
+      "retry": "Повторить"
+    },
+    "tooltip": {
+      "what_does_this_mean": "Что это значит?"
+    },
+    "actions": {
+      "label": {
+        "reindexTable": "REINDEX",
+        "vacuum": "VACUUM",
+        "analyze": "ANALYZE",
+        "dropIndex": "DROP INDEX",
+        "killPid": "Прервать сессию",
+        "explain": "EXPLAIN"
+      },
+      "tooltip": {
+        "reindexTable": "Перестроить индекс конкурентно — короткая блокировка",
+        "vacuum": "Освободить место от мёртвых кортежей — минимум блокировок",
+        "analyze": "Обновить статистику планировщика",
+        "dropIndex": "Удалить этот неиспользуемый индекс (конкурентно)",
+        "killPid": "Прервать сессию (pg_cancel_backend)",
+        "explain": "Открыть этот запрос на отдельной EXPLAIN-вкладке"
+      },
+      "title": {
+        "reindexTable": "Перестроить таблицу?",
+        "vacuum": "Выполнить VACUUM таблицы?",
+        "analyze": "Выполнить ANALYZE таблицы?",
+        "dropIndex": "Удалить индекс?",
+        "killPid": "Прервать сессию?"
+      },
+      "run": {
+        "reindexTable": "Запустить REINDEX",
+        "vacuum": "Запустить VACUUM",
+        "analyze": "Запустить ANALYZE",
+        "dropIndex": "Удалить",
+        "killPid": "Прервать"
+      },
+      "running": {
+        "reindexTable": "Перестраиваю…",
+        "vacuum": "Выполняю VACUUM…",
+        "analyze": "Анализирую…",
+        "dropIndex": "Удаляю…",
+        "killPid": "Прерываю…",
+        "indeterminate": "Работаю…"
+      },
+      "phase": {
+        "starting": "запуск",
+        "scanning_heap": "сканирую heap",
+        "vacuuming_indexes": "очищаю индексы",
+        "vacuuming_heap": "очищаю heap",
+        "cleaning_up_indexes": "финальная очистка индексов",
+        "truncating_heap": "усекаю heap",
+        "performing_final_cleanup": "финальная очистка",
+        "building_index": "строю индекс",
+        "validating_index": "проверяю индекс",
+        "waiting_for_writers_to_finish": "жду writer-ов",
+        "loading_tuples_in_tree": "загружаю кортежи в дерево",
+        "swapping_relation_files": "переключаю файлы отношения"
+      },
+      "impact": {
+        "reindex": "Короткая блокировка; размер до: {{size}}.",
+        "vacuum": "Может занять минуты для {{size}}; минимум блокировок.",
+        "analyze": "Обновляет статистику; ShareUpdateExclusiveLock.",
+        "drop_index": "Освободит {{size}}; конкурентно — без блокировки записей.",
+        "kill_cancel": "Отправит pg_cancel_backend({{pid}}). Если сессия не остановится, спрошу про terminate.",
+        "kill_terminate": "Жёстко завершит сессию {{pid}}."
+      },
+      "confirm": {
+        "body": "Подключение {{environment}} требует подтверждения. Введите {{target}}.",
+        "inputLabel": "Введите цель для подтверждения"
+      },
+      "fallback": {
+        "title": "pg_cancel_backend не сработал",
+        "body": "Сессия {{pid}} ещё активна. Отправить pg_terminate_backend? Введите {{pid}} ещё раз для подтверждения.",
+        "confirm": "Завершить"
+      },
+      "toast": {
+        "completed": "{{label}} завершено за {{duration}}.",
+        "notFound": "Сессия {{pid}} уже завершилась сама.",
+        "terminated": "Сессия {{pid}} завершена за {{duration}}.",
+        "failed": "{{label}} не удалось: {{message}}"
+      },
+      "duration": {
+        "ms": "{{ms}} мс",
+        "s": "{{s}} с"
+      }
+    }
+  },
+  "live_ops": {
+    "tab": {
+      "title": "Live Ops",
+      "name_with_conn": "Live Ops · {{name}}"
+    },
+    "header": {
+      "interval_label": "Обновление",
+      "interval_off": "Выкл",
+      "interval_1s": "1 с",
+      "interval_2s": "2 с",
+      "interval_5s": "5 с",
+      "interval_10s": "10 с",
+      "env_capped_tooltip": "Минимум {{min}}с на {{env}} (env-cap)",
+      "last_refresh": "Обновлено: {{relative}}",
+      "x_ago": "{{seconds}} с назад",
+      "refreshing": "Обновляю…",
+      "refresh_now": "Обновить"
+    },
+    "subtab": {
+      "sessions": "Сессии",
+      "slow": "Медленные запросы",
+      "replication": "Репликация"
+    },
+    "sessions": {
+      "mode": {
+        "blocked": "Только заблокированные",
+        "all": "Все"
+      },
+      "view": {
+        "dag": "DAG",
+        "list": "Список"
+      },
+      "level": {
+        "blockers": "L0 · BLOCKERS",
+        "waiters_n": "L{{n}} · WAITERS",
+        "others": "ПРОЧИЕ"
+      },
+      "summary": {
+        "sessions_one": "{{count}} сессия",
+        "sessions_few": "{{count}} сессии",
+        "sessions_many": "{{count}} сессий",
+        "blocked_count_one": "{{count}} заблокирована",
+        "blocked_count_few": "{{count}} заблокированы",
+        "blocked_count_many": "{{count}} заблокировано"
+      },
+      "aria": {
+        "chain_idle": "Активных сессий: {{count}}, блокировок нет",
+        "chain_active": "Активных сессий: {{sessions}}, PID {{blockerPid}} блокирует ещё {{blocked}}"
+      },
+      "actions": {
+        "terminate": "Завершить",
+        "cancel": "Отменить запрос",
+        "highlight_blocker": "подсветить блокера"
+      },
+      "blocked_by": "от pid {{pid}}",
+      "lock": "{{type}}",
+      "wait_short": "ожидание:",
+      "hint": "Правый клик на сессии — действия",
+      "cancel": "Отменить запрос (pg_cancel_backend)",
+      "terminate": "Завершить сессию (pg_terminate_backend, force)",
+      "empty_blocked": "Сейчас никто никого не блокирует ✓",
+      "empty_all": "Нет активных сессий",
+      "truncated": "Показаны первые 200 сессий",
+      "list": {
+        "col": {
+          "pid": "pid",
+          "user": "пользователь",
+          "state": "состояние",
+          "duration": "длительность",
+          "wait": "ожидание",
+          "query": "запрос"
+        }
+      },
+      "node": {
+        "wait": "ожидание: {{type}}/{{event}}"
+      },
+      "state": {
+        "active": "активна",
+        "idle": "простаивает",
+        "idle_in_transaction": "idle-in-tx",
+        "idle_in_transaction_aborted": "idle-in-tx (aborted)",
+        "fastpath_function_call": "fastpath",
+        "disabled": "отключена"
+      }
+    },
+    "slow": {
+      "col": {
+        "mean": "Среднее",
+        "total": "Сумма",
+        "calls": "×",
+        "rows": "Строк",
+        "query": "Запрос"
+      },
+      "search_placeholder": "Поиск по запросу…",
+      "time_range": {
+        "label": "Период",
+        "1h": "За последний час",
+        "24h": "За 24 часа",
+        "all": "Всё время"
+      },
+      "summary": {
+        "queries_one": "{{count}} запрос",
+        "queries_few": "{{count}} запроса",
+        "queries_many": "{{count}} запросов",
+        "p99": "{{ms}} ms p99"
+      },
+      "rows_per_call": "{{count}} / запрос",
+      "explain": "EXPLAIN",
+      "empty": "Нет запросов в pg_stat_statements",
+      "empty_filtered": "Нет совпадений по запросу",
+      "click_hint": "Нажмите на строку — откроется в редакторе"
+    },
+    "replication": {
+      "no_replication": "Репликация не настроена ✓",
+      "slots": "Слоты репликации ({{count}})",
+      "publications": "Публикации ({{count}})",
+      "subscriptions": "Подписки ({{count}})",
+      "show_empty": "Показать пустые секции ({{count}})",
+      "inactive": "неактивен",
+      "slot_growth_warn": "Слот удерживает >1 ГБ; проверьте подписчика",
+      "slot_growth_danger": "Слот удерживает >5 ГБ; подписчик мог упасть",
+      "summary": {
+        "slots_one": "{{count}} слот",
+        "slots_few": "{{count}} слота",
+        "slots_many": "{{count}} слотов",
+        "critical": "{{count}} critical",
+        "warn": "{{count}} warn"
+      },
+      "lag_seconds": "{{seconds}} с лаг",
+      "lag_seconds_short": "{{seconds}} с",
+      "drop_slot": "DROP slot",
+      "tables_count_one": "{{count}} таблица",
+      "tables_count_few": "{{count}} таблицы",
+      "tables_count_many": "{{count}} таблиц",
+      "tables_list_label": "tables:",
+      "last_msg_label": "last_msg",
+      "publications_label": "publications:"
+    },
+    "error": {
+      "forbidden": "Недостаточно прав (нужна роль {{role}})",
+      "forbidden_grant": "GRANT {{role}} TO current_user;",
+      "unavailable": "Расширение {{extension}} не установлено",
+      "query_failed": "Запрос упал: {{message}}",
+      "retry": "Повторить",
+      "details": "Детали"
+    }
+  },
+  "jsonb": {
+    "modal": {
+      "title": "Редактирование JSONB: {{table}}.{{column}} (строка {{rowSummary}})",
+      "titleNoPk": "Редактирование JSONB: {{table}}.{{column}} (строка {{rowIdx}})",
+      "titleV2": "Редактирование JSONB: {{target}} · строка {{row}}",
+      "save": "Сохранить",
+      "cancel": "Отмена",
+      "close": "Закрыть",
+      "discardConfirm": "Отменить несохранённые изменения?"
+    },
+    "mode": {
+      "text": "Текст",
+      "tree": "Дерево",
+      "table": "Таблица",
+      "tableDisabledTooltip": "Табличный режим работает только для массива объектов с не более чем 12 уникальными ключами",
+      "tablistLabel": "Режим отображения"
+    },
+    "tree": {
+      "addKey": "+ Добавить ключ",
+      "addItem": "+ Добавить элемент",
+      "delete": "Удалить",
+      "canonicalNote": "PostgreSQL хранит jsonb в каноническом порядке ключей; здесь показан твой порядок редактирования, но в хранилище порядок нормализуется.",
+      "type": {
+        "string": "string",
+        "number": "number",
+        "boolean": "boolean",
+        "null": "null",
+        "object": "object",
+        "array": "array, {{count}} items"
+      }
+    },
+    "text": {
+      "invalidJson": "Некорректный JSON: {{message}}"
+    },
+    "diff": {
+      "willSaveAs": "Будет сохранено как",
+      "setOps": "{{count}} операций jsonb_set",
+      "fullReplace": "полная замена",
+      "noChanges": "Изменений нет"
+    },
+    "readonly": {
+      "banner": "Результат только для чтения. Скопировать шаблон UPDATE:",
+      "copyTemplate": "Копировать шаблон",
+      "reason": {
+        "noBaseTable": "в результате нет базовой таблицы (только вычисляемые колонки)",
+        "multipleTables": "результат объединяет несколько таблиц",
+        "matview": "материализованное представление (используйте REFRESH MATERIALIZED VIEW)",
+        "foreignTable": "foreign-таблица (не поддерживается в S15)",
+        "viewWithoutPk": "представление без первичного ключа",
+        "partitionedNoPk": "партиционированная таблица без первичного ключа",
+        "noColumnMetadata": "нет метаданных источника колонки"
+      }
+    },
+    "prod": {
+      "confirmTitle": "Подтвердите запись в production-базу",
+      "confirmBody": "Сейчас будет выполнен UPDATE {{table}} на production-подключении. Проверьте SQL выше и введите имя таблицы для подтверждения:",
+      "confirmInputLabel": "Введите {{table}}",
+      "apply": "Применить"
+    },
+    "inference": {
+      "panel": {
+        "title": "Предполагаемая схема",
+        "sampledRowsCount": "{{count}} выборок строк",
+        "keysCount": "{{count}} ключей",
+        "ago": "{{relative}} назад",
+        "agoNow": "только что",
+        "agoSeconds": "{{count}}с назад",
+        "agoMinutes": "{{count}}мин назад",
+        "agoHours": "{{count}}ч назад",
+        "agoDays": "{{count}}дн назад",
+        "agoUnknown": "—",
+        "headerSummary": "{{title}} · {{rows}} · {{keys}} · {{ago}}",
+        "staleBadge": "Устарело",
+        "staleTooltip": "Статистика указывает на изменения в таблице — обновляется в фоне.",
+        "reinferAction": "Пересчитать",
+        "empty": "Ключи не найдены (колонка может быть полностью NULL или скаляр).",
+        "error": "Не удалось вычислить схему: {{message}}",
+        "retryAction": "Повторить",
+        "statusPending": "Считаем схему по выборке…",
+        "ariaRegion": "Предполагаемая схема JSONB для колонки {{column}}",
+        "togglePanel": "Показать/скрыть предполагаемую схему",
+        "modalSection": {
+          "expand": "Предполагаемая схема",
+          "collapse": "Предполагаемая схема"
+        }
+      }
+    },
+    "builder": {
+      "title": "Конструктор запроса: {{table}}.{{column}}",
+      "operatorLabel": "Оператор",
+      "operator": {
+        "existence": "? — наличие ключа",
+        "containment": "@> — вложенность",
+        "pathExtract": "#> — извлечение пути",
+        "pathPredicate": "@? — предикат пути"
+      },
+      "pathLabel": "Путь",
+      "pathPlaceholder": "Выберите путь из inferred-схемы слева",
+      "valueLabel": "Значение",
+      "extractMode": {
+        "projection": "Как SELECT-проекция",
+        "comparison": "Как сравнение в WHERE"
+      },
+      "comparator": {
+        "eq": "==",
+        "ne": "!=",
+        "gt": ">",
+        "lt": "<",
+        "ge": ">=",
+        "le": "<=",
+        "likeRegex": "like_regex"
+      },
+      "previewLabel": "Сгенерированный SQL",
+      "warning": {
+        "existenceTopLevel": "? проверяет только ключи верхнего уровня объекта по этому пути.",
+        "pathTooDeep": "Достигнут предел глубины пути ({{limit}})."
+      },
+      "error": {
+        "invalidJson": "Невалидный JSON: {{message}}",
+        "typeMismatch": "Ожидалось {{expected}}, получено {{got}}"
+      },
+      "actions": {
+        "generate": "Сгенерировать → новая вкладка",
+        "cancel": "Отмена"
+      },
+      "buildFromCellTitle": "Построить запрос"
+    },
+    "suggester": {
+      "title": "Рекомендованный GIN-индекс: {{table}}.{{column}}",
+      "recommendedHeader": "Рекомендуемый индекс",
+      "rationale": {
+        "header": "Почему {{opClass}}",
+        "minedSummary": "Найдено {{calls}} вызовов · {{time}} суммарно — операторы {{ops}}.",
+        "jsonbOpsBenefit": "jsonb_ops покрывает {{ops}} и является самым безопасным дефолтом.",
+        "jsonbPathOpsBenefit": "jsonb_path_ops примерно на 30% компактнее jsonb_ops и быстрее на path-запросах.",
+        "expressionBenefit": "Expression-индекс работает по одному ключу — самый компактный и быстрый для сравнения на равенство."
+      },
+      "rationaleGeneric": "Нет данных об использовании — рекомендуется самый безопасный дефолт.",
+      "sizeEstimateLabel": "Оценка размера индекса",
+      "sizeEstimateValue": "~{{size}} (эвристика: pg_class × 0.3)",
+      "speedupLabel": "Оценка ускорения",
+      "speedupComputing": "Считаем…",
+      "speedupComputed": "Базовая стоимость: {{baseline}} → С гипотетическим индексом: {{hypothetical}} (~{{pct}}% сокращение)",
+      "speedupUnavailable": {
+        "hypopgMissing": "Установите HypoPG для оценки гипотетического ускорения:",
+        "hypopgInstallSql": "CREATE EXTENSION hypopg;",
+        "pgTooOld": "Гипотетический EXPLAIN требует PostgreSQL 16+ (текущая: {{actual}})",
+        "noRepresentativeQuery": "Нет данных об использовании — установите pg_stat_statements для оценки.",
+        "plannerError": "Ошибка планировщика: {{message}}"
+      },
+      "representativeQueryLabel": "Пример запроса (из pg_stat_statements):",
+      "actions": {
+        "copy": "Скопировать SQL",
+        "openInEditor": "Открыть в редакторе",
+        "close": "Закрыть",
+        "retry": "Повторить",
+        "copied": "Скопировано"
+      },
+      "extensions": {
+        "pgStatStatementsRequiredCard": "pg_stat_statements не установлен",
+        "pgStatStatementsRequiredColumn": "Показана общая рекомендация — установите pg_stat_statements для ранжирования по частоте использования."
+      }
+    },
+    "toast": {
+      "saved": "Сохранено ({{rows}} строка, {{duration}} мс)",
+      "rowVanished": "Строка не найдена — результат может быть устаревшим",
+      "saveFailed": "Ошибка сохранения: {{message}}"
+    }
+  },
+  "common": {
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "create": "Создать",
+    "edit": "Изменить",
+    "delete": "Удалить"
+  },
+  "snippets": {
+    "palette": {
+      "title": "Палитра сниппетов",
+      "searchPlaceholder": "Поиск сниппетов…"
+    },
+    "badge": {
+      "builtin": "Встроенный",
+      "user": "Свой",
+      "overridden": "Переопределено"
+    },
+    "toolbar": {
+      "new": "Создать",
+      "import": "Импорт…",
+      "export": "Экспорт…"
+    },
+    "editor": {
+      "newTitle": "Новый сниппет",
+      "editTitle": "Изменить сниппет",
+      "label": "Название",
+      "prefix": "Префикс",
+      "body": "Тело",
+      "documentation": "Документация"
+    }
+  },
+  "easyMode": {
+    "toggle": {
+      "easyOn": "Easy",
+      "standardOn": "Standard",
+      "hint": "Переключение между Easy и Standard режимом (Cmd+Shift+E)"
+    },
+    "bidi": {
+      "title": "Сгенерированный SQL",
+      "toggle": "Скрыть/показать панель",
+      "hint": "Редактируйте этот SQL — GUI наверху обновится автоматически."
+    },
+    "help": {
+      "restartTour": "Запустить обучающий тур"
+    }
+  },
+  "conceptTooltip": {
+    "trigger": "Что это такое?",
+    "transactionHint": "Выполняется в одной"
+  },
+  "easyLinter": {
+    "headline": "Типичная ошибка",
+    "fixLabel": "Подсказка",
+    "ruleLabel": "Правило",
+    "source": "easy-mistakes"
+  },
+  "onboardingTour": {
+    "skip": "Пропустить",
+    "next": "Далее",
+    "previous": "Назад",
+    "finish": "Завершить",
+    "stepProgress": "Шаг {{current}} из {{total}}"
+  },
+  "errorExplain": {
+    "button": "Объяснить простыми словами",
+    "title": "Объяснение ошибки",
+    "codeLabel": "SQLSTATE {{code}}",
+    "originalMessage": "Исходное сообщение PostgreSQL",
+    "explanationHeading": "Что это значит",
+    "classExplanationHeading": "Класс ошибки (точного совпадения нет)",
+    "suggestedFix": "Что попробовать",
+    "close": "Закрыть",
+    "askAgent": {
+      "headline": "В нашей таблице нет точного совпадения. Скопируйте контекст ошибки и вставьте его в подключённого AI-агента (Claude Code, Cursor, …) — у него есть полный контекст IDE через ide99 MCP-сервер.",
+      "copy": "Скопировать контекст ошибки",
+      "copied": "Скопировано!"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "snippets": "Сниппеты",
+      "mcp": "AI / MCP",
+      "privacy": "Приватность",
+      "modules": "Модули",
+      "updates": "Обновления",
+      "keymap": "Раскладка",
+      "sharing": "Импорт / Экспорт"
+    },
+    "snippets": {
+      "title": "SQL-сниппеты",
+      "builtins": "Встроенные ({{count}})",
+      "mySnippets": "Мои сниппеты ({{count}})",
+      "empty": "Своих сниппетов ещё нет. Нажмите «+ Создать», чтобы добавить."
+    },
+    "mcp": {
+      "title": "MCP-сервер (подключите своего AI-агента)",
+      "description": "Откройте ide99 для своего AI-агента (Claude Code, Cursor, Windsurf, …) по Model Context Protocol. Агент увидит активное подключение, текущий запрос и последний результат, а безопасные запросы сможет выполнять от твоего имени.",
+      "loading": "Загружаем статус MCP…",
+      "enableLabel": "Включить MCP-сервер",
+      "runningOnPort": "Работает на 127.0.0.1:{{port}}",
+      "authorizedClients": "Авторизованные клиенты",
+      "noClients": "Пока никто не подключён. Используйте «Подключить агента» ниже.",
+      "revoke": "Отозвать",
+      "lastUsed": "Последняя активность: {{when}}",
+      "lastUsedNever": "Не использовался",
+      "connectAgent": "Подключить агента",
+      "connectAgentHint": "Добавьте ide99 как MCP-сервер в Claude Code, Cursor или другой поддерживаемый агент. Каждый агент подключается один раз и при первом запросе спрашивает разрешения прямо в ide99.",
+      "authorize": {
+        "title": "Авторизовать MCP-клиента",
+        "requesting": "{{client}} запрашивает доступ",
+        "scopesHeading": "Запрашиваемые scope-ы",
+        "allow": "Разрешить",
+        "allowReadOnly": "Только чтение",
+        "allowWithWrite": "С записью",
+        "deny": "Отклонить"
+      },
+      "writeConfirm": {
+        "title": "Подтвердить запись?",
+        "kindQuery": "запрос",
+        "kindMigration": "миграцию",
+        "clientWants": "{{client}} хочет выполнить {{kind}}",
+        "approve": "Разрешить",
+        "reject": "Отклонить",
+        "approveAllForNext": "Разрешать все записи от этого клиента следующие {{minutes}} мин."
+      },
+      "connect": {
+        "claudeCode": "Добавить в Claude Code",
+        "cursor": "Добавить в Cursor",
+        "manualConfig": "Ручная настройка",
+        "copy": "Копировать",
+        "copied": "Скопировано!",
+        "commandNotFound": "Claude CLI не найден в PATH. Скопируйте конфигурацию выше вручную.",
+        "addedSuccessfully": "Добавлено в {{client}}",
+        "enableFirst": "Включите MCP-сервер выше, чтобы увидеть готовый конфиг.",
+        "readGuide": "Полное руководство по MCP"
+      },
+      "audit": {
+        "title": "Журнал аудита",
+        "viewLog": "Показать недавние записи"
+      },
+      "external": {
+        "title": "Внешние MCP-серверы",
+        "description": "Подключите ide99 к внешним MCP-серверам (Linear, GitHub, …), чтобы AI-фичи v1.1+ могли читать оттуда контекст. В v1.0 — только чтение: ide99 показывает доступные tools/resources, но не вызывает write-tools.",
+        "loading": "Загрузка внешних серверов…",
+        "empty": "Внешних MCP-серверов не настроено. Отредактируйте ~/.config/ide99/mcp-servers.json (см. MCP-гид).",
+        "reload": "Перечитать конфиг",
+        "reloaded": "Конфиг перечитан.",
+        "configPath": "Конфиг: {{path}}",
+        "connect": "Подключить",
+        "disconnect": "Отключить",
+        "statusDisconnected": "Отключён",
+        "statusConnecting": "Подключение…",
+        "statusConnected": "Подключён",
+        "statusError": "Ошибка",
+        "toolsCount_one": "{{count}} tool",
+        "toolsCount_few": "{{count}} tools",
+        "toolsCount_many": "{{count}} tools",
+        "toolsCount_other": "{{count}} tools",
+        "resourcesCount_one": "{{count}} resource",
+        "resourcesCount_few": "{{count}} resources",
+        "resourcesCount_many": "{{count}} resources",
+        "resourcesCount_other": "{{count}} resources"
+      }
+    },
+    "title": "Настройки",
+    "open": "Открыть настройки (Cmd/Ctrl+,)"
+  },
+  "env": {
+    "label": {
+      "local": "Локальный",
+      "dev": "Dev",
+      "stage": "Stage",
+      "prod": "Prod"
+    }
+  },
+  "connections": {
+    "form": {
+      "environment": "Окружение",
+      "readOnly": "Read-only режим (запретить запись)",
+      "confirmDestructive": "Подтверждение для DROP / TRUNCATE / DELETE без WHERE",
+      "slowQueryWarning": "Предупреждение перед медленными запросами (cost > 100K)"
+    }
+  },
+  "safety": {
+    "confirm": {
+      "title": "Подтвердите {{action}} на {{target}}",
+      "body": "Сейчас будет выполнен {{action}} на «{{target}}» в окружении {{environment}}. Введите имя цели ниже для подтверждения.",
+      "inputLabel": "Текст подтверждения",
+      "confirmButton": "Подтвердить"
+    },
+    "slow": {
+      "title": "Запрос вероятно медленный",
+      "body": "PostgreSQL оценивает стоимость запроса в ~{{cost}} единиц. Возможен sequential scan или отсутствует индекс. Выполнить?",
+      "dontAsk": "Не спрашивать больше для этого подключения",
+      "runAnyway": "Выполнить"
+    },
+    "easy": {
+      "cross-join": {
+        "title": "Возможен cross join",
+        "body": "Запрос соединяет {{tableCount}} таблиц через запятую, но без WHERE-условия. PostgreSQL вернёт все возможные комбинации строк (декартово произведение). Скорее всего, ты хотел добавить условие JOIN. Выполнить как есть?"
+      },
+      "slow-preview": {
+        "title": "Это загрузит всю таблицу",
+        "body": "SELECT * без WHERE и LIMIT прочитает каждую строку. На большой таблице это может быть медленно. Попробуй добавить LIMIT, чтобы посмотреть несколько строк. Выполнить как есть?"
+      }
+    },
+    "readOnlyBlocked": "Подключение в режиме read-only. Отключите в настройках для разрешения записи."
+  },
+  "parser": {
+    "ddl": {
+      "error": "Ошибка парсинга",
+      "warningTitle": "Некоторые операторы пока не представимы в ERD"
+    },
+    "select": {
+      "error": "Ошибка парсинга запроса",
+      "restored_invalid": "Восстановленный запрос содержит ошибку парсинга (строка {{line}}:{{column}} — {{message}}). Возможно, он был повреждён при автосохранении.",
+      "reset": "Очистить и начать заново"
+    }
+  },
+  "filter": {
+    "title": "Фильтр колонки",
+    "aria": "Фильтр колонки",
+    "apply": "Применить",
+    "clear": "Очистить",
+    "rerunHint": "Фильтр применён. Перезапустить запрос?",
+    "rerun": "Перезапустить",
+    "dismiss": "Скрыть",
+    "unrepresentable": "Фильтры по колонкам недоступны",
+    "unrepresentableHint": "Запрос содержит {{reason}} — фильтры по колонкам недоступны. Редактируйте WHERE вручную.",
+    "unrepresentableReason": {
+      "group_by": "GROUP BY",
+      "having": "HAVING",
+      "window": "оконные функции",
+      "with_cte": "WITH / CTE",
+      "multiple_from": "несколько таблиц во FROM",
+      "complex_from": "нестандартный FROM",
+      "non_flat_from": "JOIN, подзапрос или алиас таблицы",
+      "multi_column_order": "ORDER BY по нескольким колонкам",
+      "order_shape": "нестандартный ORDER BY",
+      "order_expr": "выражение в ORDER BY",
+      "where_expr": "сложное выражение в WHERE"
+    },
+    "operator": "Оператор",
+    "value": "Значение",
+    "column_button_title": "Фильтр колонки",
+    "column_button_aria": "Фильтр колонки {{column}}"
+  },
+  "migrations": {
+    "tab": {
+      "title": "Миграции — {{connection}}",
+      "aria_open": "Открыть панель миграций для {{connection}}"
+    },
+    "panel": {
+      "title": "Миграции",
+      "directory": "Директория",
+      "directoryNotSet": "Не задана",
+      "change": "Изменить…",
+      "clear": "Очистить",
+      "trackingTable": "Создавать таблицу учёта",
+      "snapshots": "Сохранять снимки схемы",
+      "trackingMissing": "Таблица учёта не найдена в целевой БД — будет создана при первом применении."
+    },
+    "toolbar": {
+      "applyAll": "Применить всё",
+      "applySingle": "Применить одну",
+      "applyRange": "Применить диапазон",
+      "rollback": "Откатить",
+      "diff": "Diff…"
+    },
+    "timeline": {
+      "summary": "{{applied}} применено · {{pending}} в ожидании · {{dirty}} грязных",
+      "empty": "Миграции не обнаружены. Выберите директорию с файлами .up.sql / .down.sql.",
+      "applied": "применена",
+      "pending": "ожидает",
+      "dirty": "грязная",
+      "noRollbackFile": "Нет файла отката",
+      "duplicateVersion": "Дубликат версии",
+      "orphanRollback": "Файл отката без миграции",
+      "checksumMismatch": "Расхождение контрольной суммы",
+      "fileMissing": "Файл отсутствует"
+    },
+    "apply": {
+      "title": "Применить миграции",
+      "modeSingle": "Одну",
+      "modeRange": "Диапазон",
+      "modeAllPending": "Все ожидающие",
+      "from": "От",
+      "to": "До",
+      "version": "Версия",
+      "rangeError": "Диапазон должен быть непрерывным и состоять только из ожидающих миграций",
+      "noPending": "Нет ожидающих миграций",
+      "selectVersion": "Выберите версию",
+      "previewLoading": "Загрузка предпросмотра…",
+      "previewError": "Не удалось загрузить предпросмотр: {{error}}",
+      "prodBanner": "Применение {{count}} миграций на production-подключении «{{name}}»",
+      "applying": "Применение…",
+      "apply": "Применить {{count}} миграцию",
+      "apply_other": "Применить {{count}} миграций",
+      "cancel": "Отмена",
+      "pendingCount": "{{count}} ожидающая миграция",
+      "pendingCount_other": "{{count}} ожидающих миграций"
+    },
+    "rollback": {
+      "title": "Откатить миграцию {{version}}",
+      "noDownFile": "Нет файла отката (.down.sql отсутствует)",
+      "previewLoading": "Загрузка предпросмотра…",
+      "previewError": "Не удалось загрузить предпросмотр: {{error}}",
+      "prodTitle": "Откат на production",
+      "prodDescription": "Откат «{{version}}» на production-подключении «{{name}}». Введите имя подключения для подтверждения.",
+      "prodInputLabel": "Введите имя подключения",
+      "rollback": "Откатить",
+      "rollingBack": "Откат…",
+      "cancel": "Отмена"
+    },
+    "diff": {
+      "title": "Diff схемы",
+      "from": "От",
+      "to": "До",
+      "noSnapshots": "Ни в одной миграции нет сохранённого снимка. Включите «Сохранять снимки схемы» и повторите.",
+      "loading": "Загрузка diff…",
+      "error": "Не удалось загрузить diff: {{error}}",
+      "noChanges": "Нет изменений между снимками",
+      "selectBoth": "Выберите две версии для сравнения"
+    },
+    "selector": {
+      "title": "Директория миграций",
+      "openDialog": "Выбрать директорию миграций"
+    },
+    "browser": {
+      "open_button": "Открыть миграции",
+      "open_button_aria": "Открыть панель миграций для подключённой базы"
+    },
+    "squawk": {
+      "installBanner": {
+        "title": "Линтер Squawk не установлен",
+        "body": "Установите для встроенного линта миграций:",
+        "copy": "Копировать",
+        "copied": "Скопировано",
+        "dismiss": "Скрыть"
+      },
+      "badge": {
+        "tooltip_one": "{{count}} находка Squawk",
+        "tooltip_other": "{{count}} находок Squawk"
+      }
+    },
+    "dryrun": {
+      "checkbox": "Сначала пробный прогон на одноразовой БД",
+      "running": "Идёт пробный прогон…",
+      "phase": {
+        "pulling": "Скачивание postgres:17-alpine",
+        "starting": "Запуск контейнера",
+        "seeding": "Заполняем журнал",
+        "running": "Запуск миграций",
+        "done": "Готово",
+        "failed": "Сбой"
+      },
+      "succeeded": "Пробный прогон успешен за {{ms}}мс",
+      "failed": "Пробный прогон упал на {{version}}",
+      "containerStats": "Контейнер: pull {{pull}}мс, start {{start}}мс, run {{run}}мс",
+      "applyForReal": "Применить по-настоящему",
+      "close": "Закрыть",
+      "findings_one": "Squawk: {{count}} находка",
+      "findings_other": "Squawk: {{count}} находок",
+      "errorPrefix": "ошибка:",
+      "hintFix": "Исправьте миграцию и снова откройте Применить",
+      "error": {
+        "dockerUnavailable": "Docker недоступен",
+        "imagePullFailed": "Сбой загрузки образа",
+        "containerStartFailed": "Сбой запуска контейнера",
+        "ledgerSeedFailed": "Не удалось заполнить журнал",
+        "migrationFailed": "Пробный прогон упал на {{version}}",
+        "cancelled": "Пробный прогон отменён",
+        "internal": "Внутренняя ошибка"
+      }
+    },
+    "error": {
+      "connectionNotFound": "Подключение не найдено",
+      "notConnected": "Сначала подключитесь к базе",
+      "io": "Ошибка чтения файла: {{detail}}",
+      "invalidFilename": "Некорректное имя файла миграции: {{detail}}",
+      "duplicateVersion": "Дубликат версии: {{detail}}",
+      "notFound": "Миграция не найдена: {{detail}}",
+      "alreadyApplied": "Миграция уже применена: {{detail}}",
+      "notApplied": "Миграция ещё не применена: {{detail}}",
+      "rollbackFileMissing": "Файл отката отсутствует: {{detail}}",
+      "snapshotMissing": "Снимок схемы отсутствует для версии {{detail}}",
+      "snapshotsDisabled": "Снимки схемы выключены — diff недоступен",
+      "postgres": "Ошибка PostgreSQL: {{detail}}",
+      "storage": "Ошибка хранилища: {{detail}}",
+      "rangeNonContiguous": "Диапазон не непрерывен",
+      "watcher": "Ошибка наблюдателя за директорией: {{detail}}",
+      "hasParseError": "Миграция {{detail}} содержит ошибку разбора",
+      "fallback": "Не удалось загрузить миграции: {{detail}}"
+    }
+  },
+  "object_editor": {
+    "tab": {
+      "title": "{{kind}} · {{schema}}.{{name}}",
+      "new_suffix": "(новый)"
+    },
+    "tree_menu": {
+      "new_table": "Новая таблица…",
+      "new_view": "Новое представление…",
+      "new_matview": "Новый materialized view…",
+      "new_sequence": "Новая sequence…",
+      "new_index": "Новый индекс на эту таблицу…",
+      "edit_table": "Редактировать таблицу…",
+      "edit_view": "Редактировать определение…"
+    },
+    "toolbar": {
+      "new_dropdown": "+ Новый",
+      "new_table": "Таблица…",
+      "new_view": "Представление…",
+      "new_matview": "Материализованное представление…",
+      "new_index": "Индекс…",
+      "new_sequence": "Последовательность…",
+      "new_function": "Функция…",
+      "new_procedure": "Процедура…",
+      "new_trigger": "Триггер…",
+      "new_fdw_server": "FDW сервер…",
+      "new_publication": "Публикация…",
+      "new_subscription": "Подписка…",
+      "new_role": "Роль…",
+      "new_type": "Тип…",
+      "new_enum_type": "Перечисление",
+      "new_composite_type": "Составной тип",
+      "new_domain_type": "Домен",
+      "new_range_type": "Диапазон",
+      "back": "Назад"
+    },
+    "stub": {
+      "rls_advanced": "Сейчас доступно только включение и выключение Row-Level Security. Создание и редактирование политик появится в одном из следующих обновлений.",
+      "partition_advanced": "Создание и изменение партиционирования появится в одном из следующих обновлений. Пока для этого используйте SQL-редактор.",
+      "matview_recreate_warning": "Изменение тела materialized view требует DROP MATERIALIZED VIEW + CREATE. Зависимые индексы потребуется создать заново."
+    },
+    "actions": {
+      "apply": "Применить",
+      "cancel": "Отмена",
+      "help": "Документация PostgreSQL",
+      "no_changes": "-- Нет изменений",
+      "discard_changes_title": "Отменить изменения?",
+      "discard_changes_body": "В этом редакторе есть несохранённые изменения. Закрытие вкладки приведёт к их потере.",
+      "discard": "Отменить",
+      "keep_editing": "Продолжить",
+      "prod_confirm_title": "Применить DDL к PROD базе данных",
+      "prod_confirm_body": "Будет запущено {{n}} запрос(ов) к {{conn}}. Это подключение с тегом prod. Введите имя БД, чтобы активировать кнопку «Применить».",
+      "prod_confirm_input_label": "Введите {{db}} для подтверждения"
+    },
+    "warnings": {
+      "name_required": "Имя обязательно.",
+      "duplicate_column": "Имена колонок должны быть уникальны.",
+      "duplicate_param_name": "Имена параметров должны быть уникальны.",
+      "pk_unknown_column": "Колонка первичного ключа не существует в таблице.",
+      "empty_check": "CHECK выражение пустое.",
+      "body_required": "Тело не может быть пустым.",
+      "return_type_required": "Тип возврата обязателен.",
+      "function_required": "Функция триггера обязательна.",
+      "language_other_required": "Имя языка обязательно при выборе «other».",
+      "at_least_one_event": "Должно быть выбрано хотя бы одно событие триггера.",
+      "instead_of_typically_views": "INSTEAD OF триггеры обычно определяют на представлениях.",
+      "variadic_not_last": "VARIADIC параметр должен быть последним.",
+      "when_requires_for_each_row": "WHEN-условие требует FOR EACH ROW.",
+      "matview_recreate": "Изменение тела требует DROP MATERIALIZED VIEW + CREATE; зависимые индексы будут потеряны.",
+      "index_recreate": "Изменение метода/колонок индекса требует DROP + CREATE.",
+      "trigger_recreate": "Изменение события/времени/функции триггера требует DROP + CREATE.",
+      "function_signature_changed": "Сигнатура функции изменилась — эмитится DROP + CREATE, чтобы избежать создания перегрузки.",
+      "procedure_signature_changed": "Сигнатура процедуры изменилась — эмитится DROP + CREATE, чтобы избежать создания перегрузки.",
+      "enum_recreate_required": "PostgreSQL не поддерживает переупорядочивание/переименование enum-значений; используется DROP + CREATE — зависимые колонки будут удалены (CASCADE).",
+      "fdw_recreate_required": "Изменение FDW или server type требует DROP + CREATE; зависимые foreign tables будут потеряны (CASCADE).",
+      "publication_recreate_required": "Смена режима публикации требует DROP + CREATE.",
+      "range_recreate_required": "PostgreSQL не поддерживает ALTER range-типов; non-rename изменения требуют DROP + CREATE.",
+      "role_password_visible": "Пароль виден в предпросмотре DDL.",
+      "subscription_password_visible": "Connection string содержит пароль в открытом виде — не коммитьте предпросмотр DDL в систему контроля версий.",
+      "subscription_slot_rename_blocked": "Нельзя переименовать слот работающей подписки. Сначала отключите подписку."
+    },
+    "errors": {
+      "name_required": "Имя обязательно.",
+      "duplicate_column": "Имена колонок должны быть уникальны.",
+      "duplicate_param_name": "Имена параметров должны быть уникальны.",
+      "pk_unknown_column": "Колонка первичного ключа не существует.",
+      "empty_check": "CHECK выражение пустое.",
+      "body_required": "Тело не может быть пустым.",
+      "return_type_required": "Тип возврата обязателен.",
+      "function_required": "Функция триггера обязательна.",
+      "language_other_required": "Имя языка обязательно при выборе «other».",
+      "at_least_one_event": "Должно быть выбрано хотя бы одно событие триггера.",
+      "variadic_not_last": "VARIADIC параметр должен быть последним."
+    },
+    "common": {
+      "schema": "Схема",
+      "name": "Имя",
+      "dirty": "Не сохранено",
+      "ddl_preview": "Предпросмотр DDL",
+      "loading": "Загрузка…",
+      "load_error": "Не удалось загрузить определение",
+      "add": "Добавить"
+    },
+    "table": {
+      "tab_columns": "Колонки",
+      "tab_constraints": "Ограничения",
+      "tab_indexes": "Индексы",
+      "tab_rls": "RLS",
+      "tab_partition": "Партиции",
+      "rls_label": "Включить Row Level Security",
+      "partition_none": "Таблица не партиционирована.",
+      "partition_strategy": "Стратегия",
+      "partition_key": "Ключ партиционирования"
+    },
+    "columns": {
+      "column": "Колонка",
+      "type": "Тип",
+      "nullable": "Допускает NULL",
+      "default": "По умолчанию",
+      "comment": "Комментарий",
+      "generated": "Generated",
+      "generated_expr": "Выражение",
+      "add_column": "Добавить колонку",
+      "remove_column": "Удалить колонку"
+    },
+    "constraints": {
+      "kind": "Тип",
+      "constraint_name": "Имя ограничения",
+      "columns": "Колонки",
+      "ref_schema": "Реф. схема",
+      "ref_table": "Реф. таблица",
+      "ref_columns": "Реф. колонки",
+      "expression": "Выражение",
+      "add_pk": "Первичный ключ",
+      "add_unique": "Уникальное",
+      "add_fk": "Внешний ключ",
+      "add_check": "Check",
+      "add_constraint": "Добавить ограничение",
+      "remove": "Удалить"
+    },
+    "indexes": {
+      "index_name": "Имя индекса",
+      "table": "Таблица",
+      "method": "Метод",
+      "unique": "Уникальный",
+      "include": "INCLUDE колонки",
+      "predicate": "Where-предикат",
+      "column_expr": "Выражение",
+      "direction": "Направление",
+      "nulls": "NULL'ы",
+      "opclass": "Operator class",
+      "add_index": "Добавить индекс",
+      "asc": "По возрастанию",
+      "desc": "По убыванию",
+      "nulls_first": "Первыми",
+      "nulls_last": "Последними",
+      "recreate_warning": "Изменение метода/колонок/предиката индекса требует DROP + CREATE."
+    },
+    "view": {
+      "body": "Определение представления (SELECT)"
+    },
+    "matview": {
+      "body": "Определение materialized view (SELECT)",
+      "with_data": "Заполнить сразу (WITH DATA)"
+    },
+    "sequence": {
+      "data_type": "Тип данных",
+      "start": "Начальное значение",
+      "increment": "Шаг",
+      "min_value": "Минимум",
+      "max_value": "Максимум",
+      "cache": "Кэш",
+      "cycle": "Cycle",
+      "owned_by": "Принадлежит",
+      "owned_schema": "Схема",
+      "owned_table": "Таблица",
+      "owned_column": "Колонка"
+    },
+    "function": {
+      "schema_label": "Схема",
+      "name_label": "Имя функции",
+      "language_label": "Язык",
+      "languages_sql": "sql",
+      "languages_plpgsql": "plpgsql",
+      "languages_other": "другой…",
+      "language_other_placeholder": "напр. plpython3u",
+      "language_other_warning": "Подсветка ограничена; установите расширение языка для полной поддержки редактора.",
+      "parameters_section": "Параметры",
+      "return_type_section": "Возвращаемый тип",
+      "body_section": "Тело",
+      "attributes_section": "Атрибуты",
+      "comment_label": "Комментарий",
+      "volatility": "Volatility",
+      "volatility_volatile": "VOLATILE",
+      "volatility_stable": "STABLE",
+      "volatility_immutable": "IMMUTABLE",
+      "parallel_safety": "Parallel safety",
+      "parallel_unsafe": "UNSAFE",
+      "parallel_restricted": "RESTRICTED",
+      "parallel_safe": "SAFE",
+      "security_definer": "SECURITY DEFINER",
+      "cost": "Cost",
+      "cost_placeholder": "100 (по умолчанию)",
+      "rows": "Оценка строк",
+      "rows_placeholder": "(только для setof)",
+      "add_parameter": "Добавить параметр",
+      "remove_parameter": "Удалить",
+      "param_name": "Имя",
+      "param_mode": "Режим",
+      "param_type": "Тип",
+      "param_default": "По умолчанию",
+      "mode_in": "IN",
+      "mode_out": "OUT",
+      "mode_inout": "INOUT",
+      "mode_variadic": "VARIADIC",
+      "return_kind": "Тип возврата",
+      "return_scalar": "Скаляр",
+      "return_setof": "SETOF",
+      "return_void": "void",
+      "return_trigger": "TRIGGER",
+      "return_type_input": "Тип"
+    },
+    "procedure": {
+      "schema_label": "Схема",
+      "name_label": "Имя процедуры",
+      "language_label": "Язык",
+      "languages_sql": "sql",
+      "languages_plpgsql": "plpgsql",
+      "languages_other": "другой…",
+      "language_other_placeholder": "напр. plpython3u",
+      "language_other_warning": "Подсветка ограничена; установите расширение языка для полной поддержки редактора.",
+      "parameters_section": "Параметры",
+      "body_section": "Тело",
+      "attributes_section": "Атрибуты",
+      "comment_label": "Комментарий",
+      "security_definer": "SECURITY DEFINER",
+      "add_parameter": "Добавить параметр",
+      "remove_parameter": "Удалить",
+      "param_name": "Имя",
+      "param_mode": "Режим",
+      "param_type": "Тип",
+      "param_default": "По умолчанию"
+    },
+    "trigger": {
+      "schema_label": "Схема",
+      "name_label": "Имя триггера",
+      "table_section": "Целевая таблица",
+      "table_schema": "Схема таблицы",
+      "table_name": "Имя таблицы",
+      "timing_section": "Время срабатывания",
+      "timing_before": "BEFORE",
+      "timing_after": "AFTER",
+      "timing_instead_of": "INSTEAD OF",
+      "events_section": "События",
+      "event_insert": "INSERT",
+      "event_update": "UPDATE",
+      "event_delete": "DELETE",
+      "event_truncate": "TRUNCATE",
+      "update_columns_label": "UPDATE OF колонки (через запятую)",
+      "update_columns_placeholder": "col1, col2",
+      "for_each_section": "Гранулярность",
+      "for_each_row": "FOR EACH ROW",
+      "for_each_statement": "FOR EACH STATEMENT",
+      "when_label": "WHEN-выражение",
+      "when_placeholder": "NEW.status IS DISTINCT FROM OLD.status",
+      "function_section": "Функция-обработчик",
+      "function_picker_search": "Поиск функций",
+      "function_picker_loading": "Загрузка…",
+      "function_picker_empty": "Триггерные функции не найдены.",
+      "function_picker_selected_outside": "Выбрано: {{schema}}.{{name}} (нет в текущем списке)",
+      "enabled": "Включён",
+      "instead_of_warning": "INSTEAD OF триггеры обычно применяются к представлениям; убедитесь, что цель — view."
+    },
+    "fdw_server": {
+      "title_new": "Новый FDW сервер",
+      "title_edit": "Редактирование FDW сервера",
+      "name_label": "Имя сервера",
+      "fdw_label": "FDW",
+      "type_label": "Тип сервера (опционально)",
+      "version_label": "Версия (опционально)",
+      "options_section": "Параметры",
+      "add_option": "+ Добавить параметр",
+      "option_key": "Ключ",
+      "option_value": "Значение",
+      "user_mappings_section": "Сопоставления пользователей",
+      "add_mapping": "+ Добавить сопоставление",
+      "mapping_role": "Роль",
+      "mapping_role_public": "PUBLIC",
+      "fdw_change_warning": "Смена FDW или типа сервера требует DROP+CREATE; зависимые внешние таблицы будут удалены (CASCADE).",
+      "comment_label": "Комментарий"
+    },
+    "publication": {
+      "title_new": "Новая публикация",
+      "title_edit": "Редактирование публикации",
+      "name_label": "Имя публикации",
+      "mode_label": "Цель",
+      "mode_all_tables": "FOR ALL TABLES",
+      "mode_schemas": "TABLES IN SCHEMA",
+      "mode_tables": "Список TABLE",
+      "tables_section": "Таблицы",
+      "schemas_section": "Схемы",
+      "publish_ops_section": "Операции",
+      "publish_insert": "INSERT",
+      "publish_update": "UPDATE",
+      "publish_delete": "DELETE",
+      "publish_truncate": "TRUNCATE",
+      "publish_via_partition_root": "publish_via_partition_root",
+      "all_tables_change_warning": "Смена режима цели публикации требует DROP+CREATE.",
+      "no_publishable_tables": "Нет обычных таблиц, доступных для публикации.",
+      "comment_label": "Комментарий"
+    },
+    "subscription": {
+      "title_new": "Новая подписка",
+      "title_edit": "Редактирование подписки",
+      "name_label": "Имя подписки",
+      "conninfo_label": "Строка подключения",
+      "conninfo_password_warning": "Строка подключения содержит пароль в открытом виде. Postgres хранит её как plain text в pg_subscription. Не сохраняйте этот DDL в системе контроля версий.",
+      "publications_label": "Публикации (через запятую)",
+      "enabled_label": "Включена",
+      "copy_data_label": "copy_data",
+      "create_slot_label": "create_slot",
+      "slot_name_label": "Имя слота (опционально)",
+      "synchronous_commit_label": "synchronous_commit",
+      "slot_rename_warning": "Нельзя переименовать слот работающей подписки. Сначала отключите подписку.",
+      "comment_label": "Комментарий"
+    },
+    "role": {
+      "title_new": "Новая роль",
+      "title_edit": "Редактирование роли",
+      "name_label": "Имя роли",
+      "attributes_section": "Атрибуты",
+      "login_label": "LOGIN",
+      "superuser_label": "SUPERUSER",
+      "createdb_label": "CREATEDB",
+      "createrole_label": "CREATEROLE",
+      "replication_label": "REPLICATION",
+      "bypassrls_label": "BYPASSRLS",
+      "inherit_label": "INHERIT",
+      "connection_limit_label": "Лимит подключений (-1 = без ограничения)",
+      "valid_until_label": "Действует до (timestamp, опционально)",
+      "password_label": "Пароль",
+      "password_is_hash_label": "Использовать существующий хэш (ENCRYPTED PASSWORD)",
+      "password_warning": "Пароль виден в превью DDL.",
+      "member_of_section": "Член ролей",
+      "member_of_picker_placeholder": "Выберите родительскую роль…",
+      "comment_label": "Комментарий"
+    },
+    "type": {
+      "enum_title_new": "Новый перечислимый тип",
+      "enum_title_edit": "Редактирование перечислимого типа",
+      "enum_values_section": "Значения",
+      "enum_add_value": "+ Добавить значение",
+      "enum_value_label": "Значение",
+      "enum_recreate_warning": "Postgres не поддерживает переупорядочивание или переименование значений enum на месте; используется DROP+CREATE — зависимые столбцы будут удалены (CASCADE).",
+      "composite_title_new": "Новый составной тип",
+      "composite_title_edit": "Редактирование составного типа",
+      "composite_fields_section": "Поля",
+      "composite_add_field": "+ Добавить поле",
+      "composite_field_name": "Имя",
+      "composite_field_type": "Тип",
+      "composite_field_collation": "Сопоставление (опционально)",
+      "domain_title_new": "Новый домен",
+      "domain_title_edit": "Редактирование домена",
+      "domain_base_type_label": "Базовый тип",
+      "domain_default_label": "Значение по умолчанию (выражение, опционально)",
+      "domain_not_null_label": "NOT NULL",
+      "domain_collation_label": "Сопоставление (опционально)",
+      "domain_constraints_section": "CHECK-ограничения",
+      "domain_add_constraint": "+ Добавить ограничение",
+      "domain_constraint_name": "Имя ограничения (опционально)",
+      "domain_constraint_check": "CHECK-выражение",
+      "domain_constraint_not_valid": "NOT VALID",
+      "range_title_new": "Новый диапазонный тип",
+      "range_title_edit": "Редактирование диапазонного типа",
+      "range_subtype_label": "Подтип",
+      "range_subtype_opclass_label": "Класс операторов подтипа (опционально)",
+      "range_collation_label": "Сопоставление (опционально)",
+      "range_canonical_label": "Каноническая функция (опционально)",
+      "range_subtype_diff_label": "Функция diff подтипа (опционально)",
+      "range_multirange_type_name_label": "Имя multirange-типа (опционально)",
+      "range_recreate_warning": "Postgres не позволяет ALTER для диапазонных типов на месте; изменения, кроме переименования, требуют DROP+CREATE."
+    }
+  },
+  "notebook": {
+    "tab": {
+      "title": "Notebook"
+    },
+    "untitled": "Безымянный notebook",
+    "loading": "Загрузка notebook…",
+    "empty": "Notebook пуст. Добавьте ячейку, чтобы начать.",
+    "no_connection_hint": "Выберите подключение, чтобы запускать SQL.",
+    "cell_count_one": "{{count}} ячейка",
+    "cell_count_few": "{{count}} ячейки",
+    "cell_count_many": "{{count}} ячеек",
+    "cell_count_other": "{{count}} ячеек",
+    "cell_count": "{{count}} ячеек",
+    "cell_kind": {
+      "sql": "SQL",
+      "markdown": "Markdown",
+      "result": "Результат"
+    },
+    "field": {
+      "name": "Название notebook"
+    },
+    "action": {
+      "add_sql": "+ SQL-ячейка",
+      "add_markdown": "+ Markdown",
+      "delete": "Удалить",
+      "duplicate": "Дублировать",
+      "drag": "Перетащите, чтобы поменять порядок",
+      "move_up": "Поднять",
+      "move_down": "Опустить",
+      "run_cell": "Запустить ячейку",
+      "run_cell_icon": "▶ Запустить",
+      "run_from": "Запустить отсюда",
+      "run_all": "Запустить всё",
+      "save": "Сохранить",
+      "save_as": "Сохранить как…",
+      "open": "Открыть…",
+      "import": "Импорт…"
+    },
+    "status": {
+      "idle": "Ожидание",
+      "running": "Выполняется…",
+      "ok": "OK · {{ms}} мс",
+      "error": "Ошибка"
+    },
+    "cte": {
+      "share_label": "Делиться как CTE",
+      "name_label": "Имя CTE",
+      "help": "Сделать результат этой ячейки доступным следующим как CTE"
+    },
+    "markdown": {
+      "edit": "Редактировать",
+      "preview": "Просмотр",
+      "empty_hint": "Пустая markdown-ячейка — нажмите, чтобы редактировать"
+    },
+    "result": {
+      "row_count_one": "{{count}} строка",
+      "row_count_few": "{{count}} строки",
+      "row_count_many": "{{count}} строк",
+      "row_count_other": "{{count}} строк",
+      "row_count": "{{count}} строк",
+      "duration": "{{ms}} мс",
+      "truncated": "Усечено",
+      "empty": "Запрос не вернул строк.",
+      "show_all": "Показать все ({{count}})",
+      "show_less": "Скрыть"
+    },
+    "autosave": {
+      "pending": "Ожидание…",
+      "saving": "Сохранение…",
+      "saved": "Сохранено",
+      "error": "Ошибка сохранения"
+    },
+    "dialog": {
+      "save_as_title": "Сохранить notebook как…",
+      "open_title": "Открыть notebook"
+    }
+  },
+  "paid_modules": {
+    "loading": "Загрузка состояния подписки…",
+    "settings": {
+      "title": "Модули"
+    },
+    "status": {
+      "active": "активна",
+      "inactive": "не подключена"
+    },
+    "action": {
+      "manage": "Управлять подпиской",
+      "upgrade": "Подключить →"
+    },
+    "spg99": {
+      "short_name": "Instant DB",
+      "full_name": "ide99 Instant DB",
+      "description": "Одноразовые PostgreSQL-базы: поднимаются за секунды, автоматически останавливаются после простоя. Идеально для пробных миграций, воспроизведения багов на реальной схеме и песочницы AI-агента — без риска для dev и prod.",
+      "cta_subscribed": "+ Instant DB",
+      "cta_upgrade": "Попробовать Instant DB",
+      "status_bar": "{{template}} · автостоп через {{minutes}} мин",
+      "status_bar_full": {
+        "label": "Instant DB: {{template}}",
+        "auto_stop": "Автостоп через {{minutes}} мин",
+        "cost": "Стоимость: ₽{{amount}}",
+        "menu_extend": "Продлить TTL",
+        "menu_stop": "Остановить сейчас",
+        "menu_console": "Открыть в консоли"
+      },
+      "template_picker": {
+        "title": "Новая Instant DB",
+        "description": "Подними свежий PostgreSQL за секунды. Выбери шаблон, настрой автостоп и TTL.",
+        "template_label": "Шаблон",
+        "template": {
+          "clean": "Чистый PostgreSQL (последняя версия)",
+          "pgvector": "PostgreSQL + pgvector",
+          "postgis": "PostgreSQL + PostGIS",
+          "timescale": "PostgreSQL + TimescaleDB",
+          "project": "Схема проекта (применить текущие миграции)",
+          "custom": "Свой шаблон (.ide99-template файл)"
+        },
+        "auto_stop_label": "Автостоп после простоя (минут)",
+        "ttl_label": "Максимальное время жизни (часов)",
+        "create": "Создать",
+        "cancel": "Отмена",
+        "v1_disabled_note": "Облачное создание баз появится в v1.1. Включи модуль Instant DB в «Настройки → Модули», чтобы активировать слот целиком.",
+        "preset_health_repro": "Схема проекта + sample data (для воспроизведения медленного запроса)"
+      },
+      "dry_run": {
+        "target_legend": "Где запускать dry-run",
+        "target_spg99": "Instant DB (рекомендуется)",
+        "target_spg99_hint": "Быстрее, чем Docker, настоящий PostgreSQL, чистится автоматически",
+        "target_docker": "Локальный Docker (медленнее)",
+        "target_locked_tooltip": "Чтобы выбрать этот вариант, подключи Instant DB",
+        "upgrade_hint": "Быстрее с Instant DB — подключить →"
+      },
+      "reproduce": {
+        "button_label": "Воспроизвести на одноразовой",
+        "aria_label": "Воспроизвести медленный запрос на одноразовой Instant DB",
+        "upgrade_tooltip": "Нужна подписка Instant DB — откроется страница подключения"
+      },
+      "cta": "Instant DB",
+      "cta_pending": "Создание…",
+      "free_beta_badge": "Free Beta",
+      "connection_name_prefix": "Instant DB",
+      "create_ok": "Instant DB готов — проверьте и сохраните",
+      "create_error": "Не удалось создать Instant DB: {{msg}}"
+    },
+    "vibepg": {
+      "short_name": "vibepg",
+      "full_name": "vibepg — AI-агент",
+      "description": "AI-агент, который не просто генерирует SQL, а итеративно применяет, тестирует и исправляет его на одноразовой базе.",
+      "explain_optimize": {
+        "label": "🤖 vibepg оптимизировать",
+        "full_label": "🤖 vibepg: оптимизировать с замерами"
+      },
+      "migration_review": {
+        "label": "🤖 vibepg проверить",
+        "full_label": "🤖 vibepg: проверить миграцию"
+      },
+      "agent_mode": {
+        "label": "🤖 Режим агента"
+      },
+      "command_palette": {
+        "label": "🤖 vibepg"
+      },
+      "result_dialog": {
+        "title": "🤖 Результат vibepg",
+        "close": "Закрыть",
+        "cancel": "Отмена",
+        "apply": "Применить к текущему подключению",
+        "apply_done": "Рекомендация скопирована в буфер обмена",
+        "connecting": "Подключаемся к облаку vibepg…",
+        "v1_1_note": "В v1.1 vibepg запустит реальный измерительный прогон на одноразовой базе. В v1.0 показывается предпросмотр.",
+        "iteration_log": "Шаги агента",
+        "step_generate": "Сгенерировал SQL",
+        "step_apply": "Применил на одноразовой БД",
+        "step_error": "Поймал ошибку",
+        "step_refine": "Уточнил",
+        "step_retry": "Повторил",
+        "step_success": "Готово",
+        "field_tested": "Проверено",
+        "field_plan_before": "План до",
+        "field_plan_after": "План после",
+        "field_speedup": "Ускорение",
+        "field_index_size": "Размер индекса",
+        "field_recommendation": "Рекомендация",
+        "recommendation_create": "✅ создать индекс",
+        "recommendation_skip": "⊘ пропустить — выгода не подтверждена"
+      },
+      "agent_mode_toggle": {
+        "aria_label": "Режим AI",
+        "quick": "Quick (бесплатный AI)",
+        "quick_hint": "Один шаг. Без выполнения.",
+        "agent": "Agent (vibepg)",
+        "agent_hint": "Итеративно. Проверяет на одноразовой БД.",
+        "agent_locked_tooltip": "Нужна подписка vibepg"
+      },
+      "command_palette_items": {
+        "title": "Палитра команд",
+        "search_placeholder": "Найдите подключение или команду…",
+        "no_results": "Ничего не найдено",
+        "open_palette": "Открыть палитру команд",
+        "close": "Закрыть",
+        "section_connections": "Подключения",
+        "section_commands": "Команды vibepg",
+        "check_migration": "🤖 vibepg: проверить миграцию",
+        "check_migration_hint": "Агент прогоняет миграцию на одноразовой БД",
+        "fix_sql_error": "🤖 vibepg: исправить SQL-ошибку",
+        "fix_sql_error_hint": "Агент чинит последнюю ошибку итеративно",
+        "explain_query": "🤖 vibepg: объяснить запрос",
+        "explain_query_hint": "Глубокое объяснение с реальными метриками",
+        "suggest_index": "🤖 vibepg: предложить индекс",
+        "suggest_index_hint": "На основе замеров, не гипотетически",
+        "generate_seed_data": "🤖 vibepg: сгенерировать тестовые данные",
+        "generate_seed_data_hint": "AI заполняет схему реалистичными данными",
+        "compare_plans": "🤖 vibepg: сравнить планы",
+        "compare_plans_hint": "Два варианта запроса рядом",
+        "rollback_plan": "🤖 vibepg: построить rollback",
+        "rollback_plan_hint": "Создать rollback для применённой миграции"
+      }
+    },
+    "upgrade": {
+      "spg99": {
+        "cta": "Попробовать Instant DB →"
+      },
+      "vibepg": {
+        "cta": "Попробовать vibepg →"
+      }
+    }
+  },
+  "updater": {
+    "title": "Обновления",
+    "check_now": "Проверить обновления",
+    "checking": "Проверяем…",
+    "loading": "Читаем текущую версию…",
+    "current_version": "Текущая версия: {{version}}",
+    "up_to_date": "У тебя последняя версия — {{version}}.",
+    "available": "Доступно обновление: {{from}} → {{to}}",
+    "error": "Не удалось проверить обновления: {{message}}",
+    "channel": {
+      "label": "Канал релизов",
+      "stable": "Stable (рекомендуется)",
+      "beta": "Beta",
+      "nightly": "Nightly"
+    },
+    "release_notes": "Что нового",
+    "approve": "Установить обновление",
+    "defer": "Напомнить позже",
+    "deferred": "Отложено — проверку можно запустить заново.",
+    "installing": "Устанавливаем…",
+    "progress": {
+      "started": "Начинаем загрузку…",
+      "downloading": "Скачивание {{percent}}%",
+      "downloading_unknown": "Скачивание… ({{kb}} КБ)",
+      "installing": "Проверяем подпись и устанавливаем…",
+      "done": "Обновление установлено. Перезапусти ide99, чтобы применить."
+    }
+  },
+  "privacy": {
+    "loading": "Загрузка настроек…",
+    "title": "Приватность и телеметрия",
+    "telemetry": {
+      "title": "Анонимная статистика использования",
+      "description": "Только счётчики — никаких запросов, схем, подключений или значений данных. Можешь отключить в любой момент.",
+      "enable": "Отправлять анонимные счётчики использования",
+      "endpoint": "Эндпойнт",
+      "endpoint_none": "не отправлять (отключить транспорт)"
+    },
+    "crash": {
+      "title": "Отчёты о сбоях",
+      "description": "При сбое ide99 ты увидишь предпросмотр отчёта (стек + системная информация) и подтвердишь отправку. Ничего не уходит автоматически.",
+      "enable": "Отправлять отчёты о сбоях (с предпросмотром)",
+      "dialog": {
+        "title": "ide99 упал — отправить отчёт?",
+        "preview_header": "Посмотри стек и системную информацию перед отправкой. Без твоего подтверждения ничего не уходит.",
+        "field_message": "Сообщение",
+        "field_stack": "Стек вызовов",
+        "field_platform": "Платформа",
+        "field_app_version": "Версия приложения",
+        "field_captured_at": "Время",
+        "stack_empty": "(стек не захвачен)",
+        "approve": "Отправить отчёт",
+        "cancel": "Не отправлять",
+        "footer": "Отчёты о сбоях можно отключить в любой момент в Настройках → Приватность."
+      }
+    },
+    "clear_all": "Удалить мои данные",
+    "clear_all_confirm": {
+      "title": "Удалить все локальные данные приватности?",
+      "body": "Идентификатор устройства будет сброшен, телеметрия и crash-репорты выключены. Действие необратимо.",
+      "type_prompt": "Введите CLEAR для подтверждения",
+      "expected_token": "CLEAR",
+      "confirm": "Удалить данные",
+      "cancel": "Отмена",
+      "success": "Данные приватности удалены.",
+      "error": "Не удалось удалить данные приватности."
+    },
+    "device_uuid": "Идентификатор устройства: {{uuid}}",
+    "opt_in": {
+      "title": "Помочь улучшить ide99?",
+      "body": "Только анонимная статистика — никаких запросов, схем или подключений. Это помогает нам понимать, что развивать в первую очередь. Можно изменить в любой момент в Настройках.",
+      "what_we_collect": "Что мы собираем",
+      "decline": "Нет, просто открыть",
+      "accept": "Да, отправлять анонимную статистику",
+      "footer": "Полный список метрик и переключатели доступны в Настройках → Приватность."
+    },
+    "what_we_collect": {
+      "button": "Что мы собираем",
+      "title": "Что мы собираем",
+      "body": "Полный список событий, которые ide99 может отправить при включённой телеметрии. Никаких запросов, схем, подключений или строк данных не покидает твою машину.",
+      "close": "Закрыть"
+    },
+    "events": {
+      "app_launched": "Приложение запущено — счётчик запусков в день.",
+      "session_ended": "Приложение закрыто — корзина длительности сессии.",
+      "feature_used": "Использована именованная функция (только id категории).",
+      "tab_opened": "Открыта вкладка редактора (только тип — query/explain/...).",
+      "query_executed": "Выполнен запрос — только счётчик, без SQL.",
+      "explain_opened": "Открыт визуализатор EXPLAIN.",
+      "health_check_run": "Завершилась проверка Health Screen (только id).",
+      "live_ops_opened": "Открыт Live Ops Dashboard.",
+      "erd_opened": "Открыта ERD-диаграмма.",
+      "object_editor_opened": "Открыт редактор объекта (только тип).",
+      "migration_applied": "Применена миграция (только счётчик).",
+      "notebook_created": "Создан notebook.",
+      "backup_started": "Запущена задача backup.",
+      "restore_started": "Запущена задача restore.",
+      "mode_switched": "Переключён режим UI (Easy / Standard).",
+      "theme_switched": "Переключена тема (light / dark / system).",
+      "language_switched": "Переключён язык интерфейса (en / ru).",
+      "onboarding_started": "Запущен first-run onboarding.",
+      "onboarding_completed": "Onboarding завершён.",
+      "mcp_server_enabled": "Включён встроенный MCP-сервер.",
+      "mcp_client_connected": "Внешний AI-агент подключился по MCP.",
+      "privacy_choice_made": "Пользователь сделал first-run выбор телеметрии."
+    }
+  },
+  "onboarding": {
+    "step": {
+      "welcome": {
+        "title": "Добро пожаловать в ide99"
+      },
+      "connection": {
+        "title": "Выбери профиль подключения"
+      },
+      "tour-handoff": {
+        "title": "Всё готово"
+      }
+    },
+    "progress": "Шаг {{current}} из {{total}}",
+    "welcome": {
+      "title": "Добро пожаловать в ide99",
+      "body": "Сейчас доступен Standard режим. Полный набор инструментов для работы с PostgreSQL.",
+      "standard": "Standard",
+      "standard_desc": "Если уже работал с PostgreSQL. Полный набор: Monaco, EXPLAIN, JSONB, Live Ops.",
+      "easy": "Easy",
+      "easy_desc": "Если только начинаешь. Понятные ошибки, GUI ↔ SQL и короткий guided tour.",
+      "skip": "Просто открыть IDE — настрою позже"
+    },
+    "connection": {
+      "body": "Где живёт твой PostgreSQL? Выбери профиль, чтобы пропустить общую конфигурацию.",
+      "selected_help": "Откроем форму подключения с предзаполненными полями для {{profile}}. Любое поле можно поправить перед сохранением.",
+      "open_form": "Открыть форму подключения",
+      "skip_help": "Подключение можно добавить в любой момент из левой панели."
+    },
+    "profile": {
+      "local": "Локальный PostgreSQL",
+      "local_desc": "ide99 проверит localhost:5432 через pg_isready. Работает сразу, если PG запущен локально.",
+      "supabase": "Supabase",
+      "supabase_desc": "Вставь connection string из Project Settings → Database. SSL: require.",
+      "neon": "Neon",
+      "neon_desc": "Вставь pooled connection string из дашборда Neon. SSL: require.",
+      "railway": "Railway",
+      "railway_desc": "Вставь connection string из Variables → DATABASE_URL. SSL: require.",
+      "rds": "AWS RDS",
+      "rds_desc": "RDS с password-аутентификацией работает уже сейчас. Полный IAM-мастер появится в v1.1.",
+      "spg99": "Instant DB",
+      "spg99_desc": "Подключись к ide99 Instant DB. Учётные данные подтянутся из аккаунта ide99.",
+      "custom": "Свой формат",
+      "custom_desc": "Пустая форма — заполни host, port, базу, пользователя и пароль вручную.",
+      "skip": "Пропустить — настрою позже",
+      "skip_desc": "Сразу попадёшь в ide99, а подключение добавишь потом из левой панели."
+    },
+    "tour_handoff": {
+      "body": "Режим: {{mode}}, демо-БД: {{sample}}. Нажми «Завершить», чтобы войти в ide99 и запустить guided tour.",
+      "body_easy": "В режиме Easy туториал проведёт тебя по ide99 шаг за шагом. Это 5-минутная ориентация, и её всегда можно перезапустить из Help.",
+      "body_standard": "Хочешь 5-минутный walkthrough по всем панелям? Можно и пропустить — разберёшься сам.",
+      "finish": "Завершить настройку",
+      "finish_with_tour": "Завершить и запустить тур",
+      "skip_tour": "Пропустить тур"
+    },
+    "action": {
+      "back": "← Назад",
+      "skip": "Пропустить",
+      "next": "Далее",
+      "close": "Закрыть"
+    },
+    "test": {
+      "running": "Проверяем подключение…",
+      "success": "Подключение успешно ({{ms}} мс).",
+      "failed": "Подключение не удалось.",
+      "skipped": "Пропущено — проверишь внутри формы."
+    }
+  },
+  "coach": {
+    "dismiss": "Понятно",
+    "empty_connections": {
+      "title": "Подсказка",
+      "body": "Кнопка + предлагает шаблоны для Supabase / Neon / Railway / RDS — заполнят поля за тебя. Или вставь connection string выше."
+    },
+    "editor_shortcuts": {
+      "title": "Горячие клавиши редактора",
+      "body": "Cmd/Ctrl+Enter — запустить запрос. Cmd/Ctrl+E — EXPLAIN. Автокомплит срабатывает при наборе."
+    }
+  },
+  "file_sharing": {
+    "import": {
+      "title": "Импорт .ide99 файла",
+      "pick": "Выбрать .ide99 файл…",
+      "picking": "Открываем…",
+      "kind": "Тип",
+      "may_collide": "Имена могут конфликтовать с существующими — проверь перед применением.",
+      "cancel": "Отмена",
+      "apply": "Применить"
+    },
+    "export": {
+      "connection": "Экспортировать подключение (.ide99)",
+      "connection_bundle": "Экспортировать набор подключений (.ide99)",
+      "snippet": "Экспортировать сниппет (.ide99)",
+      "snippet_bundle": "Экспортировать набор сниппетов (.ide99)",
+      "query": "Экспортировать запрос (.ide99)",
+      "notebook": "Экспортировать notebook (.ide99)",
+      "migration_set": "Экспортировать набор миграций (.ide99)",
+      "erd_layout": "Экспортировать ERD-раскладку (.ide99)",
+      "theme": "Экспортировать тему (.ide99)",
+      "keymap": "Экспортировать раскладку клавиш (.ide99)",
+      "health_config": "Экспортировать Health-конфиг (.ide99)",
+      "saved": "Сохранено в {{path}}"
+    },
+    "summary": {
+      "connection": "{{name}} ({{host}}:{{port}} / {{database}})",
+      "connection_bundle": "{{name}} ({{count}} подключений)",
+      "snippet": "{{label}} (:{{prefix}})",
+      "snippet_bundle": "{{name}} ({{count}} сниппетов)",
+      "query": "{{name}} ({{chars}} символов)",
+      "notebook": "{{name}} ({{count}} ячеек: {{sql}} SQL, {{md}} Markdown)",
+      "migration_set": "{{label}} ({{count}} миграций)",
+      "erd_layout": "{{label}} ({{count}} узлов)",
+      "theme": "{{name}} ({{count}} токенов)",
+      "keymap": "{{name}} ({{count}} биндингов)",
+      "health_config": "{{label}} ({{count}} проверок)"
+    },
+    "apply": {
+      "success": "Импортировано ({{count}} элемент)",
+      "error": {
+        "invalid_file": "Файл не является валидным .ide99 envelope.",
+        "unsupported_version": "Файл .ide99 использует неподдерживаемую версию формата.",
+        "not_implemented": "Этот тип пока нельзя применить.",
+        "storage_error": "Не удалось записать в локальное хранилище.",
+        "io_error": "Не удалось прочитать или записать файл.",
+        "no_dest": "Не выбрана целевая директория."
+      }
+    }
+  },
+  "keymap_import": {
+    "title": "Импорт раскладки клавиш",
+    "field": {
+      "format": "Исходный формат",
+      "raw": "Вставьте содержимое раскладки"
+    },
+    "action": {
+      "parse": "Распарсить",
+      "parsing": "Парсинг…",
+      "reset": "Сбросить"
+    },
+    "preview": {
+      "title": "Распознанные привязки ({{count}})",
+      "empty": "Привязок пока нет."
+    },
+    "parser_warning": {
+      "json_parse": "Не удалось разобрать JSON: {{detail}}",
+      "root_must_be_array": "Корень раскладки VS Code должен быть массивом {key, command, when?}",
+      "root_must_be_keymap": "Ожидался корень <keymap>, получено <{{tag}}>",
+      "root_must_be_bindings": "Ожидался корень <bindings>, получено <{{tag}}>",
+      "entry_not_object": "Запись {{idx}}: не объект — пропущено",
+      "missing_key_or_command": "Запись {{idx}}: отсутствует key или command — пропущено",
+      "vscode_unbind": "Запись {{idx}}: отвязка VS Code «{{command}}» — пропущено",
+      "missing_first_keystroke": "<action id=\"{{id}}\">: отсутствует first-keystroke — пропущено",
+      "action_missing_id": "<action> без атрибута id — пропущено",
+      "binding_missing_command_id": "<binding>: отсутствует commandId — пропущено",
+      "binding_missing_trigger": "<binding commandId=\"{{command}}\">: отсутствует triggerSequence — пропущено",
+      "binding_empty_trigger": "<binding commandId=\"{{command}}\">: пустой triggerSequence (отвязка) — пропущено",
+      "xml_parse": "Ошибка парсинга XML: {{detail}}",
+      "dom_parser_unavailable": "DOMParser недоступен в данной среде"
+    }
+  },
+  "backup": {
+    "tab": {
+      "title": "Резервная копия ({{connection}})"
+    },
+    "section": {
+      "backup": "Создание",
+      "restore": "Восстановление",
+      "basebackup": "Базовая копия",
+      "schedule": "Расписание",
+      "nav_label": "Разделы центра резервного копирования"
+    },
+    "field": {
+      "format": "Формат",
+      "scope": "Объём",
+      "output_path": "Файл вывода",
+      "compress_level": "Уровень сжатия",
+      "parallel_jobs": "Параллельных потоков",
+      "include_schemas": "Схемы",
+      "include_tables": "Таблицы",
+      "all_schemas": "Все схемы",
+      "all_tables_hint": "Если в схеме не отмечена ни одна таблица — будут включены все",
+      "include_create_db": "Включить CREATE DATABASE (--create)",
+      "browse": "Обзор…",
+      "estimate": "Оценить размер",
+      "estimating": "Оценка…",
+      "source_path": "Файл резервной копии",
+      "clean_before_restore": "Удалить существующие объекты (--clean)",
+      "clean_warning": "необратимо",
+      "create_database": "Создать целевую БД (--create)",
+      "no_owner": "Пропустить смену владельцев (--no-owner)"
+    },
+    "format": {
+      "custom": "custom (-Fc)",
+      "plain": "plain (-Fp)",
+      "directory": "directory (-Fd)",
+      "tar": "tar (-Ft)",
+      "help": {
+        "custom": "Сжатый архив, читаемый pg_restore. Рекомендуемый вариант.",
+        "plain": "SQL-текст, загружается через psql. Селективное восстановление недоступно.",
+        "directory": "Файл на каждый объект; поддерживает параллельные потоки.",
+        "tar": "Tar-архив; читается pg_restore, но без сжатия."
+      }
+    },
+    "scope": {
+      "both": "Схема + данные",
+      "data_only": "Только данные",
+      "schema_only": "Только схема"
+    },
+    "preview": {
+      "title": "Предпросмотр команды",
+      "hint": "Заполните путь вывода, чтобы увидеть полную команду."
+    },
+    "run": {
+      "start": "Запустить",
+      "in_progress": "Выполняется…",
+      "cancel": "Отменить",
+      "cancelled": "Задача отменена.",
+      "success": "Резервная копия успешно создана.",
+      "output_path": "Сохранено в {{path}}",
+      "failure": "Не удалось создать резервную копию.",
+      "failure_with_tail": "Не удалось создать резервную копию: {{tail}}"
+    },
+    "progress": {
+      "phase": {
+        "starting": "Запуск",
+        "dumping": "Выгрузка",
+        "restoring": "Восстановление",
+        "reading": "Чтение",
+        "finished": "Готово",
+        "log": "Журнал",
+        "compressing": "Сжатие",
+        "writing": "Запись"
+      }
+    },
+    "restore": {
+      "selective_deferred": "Селективное восстановление (pg_restore --list) появится в будущем обновлении.",
+      "confirm_title": "Подтвердите разрушительное восстановление",
+      "confirm_body": "Существующие объекты в {{target}} будут удалены перед восстановлением. Введите RESTORE для подтверждения.",
+      "confirm_input_label": "Введите {{token}} для подтверждения",
+      "confirm_apply": "Восстановить",
+      "confirm_cancel": "Отмена"
+    },
+    "basebackup": {
+      "output_dir": "Каталог вывода",
+      "compression": "Сжатие",
+      "compression_none": "Без сжатия",
+      "incremental": "Инкрементально",
+      "incremental_hint": "Укажите родительский backup_manifest для инкрементальной копии (только PostgreSQL 17+).",
+      "incremental_enable": "Создать инкрементальную копию",
+      "manifest_required": "Родительский manifest обязателен при включённой инкрементальной копии."
+    },
+    "schedule": {
+      "list": "Запланированные копии",
+      "empty": "Запланированных копий пока нет.",
+      "add": "Добавить расписание",
+      "add_title": "Новое расписание",
+      "edit": "Изменить",
+      "edit_title": "Изменить расписание",
+      "id": "ID",
+      "label": "Название",
+      "cron": "Cron-выражение",
+      "output_path": "Файл вывода",
+      "save": "Сохранить",
+      "cancel": "Отмена",
+      "close": "Закрыть",
+      "remove": "Удалить",
+      "preview_cron": "Предпросмотр cron-строки",
+      "install": "Установить",
+      "uninstall": "Удалить из системы",
+      "installed_badge": "установлено",
+      "run_now": "Запустить сейчас",
+      "run_started": "Задача отправлена: {{jobId}}"
+    }
+  },
+  "support": {
+    "button": "Поддержка",
+    "dialog": {
+      "title": "Поддержка",
+      "description": "Если у Вас есть вопросы, предложения или Вы обнаружили баг — напишите нам. При необходимости можно приложить скриншоты.",
+      "close": "Закрыть",
+      "cancel": "Отмена",
+      "send": "Отправить",
+      "sending": "Отправляем…",
+      "success": "Отправлено — спасибо, ответим на Вашу почту.",
+      "remove_screenshot": "Удалить {{name}}",
+      "field": {
+        "email": "Ваш email",
+        "email_placeholder": "you@example.com",
+        "message": "Сообщение",
+        "message_placeholder": "Что произошло? Что Вы ожидали увидеть?",
+        "screenshots": "Скриншоты (по желанию, до {{n}})",
+        "attach": "Прикрепить изображения"
+      },
+      "error": {
+        "email_required": "Укажите корректный email — туда придёт ответ.",
+        "message_required": "Опишите, пожалуйста, что произошло, чтобы мы могли помочь.",
+        "too_many": "Максимум {{n}} скриншотов",
+        "bad_type": "Неподдерживаемый формат: {{name}}",
+        "too_large": "{{name}} больше {{limit}}",
+        "read_failed": "Не удалось прочитать {{name}}",
+        "send_failed": "Не удалось отправить: {{msg}}"
+      }
+    }
+  }
+}
