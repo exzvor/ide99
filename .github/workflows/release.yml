@@ -20,8 +20,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # macos-latest runners are arm64 by default; building without an
+          # explicit --target keeps artifacts at target/release/... so the
+          # downstream packaging script finds them.
           - platform: macos-latest
-            target: aarch64-apple-darwin
+            target: ""
           - platform: ubuntu-22.04
             target: ""
           - platform: windows-latest
