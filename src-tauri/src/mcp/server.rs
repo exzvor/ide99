@@ -41,7 +41,8 @@ use crate::mcp::auth::{
 use crate::mcp::ide_bridge::IdeBridgeState;
 
 /// MCP protocol version we advertise in `initialize`. Bumped only on
-/// breaking changes — pub const PROTOCOL_VERSION: &str = "2024-11-05";
+/// breaking changes.
+pub const PROTOCOL_VERSION: &str = "2024-11-05";
 
 /// Top-level error type for all MCP operations. Serialized per the
 /// ide99 convention (see `connection::types::ConnectionError`) — `String`
