@@ -73,6 +73,9 @@ jobs:
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Vite build OOMs the default ~4GB Node heap on macos-latest. Bump
+          # to 8GB for headroom across all platforms.
+          NODE_OPTIONS: --max-old-space-size=8192
         with:
           tagName: ${{ steps.tag.outputs.tag }}
           releaseName: "ide99 ${{ steps.tag.outputs.tag }}"
