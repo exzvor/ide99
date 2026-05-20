@@ -1,4 +1,5 @@
 import * as RadixToast from "@radix-ui/react-toast";
+import { X } from "lucide-react";
 import {
   type ReactNode,
   createContext,
@@ -8,6 +9,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * Application-level toast surface.
@@ -72,6 +74,7 @@ const VARIANT_CLASSES: Record<ToastVariant, string> = {
 const MAX_TOASTS = 5;
 
 export function ToastProvider({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
   const [items, setItems] = useState<ToastEntry[]>([]);
 
   const push = useCallback((entry: Omit<ToastEntry, "id">, idHint: string) => {
@@ -139,6 +142,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 </button>
               </RadixToast.Action>
             ) : null}
+            <RadixToast.Close
+              aria-label={t("common.close")}
+              data-testid="toast-close"
+              className={`${entry.action ? "" : "ml-auto "}-mr-[var(--space-1)] -mt-[var(--space-1)] inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-[var(--radius-sm)] text-current opacity-60 transition hover:bg-[color:rgb(0_0_0_/_5%)] hover:opacity-100`}
+            >
+              <X size={14} aria-hidden="true" />
+            </RadixToast.Close>
           </RadixToast.Root>
         ))}
         <RadixToast.Viewport className="fixed right-[var(--space-4)] top-[var(--space-4)] z-[var(--z-toast)] flex w-[20rem] max-w-[calc(100vw-2rem)] flex-col gap-[var(--space-2)] outline-none" />

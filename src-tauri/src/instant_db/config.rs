@@ -9,12 +9,13 @@
 pub const URL_RU: &str = "https://instant.ide99.ru";
 /// Domain for all other locales / international builds.
 pub const URL_INTL: &str = "https://instant.ide99.io";
-/// Fallback used while DNS+TLS are still being provisioned. Plain HTTP on
-/// port 80 of the beta VM — caddy on that port routes `/v1/instant-db/*` to
-/// control and `/telemetry/v1/*` to admin, so the same fallback works for
-/// both pipes. Once DNS+LE certs land, the HTTPS canonicals win first and
-/// this is effectively dead code without a rebuild.
-pub const URL_DEV_FALLBACK: &str = "http://46.21.247.85";
+/// Fallback used if HTTPS canonicals fail (DNS hiccup, MITM-proxy stripping
+/// SNI, etc.). Plain HTTP on port 80 of the beta VM — caddy on that port
+/// routes `/v1/instant-db/*` to control and `/telemetry/v1/*` to admin, so
+/// the same fallback works for both pipes. The IP is the ephemeral external
+/// address of the `ide99-instant-beta` YC VM; it persists across stop/start
+/// and only changes if the VM is fully destroyed.
+pub const URL_DEV_FALLBACK: &str = "http://89.169.150.184";
 
 /// HMAC-SHA256 secret matching `HMAC_SECRET` in the control service `.env`.
 /// Bumping this requires bumping the same secret on the VM and shipping a new

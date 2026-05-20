@@ -1237,6 +1237,19 @@ body {
   width: 600px;
   padding: 0;
 }
+/* Restore inset on header + footer for the lg variant — outer `padding: 0`
+ * is intentional (so consumers can full-bleed the body, e.g. <pre> blocks),
+ * but title and footer buttons should never sit flush against the rounded
+ * modal corners. Consumers that need a padded body add their own
+ * `padding: "0 26px 16px"` on the inner wrapper. */
+.q-modal.lg .q-modal-header {
+  padding: 22px 26px 0;
+  margin-bottom: 14px;
+}
+.q-modal.lg .q-modal-footer {
+  padding: 0 26px 22px;
+  margin-top: 18px;
+}
 /* JSONB editor needs more horizontal room (tree mode at depth
  * 4–5 already tight at 600px). `xl` clamps to viewport-minus-margins so
  * the modal never overflows on 1280×800 laptops. Outer padding is 0 so
@@ -1335,6 +1348,51 @@ body {
   justify-content: flex-end;
   gap: 8px;
   margin-top: 20px;
+}
+
+/* ── Error-explain modal body (lg variant — outer modal has padding:0,
+ *    so body needs its own inset). Mirrors the CrashReportDialog pattern
+ *    but styled here so the JSX stays declarative.                       */
+.error-explain-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 26px 4px;
+  min-width: 0;
+}
+.error-explain-body section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.error-explain-body h4 {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.error-explain-body p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-1);
+}
+.error-explain-body pre {
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border-q);
+  border-radius: var(--r-md);
+  font-family: var(--font-mono-q, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-1);
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
 }
 
 /* ── Inline answer card (success / warning / danger) ──────────────────── */

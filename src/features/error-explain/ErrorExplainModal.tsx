@@ -63,8 +63,14 @@ export function ErrorExplainModalHost(): JSX.Element | null {
             : undefined
       }
       size="lg"
+      closeAriaLabel={t("errorExplain.close")}
       footer={
-        <button type="button" onClick={() => setPayload(null)} data-testid="error-explain-close">
+        <button
+          type="button"
+          className="btn btn-ghost"
+          onClick={() => setPayload(null)}
+          data-testid="error-explain-close"
+        >
           {t("errorExplain.close")}
         </button>
       }

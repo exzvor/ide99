@@ -4,6 +4,14 @@ All notable changes to **ide99** are documented here. Format: [Keep a Changelog]
 
 ## [Unreleased]
 
+## [1.0.3] — 2026-05-20
+
+Small UI polish on top of v1.0.2.
+
+- **Instant DB beta endpoint repaired.** The hard-coded dev fallback in `src-tauri/src/instant_db/config.rs` pointed to a stale IP (`46.21.247.85`) that no longer routed to the beta VM, surfacing as `Failed to create Instant DB: network error` whenever DNS for `instant.ide99.ru` / `instant.ide99.io` was missing. The canonical HTTPS hosts now resolve (DNS A-records + Let's Encrypt certs live on the beta VM); the dev fallback was retargeted to the current VM address as a safety net.
+- **Error-explanation modal no longer clips against the modal edges.** `.q-modal.lg` left header and footer flush against the rounded corners, and `.error-explain-body` had no padding/typography styles at all — so the title, the SQLSTATE subtitle, and the `Close` button all sat at the modal border. Added proper insets for the `lg` variant header/footer + a full set of body styles (sectioned layout, monospace `<pre>` block, accent-aware spacing), plus a corner `×` close button on the modal itself.
+- **Toast notifications now have a manual close `×`.** Top-right toasts auto-dismissed on a timer with no way to close them sooner; added a `RadixToast.Close` button with an `X` icon to every toast (sits next to the optional action button if present).
+
 ## [1.0.2] — 2026-05-15
 
 Bug-fix patch on top of v1.0.1.

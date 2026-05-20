@@ -1543,7 +1543,8 @@
     "save": "Save",
     "create": "Create",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "close": "Close"
   },
   "snippets": {
     "palette": {
