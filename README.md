@@ -9,9 +9,14 @@
 [![Downloads](https://img.shields.io/github/downloads/exzvor/ide99/total?style=flat-square&color=4f8cff)](https://github.com/exzvor/ide99/releases)
 [![Stars](https://img.shields.io/github/stars/exzvor/ide99?style=flat-square&color=4f8cff)](https://github.com/exzvor/ide99/stargazers)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square)](LICENSE)
-[![Website](https://img.shields.io/badge/website-ide99.io-4f8cff?style=flat-square)](https://ide99.io)
 
 [Download](#install) · [Docs](https://ide99.io/docs/) · [Discussions](https://github.com/exzvor/ide99/discussions) · [Why ide99](#why-ide99)
+
+[ide99.io (English)](https://ide99.io) · [ide99.ru (Русский)](https://ide99.ru)
+
+<br/>
+
+<img src=".github/social-preview.png" alt="ide99 — fast local-first PostgreSQL IDE with EXPLAIN plan visualizer" width="900" />
 
 </div>
 
