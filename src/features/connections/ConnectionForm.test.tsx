@@ -28,6 +28,7 @@ vi.mock("react-i18next", () => ({
 }));
 
 const testConnectionMock = vi.fn();
+const testConnectionForEditMock = vi.fn();
 const createConnectionMock = vi.fn();
 const updateConnectionMock = vi.fn();
 
@@ -36,6 +37,7 @@ vi.mock("../../lib/tauri", async () => {
   return {
     ...actual,
     testConnection: (input: unknown) => testConnectionMock(input),
+    testConnectionForEdit: (id: string, input: unknown) => testConnectionForEditMock(id, input),
     createConnection: (input: unknown) => createConnectionMock(input),
     updateConnection: (id: string, input: unknown) => updateConnectionMock(id, input),
   };
@@ -92,6 +94,7 @@ function renderForm() {
 describe("ConnectionForm", () => {
   beforeEach(() => {
     testConnectionMock.mockReset();
+    testConnectionForEditMock.mockReset();
     createConnectionMock.mockReset();
     updateConnectionMock.mockReset();
     storeState = {
@@ -453,5 +456,82 @@ describe("ConnectionForm", () => {
     expect(confirmDestructive).toBeChecked();
     // Toggling confirmDestructive must not flip readOnly.
     expect(readOnly).not.toBeChecked();
+  });
+
+  // --- Issue #15 — Save enables on non-connectivity setting changes ---
+
+  it("edit mode: changing environment alone enables Save without a test", async () => {
+    storeState.formMode = { type: "edit", id: "conn-1" };
+    storeState.connections = [baseConnection];
+    renderForm();
+
+    await waitFor(() => {
+      expect(screen.getByText("connection.form.title.edit")).toBeInTheDocument();
+    });
+    const saveButton = screen.getByRole("button", { name: "connection.form.action.save" });
+    // Untouched edit form: Save starts disabled (no test, no checkbox, not dirty).
+    expect(saveButton).toBeDisabled();
+
+    const envTrigger = screen.getByRole("combobox", {
+      name: "connection.form.field.environment",
+    });
+    await userEvent.click(envTrigger);
+    const stageOption = await screen.findByRole("option", { name: /env\.label\.stage/ });
+    await userEvent.click(stageOption);
+
+    // environment is a non-connectivity setting → a dirty edit to it alone
+    // enables Save with no connection test required (this is issue #15).
+    await waitFor(() => {
+      expect(saveButton).not.toBeDisabled();
+    });
+  });
+
+  it("edit mode: changing a connectivity field (host) keeps Save gated", async () => {
+    storeState.formMode = { type: "edit", id: "conn-1" };
+    storeState.connections = [baseConnection];
+    renderForm();
+
+    const hostInput = screen.getByLabelText(/connection.form.field.host/);
+    await waitFor(() => {
+      expect((hostInput as HTMLInputElement).value).toBe("db.example.com");
+    });
+    const saveButton = screen.getByRole("button", { name: "connection.form.action.save" });
+
+    await userEvent.type(hostInput, "x"); // host is connectivity-affecting → dirty
+    // A connectivity edit must NOT enable Save on its own — the last test no
+    // longer reflects what we'd persist.
+    expect(saveButton).toBeDisabled();
+
+    // The explicit "save without testing" opt-in still works.
+    await userEvent.click(screen.getByRole("checkbox", { name: /save_without_testing/ }));
+    expect(saveButton).not.toBeDisabled();
+  });
+
+  it("edit mode: a successful test enables Save with no field edits (regression guard)", async () => {
+    // Edit mode + blank password routes through testConnectionForEdit (the
+    // backend fills the password from the keychain), not testConnection.
+    testConnectionForEditMock.mockResolvedValueOnce({
+      ok: true,
+      durationMs: 42,
+      error: null,
+      serverVersion: "PostgreSQL 17.2",
+    });
+    storeState.formMode = { type: "edit", id: "conn-1" };
+    storeState.connections = [baseConnection];
+    renderForm();
+
+    await waitFor(() => {
+      expect(screen.getByText("connection.form.title.edit")).toBeInTheDocument();
+    });
+    const saveButton = screen.getByRole("button", { name: "connection.form.action.save" });
+    expect(saveButton).toBeDisabled();
+
+    // No edits at all — just re-test. Save must enable on test success even
+    // though the form is not dirty; guards against gating Save behind isDirty.
+    await userEvent.click(screen.getByRole("button", { name: "connection.form.action.test" }));
+    await waitFor(() => {
+      expect(screen.getByTestId("form-test-success")).toBeInTheDocument();
+    });
+    expect(saveButton).not.toBeDisabled();
   });
 });
