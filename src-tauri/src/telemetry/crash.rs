@@ -114,7 +114,9 @@ pub async fn send(settings: &AppSettings, report: CrashReport) -> Result<(), Tel
         Ok(v) if !v.is_empty() => v,
         _ => {
             tracing::debug!("sentry dsn not configured; skipping crash send");
-            return Ok(());
+            // Distinct from a real send: the UI tells the user reporting is
+            // not configured instead of silently implying the report was sent.
+            return Err(TelemetryError::NotConfigured);
         }
     };
     let endpoint = derive_envelope_url(&dsn).ok_or_else(|| {
@@ -302,16 +304,20 @@ mod tests {
         ));
     }
 
-    /// when DSN env var is absent, `send` returns `Ok(())` silently
-    /// without opening a socket. Test relies on the env var being unset in CI.
+    /// when DSN env var is absent, `send` returns `Err(NotConfigured)`
+    /// without opening a socket, so the UI can distinguish "not configured"
+    /// from a real send. Test relies on the env var being unset in CI.
     #[tokio::test]
-    async fn send_noop_when_dsn_missing() {
+    async fn send_not_configured_when_dsn_missing() {
         if std::env::var(DSN_ENV).is_ok() {
             return; // skip if operator set a real DSN
         }
         let s = opted_in();
         let report = build_report("x", "", "1.0.0");
-        send(&s, report).await.expect("missing dsn => silent Ok");
+        assert!(matches!(
+            send(&s, report).await,
+            Err(TelemetryError::NotConfigured)
+        ));
     }
 
     #[test]

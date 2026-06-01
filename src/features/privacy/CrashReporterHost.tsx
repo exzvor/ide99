@@ -1,5 +1,7 @@
 import { type JSX, useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
+import { useToast } from "../../components/Toast";
 import { CrashReportDialog } from "./CrashReportDialog";
 import { useAppSettings } from "./store";
 import type { CrashReport } from "./types";
@@ -20,6 +22,8 @@ const APP_VERSION =
   "0.1.0";
 
 export function CrashReporterHost(): JSX.Element {
+  const { t } = useTranslation();
+  const toast = useToast();
   const settings = useAppSettings((s) => s.settings);
   const buildCrashReport = useAppSettings((s) => s.buildCrashReport);
   const sendCrashReport = useAppSettings((s) => s.sendCrashReport);
@@ -71,10 +75,22 @@ export function CrashReporterHost(): JSX.Element {
     if (!report) return;
     try {
       await sendCrashReport(report);
+      toast.success(t("privacy.crash.send.success"));
+    } catch (e) {
+      // The backend returns a distinct `not_configured` code when crash
+      // reporting is enabled but no destination (DSN) is set — tell the user
+      // that instead of implying the report was delivered. Anything else is a
+      // genuine send failure.
+      const code = (e as { code?: string } | null)?.code;
+      if (code === "not_configured") {
+        toast.info(t("privacy.crash.send.not_configured"));
+      } else {
+        toast.error(t("privacy.crash.send.error"));
+      }
     } finally {
       setReport(null);
     }
-  }, [report, sendCrashReport]);
+  }, [report, sendCrashReport, toast, t]);
 
   const onCancel = useCallback(() => setReport(null), []);
 
