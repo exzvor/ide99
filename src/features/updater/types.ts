@@ -30,6 +30,10 @@ export type CheckResult =
     }
   | {
       kind: "error";
+      /** Stable failure code from the backend: "unavailable" | "unreachable".
+       *  The UI maps it to a calm, localized message; `message` is raw detail
+       *  kept for diagnostics, not direct display. */
+      code: string;
       message: string;
       channel: ReleaseChannel;
       checkedAt: string;

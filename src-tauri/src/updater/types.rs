@@ -76,6 +76,13 @@ pub enum CheckResult {
         checked_at: String,
     },
     Error {
+        /// Stable, UI-facing failure code so the renderer can show a calm,
+        /// localized message instead of a raw resolver/transport string.
+        /// `"unavailable"` — the updater could not be built (no endpoints /
+        /// not configured). `"unreachable"` — the update server could not be
+        /// reached or returned no usable manifest. The free-form `message`
+        /// is kept for logs/diagnostics, not for direct display.
+        code: String,
         message: String,
         channel: ReleaseChannel,
         checked_at: String,
