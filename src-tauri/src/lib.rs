@@ -7,6 +7,7 @@
 pub mod admin_telemetry;
 mod app_paths;
 pub mod backup;
+pub mod cli;
 pub mod connection;
 pub mod file_sharing;
 pub mod health;
