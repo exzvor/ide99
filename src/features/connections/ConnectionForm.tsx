@@ -416,8 +416,32 @@ export function ConnectionForm() {
   const isInstantDbManaged = pendingInstantDbId !== null;
 
   const saveWithoutTesting = methods.watch("saveWithoutTesting");
+  // Read formState during render so RHF subscribes the proxy and re-renders
+  // (and recomputes saveEnabled) as dirtiness changes — including setValue-
+  // driven fields like `environment` that mark dirty via { shouldDirty: true }.
+  const { isDirty, dirtyFields } = methods.formState;
+  // Connectivity fields (the same set as `configChanged` at submit time) keep
+  // Save gated behind a successful test or the explicit "save without testing"
+  // opt-in: editing them means the last test no longer reflects what we'd
+  // persist. Use dirtyFields (not value compare) so coercion (port) and
+  // edit-then-revert behave correctly.
+  const connectivityDirty =
+    dirtyFields.host === true ||
+    dirtyFields.port === true ||
+    dirtyFields.database === true ||
+    dirtyFields.username === true ||
+    dirtyFields.password === true ||
+    dirtyFields.sslMode === true;
+  // Non-connectivity settings (name, environment, the safety/history toggles)
+  // don't affect reachability, so a dirty edit to those alone enables Save —
+  // added as a THIRD enabler so the existing test-success / save-without-
+  // testing paths (which don't require dirtiness, e.g. re-test then save with
+  // no edits) keep working unchanged.
   const saveEnabled =
-    !submitting && (testState.status === "success" || saveWithoutTesting === true);
+    !submitting &&
+    (testState.status === "success" ||
+      saveWithoutTesting === true ||
+      (isDirty && !connectivityDirty));
 
   const title =
     formMode.type === "edit" ? t("connection.form.title.edit") : t("connection.form.title.create");
