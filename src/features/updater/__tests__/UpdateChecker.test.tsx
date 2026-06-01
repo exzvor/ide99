@@ -258,13 +258,14 @@ describe("UpdateChecker", () => {
     });
   });
 
-  it("renders an error result inline (not as a thrown alert)", async () => {
+  it("renders an unreachable error inline with a calm localized message (not the raw string)", async () => {
     invokeMock.mockImplementation(async (cmd: string) => {
       if (cmd === "updater_current_version") return "1.0.0";
       if (cmd === "updater_check")
         return {
           kind: "error",
-          message: "manifest unreachable",
+          code: "unreachable",
+          message: "error sending request for url (https://updates.ide99.io): dns error",
           channel: "stable",
           checkedAt: "now",
         } satisfies CheckResult;
@@ -274,7 +275,30 @@ describe("UpdateChecker", () => {
     render(<UpdateChecker />);
     await user.click(screen.getByTestId("updater-check"));
     await screen.findByTestId("updater-result-error");
-    expect(screen.getByRole("alert")).toHaveTextContent("manifest unreachable");
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveTextContent("updater.error_unreachable");
+    // The scary raw resolver/transport string must not reach the user.
+    expect(alert).not.toHaveTextContent("dns error");
+  });
+
+  it("falls back to the generic error message for an unknown code", async () => {
+    invokeMock.mockImplementation(async (cmd: string) => {
+      if (cmd === "updater_current_version") return "1.0.0";
+      if (cmd === "updater_check")
+        return {
+          kind: "error",
+          code: "something-new",
+          message: "weird failure",
+          channel: "stable",
+          checkedAt: "now",
+        } satisfies CheckResult;
+      return undefined;
+    });
+    const user = userEvent.setup();
+    render(<UpdateChecker />);
+    await user.click(screen.getByTestId("updater-check"));
+    await screen.findByTestId("updater-result-error");
+    expect(screen.getByRole("alert")).toHaveTextContent("updater.error|message=weird failure");
   });
 
   it("ignores progress events that arrive before installing flips on", async () => {

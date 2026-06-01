@@ -63,6 +63,8 @@ const KEYS = [
   "updater.up_to_date",
   "updater.available",
   "updater.error",
+  "updater.error_unavailable",
+  "updater.error_unreachable",
   "updater.channel.label",
   "updater.channel.stable",
   "updater.channel.beta",
