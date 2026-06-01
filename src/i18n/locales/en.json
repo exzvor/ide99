@@ -2579,6 +2579,11 @@
       "title": "Crash reports",
       "description": "When ide99 crashes, you can preview the report (stack + system info) and approve before send. Never auto-sent.",
       "enable": "Send crash reports (with preview)",
+      "send": {
+        "success": "Crash report sent. Thank you.",
+        "not_configured": "Crash reporting isn't set up in this build, so nothing was sent.",
+        "error": "Couldn't send the crash report. Please try again later."
+      },
       "dialog": {
         "title": "ide99 crashed — send the report?",
         "preview_header": "Preview the captured stack and system info before sending. Nothing is sent without your approval.",

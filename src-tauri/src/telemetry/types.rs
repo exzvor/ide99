@@ -121,6 +121,11 @@ pub enum TelemetryError {
     InvalidInput(String),
     #[error("network error: {0}")]
     Network(String),
+    /// Opted in, but no destination is configured (no `IDE99_SENTRY_DSN`).
+    /// Distinct from a real send so the UI can tell the user reporting isn't
+    /// set up rather than implying the report was delivered.
+    #[error("crash reporting is not configured")]
+    NotConfigured,
 }
 
 impl serde::Serialize for TelemetryError {
@@ -132,6 +137,7 @@ impl serde::Serialize for TelemetryError {
             Self::UnknownEvent(name) => ("unknown_event", format!("unknown event: {name}")),
             Self::InvalidInput(m) => ("invalid_input", m.clone()),
             Self::Network(m) => ("network_error", m.clone()),
+            Self::NotConfigured => ("not_configured", "crash reporting is not configured".into()),
         };
         let mut s = ser.serialize_struct("TelemetryError", 2)?;
         s.serialize_field("code", code)?;
