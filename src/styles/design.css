@@ -590,7 +590,11 @@ body {
   border-radius: var(--r-md);
   box-shadow: var(--shadow-q-lg);
   padding: 4px;
-  z-index: 80;
+  /* Must sit above the host .q-modal (z-index 90) and its .q-backdrop (80):
+   * both this Select panel and the modal mount as document.body-level Radix
+   * portals, so the dropdown is only clickable if it paints above the modal.
+   * Stays well below tooltips (70 is workspace-only) and toasts (600). */
+  z-index: 95;
   min-width: var(--radix-select-trigger-width, 200px);
 }
 .env-select-item {
