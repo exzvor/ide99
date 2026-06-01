@@ -10,6 +10,7 @@ use tauri::{
     menu::{Menu, MenuBuilder, MenuEvent, MenuItemBuilder, PredefinedMenuItem, SubmenuBuilder},
     AppHandle, Emitter, Runtime, Wry,
 };
+use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 
 pub const ID_TOGGLE_THEME: &str = "toggle-theme";
 pub const ID_ABOUT: &str = "about";
@@ -67,8 +68,8 @@ pub fn build(app: &AppHandle) -> tauri::Result<Menu<Wry>> {
 }
 
 /// Route menu activations. `toggle-theme` re-broadcasts as a webview event so
-/// the React-side `useTheme` hook can react. `about` logs through tracing
-/// for now — a full About dialog lands when we adopt `tauri-plugin-dialog`.
+/// the React-side `useTheme` hook can react. `about` opens a native message
+/// dialog via `tauri-plugin-dialog`.
 ///
 /// Takes `MenuEvent` by value to satisfy the Tauri 2 `on_menu_event` callback
 /// signature (`Fn(&AppHandle<R>, MenuEvent)`).
@@ -81,7 +82,17 @@ pub fn handle_event<R: Runtime>(app: &AppHandle<R>, event: MenuEvent) {
             }
         }
         ID_ABOUT => {
-            tracing::info!(version = env!("CARGO_PKG_VERSION"), "about menu activated");
+            let version = app.package_info().version.to_string();
+            let identifier = app.config().identifier.clone();
+            // Show non-blocking: a blocking dialog invoked from inside the
+            // menu-event callback can reenter the GTK main loop on Linux.
+            app.dialog()
+                .message(format!(
+                    "ide99 {version}\n\nA desktop PostgreSQL client.\n{identifier}"
+                ))
+                .title("About ide99")
+                .kind(MessageDialogKind::Info)
+                .show(|_| {});
         }
         other => {
             tracing::debug!(menu_id = other, "unhandled menu event");

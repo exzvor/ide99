@@ -99,7 +99,11 @@ impl AppState {
         let updater = match app.updater_builder().timeout(CHECK_TIMEOUT).build() {
             Ok(u) => u,
             Err(e) => {
+                // Builder failure = updater not configured / no endpoints.
+                // Keep the raw error in the log; the UI keys off `code`.
+                tracing::warn!(error = %e, "updater build failed");
                 return Ok(CheckResult::Error {
+                    code: "unavailable".into(),
                     message: format!("updater unavailable: {e}"),
                     channel,
                     checked_at: now,
@@ -122,11 +126,19 @@ impl AppState {
                     checked_at: now,
                 })
             }
-            Err(e) => Ok(CheckResult::Error {
-                message: format!("{e}"),
-                channel,
-                checked_at: now,
-            }),
+            // Any check() failure (DNS/connect/transport, or no valid release
+            // JSON) means we could not reach a usable update server. Classify
+            // by the failed operation rather than sniffing the error's Display
+            // string, which is platform/locale/plugin-version dependent.
+            Err(e) => {
+                tracing::warn!(error = %e, "updater check failed");
+                Ok(CheckResult::Error {
+                    code: "unreachable".into(),
+                    message: format!("{e}"),
+                    channel,
+                    checked_at: now,
+                })
+            }
         }
     }
 

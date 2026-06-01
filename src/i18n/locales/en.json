@@ -2544,6 +2544,8 @@
     "up_to_date": "You're up to date — version {{version}}.",
     "available": "Update available: {{from}} → {{to}}",
     "error": "Couldn't check for updates: {{message}}",
+    "error_unavailable": "Automatic updates aren't enabled in this build.",
+    "error_unreachable": "Couldn't reach the update server. Try again later.",
     "channel": {
       "label": "Release channel",
       "stable": "Stable (recommended)",

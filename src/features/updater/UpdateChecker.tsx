@@ -238,7 +238,11 @@ export function UpdateChecker(): JSX.Element {
 
           {lastResult.kind === "error" ? (
             <span role="alert" style={{ color: "var(--err, #d33)" }}>
-              {t("updater.error", { message: lastResult.message })}
+              {lastResult.code === "unreachable"
+                ? t("updater.error_unreachable")
+                : lastResult.code === "unavailable"
+                  ? t("updater.error_unavailable")
+                  : t("updater.error", { message: lastResult.message })}
             </span>
           ) : null}
         </div>
