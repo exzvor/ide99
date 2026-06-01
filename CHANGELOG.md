@@ -4,6 +4,17 @@ All notable changes to **ide99** are documented here. Format: [Keep a Changelog]
 
 ## [Unreleased]
 
+## [1.0.4] — 2026-06-01
+
+Bug-fix release addressing reported v1.0.3 issues.
+
+- **Environment dropdown is selectable in the connection form (#13).** `.env-select-content` rendered at `z-index: 80`, below the host `.q-modal` (90), so its options painted behind the modal and were not clickable with the mouse (keyboard selection still worked). Both mount as `document.body`-level Radix portals; raised the panel to 95 so it stacks above the modal.
+- **Save enables on non-connectivity setting changes (#15).** Changing Environment, name, or the safety/history toggles now enables Save without requiring a connection test. Connectivity fields (host/port/database/username/password/SSL) still require a successful test or the explicit "save without testing" opt-in.
+- **`--version` / `--help` work without launching the GUI (#10).** The binary prints version/usage and exits for `--version`/`-V`/`--help`/`-h`; unrecognized args (including macOS launch args and file paths) fall through to a normal launch. Windows GUI-subsystem console output is a tracked follow-up.
+- **Help → About opens a real dialog (#12, partial).** The About item now shows a native dialog with name/version/identifier instead of only writing a log line. The Linux native-menu vs custom-titlebar frame conflict is tracked separately.
+- **Calmer "check for updates" failure (#16, partial).** An unreachable/unconfigured updater no longer surfaces a raw resolver/DNS error string; a localized message is shown instead. End-to-end update checking still requires the updater infrastructure (DNS/TLS/CDN + signing key), tracked separately.
+- **Crash-report send feedback (#14, partial).** "Send report" now shows a success / "not configured" / error toast instead of closing silently; the backend distinguishes a missing DSN from a real send. The underlying connect-crash diagnosis (file logging + repro) is tracked separately.
+
 ## [1.0.3] — 2026-05-20
 
 Small UI polish on top of v1.0.2.
