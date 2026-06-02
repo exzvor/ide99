@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import { type JSX, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActionButton } from "../actions/ActionButton";
 import type { CardState } from "../store";
@@ -30,14 +30,18 @@ export function BloatCard({ connId, state }: CardProps): JSX.Element {
     );
   }
 
-  const top3 = rows.slice(0, 3);
-  const more = rows.length - top3.length;
+  const TOP_N = 3;
+  const [expanded, setExpanded] = useState(false);
+  const visible = expanded ? rows : rows.slice(0, TOP_N);
+  const more = rows.length - TOP_N;
+  // tone is computed over ALL rows (not just the visible slice) so expanding
+  // the list never changes the card's severity.
   const maxPct = rows.reduce((acc, r) => Math.max(acc, r.bloatPct), 0);
   const tone = bloatTone(maxPct);
 
   const body = (
     <ul style={{ margin: 0, padding: 0, listStyle: "none", fontSize: 12 }}>
-      {top3.map((r) => (
+      {visible.map((r) => (
         <li
           key={`${r.schema}.${r.table}`}
           data-testid="bloat-row"
@@ -74,8 +78,24 @@ export function BloatCard({ connId, state }: CardProps): JSX.Element {
         </li>
       ))}
       {more > 0 ? (
-        <li style={{ opacity: 0.65 }} data-testid="bloat-more">
-          {t("health.card.bloat.more", { count: more })}
+        <li>
+          <button
+            type="button"
+            data-testid="bloat-more"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+            style={{
+              background: "none",
+              border: "none",
+              padding: 0,
+              font: "inherit",
+              color: "var(--ink-4)",
+              cursor: "pointer",
+              textDecoration: "underline",
+            }}
+          >
+            {expanded ? t("health.card.show_less") : t("health.card.bloat.more", { count: more })}
+          </button>
         </li>
       ) : null}
     </ul>

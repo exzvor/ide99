@@ -29,6 +29,21 @@ function getEnvForConnection(
   return found?.environment ?? "local";
 }
 
+/**
+ * Scroll to the first Health card of the given severity and briefly flash it,
+ * so the critical/warning pills act as jump-to navigation (#34). Card roots
+ * carry `data-card-tone` (set in CardShell) and the DOM order matches the
+ * dashboard display order, so the first match is the first such card.
+ */
+export function jumpToTone(tone: "danger" | "warn"): void {
+  const el = document.querySelector<HTMLElement>(`[data-card-tone="${tone}"]`);
+  if (!el) return;
+  const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+  el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest" });
+  el.classList.add("health-card-flash");
+  window.setTimeout(() => el.classList.remove("health-card-flash"), 1200);
+}
+
 function rtfFor(locale: string): Intl.RelativeTimeFormat | null {
   if (typeof Intl === "undefined" || !Intl.RelativeTimeFormat) return null;
   try {
@@ -151,14 +166,26 @@ export function HealthHeader({
 
       <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
         {counts.danger > 0 ? (
-          <span className="q-pill crit" data-testid="health-pill-critical">
+          <button
+            type="button"
+            className="q-pill crit"
+            data-testid="health-pill-critical"
+            onClick={() => jumpToTone("danger")}
+            title={t("health.header.pill_jump")}
+          >
             {t("health.header.pill_critical", { count: counts.danger })}
-          </span>
+          </button>
         ) : null}
         {counts.warn > 0 ? (
-          <span className="q-pill warn" data-testid="health-pill-warning">
+          <button
+            type="button"
+            className="q-pill warn"
+            data-testid="health-pill-warning"
+            onClick={() => jumpToTone("warn")}
+            title={t("health.header.pill_jump")}
+          >
             {t("health.header.pill_warning", { count: counts.warn })}
-          </span>
+          </button>
         ) : null}
         {counts.ok > 0 ? (
           <span className="q-pill ok" data-testid="health-pill-ok">

@@ -3,7 +3,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import i18n from "../../i18n";
 import type { Connection } from "../../lib/tauri";
 import { useConnections } from "../connections/store";
-import { HealthHeader } from "./HealthHeader";
+import { HealthHeader, jumpToTone } from "./HealthHeader";
 import { useHealth } from "./store";
 
 const fakeConn = (
@@ -176,5 +176,28 @@ describe("HealthHeader", () => {
       target: { value: "off" },
     });
     expect(setRefreshInterval).toHaveBeenCalledWith("c1", null);
+  });
+
+  it("jumpToTone scrolls to and flashes the first card of the tone (#34)", () => {
+    const other = document.createElement("div");
+    other.setAttribute("data-card-tone", "warn");
+    const target = document.createElement("div");
+    target.setAttribute("data-card-tone", "danger");
+    const scrollIntoView = vi.fn();
+    target.scrollIntoView = scrollIntoView;
+    document.body.append(other, target);
+    try {
+      jumpToTone("danger");
+      expect(scrollIntoView).toHaveBeenCalledTimes(1);
+      expect(target.classList.contains("health-card-flash")).toBe(true);
+    } finally {
+      other.remove();
+      target.remove();
+    }
+  });
+
+  it("jumpToTone is a no-op when no card of that tone exists", () => {
+    // No data-card-tone elements in the document → must not throw.
+    expect(() => jumpToTone("danger")).not.toThrow();
   });
 });

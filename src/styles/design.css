@@ -702,6 +702,38 @@ body {
   color: var(--ink-3);
   letter-spacing: 0.01em;
 }
+/* A pill rendered as an interactive button (jump-to-severity, #34): strip the
+ * native button chrome so it matches the span pills, and show it's clickable. */
+button.q-pill {
+  border: none;
+  margin: 0;
+  cursor: pointer;
+}
+button.q-pill:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+/* Transient flash when a severity pill jumps to its first card (#34). */
+@keyframes health-card-flash {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  25% {
+    box-shadow: 0 0 0 3px var(--accent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.health-card-flash {
+  animation: health-card-flash 1.2s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .health-card-flash {
+    animation: none;
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+}
 .q-pill.ok {
   background: var(--accent-soft);
   color: var(--accent-strong);
