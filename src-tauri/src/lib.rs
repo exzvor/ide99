@@ -136,6 +136,11 @@ pub fn run() {
     logging::init_tracing();
     tracing::info!(version = env!("CARGO_PKG_VERSION"), "ide99 starting");
 
+    // One-time migration of v1.0.x user data from the legacy data dir (the
+    // generic "app" folder on Linux/Windows, issue #26) to the canonical
+    // io.ide99.app dir. Best-effort; must run before the store is opened.
+    app_paths::migrate_legacy_data_dir();
+
     let data_dir_path = app_paths::data_dir().expect("data dir");
     let db_path = app_paths::store_db_path().expect("store db path");
     let mut store = Store::open(&db_path).expect("open store");
