@@ -6,7 +6,9 @@ import {
   Database,
   Eye,
   Folder,
+  FunctionSquare,
   Layers,
+  SquareFunction,
   Table2,
 } from "lucide-react";
 import {
@@ -95,7 +97,9 @@ function buildTreeNodes(
     const displayName =
       child.kind === "tables-group" ||
       child.kind === "views-group" ||
-      child.kind === "matviews-group"
+      child.kind === "matviews-group" ||
+      child.kind === "functions-group" ||
+      child.kind === "procedures-group"
         ? translate(child.name)
         : child.name;
     return {
@@ -120,12 +124,20 @@ function iconForKind(kind: NodeKind): JSX.Element | null {
       return <Folder {...props} />;
     case "matviews-group":
       return <Folder {...props} />;
+    case "functions-group":
+      return <Folder {...props} />;
+    case "procedures-group":
+      return <Folder {...props} />;
     case "table":
       return <Table2 {...props} />;
     case "view":
       return <Eye {...props} />;
     case "matview":
       return <Layers {...props} />;
+    case "function":
+      return <FunctionSquare {...props} />;
+    case "procedure":
+      return <SquareFunction {...props} />;
     case "column":
       return <Columns {...props} />;
   }
@@ -219,7 +231,13 @@ function Row({
       // column rows: click is a no-op; only the JSONB chevron toggles the panel
       return;
     }
-    if (kind === "table" || kind === "view" || kind === "matview") {
+    if (
+      kind === "table" ||
+      kind === "view" ||
+      kind === "matview" ||
+      kind === "function" ||
+      kind === "procedure"
+    ) {
       // Tables and views: select the node AND toggle column expansion.
       // Only call onToggle (which triggers loadChildren) if the node is a
       // non-leaf in the tree — i.e., the cache already knows it has children.
@@ -254,7 +272,12 @@ function Row({
 
   // "isLeaf" is used only to apply the "ident" CSS class — originally tables/views
   // were leaves; they still get the same class treatment.
-  const isLeaf = kind === "table" || kind === "view" || kind === "matview";
+  const isLeaf =
+    kind === "table" ||
+    kind === "view" ||
+    kind === "matview" ||
+    kind === "function" ||
+    kind === "procedure";
   const isColumn = kind === "column";
 
   // S28 — hypertable badge: looks up isHypertable in useTimescale's per-conn map.
@@ -516,7 +539,13 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
 
   const handleSelect = useCallback(
     (id: NodeKey, kind: NodeKind) => {
-      if (kind === "table" || kind === "view" || kind === "matview") {
+      if (
+        kind === "table" ||
+        kind === "view" ||
+        kind === "matview" ||
+        kind === "function" ||
+        kind === "procedure"
+      ) {
         selectNode(id);
         // also dispatch an editor object tab so the user gets a
         // pinned ObjectDetails view in the main area without losing other
