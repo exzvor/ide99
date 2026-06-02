@@ -4,6 +4,14 @@ All notable changes to **ide99** are documented here. Format: [Keep a Changelog]
 
 ## [Unreleased]
 
+## [1.0.5] — 2026-06-02
+
+Schema-browser + connection-form improvements and a data-dir fix.
+
+- **Materialized views are shown in the schema tree (#27).** Each schema now has a **Materialized views** group alongside Tables and Views; selecting a matview shows its definition (with a note when it is unpopulated). Existing matviews were always intact — they were just missing the tree node. Reported via support.
+- **Browse available databases in the connection form (#24).** A **Browse databases** button next to the Database field lists the databases the entered credentials can reach (it connects to a maintenance DB, so it works even if the typed database name is wrong) and feeds them to a type-ahead `<datalist>`.
+- **Data directory uses a product-specific folder on every platform (#26).** Linux/Windows stored data in a generic `app` folder (`~/.local/share/app`); it now resolves to `io.ide99.app`, matching macOS. A one-time, best-effort startup migration moves existing v1.0.x data to the new location, so saved connections are preserved.
+
 ## [1.0.4] — 2026-06-01
 
 Bug-fix release addressing reported v1.0.3 issues.
