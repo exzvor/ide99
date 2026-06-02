@@ -1,5 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+// Bundles Monaco locally so the SQL editor works offline instead of hanging on
+// "Loading…" (issue #32). Runs at import time, before any <Editor> mounts.
+import "./lib/monaco-setup";
 import "./styles/globals.css";
 import "pev2/dist/pev2.css";
 import "./i18n";
