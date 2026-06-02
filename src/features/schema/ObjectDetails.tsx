@@ -6,16 +6,20 @@ import { localizeConnectionError } from "../../lib/errors";
 import {
   type ColumnInfo,
   type ForeignKeyInfo,
+  type FunctionDefinition,
   type IndexInfo,
   type MatviewDefinition,
+  type ProcedureDefinition,
   type ViewInfo,
+  schemaGetFunctionDefinition,
   schemaGetMatviewDefinition,
+  schemaGetProcedureDefinition,
   schemaListColumns,
   schemaListForeignKeys,
   schemaListIndexes,
   schemaListViews,
 } from "../../lib/tauri";
-import { type NodeKey, useSchema } from "./store";
+import { type NodeKey, parseRoutineKey, useSchema } from "./store";
 
 /**
  * Main-area panel for selected tree node (spec §5.4 / §7.4).
@@ -53,7 +57,19 @@ interface ParsedMatview {
   name: string;
 }
 
-type ParsedNode = ParsedTable | ParsedView | ParsedMatview | { kind: "placeholder" };
+interface ParsedRoutine {
+  kind: "function" | "procedure";
+  schema: string;
+  name: string;
+  args: string;
+}
+
+type ParsedNode =
+  | ParsedTable
+  | ParsedView
+  | ParsedMatview
+  | ParsedRoutine
+  | { kind: "placeholder" };
 
 function parseNode(node: NodeKey | null): ParsedNode {
   if (node === null) return { kind: "placeholder" };
@@ -74,6 +90,10 @@ function parseNode(node: NodeKey | null): ParsedNode {
     const slash = rest.indexOf("/");
     if (slash === -1) return { kind: "placeholder" };
     return { kind: "matview", schema: rest.slice(0, slash), name: rest.slice(slash + 1) };
+  }
+  const routine = parseRoutineKey(node);
+  if (routine) {
+    return routine;
   }
   return { kind: "placeholder" };
 }
@@ -135,6 +155,19 @@ export function ObjectDetails({ node }: { node: NodeKey | null }): JSX.Element {
         schema={parsed.schema}
         name={parsed.name}
         key={`matview:${parsed.schema}/${parsed.name}`}
+      />
+    );
+  }
+
+  if (parsed.kind === "function" || parsed.kind === "procedure") {
+    return (
+      <RoutineDetails
+        kind={parsed.kind}
+        connId={connection.connId}
+        schema={parsed.schema}
+        name={parsed.name}
+        args={parsed.args}
+        key={`${parsed.kind}:${parsed.schema}/${parsed.name}#${parsed.args}`}
       />
     );
   }
@@ -446,6 +479,83 @@ function MatviewDetails({
                 <code>{state.data.body}</code>
               </pre>
             </>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RoutineDetails({
+  kind,
+  connId,
+  schema,
+  name,
+  args,
+}: {
+  kind: "function" | "procedure";
+  connId: string;
+  schema: string;
+  name: string;
+  args: string;
+}): JSX.Element {
+  const { t } = useTranslation();
+  const toast = useToast();
+  const [state, setState] =
+    useState<FetchState<FunctionDefinition | ProcedureDefinition>>(initialFetch);
+
+  const load = useCallback(() => {
+    setState({ loading: true, data: null, error: null });
+    const fetchDef =
+      kind === "function"
+        ? schemaGetFunctionDefinition(connId, schema, name, args)
+        : schemaGetProcedureDefinition(connId, schema, name, args);
+    fetchDef
+      .then((def) => {
+        setState({ loading: false, data: def, error: null });
+      })
+      .catch((err: unknown) => {
+        const message = localizeConnectionError(err, t);
+        setState({ loading: false, data: null, error: message });
+        toast.error(message);
+      });
+  }, [kind, connId, schema, name, args, t, toast]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
+      <div
+        role="tablist"
+        aria-label={t("object_details.section.definition")}
+        className="q-subtabbar"
+      >
+        <TabButton active onClick={() => {}} controls="panel-definition" id="tab-definition">
+          {t("object_details.section.definition")}
+        </TabButton>
+      </div>
+      <div className="q-scroll" style={{ flex: 1, overflow: "auto", padding: 18, minHeight: 0 }}>
+        <div role="tabpanel" id="panel-definition" aria-labelledby="tab-definition">
+          {state.loading ? <LoadingRow /> : null}
+          {state.error ? <ErrorRow message={state.error} onRetry={load} /> : null}
+          {state.data ? (
+            <pre
+              style={{
+                overflow: "auto",
+                background: "var(--bg-sunken)",
+                padding: 12,
+                borderRadius: 8,
+                margin: 0,
+                fontFamily: "var(--font-mono-q)",
+                fontSize: 11.5,
+                color: "var(--ink-2)",
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              <code>{`-- ${state.data.name}(${args})  ·  language: ${state.data.language}\n\n${state.data.body}`}</code>
+            </pre>
           ) : null}
         </div>
       </div>

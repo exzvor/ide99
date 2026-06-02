@@ -179,6 +179,8 @@
       "tables_group": "Таблицы",
       "views_group": "Представления",
       "matviews_group": "Материализованные представления",
+      "functions_group": "Функции",
+      "procedures_group": "Процедуры",
       "expand": "Раскрыть",
       "collapse": "Свернуть",
       "copy_name": "Копировать имя",

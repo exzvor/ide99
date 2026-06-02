@@ -1,5 +1,13 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import type { ConnectInfo, MatviewSummary, SchemaInfo, TableInfo, ViewInfo } from "../../lib/tauri";
+import type {
+  ConnectInfo,
+  FunctionSummary,
+  MatviewSummary,
+  ProcedureSummary,
+  SchemaInfo,
+  TableInfo,
+  ViewInfo,
+} from "../../lib/tauri";
 
 const connectionConnectMock = vi.fn();
 const connectionDisconnectMock = vi.fn();
@@ -7,6 +15,8 @@ const schemaListSchemasMock = vi.fn();
 const schemaListTablesMock = vi.fn();
 const schemaListViewsMock = vi.fn();
 const schemaListMatviewsMock = vi.fn();
+const schemaListFunctionsMock = vi.fn();
+const schemaListProceduresMock = vi.fn();
 
 vi.mock("../../lib/tauri", async () => {
   const actual = await vi.importActual<typeof import("../../lib/tauri")>("../../lib/tauri");
@@ -18,10 +28,14 @@ vi.mock("../../lib/tauri", async () => {
     schemaListTables: (connId: string, schema: string) => schemaListTablesMock(connId, schema),
     schemaListViews: (connId: string, schema: string) => schemaListViewsMock(connId, schema),
     schemaListMatviews: (connId: string, schema: string) => schemaListMatviewsMock(connId, schema),
+    schemaListFunctions: (connId: string, schema: string, triggerOnly: boolean) =>
+      schemaListFunctionsMock(connId, schema, triggerOnly),
+    schemaListProcedures: (connId: string, schema: string) =>
+      schemaListProceduresMock(connId, schema),
   };
 });
 
-import { __testing, useSchema } from "./store";
+import { __testing, parseRoutineKey, routineKey, useSchema } from "./store";
 
 const initial = useSchema.getState();
 
@@ -53,6 +67,16 @@ const dailyStatsMatview: MatviewSummary = {
   populated: true,
   comment: null,
 };
+const addFunction: FunctionSummary = {
+  name: "add",
+  args: "a integer, b integer",
+  returnKind: "scalar",
+  returnType: "integer",
+};
+const doThingProcedure: ProcedureSummary = {
+  name: "do_thing",
+  args: "",
+};
 
 beforeEach(() => {
   connectionConnectMock.mockReset();
@@ -61,6 +85,8 @@ beforeEach(() => {
   schemaListTablesMock.mockReset();
   schemaListViewsMock.mockReset();
   schemaListMatviewsMock.mockReset();
+  schemaListFunctionsMock.mockReset();
+  schemaListProceduresMock.mockReset();
   reset();
 });
 
@@ -173,7 +199,7 @@ describe("useSchema loadChildren", () => {
     expect(useSchema.getState().cache.get("schemas")).toEqual(children);
   });
 
-  test('"schema:NAME" → synthetic tables-group + views-group + matviews-group, no backend call', async () => {
+  test('"schema:NAME" → synthetic tables/views/matviews/functions/procedures groups, no backend call', async () => {
     const children = await useSchema.getState().loadChildren("schema:public");
 
     expect(children).toEqual([
@@ -195,10 +221,24 @@ describe("useSchema loadChildren", () => {
         kind: "matviews-group",
         hasChildren: true,
       },
+      {
+        id: "schema:public/functions",
+        name: "schema.tree.functions_group",
+        kind: "functions-group",
+        hasChildren: true,
+      },
+      {
+        id: "schema:public/procedures",
+        name: "schema.tree.procedures_group",
+        kind: "procedures-group",
+        hasChildren: true,
+      },
     ]);
     expect(schemaListTablesMock).not.toHaveBeenCalled();
     expect(schemaListViewsMock).not.toHaveBeenCalled();
     expect(schemaListMatviewsMock).not.toHaveBeenCalled();
+    expect(schemaListFunctionsMock).not.toHaveBeenCalled();
+    expect(schemaListProceduresMock).not.toHaveBeenCalled();
   });
 
   test('"schema:NAME/tables" → maps to table leaf children', async () => {
@@ -243,6 +283,52 @@ describe("useSchema loadChildren", () => {
       },
     ]);
     expect(schemaListMatviewsMock).toHaveBeenCalledWith("conn-1", "public");
+  });
+
+  test('"schema:NAME/functions" → maps to function leaf children (args-encoded key)', async () => {
+    schemaListFunctionsMock.mockResolvedValueOnce([addFunction]);
+
+    const children = await useSchema.getState().loadChildren("schema:public/functions");
+
+    expect(children).toEqual([
+      {
+        // name + args encoded into the key so overloads never collide
+        id: `function:public/add#${encodeURIComponent("a integer, b integer")}`,
+        name: "add(a integer, b integer)",
+        kind: "function",
+        hasChildren: false,
+      },
+    ]);
+    // triggerOnly=false → list all functions, not just trigger-returning ones.
+    expect(schemaListFunctionsMock).toHaveBeenCalledWith("conn-1", "public", false);
+  });
+
+  test("function overloads produce distinct node keys", async () => {
+    schemaListFunctionsMock.mockResolvedValueOnce([
+      { name: "f", args: "a integer", returnKind: "scalar", returnType: "integer" },
+      { name: "f", args: "a text", returnKind: "scalar", returnType: "text" },
+    ]);
+
+    const children = await useSchema.getState().loadChildren("schema:public/functions");
+
+    expect(children).toHaveLength(2);
+    expect(children[0].id).not.toBe(children[1].id);
+  });
+
+  test('"schema:NAME/procedures" → maps to procedure leaf children', async () => {
+    schemaListProceduresMock.mockResolvedValueOnce([doThingProcedure]);
+
+    const children = await useSchema.getState().loadChildren("schema:public/procedures");
+
+    expect(children).toEqual([
+      {
+        id: "procedure:public/do_thing#",
+        name: "do_thing",
+        kind: "procedure",
+        hasChildren: false,
+      },
+    ]);
+    expect(schemaListProceduresMock).toHaveBeenCalledWith("conn-1", "public");
   });
 
   test("returns cached value without re-fetching", async () => {
@@ -362,6 +448,32 @@ describe("useSchema refreshAll", () => {
     expect(useSchema.getState().cache.get("schema:public/tables")).toEqual([
       { id: "table:public/users", name: "users", kind: "table", hasChildren: true },
     ]);
+  });
+});
+
+describe("routine key codec", () => {
+  test("round-trips schema/name/args incl commas, spaces, brackets", () => {
+    const key = routineKey("function", "public", "add", "a integer, b text[]");
+    expect(parseRoutineKey(key)).toEqual({
+      kind: "function",
+      schema: "public",
+      name: "add",
+      args: "a integer, b text[]",
+    });
+  });
+
+  test("round-trips empty args", () => {
+    expect(parseRoutineKey(routineKey("procedure", "public", "do_thing", ""))).toEqual({
+      kind: "procedure",
+      schema: "public",
+      name: "do_thing",
+      args: "",
+    });
+  });
+
+  test("returns null for non-routine keys", () => {
+    expect(parseRoutineKey("table:public/users")).toBeNull();
+    expect(parseRoutineKey("matview:public/m")).toBeNull();
   });
 });
 

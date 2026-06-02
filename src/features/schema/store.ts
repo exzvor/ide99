@@ -7,10 +7,9 @@
  * user expanding/collapsing the same node rapidly never triggers duplicate
  * Tauri command round-trips.
  *
- * Synthetic group nodes ("schema:NAME") are expanded into three virtual children
- * ("schema:NAME/tables", "schema:NAME/views", "schema:NAME/matviews") without
- * hitting the backend; the `name` field carries an i18n key so render-site
- * components can localize.
+ * Synthetic group nodes ("schema:NAME") are expanded into five virtual children
+ * (tables, views, matviews, functions, procedures) without hitting the backend;
+ * the `name` field carries an i18n key so render-site components can localize.
  */
 
 import { create } from "zustand";
@@ -20,7 +19,9 @@ import {
   connectionConnect,
   connectionDisconnect,
   schemaListColumns,
+  schemaListFunctions,
   schemaListMatviews,
+  schemaListProcedures,
   schemaListSchemas,
   schemaListTables,
   schemaListViews,
@@ -49,9 +50,13 @@ export type NodeKind =
   | "tables-group"
   | "views-group"
   | "matviews-group"
+  | "functions-group"
+  | "procedures-group"
   | "table"
   | "view"
   | "matview"
+  | "function"
+  | "procedure"
   | "column";
 
 export type NodeKey = string;
@@ -127,6 +132,8 @@ function parseKey(
   | { kind: "tables-group"; schema: string }
   | { kind: "views-group"; schema: string }
   | { kind: "matviews-group"; schema: string }
+  | { kind: "functions-group"; schema: string }
+  | { kind: "procedures-group"; schema: string }
   | { kind: "table"; schema: string; table: string }
   | { kind: "unknown" } {
   if (key === "schemas") return { kind: "schemas" };
@@ -141,6 +148,12 @@ function parseKey(
     if (rest.endsWith("/matviews")) {
       return { kind: "matviews-group", schema: rest.slice(0, -"/matviews".length) };
     }
+    if (rest.endsWith("/functions")) {
+      return { kind: "functions-group", schema: rest.slice(0, -"/functions".length) };
+    }
+    if (rest.endsWith("/procedures")) {
+      return { kind: "procedures-group", schema: rest.slice(0, -"/procedures".length) };
+    }
     return { kind: "schema", schema: rest };
   }
   if (key.startsWith("table:")) {
@@ -151,6 +164,46 @@ function parseKey(
     }
   }
   return { kind: "unknown" };
+}
+
+/**
+ * Function/procedure leaf NodeKeys must encode the argument signature: Postgres
+ * routines can be overloaded (same name, different args), and the definition
+ * fetch needs the exact args to disambiguate. Format
+ * `function:<schema>/<name>#<encodedArgs>` (args percent-encoded so it can't
+ * collide with the `/` schema delimiter or the `#` args delimiter). Shared so
+ * the store (key builder) and ObjectDetails (decoder) round-trip identically.
+ */
+export function routineKey(
+  kind: "function" | "procedure",
+  schema: string,
+  name: string,
+  args: string,
+): NodeKey {
+  return `${kind}:${schema}/${name}#${encodeURIComponent(args)}`;
+}
+
+export function parseRoutineKey(
+  key: NodeKey,
+): { kind: "function" | "procedure"; schema: string; name: string; args: string } | null {
+  const colon = key.indexOf(":");
+  if (colon === -1) return null;
+  const prefix = key.slice(0, colon);
+  if (prefix !== "function" && prefix !== "procedure") return null;
+  const rest = key.slice(colon + 1);
+  const slash = rest.indexOf("/");
+  if (slash === -1) return null;
+  const nameAndArgs = rest.slice(slash + 1);
+  // encodeURIComponent escapes '#', so the last '#' always separates the (raw)
+  // name from the encoded args, even if the name itself contains a '#'.
+  const hash = nameAndArgs.lastIndexOf("#");
+  if (hash === -1) return null;
+  return {
+    kind: prefix,
+    schema: rest.slice(0, slash),
+    name: nameAndArgs.slice(0, hash),
+    args: decodeURIComponent(nameAndArgs.slice(hash + 1)),
+  };
 }
 
 async function fetchChildren(parent: NodeKey, connId: string): Promise<NodeChild[]> {
@@ -187,6 +240,18 @@ async function fetchChildren(parent: NodeKey, connId: string): Promise<NodeChild
           kind: "matviews-group" as const,
           hasChildren: true,
         },
+        {
+          id: `schema:${parsed.schema}/functions`,
+          name: "schema.tree.functions_group",
+          kind: "functions-group" as const,
+          hasChildren: true,
+        },
+        {
+          id: `schema:${parsed.schema}/procedures`,
+          name: "schema.tree.procedures_group",
+          kind: "procedures-group" as const,
+          hasChildren: true,
+        },
       ];
     }
     case "tables-group": {
@@ -214,6 +279,27 @@ async function fetchChildren(parent: NodeKey, connId: string): Promise<NodeChild
         id: `matview:${parsed.schema}/${m.name}`,
         name: m.name,
         kind: "matview" as const,
+        hasChildren: false,
+      }));
+    }
+    case "functions-group": {
+      // triggerOnly=false: list all functions, not just trigger-returning ones.
+      const list = await schemaListFunctions(connId, parsed.schema, false);
+      return list.map((f) => ({
+        id: routineKey("function", parsed.schema, f.name, f.args),
+        // Show the signature so overloads (same name, different args) are
+        // distinguishable in the tree.
+        name: f.args === "" ? f.name : `${f.name}(${f.args})`,
+        kind: "function" as const,
+        hasChildren: false,
+      }));
+    }
+    case "procedures-group": {
+      const list = await schemaListProcedures(connId, parsed.schema);
+      return list.map((p) => ({
+        id: routineKey("procedure", parsed.schema, p.name, p.args),
+        name: p.args === "" ? p.name : `${p.name}(${p.args})`,
+        kind: "procedure" as const,
         hasChildren: false,
       }));
     }
@@ -413,11 +499,15 @@ export const useSchema = create<SchemaStore>((set, get) => ({
           const tablesKey = `${schema.id}/tables`;
           const viewsKey = `${schema.id}/views`;
           const matviewsKey = `${schema.id}/matviews`;
+          const functionsKey = `${schema.id}/functions`;
+          const proceduresKey = `${schema.id}/procedures`;
           return [
             get().loadChildren(schema.id),
             get().loadChildren(tablesKey),
             get().loadChildren(viewsKey),
             get().loadChildren(matviewsKey),
+            get().loadChildren(functionsKey),
+            get().loadChildren(proceduresKey),
           ];
         }),
       );
