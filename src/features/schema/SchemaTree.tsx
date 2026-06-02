@@ -93,7 +93,9 @@ function buildTreeNodes(
   if (children === undefined) return [];
   return children.map((child) => {
     const displayName =
-      child.kind === "tables-group" || child.kind === "views-group"
+      child.kind === "tables-group" ||
+      child.kind === "views-group" ||
+      child.kind === "matviews-group"
         ? translate(child.name)
         : child.name;
     return {
@@ -116,24 +118,29 @@ function iconForKind(kind: NodeKind): JSX.Element | null {
       return <Folder {...props} />;
     case "views-group":
       return <Folder {...props} />;
+    case "matviews-group":
+      return <Folder {...props} />;
     case "table":
       return <Table2 {...props} />;
     case "view":
       return <Eye {...props} />;
+    case "matview":
+      return <Layers {...props} />;
     case "column":
       return <Columns {...props} />;
   }
 }
 
 /**
- * Splits a `table:schema/name` or `view:schema/name` key back into its parts.
- * Returns `null` for any key that isn't a leaf table/view.
+ * Splits a `table:schema/name`, `view:schema/name`, or `matview:schema/name`
+ * key back into its parts. Returns `null` for any key that isn't a leaf
+ * table/view/matview.
  */
 function parseLeafKey(key: NodeKey): { schema: string; name: string } | null {
   const sep = key.indexOf(":");
   if (sep === -1) return null;
   const prefix = key.slice(0, sep);
-  if (prefix !== "table" && prefix !== "view") return null;
+  if (prefix !== "table" && prefix !== "view" && prefix !== "matview") return null;
   const slash = key.indexOf("/", sep);
   if (slash === -1) return null;
   return {
@@ -212,7 +219,7 @@ function Row({
       // column rows: click is a no-op; only the JSONB chevron toggles the panel
       return;
     }
-    if (kind === "table" || kind === "view") {
+    if (kind === "table" || kind === "view" || kind === "matview") {
       // Tables and views: select the node AND toggle column expansion.
       // Only call onToggle (which triggers loadChildren) if the node is a
       // non-leaf in the tree — i.e., the cache already knows it has children.
@@ -224,7 +231,7 @@ function Row({
         onToggle(node.id);
       }
     } else {
-      // Schema / tables-group / views-group: tree expand only.
+      // Schema / tables-group / views-group / matviews-group: tree expand only.
       node.toggle();
       onToggle(node.id);
     }
@@ -247,7 +254,7 @@ function Row({
 
   // "isLeaf" is used only to apply the "ident" CSS class — originally tables/views
   // were leaves; they still get the same class treatment.
-  const isLeaf = kind === "table" || kind === "view";
+  const isLeaf = kind === "table" || kind === "view" || kind === "matview";
   const isColumn = kind === "column";
 
   // S28 — hypertable badge: looks up isHypertable in useTimescale's per-conn map.
@@ -509,7 +516,7 @@ export function SchemaTree({ onOpenBuilder, onOpenSuggester }: SchemaTreeProps =
 
   const handleSelect = useCallback(
     (id: NodeKey, kind: NodeKind) => {
-      if (kind === "table" || kind === "view") {
+      if (kind === "table" || kind === "view" || kind === "matview") {
         selectNode(id);
         // also dispatch an editor object tab so the user gets a
         // pinned ObjectDetails view in the main area without losing other
