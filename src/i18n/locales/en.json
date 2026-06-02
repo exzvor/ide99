@@ -179,6 +179,8 @@
       "tables_group": "Tables",
       "views_group": "Views",
       "matviews_group": "Materialized views",
+      "functions_group": "Functions",
+      "procedures_group": "Procedures",
       "expand": "Expand",
       "collapse": "Collapse",
       "copy_name": "Copy name",
