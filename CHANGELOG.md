@@ -4,6 +4,14 @@ All notable changes to **ide99** are documented here. Format: [Keep a Changelog]
 
 ## [Unreleased]
 
+## [1.0.6] — 2026-06-02
+
+Offline editor fix + more of the schema tree + Health dashboard interactivity.
+
+- **SQL editor works offline (#32).** The editor (Monaco) was fetched from a CDN at runtime, so on offline / air-gapped / proxied machines it hung on "Loading…" forever (and the SQL console appeared to be missing). Monaco and its workers are now bundled into the app — no network needed. Reported via Habr.
+- **Functions & procedures in the schema tree (#33).** Each schema now has **Functions** and **Procedures** groups alongside Tables / Views / Materialized views, with a definition view on selection. Overloaded routines (same name, different argument signatures) appear as distinct entries.
+- **Health dashboard is interactive (#34).** The "+N more" indicator on the Table-bloat card now expands the list in place, and the header **critical / warning** pills are clickable — they scroll to and briefly highlight the first card of that severity. Reported via Habr.
+
 ## [1.0.5] — 2026-06-02
 
 Schema-browser + connection-form improvements and a data-dir fix.
