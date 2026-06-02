@@ -77,7 +77,13 @@
         "test": "Test connection",
         "save": "Save",
         "cancel": "Cancel",
-        "save_without_testing": "Save without testing"
+        "save_without_testing": "Save without testing",
+        "browse_databases": "Browse databases"
+      },
+      "databases": {
+        "loading": "Loading databases…",
+        "empty": "No databases reachable with these credentials.",
+        "loaded": "Found {{n}} database(s) — start typing in the field."
       },
       "discard": {
         "title": "Discard changes?",

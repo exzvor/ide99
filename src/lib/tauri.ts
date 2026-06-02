@@ -408,6 +408,19 @@ export function testSavedConnection(id: string): Promise<TestResult> {
 }
 
 /**
+ * List the databases reachable with the supplied free-form credentials.
+ * Connects to a maintenance DB, so it works even if `input.database` is a typo.
+ */
+export function listDatabases(input: TestInput): Promise<string[]> {
+  return invokeChecked("list_databases", { input }, z.array(z.string()));
+}
+
+/** Edit-form variant — backend fills the password from the keychain when blank. */
+export function listDatabasesForEdit(id: string, input: TestInput): Promise<string[]> {
+  return invokeChecked("list_databases_for_edit", { id, input }, z.array(z.string()));
+}
+
+/**
  * Persist a test result the form already obtained, without re-hitting
  * Postgres. Used right after Save to populate `lastTestedAt` /
  * `lastTestOk` on the freshly-saved row so the details card no longer

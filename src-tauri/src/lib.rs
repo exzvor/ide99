@@ -236,6 +236,8 @@ pub fn run() {
             connection::commands::delete_connection,
             connection::commands::test_connection,
             connection::commands::test_connection_for_edit,
+            connection::commands::list_databases,
+            connection::commands::list_databases_for_edit,
             connection::commands::test_saved_connection,
             connection::commands::parse_connection_uri,
             connection::commands::connection_connect,

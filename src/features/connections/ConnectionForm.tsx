@@ -19,6 +19,8 @@ import {
   type TestResult,
   connectionRecordTestResult,
   createConnection,
+  listDatabases,
+  listDatabasesForEdit,
   testConnection,
   testConnectionForEdit,
   updateConnection,
@@ -189,6 +191,10 @@ export function ConnectionForm() {
   const [testState, setTestState] = useState<TestUiState>({ status: "idle" });
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  // #24 — databases fetched by the "browse databases" affordance, fed to a
+  // <datalist> so the Database field offers type-ahead from the real list.
+  const [databaseOptions, setDatabaseOptions] = useState<string[]>([]);
+  const [loadingDatabases, setLoadingDatabases] = useState(false);
   const [showDiscardConfirm, setShowDiscardConfirm] = useState(false);
   // Orphan-Instant-DB tracker: snapshotted from prefill at open time. While
   // this is non-null, abandoning the form (cancel/discard/X) drops the
@@ -286,6 +292,42 @@ export function ConnectionForm() {
         result: { ok: false, durationMs: 0, error: message, serverVersion: null },
       });
       toast.error(message);
+    }
+  }, [methods, t, toast, formMode.type, editingConnection]);
+
+  // #24 — fetch the databases reachable with the current credentials and feed
+  // them to the Database field's <datalist>. Connects to a maintenance DB, so
+  // it works even when the typed database name is wrong. Mirrors handleTest's
+  // edit/blank-password branching.
+  const handleBrowseDatabases = useCallback(async () => {
+    const valid = await methods.trigger(["host", "port", "username"]);
+    if (!valid) return;
+    const values = methods.getValues();
+    const blankPassword = values.password === "" || values.password === undefined;
+    const input = {
+      host: values.host,
+      port: values.port,
+      database: values.database,
+      username: values.username,
+      password: blankPassword ? undefined : values.password,
+      sslMode: values.sslMode,
+    };
+    setLoadingDatabases(true);
+    try {
+      const names =
+        formMode.type === "edit" && editingConnection && blankPassword
+          ? await listDatabasesForEdit(editingConnection.id, input)
+          : await listDatabases(input);
+      setDatabaseOptions(names);
+      if (names.length === 0) {
+        toast.info(t("connection.form.databases.empty"));
+      } else {
+        toast.success(t("connection.form.databases.loaded", { n: names.length }));
+      }
+    } catch (err) {
+      toast.error(localizeConnectionError(err, t));
+    } finally {
+      setLoadingDatabases(false);
     }
   }, [methods, t, toast, formMode.type, editingConnection]);
 
@@ -598,8 +640,33 @@ export function ConnectionForm() {
               inputProps={{
                 placeholder: t("connection.form.field.database.placeholder"),
                 readOnly: isInstantDbManaged,
+                list: "connection-database-options",
               }}
             />
+            {isInstantDbManaged ? null : (
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: -8 }}>
+                <button
+                  type="button"
+                  onClick={() => void handleBrowseDatabases()}
+                  disabled={loadingDatabases}
+                  className="btn btn-ghost"
+                  data-testid="browse-databases"
+                  style={{ fontSize: 11 }}
+                >
+                  {loadingDatabases ? (
+                    <Loader2 size={12} className="q-spin" aria-hidden="true" />
+                  ) : null}
+                  {loadingDatabases
+                    ? t("connection.form.databases.loading")
+                    : t("connection.form.action.browse_databases")}
+                </button>
+              </div>
+            )}
+            <datalist id="connection-database-options">
+              {databaseOptions.map((db) => (
+                <option key={db} value={db} />
+              ))}
+            </datalist>
             <Field
               label={t("connection.form.field.username")}
               name="username"
