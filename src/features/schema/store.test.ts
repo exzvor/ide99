@@ -1,11 +1,12 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import type { ConnectInfo, SchemaInfo, TableInfo, ViewInfo } from "../../lib/tauri";
+import type { ConnectInfo, MatviewSummary, SchemaInfo, TableInfo, ViewInfo } from "../../lib/tauri";
 
 const connectionConnectMock = vi.fn();
 const connectionDisconnectMock = vi.fn();
 const schemaListSchemasMock = vi.fn();
 const schemaListTablesMock = vi.fn();
 const schemaListViewsMock = vi.fn();
+const schemaListMatviewsMock = vi.fn();
 
 vi.mock("../../lib/tauri", async () => {
   const actual = await vi.importActual<typeof import("../../lib/tauri")>("../../lib/tauri");
@@ -16,6 +17,7 @@ vi.mock("../../lib/tauri", async () => {
     schemaListSchemas: (connId: string) => schemaListSchemasMock(connId),
     schemaListTables: (connId: string, schema: string) => schemaListTablesMock(connId, schema),
     schemaListViews: (connId: string, schema: string) => schemaListViewsMock(connId, schema),
+    schemaListMatviews: (connId: string, schema: string) => schemaListMatviewsMock(connId, schema),
   };
 });
 
@@ -46,6 +48,11 @@ const activeUsersView: ViewInfo = {
   definition: "SELECT * FROM users",
   comment: null,
 };
+const dailyStatsMatview: MatviewSummary = {
+  name: "daily_stats",
+  populated: true,
+  comment: null,
+};
 
 beforeEach(() => {
   connectionConnectMock.mockReset();
@@ -53,6 +60,7 @@ beforeEach(() => {
   schemaListSchemasMock.mockReset();
   schemaListTablesMock.mockReset();
   schemaListViewsMock.mockReset();
+  schemaListMatviewsMock.mockReset();
   reset();
 });
 
@@ -165,7 +173,7 @@ describe("useSchema loadChildren", () => {
     expect(useSchema.getState().cache.get("schemas")).toEqual(children);
   });
 
-  test('"schema:NAME" → synthetic tables-group + views-group, no backend call', async () => {
+  test('"schema:NAME" → synthetic tables-group + views-group + matviews-group, no backend call', async () => {
     const children = await useSchema.getState().loadChildren("schema:public");
 
     expect(children).toEqual([
@@ -181,9 +189,16 @@ describe("useSchema loadChildren", () => {
         kind: "views-group",
         hasChildren: true,
       },
+      {
+        id: "schema:public/matviews",
+        name: "schema.tree.matviews_group",
+        kind: "matviews-group",
+        hasChildren: true,
+      },
     ]);
     expect(schemaListTablesMock).not.toHaveBeenCalled();
     expect(schemaListViewsMock).not.toHaveBeenCalled();
+    expect(schemaListMatviewsMock).not.toHaveBeenCalled();
   });
 
   test('"schema:NAME/tables" → maps to table leaf children', async () => {
@@ -212,6 +227,22 @@ describe("useSchema loadChildren", () => {
       },
     ]);
     expect(schemaListViewsMock).toHaveBeenCalledWith("conn-1", "public");
+  });
+
+  test('"schema:NAME/matviews" → maps to matview leaf children', async () => {
+    schemaListMatviewsMock.mockResolvedValueOnce([dailyStatsMatview]);
+
+    const children = await useSchema.getState().loadChildren("schema:public/matviews");
+
+    expect(children).toEqual([
+      {
+        id: "matview:public/daily_stats",
+        name: "daily_stats",
+        kind: "matview",
+        hasChildren: false,
+      },
+    ]);
+    expect(schemaListMatviewsMock).toHaveBeenCalledWith("conn-1", "public");
   });
 
   test("returns cached value without re-fetching", async () => {

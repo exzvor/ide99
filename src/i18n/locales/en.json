@@ -172,6 +172,7 @@
     "tree": {
       "tables_group": "Tables",
       "views_group": "Views",
+      "matviews_group": "Materialized views",
       "expand": "Expand",
       "collapse": "Collapse",
       "copy_name": "Copy name",
@@ -199,6 +200,9 @@
   "object_details": {
     "no_selection": "Select an object in the schema",
     "empty": "No data",
+    "matview": {
+      "unpopulated": "Not populated yet — run REFRESH MATERIALIZED VIEW to load its data."
+    },
     "section": {
       "columns": "Columns",
       "indexes": "Indexes",

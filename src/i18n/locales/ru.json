@@ -172,6 +172,7 @@
     "tree": {
       "tables_group": "Таблицы",
       "views_group": "Представления",
+      "matviews_group": "Материализованные представления",
       "expand": "Раскрыть",
       "collapse": "Свернуть",
       "copy_name": "Копировать имя",
@@ -199,6 +200,9 @@
   "object_details": {
     "no_selection": "Выберите объект в схеме",
     "empty": "Нет данных",
+    "matview": {
+      "unpopulated": "Ещё не наполнено — выполните REFRESH MATERIALIZED VIEW, чтобы загрузить данные."
+    },
     "section": {
       "columns": "Колонки",
       "indexes": "Индексы",
