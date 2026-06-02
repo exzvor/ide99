@@ -7,9 +7,10 @@
  * user expanding/collapsing the same node rapidly never triggers duplicate
  * Tauri command round-trips.
  *
- * Synthetic group nodes ("schema:NAME") are expanded into two virtual children
- * ("schema:NAME/tables", "schema:NAME/views") without hitting the backend; the
- * `name` field carries an i18n key so render-site components can localize.
+ * Synthetic group nodes ("schema:NAME") are expanded into three virtual children
+ * ("schema:NAME/tables", "schema:NAME/views", "schema:NAME/matviews") without
+ * hitting the backend; the `name` field carries an i18n key so render-site
+ * components can localize.
  */
 
 import { create } from "zustand";
@@ -19,6 +20,7 @@ import {
   connectionConnect,
   connectionDisconnect,
   schemaListColumns,
+  schemaListMatviews,
   schemaListSchemas,
   schemaListTables,
   schemaListViews,
@@ -42,7 +44,15 @@ export type ConnectionState =
       message: string;
     };
 
-export type NodeKind = "schema" | "tables-group" | "views-group" | "table" | "view" | "column";
+export type NodeKind =
+  | "schema"
+  | "tables-group"
+  | "views-group"
+  | "matviews-group"
+  | "table"
+  | "view"
+  | "matview"
+  | "column";
 
 export type NodeKey = string;
 
@@ -116,6 +126,7 @@ function parseKey(
   | { kind: "schema"; schema: string }
   | { kind: "tables-group"; schema: string }
   | { kind: "views-group"; schema: string }
+  | { kind: "matviews-group"; schema: string }
   | { kind: "table"; schema: string; table: string }
   | { kind: "unknown" } {
   if (key === "schemas") return { kind: "schemas" };
@@ -126,6 +137,9 @@ function parseKey(
     }
     if (rest.endsWith("/views")) {
       return { kind: "views-group", schema: rest.slice(0, -"/views".length) };
+    }
+    if (rest.endsWith("/matviews")) {
+      return { kind: "matviews-group", schema: rest.slice(0, -"/matviews".length) };
     }
     return { kind: "schema", schema: rest };
   }
@@ -167,6 +181,12 @@ async function fetchChildren(parent: NodeKey, connId: string): Promise<NodeChild
           kind: "views-group" as const,
           hasChildren: true,
         },
+        {
+          id: `schema:${parsed.schema}/matviews`,
+          name: "schema.tree.matviews_group",
+          kind: "matviews-group" as const,
+          hasChildren: true,
+        },
       ];
     }
     case "tables-group": {
@@ -185,6 +205,15 @@ async function fetchChildren(parent: NodeKey, connId: string): Promise<NodeChild
         id: `view:${parsed.schema}/${v.name}`,
         name: v.name,
         kind: "view" as const,
+        hasChildren: false,
+      }));
+    }
+    case "matviews-group": {
+      const list = await schemaListMatviews(connId, parsed.schema);
+      return list.map((m) => ({
+        id: `matview:${parsed.schema}/${m.name}`,
+        name: m.name,
+        kind: "matview" as const,
         hasChildren: false,
       }));
     }
@@ -383,10 +412,12 @@ export const useSchema = create<SchemaStore>((set, get) => ({
         schemas.flatMap((schema) => {
           const tablesKey = `${schema.id}/tables`;
           const viewsKey = `${schema.id}/views`;
+          const matviewsKey = `${schema.id}/matviews`;
           return [
             get().loadChildren(schema.id),
             get().loadChildren(tablesKey),
             get().loadChildren(viewsKey),
+            get().loadChildren(matviewsKey),
           ];
         }),
       );

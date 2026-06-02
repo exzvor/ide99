@@ -7,7 +7,9 @@ import {
   type ColumnInfo,
   type ForeignKeyInfo,
   type IndexInfo,
+  type MatviewDefinition,
   type ViewInfo,
+  schemaGetMatviewDefinition,
   schemaListColumns,
   schemaListForeignKeys,
   schemaListIndexes,
@@ -25,6 +27,9 @@ import { type NodeKey, useSchema } from "./store";
  * view definition is re-fetched via `schemaListViews()` (decoupled from the
  * schema-tree store cache so this component can land independently of
  * 's store implementation).
+ * - For `matview:<schema>/<name>` nodes: renders a single Definition tab backed
+ * by `schemaGetMatviewDefinition()`, with a note when the matview is
+ * unpopulated (created/refreshed WITH NO DATA).
  * - For `null`, schemas, or group nodes: renders a no-selection placeholder.
  */
 
@@ -42,7 +47,13 @@ interface ParsedView {
   name: string;
 }
 
-type ParsedNode = ParsedTable | ParsedView | { kind: "placeholder" };
+interface ParsedMatview {
+  kind: "matview";
+  schema: string;
+  name: string;
+}
+
+type ParsedNode = ParsedTable | ParsedView | ParsedMatview | { kind: "placeholder" };
 
 function parseNode(node: NodeKey | null): ParsedNode {
   if (node === null) return { kind: "placeholder" };
@@ -57,6 +68,12 @@ function parseNode(node: NodeKey | null): ParsedNode {
     const slash = rest.indexOf("/");
     if (slash === -1) return { kind: "placeholder" };
     return { kind: "view", schema: rest.slice(0, slash), name: rest.slice(slash + 1) };
+  }
+  if (node.startsWith("matview:")) {
+    const rest = node.slice("matview:".length);
+    const slash = rest.indexOf("/");
+    if (slash === -1) return { kind: "placeholder" };
+    return { kind: "matview", schema: rest.slice(0, slash), name: rest.slice(slash + 1) };
   }
   return { kind: "placeholder" };
 }
@@ -107,6 +124,17 @@ export function ObjectDetails({ node }: { node: NodeKey | null }): JSX.Element {
         name={parsed.name}
         // Re-mount when node changes so per-section caches reset.
         key={`table:${parsed.schema}/${parsed.name}`}
+      />
+    );
+  }
+
+  if (parsed.kind === "matview") {
+    return (
+      <MatviewDetails
+        connId={connection.connId}
+        schema={parsed.schema}
+        name={parsed.name}
+        key={`matview:${parsed.schema}/${parsed.name}`}
       />
     );
   }
@@ -340,6 +368,84 @@ function ViewDetails({
             >
               <code>{state.data.definition}</code>
             </pre>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MatviewDetails({
+  connId,
+  schema,
+  name,
+}: {
+  connId: string;
+  schema: string;
+  name: string;
+}): JSX.Element {
+  const { t } = useTranslation();
+  const toast = useToast();
+  const [state, setState] = useState<FetchState<MatviewDefinition>>(initialFetch);
+
+  const load = useCallback(() => {
+    setState({ loading: true, data: null, error: null });
+    schemaGetMatviewDefinition(connId, schema, name)
+      .then((def) => {
+        setState({ loading: false, data: def, error: null });
+      })
+      .catch((err: unknown) => {
+        const message = localizeConnectionError(err, t);
+        setState({ loading: false, data: null, error: message });
+        toast.error(message);
+      });
+  }, [connId, schema, name, t, toast]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
+      <div
+        role="tablist"
+        aria-label={t("object_details.section.definition")}
+        className="q-subtabbar"
+      >
+        <TabButton active onClick={() => {}} controls="panel-definition" id="tab-definition">
+          {t("object_details.section.definition")}
+        </TabButton>
+      </div>
+      <div className="q-scroll" style={{ flex: 1, overflow: "auto", padding: 18, minHeight: 0 }}>
+        <div role="tabpanel" id="panel-definition" aria-labelledby="tab-definition">
+          {state.loading ? <LoadingRow /> : null}
+          {state.error ? <ErrorRow message={state.error} onRetry={load} /> : null}
+          {state.data ? (
+            <>
+              {state.data.populated ? null : (
+                <p
+                  data-testid="matview-unpopulated"
+                  style={{ margin: "0 0 12px", fontSize: 11.5, color: "var(--warn-q, #b8860b)" }}
+                >
+                  {t("object_details.matview.unpopulated")}
+                </p>
+              )}
+              <pre
+                style={{
+                  overflow: "auto",
+                  background: "var(--bg-sunken)",
+                  padding: 12,
+                  borderRadius: 8,
+                  margin: 0,
+                  fontFamily: "var(--font-mono-q)",
+                  fontSize: 11.5,
+                  color: "var(--ink-2)",
+                  whiteSpace: "pre-wrap",
+                }}
+              >
+                <code>{state.data.body}</code>
+              </pre>
+            </>
           ) : null}
         </div>
       </div>
