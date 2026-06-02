@@ -124,6 +124,27 @@ pub async fn test_connection_for_edit(
     state.test_connection_for_edit(&id, input).await
 }
 
+/// List the databases reachable with the form's free-form credentials, for the
+/// "browse databases" affordance in the connection form.
+#[tauri::command]
+pub async fn list_databases(
+    state: tauri::State<'_, AppState>,
+    input: TestInput,
+) -> Result<Vec<String>, ConnectionError> {
+    state.list_databases(input).await
+}
+
+/// Edit-form variant of `list_databases`: if `input.password` is `None`, fills
+/// it from the keychain entry for `id` (mirrors `test_connection_for_edit`).
+#[tauri::command]
+pub async fn list_databases_for_edit(
+    state: tauri::State<'_, AppState>,
+    id: String,
+    input: TestInput,
+) -> Result<Vec<String>, ConnectionError> {
+    state.list_databases_for_edit(&id, input).await
+}
+
 #[tauri::command]
 pub async fn test_saved_connection(
     state: tauri::State<'_, AppState>,
@@ -401,6 +422,24 @@ impl AppState {
             input.password = self.keychain.get(id)?;
         }
         self.pools.test(input).await
+    }
+
+    pub async fn list_databases(&self, input: TestInput) -> Result<Vec<String>, ConnectionError> {
+        self.pools.list_databases(input).await
+    }
+
+    /// See the `list_databases_for_edit` command. Fills the password from the
+    /// keychain when blank, mirroring `test_connection_for_edit`.
+    pub async fn list_databases_for_edit(
+        &self,
+        id: &str,
+        mut input: TestInput,
+    ) -> Result<Vec<String>, ConnectionError> {
+        if input.password.is_none() {
+            self.store.lock().await.get_by_id(id)?;
+            input.password = self.keychain.get(id)?;
+        }
+        self.pools.list_databases(input).await
     }
 
     pub async fn test_saved_connection(&self, id: &str) -> Result<TestResult, ConnectionError> {

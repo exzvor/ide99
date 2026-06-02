@@ -31,6 +31,8 @@ const testConnectionMock = vi.fn();
 const testConnectionForEditMock = vi.fn();
 const createConnectionMock = vi.fn();
 const updateConnectionMock = vi.fn();
+const listDatabasesMock = vi.fn();
+const listDatabasesForEditMock = vi.fn();
 
 vi.mock("../../lib/tauri", async () => {
   const actual = await vi.importActual<typeof import("../../lib/tauri")>("../../lib/tauri");
@@ -40,6 +42,8 @@ vi.mock("../../lib/tauri", async () => {
     testConnectionForEdit: (id: string, input: unknown) => testConnectionForEditMock(id, input),
     createConnection: (input: unknown) => createConnectionMock(input),
     updateConnection: (id: string, input: unknown) => updateConnectionMock(id, input),
+    listDatabases: (input: unknown) => listDatabasesMock(input),
+    listDatabasesForEdit: (id: string, input: unknown) => listDatabasesForEditMock(id, input),
   };
 });
 
@@ -97,6 +101,8 @@ describe("ConnectionForm", () => {
     testConnectionForEditMock.mockReset();
     createConnectionMock.mockReset();
     updateConnectionMock.mockReset();
+    listDatabasesMock.mockReset();
+    listDatabasesForEditMock.mockReset();
     storeState = {
       formMode: { type: "create" },
       connections: [],
@@ -533,5 +539,23 @@ describe("ConnectionForm", () => {
       expect(screen.getByTestId("form-test-success")).toBeInTheDocument();
     });
     expect(saveButton).not.toBeDisabled();
+  });
+
+  // --- Issue #24 — browse available databases ---
+
+  it("Browse databases fetches the list and populates the database datalist", async () => {
+    listDatabasesMock.mockResolvedValueOnce(["app_db", "postgres"]);
+    renderForm();
+    // username is required for the browse trigger; host/port carry defaults.
+    await userEvent.type(screen.getByLabelText(/connection.form.field.username/), "u");
+    await userEvent.click(screen.getByTestId("browse-databases"));
+
+    await waitFor(() => {
+      expect(listDatabasesMock).toHaveBeenCalled();
+    });
+    const options = Array.from(
+      document.querySelectorAll("#connection-database-options option"),
+    ).map((o) => (o as HTMLOptionElement).value);
+    expect(options).toEqual(["app_db", "postgres"]);
   });
 });

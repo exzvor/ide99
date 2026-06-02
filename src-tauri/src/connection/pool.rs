@@ -153,6 +153,38 @@ impl PoolRegistry {
         }
     }
 
+    /// One-shot enumeration of databases reachable with the given free-form
+    /// credentials. Connects to a maintenance DB (`postgres`, falling back to
+    /// `template1`) rather than the typed `database`, so it works even when the
+    /// user mistyped the target DB name — the whole point of the "browse
+    /// databases" affordance. Bypasses the pool.
+    pub async fn list_databases(&self, input: TestInput) -> Result<Vec<String>, ConnectionError> {
+        let mut last_err: Option<String> = None;
+        for maint_db in ["postgres", "template1"] {
+            let cfg = Self::pg_config(
+                &input.host,
+                input.port,
+                maint_db,
+                &input.username,
+                input.password.as_deref(),
+                input.ssl_mode,
+            );
+            match probe_databases(cfg, input.ssl_mode).await {
+                Ok(dbs) => return Ok(dbs),
+                Err(err) => last_err = Some(err),
+            }
+        }
+        // Mirror `test()`'s password-missing rewrite so a blank password on a
+        // password-required server surfaces an actionable message.
+        let err = last_err.unwrap_or_else(|| "could not list databases".to_string());
+        let user_facing = if input.password.is_none() && err.contains("password missing") {
+            "password not set — enter the password and retry".to_string()
+        } else {
+            err
+        };
+        Err(ConnectionError::Postgres(user_facing))
+    }
+
     /// Idempotent — closing an absent pool is a no-op so retries are safe.
     pub async fn evict(&self, connection_id: &str) {
         let mut guard = self.pools.lock().await;
@@ -264,6 +296,47 @@ async fn fetch_version(client: &tokio_postgres::Client) -> Result<String, String
         .map_err(|e| format_error_chain(&e))?;
     let v: String = row.try_get(0).map_err(|e| format_error_chain(&e))?;
     Ok(v)
+}
+
+/// Connect with the given config + TLS mode, then enumerate databases. Mirrors
+/// `run_probe`'s connect handling but runs the `pg_database` listing query.
+async fn probe_databases(cfg: PgConfig, mode: SslMode) -> Result<Vec<String>, String> {
+    match TlsFlavor::from_ssl_mode(mode) {
+        TlsFlavor::None => {
+            let (client, conn) = cfg
+                .connect(tokio_postgres::NoTls)
+                .await
+                .map_err(|e| format_error_chain(&e))?;
+            tokio::spawn(conn);
+            fetch_databases(&client).await
+        }
+        flavor => {
+            let tls = build_tls_connector(flavor).map_err(|e| e.to_string())?;
+            let (client, conn) = cfg.connect(tls).await.map_err(|e| format_error_chain(&e))?;
+            tokio::spawn(conn);
+            fetch_databases(&client).await
+        }
+    }
+}
+
+async fn fetch_databases(client: &tokio_postgres::Client) -> Result<Vec<String>, String> {
+    // Exclude template databases and any the role can't CONNECT to, so the list
+    // matches what the user could actually open. Ordered for a stable UI.
+    let rows = client
+        .query(
+            "SELECT datname FROM pg_database \
+             WHERE datistemplate = false AND has_database_privilege(datname, 'CONNECT') \
+             ORDER BY datname",
+            &[],
+        )
+        .await
+        .map_err(|e| format_error_chain(&e))?;
+    rows.iter()
+        .map(|r| {
+            r.try_get::<_, String>(0)
+                .map_err(|e| format_error_chain(&e))
+        })
+        .collect()
 }
 
 /// Walk an `std::error::Error` source chain and join Display messages with
