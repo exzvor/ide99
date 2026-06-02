@@ -102,7 +102,13 @@ export function CardShell({ cardId, connId, state, body, status }: CardShellProp
   }
 
   return (
-    <div data-testid={`health-card-${cardId}`} style={SHELL_BASE}>
+    <div
+      data-testid={`health-card-${cardId}`}
+      // Severity marker so the header's critical/warning pills can jump to the
+      // first card of a given tone (#34). Absent until the card is `ready`.
+      data-card-tone={status?.tone}
+      style={SHELL_BASE}
+    >
       {/* shimmer keyframes — scoped via plain <style>, idempotent enough for SPA */}
       <style>{`
         @keyframes health-card-shimmer {

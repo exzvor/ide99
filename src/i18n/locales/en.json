@@ -1029,7 +1029,8 @@
       "refreshing": "Refreshing…",
       "pill_critical": "{{count}} critical",
       "pill_warning": "{{count}} warning",
-      "pill_ok": "{{count}} ok"
+      "pill_ok": "{{count}} ok",
+      "pill_jump": "Jump to the first card of this severity"
     },
     "refresh": {
       "off": "Off",
@@ -1047,6 +1048,7 @@
       "other": "Other"
     },
     "card": {
+      "show_less": "Show less",
       "db_size": {
         "title": "Database size",
         "explanation": "Total on-disk size of the current database via pg_database_size(). The 7-day sparkline tracks growth from snapshots taken when you open this Health tab.",

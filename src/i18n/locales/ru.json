@@ -1029,7 +1029,8 @@
       "refreshing": "Обновляем…",
       "pill_critical": "{{count}} критично",
       "pill_warning": "{{count}} предупреждение",
-      "pill_ok": "{{count}} ок"
+      "pill_ok": "{{count}} ок",
+      "pill_jump": "Перейти к первой карточке этой важности"
     },
     "refresh": {
       "off": "Выкл",
@@ -1047,6 +1048,7 @@
       "other": "Другое"
     },
     "card": {
+      "show_less": "Свернуть",
       "db_size": {
         "title": "Размер базы",
         "explanation": "Общий размер базы данных на диске через pg_database_size(). Sparkline за 7 дней показывает рост по снимкам, которые делаются при открытии этой вкладки Health.",
