@@ -20,12 +20,13 @@ use thiserror::Error;
 use tokio_postgres::types::Oid;
 
 use super::queries::{
-    GET_FUNCTION_HEAD_SQL, GET_FUNCTION_HEAD_SQL_PRE11, GET_FUNCTION_PARAMS_SQL, GET_INDEX_DETAIL_SQL,
-    GET_PROCEDURE_HEAD_SQL, GET_SEQUENCE_OWNED_BY_SQL, GET_SEQUENCE_SQL, GET_TABLE_COLUMNS_SQL,
-    GET_TABLE_COLUMNS_SQL_PRE10, GET_TABLE_CONSTRAINTS_SQL, GET_TABLE_HEAD_SQL,
-    GET_TABLE_HEAD_SQL_PRE10, GET_TABLE_INDEX_NAMES_SQL, GET_TRIGGER_DETAIL_SQL, GET_VIEW_LIKE_SQL,
-    LIST_FUNCTIONS_SQL, LIST_FUNCTIONS_SQL_PRE11, LIST_MATVIEWS_SQL, LIST_PROCEDURES_SQL,
-    LIST_SEQUENCES_SQL, LIST_SEQUENCES_SQL_PRE10, LIST_TRIGGERS_SQL, RESOLVE_ATTNAMES_SQL,
+    GET_FUNCTION_HEAD_SQL, GET_FUNCTION_HEAD_SQL_PRE11, GET_FUNCTION_PARAMS_SQL,
+    GET_INDEX_DETAIL_SQL, GET_PROCEDURE_HEAD_SQL, GET_SEQUENCE_OWNED_BY_SQL, GET_SEQUENCE_SQL,
+    GET_TABLE_COLUMNS_SQL, GET_TABLE_COLUMNS_SQL_PRE10, GET_TABLE_CONSTRAINTS_SQL,
+    GET_TABLE_HEAD_SQL, GET_TABLE_HEAD_SQL_PRE10, GET_TABLE_INDEX_NAMES_SQL,
+    GET_TRIGGER_DETAIL_SQL, GET_VIEW_LIKE_SQL, LIST_FUNCTIONS_SQL, LIST_FUNCTIONS_SQL_PRE11,
+    LIST_MATVIEWS_SQL, LIST_PROCEDURES_SQL, LIST_SEQUENCES_SQL, LIST_SEQUENCES_SQL_PRE10,
+    LIST_TRIGGERS_SQL, RESOLVE_ATTNAMES_SQL,
 };
 use super::tgtype_decode::decode_tgtype;
 use super::types::{
@@ -145,7 +146,11 @@ pub async fn get_table_definition(
     // 1) Head row — fails fast with NotFound if no row.
     let head_rows = client
         .query(
-            if legacy { GET_TABLE_HEAD_SQL_PRE10 } else { GET_TABLE_HEAD_SQL },
+            if legacy {
+                GET_TABLE_HEAD_SQL_PRE10
+            } else {
+                GET_TABLE_HEAD_SQL
+            },
             &[&schema, &name],
         )
         .await
@@ -169,7 +174,11 @@ pub async fn get_table_definition(
     // 2) Columns.
     let col_rows = client
         .query(
-            if legacy { GET_TABLE_COLUMNS_SQL_PRE10 } else { GET_TABLE_COLUMNS_SQL },
+            if legacy {
+                GET_TABLE_COLUMNS_SQL_PRE10
+            } else {
+                GET_TABLE_COLUMNS_SQL
+            },
             &[&schema, &name],
         )
         .await
@@ -470,7 +479,11 @@ pub async fn list_sequences(
     let legacy = server_version_num(&client).await < PG10;
     let rows = client
         .query(
-            if legacy { LIST_SEQUENCES_SQL_PRE10 } else { LIST_SEQUENCES_SQL },
+            if legacy {
+                LIST_SEQUENCES_SQL_PRE10
+            } else {
+                LIST_SEQUENCES_SQL
+            },
             &[&schema],
         )
         .await

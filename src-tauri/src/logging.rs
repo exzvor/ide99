@@ -125,7 +125,11 @@ fn panic_payload(payload: &(dyn std::any::Any + Send)) -> String {
 fn write_panic_file(logs_dir: &Path, location: &str, message: &str, backtrace: &str) {
     use std::io::Write as _;
     let path = logs_dir.join("ide99-panic.log");
-    if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(path) {
+    if let Ok(mut f) = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(path)
+    {
         let _ = writeln!(
             f,
             "---\nversion: {}\nlocation: {}\nmessage: {}\nbacktrace:\n{}",
