@@ -2965,5 +2965,15 @@
         "send_failed": "Couldn't send: {{msg}}"
       }
     }
+  },
+  "errors": {
+    "boundary": {
+      "title": "Something went wrong here",
+      "body": "This part of the app hit an error and was paused so the rest keeps working. The details were written to the local log file.",
+      "retry": "Try again"
+    }
+  },
+  "keychain": {
+    "degraded_warning": "No system keychain found — connection passwords are saved to a local file (readable only by you). Install a Secret Service (e.g. gnome-keyring) for OS-backed storage."
   }
 }

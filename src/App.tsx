@@ -1,5 +1,8 @@
+import { listen } from "@tauri-apps/api/event";
 import { type JSX, useEffect, useState } from "react";
 import { EnvStrip } from "./components/EnvStrip";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { KeychainWarningHost } from "./components/KeychainWarningHost";
 import { ToastProvider } from "./components/Toast";
 import { AdminTelemetryHost } from "./features/admin-telemetry/AdminTelemetryHost";
 import { ConceptTooltipProvider } from "./features/concept-tooltips";
@@ -21,6 +24,7 @@ import { CrashReporterHost } from "./features/privacy/CrashReporterHost";
 import { TelemetryOptInDialog } from "./features/privacy/TelemetryOptInDialog";
 import { SnippetPalette } from "./features/snippets/SnippetPalette";
 import { useSnippets } from "./features/snippets/store";
+import { cycleTheme } from "./hooks/useTheme";
 import { SettingsModal, openSettings } from "./screens/SettingsModal";
 import Welcome from "./screens/Welcome";
 import Workspace from "./screens/Workspace";
@@ -61,6 +65,17 @@ export default function App(): JSX.Element {
     void useSnippets.getState().load();
   }, []);
 
+  // — wire the native View → Toggle Theme menu item (issue #12). The Rust
+  // menu emits "menu://toggle-theme"; nothing listened for it before, so the
+  // item was a silent no-op. cycleTheme() steps the same sequence as the
+  // on-screen switcher and keeps every useTheme instance in sync.
+  useEffect(() => {
+    const unlisten = listen("menu://toggle-theme", () => cycleTheme());
+    return () => {
+      void unlisten.then((un) => un());
+    };
+  }, []);
+
   // Global hotkeys (cross-platform — Cmd on macOS, Ctrl on Linux/Windows):
   // Cmd/Ctrl+J        — open snippet palette
   // Cmd/Ctrl+,        — open Settings modal
@@ -97,7 +112,12 @@ export default function App(): JSX.Element {
           `ConceptTooltip` itself). */}
       <ConceptTooltipProvider>
         <EnvStrip />
-        {hasConnections ? <Workspace /> : <Welcome />}
+        {/* — issue #14: a render throw in the editor/workspace used to blank
+            the whole window. The boundary contains it and writes the stack to
+            the local log file. */}
+        <ErrorBoundary label={hasConnections ? "workspace" : "welcome"}>
+          {hasConnections ? <Workspace /> : <Welcome />}
+        </ErrorBoundary>
         <ConnectionForm />
         <SnippetPalette />
         <SettingsModal />
@@ -113,6 +133,8 @@ export default function App(): JSX.Element {
         {/* — privacy: first-launch opt-in + crash preview. */}
         <TelemetryOptInDialog />
         <CrashReporterHost />
+        {/* — issue #25: warn once if no OS keychain (passwords in a local file). */}
+        <KeychainWarningHost />
         {/* — onboarding wizard (welcome → connection profile →
             sample DB → tour handoff). Mounted at App level so it shows
             even when there are zero connections (Welcome screen). */}

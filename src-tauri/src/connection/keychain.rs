@@ -12,6 +12,7 @@
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Mutex;
 
 use crate::connection::types::ConnectionError;
@@ -19,6 +20,17 @@ use crate::connection::types::ConnectionError;
 const SERVICE: &str = "io.ide99.app";
 const BACKEND_ENV: &str = "IDE99_KEYCHAIN_BACKEND";
 const FS_FILE_NAME: &str = "connection-passwords.json";
+
+/// Set when no OS keychain is available and passwords are kept in the on-disk
+/// fallback instead (issue #25). The frontend reads this via a command and
+/// shows a one-time warning so the user knows credentials live in a local file.
+static DEGRADED: AtomicBool = AtomicBool::new(false);
+
+/// Whether credential storage fell back to the on-disk file (no OS keychain).
+#[must_use]
+pub fn is_degraded() -> bool {
+    DEGRADED.load(Ordering::Relaxed)
+}
 
 pub trait Keychain: Send + Sync {
     fn store(&self, connection_id: &str, password: &str) -> Result<(), ConnectionError>;
@@ -55,46 +67,60 @@ pub fn pick_with_data_dir(data_dir: Option<&Path>) -> Box<dyn Keychain> {
         return Box::new(CachingKeychain::new(Box::new(MemoryKeychain::new())));
     }
 
-    let primary: Box<dyn Keychain> = match OsKeychain::probe() {
-        Ok(k) => Box::new(k),
-        Err(err) => {
-            tracing::warn!(                error = %err,
-                            "OS keychain unavailable; falling back to in-memory backend"
-            );
-            Box::new(MemoryKeychain::new())
-        }
-    };
+    // Is a real, persistent OS keychain available? (round-trip probe rejects
+    // the no-op mock; `IDE99_KEYCHAIN_BACKEND=os`/`os+fs` still go through it.)
+    let os_ok = OsKeychain::probe().is_ok();
 
-    let want_fs = match backend.as_deref() {
-        Some("os") => false,
-        Some("os+fs") => true,
-        _ => cfg!(debug_assertions),
-    };
+    let fs_path = data_dir.map(|d| d.join(FS_FILE_NAME));
 
-    let inner: Box<dyn Keychain> = if want_fs {
-        if let Some(dir) = data_dir {
-            let fs_path = dir.join(FS_FILE_NAME);
-            match FsKeychain::open(&fs_path) {
+    let inner: Box<dyn Keychain> = if os_ok {
+        // OS keychain works. In debug builds (or `os+fs`) ALSO layer a file
+        // store behind it so dev-mode keychain ACL drift between rebuilds
+        // doesn't lose passwords; release uses the OS keychain alone.
+        let want_fs_layer = match backend.as_deref() {
+            Some("os") => false,
+            Some("os+fs") => true,
+            _ => cfg!(debug_assertions),
+        };
+        match (want_fs_layer, fs_path.as_deref()) {
+            (true, Some(path)) => match FsKeychain::open(path) {
                 Ok(fs) => {
-                    tracing::info!(                        path = %fs_path.display(),
-                                            "filesystem keychain fallback engaged (debug build / opt-in)"
-                    );
-                    Box::new(LayeredKeychain::new(primary, Box::new(fs)))
+                    tracing::info!(path = %path.display(),
+                        "filesystem keychain layer engaged behind OS keychain (debug / opt-in)");
+                    Box::new(LayeredKeychain::new(Box::new(OsKeychain), Box::new(fs)))
                 }
                 Err(e) => {
-                    tracing::warn!(                        error = %e,
-                                            path = %fs_path.display(),
-                                            "FS keychain init failed; using primary backend only",
-                    );
-                    primary
+                    tracing::warn!(error = %e, "FS keychain layer init failed; OS keychain only");
+                    Box::new(OsKeychain)
                 }
-            }
-        } else {
-            tracing::warn!("FS keychain requested but data dir unavailable; primary only");
-            primary
+            },
+            _ => Box::new(OsKeychain),
         }
     } else {
-        primary
+        // No working OS keychain (headless Linux without a Secret Service, or
+        // a platform/build with no backend). Use a PERSISTENT on-disk store so
+        // passwords still survive a restart — in release too, not just debug —
+        // and flag the degraded state so the UI can warn the user (issue #25).
+        DEGRADED.store(true, Ordering::Relaxed);
+        match fs_path.as_deref() {
+            Some(path) => match FsKeychain::open(path) {
+                Ok(fs) => {
+                    tracing::warn!(path = %path.display(),
+                        "OS keychain unavailable; storing passwords in a local 0600 file. \
+                         Install a Secret Service (e.g. gnome-keyring) for OS-backed storage.");
+                    Box::new(fs)
+                }
+                Err(e) => {
+                    tracing::error!(error = %e, path = %path.display(),
+                        "OS keychain unavailable AND file fallback failed; passwords will not persist this session");
+                    Box::new(MemoryKeychain::new())
+                }
+            },
+            None => {
+                tracing::error!("OS keychain unavailable and no data dir; passwords will not persist this session");
+                Box::new(MemoryKeychain::new())
+            }
+        }
     };
 
     Box::new(CachingKeychain::new(inner))
@@ -103,12 +129,52 @@ pub fn pick_with_data_dir(data_dir: Option<&Path>) -> Box<dyn Keychain> {
 pub struct OsKeychain;
 
 impl OsKeychain {
-    /// Verify the OS keyring is reachable by performing a benign read on a
-    /// known-absent entry; `NoEntry` is the success signal.
+    /// Verify a REAL, persistent OS keyring is present via a write→read→delete
+    /// round-trip through two separate `Entry` handles (issue #25).
+    ///
+    /// The old probe just did a benign read and treated `NoEntry` as success —
+    /// but keyring v3 compiles a no-op in-memory **mock** when no backend
+    /// feature is enabled, and that mock also returns `NoEntry`, so the old
+    /// probe accepted it and every saved password was silently lost on restart.
+    ///
+    /// A real keychain persists the sentinel to the system store, so a FRESH
+    /// `Entry` for the same key reads it back. The mock keeps state per-`Entry`
+    /// (`Mutex<RefCell<MockData>>`, fresh on every `Entry::new`), so a fresh
+    /// handle returns `NoEntry` — which is exactly how we detect and reject it.
     fn probe() -> Result<Self, keyring::Error> {
-        let entry = keyring::Entry::new(SERVICE, "__ide99_probe__")?;
-        match entry.get_password() {
-            Ok(_) | Err(keyring::Error::NoEntry) => Ok(Self),
+        // Run the round-trip on a worker thread with a timeout so a wedged
+        // Secret Service / dbus call can never hang app startup on a headless,
+        // closed-network box — the exact environment we most need to support.
+        // A timeout is treated as "no usable keychain" → on-disk fallback.
+        let (tx, rx) = std::sync::mpsc::channel();
+        std::thread::spawn(move || {
+            let _ = tx.send(Self::probe_roundtrip());
+        });
+        match rx.recv_timeout(std::time::Duration::from_secs(3)) {
+            Ok(result) => result,
+            Err(_) => {
+                tracing::warn!("OS keychain probe timed out; treating as unavailable");
+                Err(keyring::Error::NoEntry)
+            }
+        }
+    }
+
+    /// The actual write→read→delete round-trip (run under a timeout by `probe`).
+    fn probe_roundtrip() -> Result<Self, keyring::Error> {
+        const SENTINEL: &str = "ide99-keychain-probe-ok";
+        // Process-scoped key so concurrent instances don't collide.
+        let key = format!("__ide99_probe_{}__", std::process::id());
+        let writer = keyring::Entry::new(SERVICE, &key)?;
+        writer.set_password(SENTINEL)?;
+        let reader = keyring::Entry::new(SERVICE, &key)?;
+        let read = reader.get_password();
+        // Best-effort cleanup of the sentinel (idempotent across both handles).
+        let _ = writer.delete_credential();
+        let _ = reader.delete_credential();
+        match read {
+            Ok(v) if v == SENTINEL => Ok(Self),
+            // Wrong value or NoEntry → not a real persistent backend (mock).
+            Ok(_) | Err(keyring::Error::NoEntry) => Err(keyring::Error::NoEntry),
             Err(err) => Err(err),
         }
     }

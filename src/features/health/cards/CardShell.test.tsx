@@ -44,7 +44,7 @@ describe("CardShell — UI matrix", () => {
     expect(screen.queryByTestId("health-card-cache_hit-info")).toBeNull();
   });
 
-  it("ready state with warn/danger tones renders AlertCircle (data-tone)", () => {
+  it("warn and danger tones render DISTINCT glyphs + screen-reader labels", () => {
     const { rerender } = render(
       <CardShell
         cardId="bloat"
@@ -57,7 +57,13 @@ describe("CardShell — UI matrix", () => {
         status={{ tone: "warn" }}
       />,
     );
-    expect(screen.getByTestId("health-card-bloat-status").getAttribute("data-tone")).toBe("warn");
+    const warnBadge = screen.getByTestId("health-card-bloat-status");
+    expect(warnBadge.getAttribute("data-tone")).toBe("warn");
+    // Warning = triangle, NOT the critical circle — distinguishable by shape.
+    expect(warnBadge.querySelector(".lucide-triangle-alert")).not.toBeNull();
+    expect(warnBadge.querySelector(".lucide-circle-alert")).toBeNull();
+    expect(warnBadge.querySelector(".sr-only")?.textContent).toBeTruthy();
+
     rerender(
       <CardShell
         cardId="bloat"
@@ -70,7 +76,12 @@ describe("CardShell — UI matrix", () => {
         status={{ tone: "danger" }}
       />,
     );
-    expect(screen.getByTestId("health-card-bloat-status").getAttribute("data-tone")).toBe("danger");
+    const dangerBadge = screen.getByTestId("health-card-bloat-status");
+    expect(dangerBadge.getAttribute("data-tone")).toBe("danger");
+    // Critical = circle-!, distinct shape from the warning triangle.
+    expect(dangerBadge.querySelector(".lucide-circle-alert")).not.toBeNull();
+    expect(dangerBadge.querySelector(".lucide-triangle-alert")).toBeNull();
+    expect(dangerBadge.querySelector(".sr-only")?.textContent).toBeTruthy();
   });
 
   it("empty state renders translated reason text", () => {

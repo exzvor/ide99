@@ -10,9 +10,28 @@ interface Particle {
 }
 
 const LINK_DIST = 130;
-const MAX_PARTICLES = 120;
-const MIN_PARTICLES = 50;
-const AREA_PER_PARTICLE = 16000;
+// Issue #11: the Welcome canvas pegged ~100% CPU. Fewer nodes + a 30fps cap
+// (below) cut the per-frame O(n²) link work and frame rate roughly in half each
+// without visibly changing the calm node mesh.
+const MAX_PARTICLES = 70;
+const MIN_PARTICLES = 40;
+const AREA_PER_PARTICLE = 22000;
+// Cap the animation at ~30fps. The drift is slow enough that 30fps is
+// indistinguishable from 60 here, at half the main-thread cost.
+const FRAME_MS = 1000 / 30;
+
+/**
+ * True when a modal/overlay is open over the screen. Radix dialogs lock body
+ * scroll (`data-scroll-locked`); the app's own modals render `.q-modal`. While
+ * one is up the canvas is fully occluded by a backdrop blur, so animating it is
+ * pure waste — we pause the loop (issue #11).
+ */
+function overlayOpen(): boolean {
+  return (
+    document.body.hasAttribute("data-scroll-locked") ||
+    document.querySelector('[role="dialog"][data-state="open"], .q-modal') !== null
+  );
+}
 
 function hexToRgb(hex: string): [number, number, number] {
   let h = hex.replace("#", "").trim();
@@ -47,7 +66,6 @@ export function Particles(): JSX.Element {
 
     const reduceMotion =
       typeof window.matchMedia === "function" &&
-      window.matchMedia("(prefers-color-scheme: dark)") &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     let width = 0;
@@ -167,8 +185,21 @@ export function Particles(): JSX.Element {
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       }
+    };
 
-      rafId = requestAnimationFrame(step);
+    // 30fps-capped driver. Pauses on a hidden tab or an open modal/overlay
+    // WITHOUT reseeding, so particles keep their positions and resume smoothly
+    // (no teleport). The rAF stays armed so resume is immediate.
+    let lastFrame = 0;
+    const loop = (now: number) => {
+      rafId = requestAnimationFrame(loop);
+      if (document.hidden || overlayOpen()) {
+        lastFrame = now;
+        return;
+      }
+      if (now - lastFrame < FRAME_MS) return;
+      lastFrame = now;
+      step();
     };
 
     readColors();
@@ -178,7 +209,7 @@ export function Particles(): JSX.Element {
       // Single frame — static nodes without links or animation.
       drawStatic();
     } else {
-      rafId = requestAnimationFrame(step);
+      rafId = requestAnimationFrame(loop);
     }
 
     const onResize = () => {
@@ -202,7 +233,8 @@ export function Particles(): JSX.Element {
         if (rafId) cancelAnimationFrame(rafId);
         rafId = 0;
       } else if (!reduceMotion && !rafId) {
-        rafId = requestAnimationFrame(step);
+        // Re-arm the throttled driver (not a fresh seed) on tab refocus.
+        rafId = requestAnimationFrame(loop);
       }
     };
 

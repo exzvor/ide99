@@ -21,6 +21,20 @@ export type ResolvedTheme = "light" | "dark" | "high-contrast";
 
 export const THEME_STORAGE_KEY = "ide99:theme";
 
+/** Cycle order shared by the on-screen switcher and the View → Toggle Theme
+ * menu item so both step through the same sequence. */
+export const NEXT_THEME: Record<Theme, Theme> = {
+  light: "dark",
+  dark: "system",
+  system: "high-contrast",
+  "high-contrast": "light",
+};
+
+/** Fired when the theme changes outside a component's own `setTheme` (e.g. the
+ * native menu's Toggle Theme) so every mounted `useTheme` re-reads and stays in
+ * sync. */
+export const THEME_CHANGE_EVENT = "ide99:theme-change";
+
 const VALID_THEMES: readonly Theme[] = ["light", "dark", "system", "high-contrast"];
 
 function readStoredTheme(): Theme {
@@ -48,6 +62,26 @@ function resolveTheme(theme: Theme, prefersDark: boolean): ResolvedTheme {
   return theme;
   // Note: "high-contrast" passes through unchanged — it's an explicit user
   // choice (Settings → Accessibility), not derived from the OS preference.
+}
+
+/**
+ * Advance to the next theme and persist it (issue #12). Safe to call from
+ * non-React code such as the native View → Toggle Theme menu listener: it
+ * writes localStorage, mirrors the resolved value onto `<html data-theme>`
+ * immediately, and notifies every mounted `useTheme` via `THEME_CHANGE_EVENT`.
+ */
+export function cycleTheme(): void {
+  if (typeof window === "undefined") return;
+  const next = NEXT_THEME[readStoredTheme()];
+  try {
+    window.localStorage.setItem(THEME_STORAGE_KEY, next);
+  } catch {
+    // Best-effort; storage may be unavailable in sandboxed contexts.
+  }
+  if (typeof document !== "undefined") {
+    document.documentElement.dataset.theme = resolveTheme(next, systemPrefersDark());
+  }
+  window.dispatchEvent(new CustomEvent(THEME_CHANGE_EVENT));
 }
 
 export interface UseThemeResult {
@@ -87,6 +121,22 @@ export function useTheme(): UseThemeResult {
     document.documentElement.dataset.theme = resolved;
   }, [resolved]);
 
+  // Re-read when the theme is changed elsewhere (the native Toggle Theme menu,
+  // another useTheme instance, or another window) so all instances agree.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const sync = () => {
+      setThemeState(readStoredTheme());
+      setPrefersDark(systemPrefersDark());
+    };
+    window.addEventListener(THEME_CHANGE_EVENT, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener(THEME_CHANGE_EVENT, sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+
   const setTheme = useCallback((next: Theme) => {
     setThemeState(next);
     if (typeof window === "undefined") return;
@@ -95,6 +145,8 @@ export function useTheme(): UseThemeResult {
     } catch {
       // Best-effort; surfacing a storage error to the user would be obnoxious.
     }
+    // Notify other useTheme instances (editor, menu listener) to re-sync.
+    window.dispatchEvent(new CustomEvent(THEME_CHANGE_EVENT));
   }, []);
 
   return { theme, resolved, setTheme };

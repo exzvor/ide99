@@ -46,6 +46,15 @@ use crate::AppState;
 /// uses its own (longer) inner budget.
 const CHECK_TIMEOUT: Duration = Duration::from_secs(8);
 
+/// Mirrors `tauri.conf.json :: plugins.updater.active`. While the updater
+/// infrastructure isn't deployed (the v1.0 reality, issue #16) this is false,
+/// and a manual "Check for updates" returns immediately with an "unavailable"
+/// result instead of doing a network round-trip — which, in a closed/air-gapped
+/// network, would block for the full timeout and then read like a server
+/// outage rather than "this build has no updater". Flip in lockstep with the
+/// config when the updater ships.
+const UPDATER_ACTIVE: bool = false;
+
 /// Channel name used for `updater:progress` events. Centralised so the
 /// renderer and the backend stay in lockstep.
 const PROGRESS_CHANNEL: &str = "updater:progress";
@@ -92,6 +101,19 @@ impl AppState {
         let channel = self.read_release_channel().await?;
         let now = Utc::now().to_rfc3339();
         let current_version = env!("CARGO_PKG_VERSION").to_string();
+
+        // Short-circuit when the updater is disabled in this build (issue #16):
+        // return the calm "not enabled in this build" state instantly with zero
+        // network I/O, instead of an 8s timeout that looks like an outage on a
+        // closed network.
+        if !UPDATER_ACTIVE {
+            return Ok(CheckResult::Error {
+                code: "unavailable".into(),
+                message: "automatic updates are not enabled in this build".into(),
+                channel,
+                checked_at: now,
+            });
+        }
 
         // Build the updater handle. If the plugin isn't fully configured
         // (e.g. dev build with `active = false`), surface that as a soft

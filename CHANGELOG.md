@@ -4,6 +4,20 @@ All notable changes to **ide99** are documented here. Format: [Keep a Changelog]
 
 ## [Unreleased]
 
+## [1.0.7] — 2026-06-03
+
+Reliability + closed-network release: crash logging, real keychains, calmer idle, single titlebar, offline installer.
+
+- **Crashes are now diagnosable and survivable (#14).** A native Rust panic used to kill the whole app instantly with no trace — no crash report, no log files. Now panics (and all errors) are written to rotating logs under `<data_dir>/logs/` (`~/.local/share/io.ide99.app/logs/` on Linux), with secrets redacted, via a panic hook that flushes before the process aborts. On the UI side a React error boundary stops a failing tab from blanking the entire window, and uncaught errors/rejections are mirrored to the local log even when crash reporting is turned off.
+- **PostgreSQL 9.6 compatibility (#14).** On old servers (e.g. Astra Linux ships 9.6) the function / procedure / sequence / table introspection queries referenced catalog columns that don't exist before PG 10/11 (`prokind`, `pg_sequences`, `pg_partitioned_table`, identity/generated columns), which surfaced as an "Unhandled rejection" on connect and missing objects in the browser. Version-gated query variants now list those objects correctly on 9.6+.
+- **Saved connection passwords persist (#25).** The `keyring` dependency was built with no backend feature, so every 1.0.x build silently used an in-memory mock and lost passwords on restart — on **all** platforms. Real OS backends are now enabled per-OS (macOS Keychain, Windows Credential Manager, Linux Secret Service). A startup write/read probe rejects the mock; when no OS keychain exists (e.g. a headless server) passwords are kept in a local `0600` file instead, and a one-time warning makes that visible rather than silent.
+- **Lower idle CPU on the Welcome/Workspace screens (#11).** The background node mesh ran an uncapped animation loop with O(n²) link work, and the blurred backdrop used an expensive 80px blur. The canvas is now capped at 30fps and paused when the window is hidden or a modal is open, with fewer nodes and a lighter blur (disabled entirely under reduced-motion). Idle CPU drops from near-100% to a few percent.
+- **One titlebar, and Toggle Theme works (#12).** On Windows/Linux the app drew its own titlebar on top of the native one (a double titlebar) — the custom bar is now shown only on macOS. The **View → Toggle Theme** menu item, previously a silent no-op, now cycles the theme.
+- **Calm update check on closed networks (#16).** While the updater isn't deployed yet, "Check for updates" returns instantly with "not enabled in this build" instead of an 8-second timeout that read like a server outage.
+- **Windows offline installer (#17).** A new `ide99_<version>_x64-offline-setup.exe` embeds the WebView2 runtime so it installs with no internet (closed-contour); the small online installer stays the default download.
+- **Health severity is readable (reported via Habr).** The corner badge used the same circle-`!` glyph for warning and critical, differing only by colour (indistinguishable in the light theme). Warnings now use a triangle, critical a circle, each with a screen-reader label.
+- **PostGIS map works offline.** Leaflet's marker icons are bundled (they were broken even online), and the OpenStreetMap basemap is skipped when offline so geometries render on a neutral background instead of broken tiles.
+
 ## [1.0.6] — 2026-06-02
 
 Offline editor fix + more of the schema tree + Health dashboard interactivity.

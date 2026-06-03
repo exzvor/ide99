@@ -326,7 +326,10 @@ body {
   content: "";
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
+  /* Issue #11: blur compositing cost grows ~quadratically with radius and was
+     a major chunk of idle GPU/CPU (≈50% on the Workspace screen). 56px keeps
+     the soft-blob look at roughly half the per-frame cost of 80px. */
+  filter: blur(56px);
   will-change: transform;
 }
 .q-mesh::before {
@@ -384,6 +387,16 @@ body {
 }
 .q-mesh.off {
   display: none;
+}
+/* Reduced motion: stop the perpetual drift animations and drop the layer
+   promotion so the blurred blobs stop re-compositing every frame (issue #11). */
+@media (prefers-reduced-motion: reduce) {
+  .q-mesh::before,
+  .q-mesh::after,
+  .q-mesh > i {
+    animation: none;
+    will-change: auto;
+  }
 }
 
 /* ==========================================================================

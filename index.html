@@ -36,6 +36,22 @@
           document.documentElement.dataset.theme = "light";
         }
         try {
+          // Stamp the OS on <html> (issue #12) so the custom titlebar renders
+          // ONLY on macOS — on Windows/Linux the native window decorations are
+          // the titlebar, and drawing our own produced a double titlebar.
+          // The webview UA reliably reflects the host: WKWebView reports
+          // "Macintosh", WebView2 "Windows", WebKitGTK "Linux". (We can't use
+          // @tauri-apps/api/os — it doesn't exist in Tauri v2.)
+          var ua = navigator.userAgent || "";
+          document.documentElement.dataset.os = /Mac/i.test(ua)
+            ? "macos"
+            : /Win/i.test(ua)
+              ? "windows"
+              : "linux";
+        } catch (e) {
+          document.documentElement.dataset.os = "linux";
+        }
+        try {
           var l = localStorage.getItem("ide99:lang");
           if (l !== "en" && l !== "ru") {
             // First launch: honour browser/OS language tag if it maps to a

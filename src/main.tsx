@@ -7,6 +7,12 @@ import "./styles/globals.css";
 import "pev2/dist/pev2.css";
 import "./i18n";
 import App from "./App";
+import { installGlobalDiagnostics } from "./lib/diagnostics";
+
+// Always-on local crash diagnostics (issue #14) — mirror uncaught errors and
+// unhandled rejections to the on-disk log, independent of the privacy-gated
+// crash reporter. No network; safe in closed/air-gapped networks.
+installGlobalDiagnostics();
 
 const root = document.getElementById("root");
 if (root) {

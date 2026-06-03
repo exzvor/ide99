@@ -31,6 +31,7 @@ vi.mock("leaflet", () => {
       tileLayer: vi.fn(() => tileLayer),
       featureGroup: vi.fn(() => featureGroup),
       geoJSON: vi.fn(() => geoJSON),
+      Icon: { Default: { mergeOptions: vi.fn() } },
     },
   };
 });

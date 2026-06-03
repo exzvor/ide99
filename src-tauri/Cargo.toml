@@ -41,6 +41,9 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "1"
 rusqlite = { version = "0.32", features = ["bundled"] }
+# Base entry; the real OS backend is selected per-target below (issue #25).
+# Without a backend feature, keyring v3 compiles a no-op in-memory mock on
+# EVERY OS and saved passwords vanish on restart.
 keyring = "3"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "net", "io-util", "io-std", "time", "fs", "process"] }
 # MCP server stack. axum + tower are already in Cargo.lock via
@@ -80,6 +83,21 @@ which = "6"
 # Telemetry HTTP client (PostHog + Sentry envelope POST).
 # rustls-only build keeps bundle small and avoids OpenSSL system dep.
 reqwest = { version = "0.13", default-features = false, features = ["rustls", "rustls-native-certs", "json"] }
+
+# — Real OS keychain backends (issue #25). keyring v3 has NO default
+# backend; each OS needs its feature or it falls back to a no-op mock that
+# loses passwords on restart. Features union with the base `keyring = "3"`.
+[target.'cfg(target_os = "macos")'.dependencies]
+keyring = { version = "3", features = ["apple-native"] }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+keyring = { version = "3", features = ["windows-native"] }
+
+# Linux: persistent libsecret / Secret Service via dbus-secret-service.
+# `crypto-rust` forces pure-Rust AES so we don't pull OpenSSL (parity with the
+# rustls-only reqwest above). Build-time system deps: libdbus-1-dev + pkg-config.
+[target.'cfg(target_os = "linux")'.dependencies]
+keyring = { version = "3", features = ["sync-secret-service", "crypto-rust"] }
 
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }

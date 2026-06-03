@@ -20,11 +20,12 @@ use thiserror::Error;
 use tokio_postgres::types::Oid;
 
 use super::queries::{
-    GET_FUNCTION_HEAD_SQL, GET_FUNCTION_PARAMS_SQL, GET_INDEX_DETAIL_SQL, GET_PROCEDURE_HEAD_SQL,
-    GET_SEQUENCE_OWNED_BY_SQL, GET_SEQUENCE_SQL, GET_TABLE_COLUMNS_SQL, GET_TABLE_CONSTRAINTS_SQL,
-    GET_TABLE_HEAD_SQL, GET_TABLE_INDEX_NAMES_SQL, GET_TRIGGER_DETAIL_SQL, GET_VIEW_LIKE_SQL,
-    LIST_FUNCTIONS_SQL, LIST_MATVIEWS_SQL, LIST_PROCEDURES_SQL, LIST_SEQUENCES_SQL,
-    LIST_TRIGGERS_SQL, RESOLVE_ATTNAMES_SQL,
+    GET_FUNCTION_HEAD_SQL, GET_FUNCTION_HEAD_SQL_PRE11, GET_FUNCTION_PARAMS_SQL, GET_INDEX_DETAIL_SQL,
+    GET_PROCEDURE_HEAD_SQL, GET_SEQUENCE_OWNED_BY_SQL, GET_SEQUENCE_SQL, GET_TABLE_COLUMNS_SQL,
+    GET_TABLE_COLUMNS_SQL_PRE10, GET_TABLE_CONSTRAINTS_SQL, GET_TABLE_HEAD_SQL,
+    GET_TABLE_HEAD_SQL_PRE10, GET_TABLE_INDEX_NAMES_SQL, GET_TRIGGER_DETAIL_SQL, GET_VIEW_LIKE_SQL,
+    LIST_FUNCTIONS_SQL, LIST_FUNCTIONS_SQL_PRE11, LIST_MATVIEWS_SQL, LIST_PROCEDURES_SQL,
+    LIST_SEQUENCES_SQL, LIST_SEQUENCES_SQL_PRE10, LIST_TRIGGERS_SQL, RESOLVE_ATTNAMES_SQL,
 };
 use super::tgtype_decode::decode_tgtype;
 use super::types::{
@@ -59,6 +60,34 @@ impl IntrospectError {
             name: name.to_string(),
         }
     }
+}
+
+/// PostgreSQL `server_version_num` thresholds for catalog-shape differences.
+/// `pg_sequences`, `pg_partitioned_table`, identity columns → PG 10.
+/// `prokind` (functions vs procedures vs aggregates) → PG 11.
+const PG10: i64 = 100_000;
+const PG11: i64 = 110_000;
+
+/// Resolve `server_version_num` (e.g. 90624, 110000, 160000) for a client.
+/// On any failure we assume a modern server (`i64::MAX`) so the default
+/// (modern) query path is used — the legacy path is opt-in for old servers
+/// such as PostgreSQL 9.6 (shipped by Astra Linux). Issue #14.
+async fn server_version_num(client: &deadpool_postgres::Client) -> i64 {
+    match client.query_one("SHOW server_version_num", &[]).await {
+        Ok(row) => row
+            .try_get::<_, String>(0)
+            .ok()
+            .and_then(|s| s.trim().parse().ok())
+            .unwrap_or(i64::MAX),
+        Err(_) => i64::MAX,
+    }
+}
+
+/// Quote an identifier for safe interpolation into dynamic SQL (PG rules: wrap
+/// in double quotes, double any embedded quote). Used only on the PG 9.x
+/// sequence-detail path where the sequence relation must be read directly.
+fn quote_ident(s: &str) -> String {
+    format!("\"{}\"", s.replace('"', "\"\""))
 }
 
 /// Map a single-character partition strategy code to the canonical name.
@@ -110,10 +139,15 @@ pub async fn get_table_definition(
     name: &str,
 ) -> Result<TableDefinition, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
+    // PG < 10 lacks pg_partitioned_table / identity / generated columns.
+    let legacy = server_version_num(&client).await < PG10;
 
     // 1) Head row — fails fast with NotFound if no row.
     let head_rows = client
-        .query(GET_TABLE_HEAD_SQL, &[&schema, &name])
+        .query(
+            if legacy { GET_TABLE_HEAD_SQL_PRE10 } else { GET_TABLE_HEAD_SQL },
+            &[&schema, &name],
+        )
         .await
         .map_err(IntrospectError::pg)?;
     let head = head_rows
@@ -134,7 +168,10 @@ pub async fn get_table_definition(
 
     // 2) Columns.
     let col_rows = client
-        .query(GET_TABLE_COLUMNS_SQL, &[&schema, &name])
+        .query(
+            if legacy { GET_TABLE_COLUMNS_SQL_PRE10 } else { GET_TABLE_COLUMNS_SQL },
+            &[&schema, &name],
+        )
         .await
         .map_err(IntrospectError::pg)?;
     let mut columns: Vec<ColumnDefinition> = Vec::with_capacity(col_rows.len());
@@ -353,10 +390,32 @@ pub async fn get_sequence_definition(
     name: &str,
 ) -> Result<SequenceDefinition, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
-    let rows = client
-        .query(GET_SEQUENCE_SQL, &[&schema, &name])
-        .await
-        .map_err(IntrospectError::pg)?;
+
+    // PG < 10 has no `pg_sequences` view; read the sequence relation directly.
+    // On 9.x every sequence is bigint and there is no per-sequence data_type.
+    let (rows, data_type) = if server_version_num(&client).await < PG10 {
+        let sql = format!(
+            "SELECT start_value, increment_by AS increment, min_value, max_value, \
+             cache_value AS cache, is_cycled AS cycle FROM {}.{}",
+            quote_ident(schema),
+            quote_ident(name),
+        );
+        let rows = client
+            .query(sql.as_str(), &[])
+            .await
+            .map_err(IntrospectError::pg)?;
+        (rows, "bigint".to_string())
+    } else {
+        let rows = client
+            .query(GET_SEQUENCE_SQL, &[&schema, &name])
+            .await
+            .map_err(IntrospectError::pg)?;
+        let data_type = rows
+            .first()
+            .map(|r| r.get::<_, String>("data_type"))
+            .unwrap_or_else(|| "bigint".to_string());
+        (rows, data_type)
+    };
     let row = rows
         .first()
         .ok_or_else(|| IntrospectError::not_found(schema, name))?;
@@ -373,7 +432,7 @@ pub async fn get_sequence_definition(
     Ok(SequenceDefinition {
         schema: schema.to_string(),
         name: name.to_string(),
-        data_type: row.get("data_type"),
+        data_type,
         start: row.get("start_value"),
         increment: row.get("increment"),
         min_value: row.get("min_value"),
@@ -408,8 +467,12 @@ pub async fn list_sequences(
     schema: &str,
 ) -> Result<Vec<SequenceSummary>, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
+    let legacy = server_version_num(&client).await < PG10;
     let rows = client
-        .query(LIST_SEQUENCES_SQL, &[&schema])
+        .query(
+            if legacy { LIST_SEQUENCES_SQL_PRE10 } else { LIST_SEQUENCES_SQL },
+            &[&schema],
+        )
         .await
         .map_err(IntrospectError::pg)?;
     Ok(rows
@@ -604,8 +667,13 @@ pub async fn get_function_definition(
     args: &str,
 ) -> Result<FunctionDefinition, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
+    let head_sql = if server_version_num(&client).await < PG11 {
+        GET_FUNCTION_HEAD_SQL_PRE11
+    } else {
+        GET_FUNCTION_HEAD_SQL
+    };
     let head_rows = client
-        .query(GET_FUNCTION_HEAD_SQL, &[&schema, &name, &args])
+        .query(head_sql, &[&schema, &name, &args])
         .await
         .map_err(IntrospectError::pg)?;
     let head = head_rows
@@ -659,6 +727,10 @@ pub async fn get_procedure_definition(
     args: &str,
 ) -> Result<ProcedureDefinition, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
+    // No procedures (or `prokind`) before PG 11 — nothing to introspect.
+    if server_version_num(&client).await < PG11 {
+        return Err(IntrospectError::not_found(schema, name));
+    }
     let head_rows = client
         .query(GET_PROCEDURE_HEAD_SQL, &[&schema, &name, &args])
         .await
@@ -744,8 +816,14 @@ pub async fn list_functions(
     trigger_only: bool,
 ) -> Result<Vec<FunctionSummary>, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
+    // PG < 11 has no `prokind`; functions are filtered via proisagg/proiswindow.
+    let sql = if server_version_num(&client).await < PG11 {
+        LIST_FUNCTIONS_SQL_PRE11
+    } else {
+        LIST_FUNCTIONS_SQL
+    };
     let rows = client
-        .query(LIST_FUNCTIONS_SQL, &[&schema, &trigger_only])
+        .query(sql, &[&schema, &trigger_only])
         .await
         .map_err(IntrospectError::pg)?;
     Ok(rows
@@ -773,6 +851,11 @@ pub async fn list_procedures(
     schema: &str,
 ) -> Result<Vec<ProcedureSummary>, IntrospectError> {
     let client = pool.get().await.map_err(IntrospectError::pg)?;
+    // CREATE PROCEDURE arrived in PG 11; older servers have none (and no
+    // `prokind` column to query), so return an empty list cleanly.
+    if server_version_num(&client).await < PG11 {
+        return Ok(Vec::new());
+    }
     let rows = client
         .query(LIST_PROCEDURES_SQL, &[&schema])
         .await

@@ -2,7 +2,7 @@ import { Contrast, Monitor, Moon, Sun } from "lucide-react";
 import type { JSX } from "react";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { type Theme, useTheme } from "../hooks/useTheme";
+import { NEXT_THEME, type Theme, useTheme } from "../hooks/useTheme";
 
 /**
  * Four-state theme cycler: light -> dark -> system -> high-contrast -> light.
@@ -11,14 +11,10 @@ import { type Theme, useTheme } from "../hooks/useTheme";
  * Why a cycle and not a popover? The Welcome screen is small; an inline
  * cyclic toggle is the cheapest interaction in clicks (1) and discoverable
  * via the icon. Power users get a full Settings → Accessibility panel.
+ *
+ * The cycle order lives in `useTheme` (`NEXT_THEME`) so the native View →
+ * Toggle Theme menu steps through the same sequence (issue #12).
  */
-
-const NEXT_THEME: Record<Theme, Theme> = {
-  light: "dark",
-  dark: "system",
-  system: "high-contrast",
-  "high-contrast": "light",
-};
 
 const ICONS: Record<Theme, typeof Sun> = {
   light: Sun,

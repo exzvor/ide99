@@ -58,7 +58,9 @@ jobs:
             librsvg2-dev \
             patchelf \
             libsoup-3.0-dev \
-            libjavascriptcoregtk-4.1-dev
+            libjavascriptcoregtk-4.1-dev \
+            libdbus-1-dev \
+            pkg-config
 
       - run: npm ci
 
@@ -120,6 +122,36 @@ jobs:
         run: |
           gh release upload "${{ steps.tag.outputs.tag }}" `
             "target/release/bundle/portable/ide99_${{ steps.tag.outputs.version }}_x64-portable.zip" `
+            --clobber
+
+      # Closed-contour installer (issue #17). The default NSIS installer uses
+      # downloadBootstrapper, which fetches the WebView2 runtime from Microsoft
+      # at install time — that fails on an air-gapped/closed network. Repackage
+      # NSIS with the offlineInstaller overlay (embeds the ~127MB WebView2
+      # runtime) and ship it as a SEPARATE *-offline-setup.exe so the small
+      # online installer stays the default download. `tauri bundle` only
+      # re-packages the already-built binary (no full rebuild).
+      - name: Build Windows offline NSIS installer
+        if: matrix.platform == 'windows-latest'
+        shell: pwsh
+        run: |
+          $nsis = "target/release/bundle/nsis"
+          $online = "$nsis/ide99_${{ steps.tag.outputs.version }}_x64-setup.exe"
+          # Preserve the online installer before the offline bundle overwrites it.
+          Copy-Item $online "$online.online.bak" -Force
+          npx tauri bundle -c src-tauri/tauri.windows-offline.conf.json --bundles nsis
+          # Rename the freshly-built offline installer, then restore the online one.
+          Move-Item $online "$nsis/ide99_${{ steps.tag.outputs.version }}_x64-offline-setup.exe" -Force
+          Move-Item "$online.online.bak" $online -Force
+
+      - name: Upload Windows offline NSIS installer to release
+        if: matrix.platform == 'windows-latest'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: |
+          gh release upload "${{ steps.tag.outputs.tag }}" `
+            "target/release/bundle/nsis/ide99_${{ steps.tag.outputs.version }}_x64-offline-setup.exe" `
             --clobber
 
   publish:

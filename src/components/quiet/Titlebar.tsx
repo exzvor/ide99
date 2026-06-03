@@ -24,7 +24,12 @@ interface TitlebarProps {
  * Double-click reproduces the standard macOS behavior: maximize
  * (toggleMaximize).
  */
-export function Titlebar({ name, context, connected = false, right }: TitlebarProps): JSX.Element {
+export function Titlebar({
+  name,
+  context,
+  connected = false,
+  right,
+}: TitlebarProps): JSX.Element | null {
   const handleMouseDown = useCallback((event: MouseEvent<HTMLDivElement>) => {
     // Do not drag if the click is on an interactive element (button / input).
     const target = event.target as HTMLElement;
@@ -42,6 +47,15 @@ export function Titlebar({ name, context, connected = false, right }: TitlebarPr
     }
     void getCurrentWindow().toggleMaximize();
   }, []);
+
+  // Issue #12: render the custom bar ONLY on macOS (where it sits under the
+  // overlay traffic lights). On Windows/Linux the native window titlebar IS the
+  // chrome, so drawing this too produced a double titlebar. `data-os` is stamped
+  // synchronously in index.html before React mounts. (Hooks run first to satisfy
+  // the rules of hooks; data-os is constant for the app's lifetime.)
+  if (typeof document !== "undefined" && document.documentElement.dataset.os !== "macos") {
+    return null;
+  }
 
   return (
     <div

@@ -172,6 +172,20 @@ LEFT JOIN pg_partitioned_table pt ON pt.partrelid = c.oid
 WHERE n.nspname = $1 AND c.relname = $2
   AND c.relkind IN ('r', 'p')";
 
+/// PG < 10 variant of [`GET_TABLE_HEAD_SQL`]. `pg_partitioned_table` does not
+/// exist before PG 10 (declarative partitioning), so the partition columns are
+/// NULL literals. Used on PostgreSQL 9.x (e.g. Astra Linux ships 9.6).
+pub const GET_TABLE_HEAD_SQL_PRE10: &str = "\
+SELECT c.oid AS oid,
+       c.relrowsecurity AS rls_enabled,
+       obj_description(c.oid, 'pg_class') AS comment,
+       NULL::text AS partition_strategy,
+       NULL::text AS partition_key
+FROM pg_class c
+JOIN pg_namespace n ON c.relnamespace = n.oid
+WHERE n.nspname = $1 AND c.relname = $2
+  AND c.relkind IN ('r', 'p')";
+
 /// List columns with full detail — generated kind, identity, defaults, comment.
 ///
 /// `attgenerated`: '' (none), 's' (STORED), 'v' (VIRTUAL — PG17+).
@@ -183,6 +197,27 @@ SELECT a.attname AS name,
        pg_get_expr(d.adbin, d.adrelid) AS default,
        a.attgenerated::text AS attgenerated,
        a.attidentity::text AS attidentity,
+       a.atthasdef AS atthasdef,
+       col_description(c.oid, a.attnum) AS comment,
+       a.attnum AS ordinal
+FROM pg_class c
+JOIN pg_namespace n ON c.relnamespace = n.oid
+JOIN pg_attribute a ON a.attrelid = c.oid
+LEFT JOIN pg_attrdef d ON d.adrelid = c.oid AND d.adnum = a.attnum
+WHERE n.nspname = $1 AND c.relname = $2
+  AND a.attnum > 0 AND NOT a.attisdropped
+ORDER BY a.attnum";
+
+/// PG < 10 variant of [`GET_TABLE_COLUMNS_SQL`]. `attidentity` (PG 10) and
+/// `attgenerated` (PG 12) do not exist on `pg_attribute` before those versions;
+/// neither feature exists on 9.x either, so both are reported as '' (none).
+pub const GET_TABLE_COLUMNS_SQL_PRE10: &str = "\
+SELECT a.attname AS name,
+       format_type(a.atttypid, a.atttypmod) AS type_text,
+       NOT a.attnotnull AS nullable,
+       pg_get_expr(d.adbin, d.adrelid) AS default,
+       ''::text AS attgenerated,
+       ''::text AS attidentity,
        a.atthasdef AS atthasdef,
        col_description(c.oid, a.attnum) AS comment,
        a.attnum AS ordinal
@@ -337,6 +372,23 @@ WHERE n.nspname = $1
 )
 ORDER BY seq.relname";
 
+/// PG < 10 variant of [`LIST_SEQUENCES_SQL`]. `pg_sequences` does not exist
+/// before PG 10; every sequence is `bigint` on 9.x, so `data_type` is reported
+/// as NULL and the caller defaults it to "bigint".
+pub const LIST_SEQUENCES_SQL_PRE10: &str = "\
+SELECT seq.relname AS name,
+       NULL::text AS data_type
+FROM pg_class seq
+JOIN pg_namespace n ON n.oid = seq.relnamespace
+WHERE n.nspname = $1
+  AND seq.relkind = 'S'
+  AND NOT EXISTS (    SELECT 1 FROM pg_depend dep
+    WHERE dep.objid = seq.oid
+      AND dep.classid = 'pg_class'::regclass
+      AND dep.deptype = 'a'
+)
+ORDER BY seq.relname";
+
 // ---------------------------------------------------------------------------
 // — function / procedure / trigger introspection.
 // ---------------------------------------------------------------------------
@@ -366,6 +418,30 @@ JOIN pg_language l ON p.prolang = l.oid
 WHERE n.nspname = $1 AND p.proname = $2
   AND pg_get_function_arguments(p.oid) = $3
   AND p.prokind = 'f'";
+
+/// PG < 11 variant of [`GET_FUNCTION_HEAD_SQL`]. No `prokind` column (PG 11+);
+/// `proparallel` exists from PG 9.6. Plain functions are filtered via
+/// `proisagg` / `proiswindow`, and `prokind` is reported as the literal 'f'.
+pub const GET_FUNCTION_HEAD_SQL_PRE11: &str = "\
+SELECT p.oid AS oid,
+       'f'::text AS prokind,
+       l.lanname AS language,
+       p.proretset AS proretset,
+       p.provolatile::text AS provolatile,
+       p.proparallel::text AS proparallel,
+       p.prosecdef AS prosecdef,
+       p.procost AS procost,
+       p.prorows AS prorows,
+       p.prosrc AS body,
+       format_type(p.prorettype, NULL) AS return_type_text,
+       obj_description(p.oid, 'pg_proc') AS comment
+FROM pg_proc p
+JOIN pg_namespace n ON p.pronamespace = n.oid
+JOIN pg_language l ON p.prolang = l.oid
+WHERE n.nspname = $1 AND p.proname = $2
+  AND pg_get_function_arguments(p.oid) = $3
+  AND NOT p.proisagg
+  AND NOT p.proiswindow";
 
 /// Head row for a single procedure — same join shape as functions but
 /// `prokind = 'p'` and the return-type cols are unused. Returns at most one row.
@@ -441,6 +517,23 @@ FROM pg_proc p
 JOIN pg_namespace n ON p.pronamespace = n.oid
 WHERE n.nspname = $1
   AND p.prokind = 'f'
+  AND ($2 = false OR p.prorettype = 'pg_catalog.trigger'::regtype)
+ORDER BY p.proname";
+
+/// PG < 11 variant of [`LIST_FUNCTIONS_SQL`]. `pg_proc.prokind` was added in
+/// PG 11; before that, plain functions are distinguished from aggregates and
+/// window functions via the boolean `proisagg` / `proiswindow` columns
+/// (procedures did not exist before PG 11).
+pub const LIST_FUNCTIONS_SQL_PRE11: &str = "\
+SELECT p.proname AS name,
+       pg_get_function_arguments(p.oid) AS args,
+       p.proretset AS proretset,
+       format_type(p.prorettype, NULL) AS return_type_text
+FROM pg_proc p
+JOIN pg_namespace n ON p.pronamespace = n.oid
+WHERE n.nspname = $1
+  AND NOT p.proisagg
+  AND NOT p.proiswindow
   AND ($2 = false OR p.prorettype = 'pg_catalog.trigger'::regtype)
 ORDER BY p.proname";
 

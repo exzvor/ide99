@@ -133,15 +133,20 @@ impl AppState {
 /// be opened — all of which indicate an unrecoverable misconfiguration.
 #[allow(clippy::too_many_lines)] // generate_handler! list grows linearly with each sprint
 pub fn run() {
-    logging::init_tracing();
+    // Resolve the data dir FIRST so file logging (issue #14) can write into
+    // <data_dir>/logs/ from the very first line — in a closed/air-gapped
+    // network this on-disk log is the only place a crash leaves evidence.
+    let data_dir_path = app_paths::data_dir().expect("data dir");
+    logging::init_tracing(&data_dir_path);
+    // Catch native Rust panics and persist them before the process aborts
+    // (release builds run panic = "abort"; the hook is the only chance).
+    logging::install_panic_hook();
     tracing::info!(version = env!("CARGO_PKG_VERSION"), "ide99 starting");
 
     // One-time migration of v1.0.x user data from the legacy data dir (the
     // generic "app" folder on Linux/Windows, issue #26) to the canonical
     // io.ide99.app dir. Best-effort; must run before the store is opened.
     app_paths::migrate_legacy_data_dir();
-
-    let data_dir_path = app_paths::data_dir().expect("data dir");
     let db_path = app_paths::store_db_path().expect("store db path");
     let mut store = Store::open(&db_path).expect("open store");
     store.run_migrations().expect("migrations");
@@ -235,6 +240,7 @@ pub fn run() {
             logging::log_error,
             system::open_external_url,
             connection::commands::list_connections,
+            connection::commands::keychain_degraded,
             connection::commands::create_connection,
             connection::commands::duplicate_connection,
             connection::commands::update_connection,

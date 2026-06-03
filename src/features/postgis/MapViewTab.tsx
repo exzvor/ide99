@@ -11,12 +11,27 @@ import L from "leaflet";
 // the real engine, so the tests mock the entire module.
 import { type JSX, useEffect, useMemo, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
+// Bundle Leaflet's default marker images through Vite so Point geometries get
+// a proper marker. Leaflet's CSS references these by bare filename relative to
+// the stylesheet, which never resolved through the bundler — so markers were
+// broken even online, and 404'd offline. Importing them yields hashed bundle
+// URLs that work fully offline. (optional-chained below so the test's leaflet
+// mock, which has no `Icon`, doesn't throw.)
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 import { type MapViewTab as MapViewTabModel, useEditor } from "../editor/store";
 
 import { type DrawTool, MapViewToolbar } from "./MapViewToolbar";
 import { type Geometry, parseEwkbHex } from "./ewkbParser";
 import { toWgs84 } from "./sridProj";
+
+L.Icon?.Default?.mergeOptions?.({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
 
 export interface MapViewTabProps {
   tab: MapViewTabModel;
@@ -129,11 +144,19 @@ export function MapViewTab({ tab }: MapViewTabProps): JSX.Element {
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
     const map = L.map(containerRef.current).setView([0, 0], 2);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution:
-        '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 19,
-    }).addTo(map);
+    // Basemap tiles come from OpenStreetMap (network). In a closed/air-gapped
+    // network they can't load, so we skip the tile layer when offline: the
+    // vector geometries still render on a neutral background instead of a wall
+    // of broken-tile icons. `errorTileUrl` suppresses broken tiles otherwise.
+    const online = typeof navigator === "undefined" || navigator.onLine !== false;
+    if (online) {
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19,
+        errorTileUrl: "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+      }).addTo(map);
+    }
     mapRef.current = map;
     return () => {
       map.remove();

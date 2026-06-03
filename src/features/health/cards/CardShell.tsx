@@ -1,4 +1,4 @@
-import { AlertCircle, CheckCircle2, Copy, RefreshCw, RotateCw } from "lucide-react";
+import { AlertCircle, AlertTriangle, CheckCircle2, Copy, RefreshCw, RotateCw } from "lucide-react";
 import type { CSSProperties, JSX, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../../../components/Toast";
@@ -151,11 +151,28 @@ export function CardShell({ cardId, connId, state, body, status }: CardShellProp
             data-tone={status?.tone ?? "ok"}
             title={status?.tooltip}
           >
-            {status?.tone === "ok" ? (
-              <CheckCircle2 size={16} color={TONE_VAR.ok} aria-hidden="true" />
-            ) : (
-              <AlertCircle size={16} color={TONE_VAR[status?.tone ?? "warn"]} aria-hidden="true" />
-            )}
+            {/* Issue (Habr/Konstantin): critical and warning used the SAME
+                circle-! glyph, differing only by hue — indistinguishable in the
+                light theme and to colorblind users. Use distinct SHAPES
+                (triangle = warning, circle-! = critical, circle-✓ = healthy)
+                plus an always-present screen-reader label. */}
+            {(() => {
+              const tone = status?.tone ?? "ok";
+              const Icon =
+                tone === "ok" ? CheckCircle2 : tone === "danger" ? AlertCircle : AlertTriangle;
+              const label =
+                tone === "ok"
+                  ? t("health.status.ok", { defaultValue: "Healthy" })
+                  : tone === "danger"
+                    ? t("health.status.danger", { defaultValue: "Problem" })
+                    : t("health.status.warn", { defaultValue: "Needs attention" });
+              return (
+                <>
+                  <Icon size={16} color={TONE_VAR[tone]} aria-hidden="true" />
+                  <span className="sr-only">{label}</span>
+                </>
+              );
+            })()}
             {/* Info-icon "what does this mean" — temporarily disabled.
                 Tied to the Easy-mode-style help UX which is currently hidden;
                 bring back together with Easy mode.

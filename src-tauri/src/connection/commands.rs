@@ -66,6 +66,15 @@ pub async fn list_connections(
     state.list_connections().await
 }
 
+/// Whether credential storage fell back to an on-disk file because no OS
+/// keychain is available (issue #25). The frontend shows a one-time warning so
+/// the user knows passwords live in a local file rather than the OS keychain.
+#[tauri::command]
+#[must_use]
+pub fn keychain_degraded() -> bool {
+    crate::connection::keychain::is_degraded()
+}
+
 #[tauri::command]
 pub async fn create_connection(
     state: tauri::State<'_, AppState>,
