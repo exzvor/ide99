@@ -4,6 +4,16 @@ All notable changes to **ide99** are documented here. Format: [Keep a Changelog]
 
 ## [Unreleased]
 
+## [1.0.8] — 2026-06-03
+
+Hotfix for two regressions found while testing 1.0.7 on Windows (WebView2).
+
+- **SQL editor renders correctly again.** After Monaco was bundled in 1.0.6/1.0.7 the editor loaded but, on Windows/WebView2, rendered misaligned — text drifted half a line up and the caret was invisible. Cause: Monaco measured glyph metrics against a fallback font before the editor font (JetBrains Mono, `font-display: swap`) finished loading, and never re-measured. We now call `monaco.editor.remeasureFonts()` once `document.fonts.ready` resolves, fixing alignment on every editor instance. (macOS/WebKit didn't show this because the font loads fast enough there.)
+- **Health screen no longer white-screens.** A Bloat card declared its "+N more" `useState` after two early returns, so a Health refresh that flipped the card's state changed the hook count and threw React #310, taking down the whole Health tab. The hook is now declared before any return (Rules of Hooks). All Health cards were audited for the same pattern.
+- **A crashing tab no longer traps the app.** The error boundary now wraps each tab body individually (keyed by the active tab) instead of the whole workspace, so a crash in one panel leaves the tab strip and sidebar usable. The recovery panel adds **Close this tab** and **Open logs folder** alongside **Try again**.
+- **Logs are findable.** New **Open logs folder** action (and a Tauri `open_logs_folder` command) reveals `<data_dir>/logs/` in the OS file manager and shows the path — Windows users were looking in the WebView2 cache dir instead of `%APPDATA%\io.ide99.app\logs`.
+- **Distinct icon for pg_stat_statements** so it no longer matches the Health icon.
+
 ## [1.0.7] — 2026-06-03
 
 Reliability + closed-network release: crash logging, real keychains, calmer idle, single titlebar, offline installer.

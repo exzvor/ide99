@@ -2970,7 +2970,9 @@
     "boundary": {
       "title": "Something went wrong here",
       "body": "This part of the app hit an error and was paused so the rest keeps working. The details were written to the local log file.",
-      "retry": "Try again"
+      "retry": "Try again",
+      "close_tab": "Close this tab",
+      "open_logs": "Open logs folder"
     }
   },
   "keychain": {

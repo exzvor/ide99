@@ -18,6 +18,10 @@ function bloatTone(maxPct: number): "ok" | "warn" | "danger" {
 
 export function BloatCard({ connId, state }: CardProps): JSX.Element {
   const { t } = useTranslation();
+  // Hooks must run on every render regardless of state — declaring `expanded`
+  // BEFORE the early returns below avoids a hook-count mismatch (React #310)
+  // when the card flips between ready / loading / empty on a Health refresh.
+  const [expanded, setExpanded] = useState(false);
 
   if (state.status !== "ready" || state.card.id !== "bloat") {
     return <CardShell cardId="bloat" connId={connId} state={state} />;
@@ -31,7 +35,6 @@ export function BloatCard({ connId, state }: CardProps): JSX.Element {
   }
 
   const TOP_N = 3;
-  const [expanded, setExpanded] = useState(false);
   const visible = expanded ? rows : rows.slice(0, TOP_N);
   const more = rows.length - TOP_N;
   // tone is computed over ALL rows (not just the visible slice) so expanding

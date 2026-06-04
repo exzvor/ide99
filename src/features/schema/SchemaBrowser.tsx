@@ -1,4 +1,4 @@
-import { Activity, GitBranch, Loader2, Network, Plus, RefreshCw } from "lucide-react";
+import { Gauge, GitBranch, Loader2, Network, Plus, RefreshCw } from "lucide-react";
 import { type JSX, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { localizeConnectionError } from "../../lib/errors";
@@ -437,7 +437,7 @@ export function SchemaBrowser(): JSX.Element {
                   style={{ width: 24, height: 24 }}
                   data-testid="schema-pgss-open"
                 >
-                  <Activity size={13} aria-hidden="true" />
+                  <Gauge size={13} aria-hidden="true" />
                 </button>
               ) : null}
               {/* — "+ New" object-editor dropdown. */}

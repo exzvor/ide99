@@ -72,6 +72,30 @@ describe("BloatCard", () => {
     expect(screen.getByTestId("health-card-bloat-status").getAttribute("data-tone")).toBe("warn");
   });
 
+  // Regression for React #310 ("Rendered more hooks…"): the "+N more" useState
+  // must run on every render, so flipping ready → loading → empty → ready (a
+  // Health refresh) must not change the hook count and must not throw.
+  it("survives ready → loading → empty → ready transitions (#310)", () => {
+    const rows = Array.from({ length: 4 }, (_, i) => ({
+      schema: "public",
+      table: `t${i}`,
+      bloatPct: 35 - i,
+      bloatBytes: (i + 1) * 1024 * 1024,
+    }));
+    const ready = { status: "ready", card: { id: "bloat", data: { rows } } } as const;
+    const { rerender } = render(<BloatCard connId="c1" state={ready} />);
+    expect(() => {
+      rerender(<BloatCard connId="c1" state={{ status: "loading" }} />);
+      rerender(
+        <BloatCard
+          connId="c1"
+          state={{ status: "ready", card: { id: "bloat", data: { rows: [] } } }}
+        />,
+      );
+      rerender(<BloatCard connId="c1" state={ready} />);
+    }).not.toThrow();
+  });
+
   it("clicking +N more expands to all rows, then collapses (#34)", () => {
     const rows = Array.from({ length: 5 }, (_, i) => ({
       schema: "public",

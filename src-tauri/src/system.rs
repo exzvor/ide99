@@ -53,3 +53,43 @@ pub fn open_external_url(url: String) -> Result<(), OpenUrlError> {
         Err(e) => Err(OpenUrlError::Spawn(e.to_string())),
     }
 }
+
+#[derive(Debug, thiserror::Error, serde::Serialize)]
+#[serde(tag = "kind", content = "message", rename_all = "camelCase")]
+pub enum OpenLogsError {
+    #[error("could not resolve data dir: {0}")]
+    DataDir(String),
+    #[error("could not create logs dir: {0}")]
+    Mkdir(String),
+    #[error("failed to spawn file manager: {0}")]
+    Spawn(String),
+}
+
+/// Reveal the app's log folder (`<data_dir>/logs`) in the OS file manager and
+/// return its path so the UI can also show it as text (issue #14 follow-up:
+/// Windows users couldn't find the logs and looked in the WebView2 cache dir).
+#[tauri::command]
+pub fn open_logs_folder() -> Result<String, OpenLogsError> {
+    let logs = crate::app_paths::data_dir()
+        .map_err(|e| OpenLogsError::DataDir(e.to_string()))?
+        .join("logs");
+    std::fs::create_dir_all(&logs).map_err(|e| OpenLogsError::Mkdir(e.to_string()))?;
+    let path = logs.to_string_lossy().into_owned();
+
+    #[cfg(target_os = "macos")]
+    let result = Command::new("open").arg(&logs).status();
+
+    #[cfg(target_os = "linux")]
+    let result = Command::new("xdg-open").arg(&logs).status();
+
+    #[cfg(target_os = "windows")]
+    let result = Command::new("explorer").arg(&logs).status();
+
+    // Best-effort reveal: we don't gate on exit status. `explorer.exe` returns
+    // exit code 1 even on success, and `open`/`xdg-open` hand off and exit; the
+    // only real failure is a spawn error (file manager missing).
+    match result {
+        Ok(_) => Ok(path),
+        Err(e) => Err(OpenLogsError::Spawn(e.to_string())),
+    }
+}

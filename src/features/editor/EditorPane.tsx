@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
+import { ErrorBoundary, ErrorFallbackPanel } from "../../components/ErrorBoundary";
 import { BackupCenter } from "../backup";
 import { CoachMark } from "../coach-marks";
 import { ErdPane } from "../erd";
@@ -32,7 +33,39 @@ import { useEditor } from "./store";
  * - no active tab → `<EmptyState />`.
  */
 
+/**
+ * Per-tab error boundary (issue #14 / 1.0.8). A render crash in one tab's body
+ * (e.g. a bad Health card) is contained HERE rather than at the app root, so
+ * the tab strip and sidebar stay alive and the user can switch or close tabs to
+ * escape the error. Keying the boundary by `activeTabId` resets it on tab
+ * switch; the fallback also offers an explicit "Close this tab".
+ */
 export function EditorPane(): JSX.Element {
+  const activeTabId = useEditor((s) => s.activeTabId);
+  return (
+    <ErrorBoundary
+      key={activeTabId ?? "none"}
+      label={`editor-tab:${activeTabId ?? "none"}`}
+      fallback={(error, reset) => (
+        <ErrorFallbackPanel
+          error={error}
+          onReset={reset}
+          onCloseTab={
+            activeTabId
+              ? () => {
+                  void useEditor.getState().closeTab(activeTabId, { force: true });
+                }
+              : undefined
+          }
+        />
+      )}
+    >
+      <EditorPaneBody />
+    </ErrorBoundary>
+  );
+}
+
+function EditorPaneBody(): JSX.Element {
   const { t } = useTranslation();
   const tabs = useEditor((s) => s.tabs);
   const activeTabId = useEditor((s) => s.activeTabId);

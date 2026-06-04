@@ -239,6 +239,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             logging::log_error,
             system::open_external_url,
+            system::open_logs_folder,
             connection::commands::list_connections,
             connection::commands::keychain_degraded,
             connection::commands::create_connection,
