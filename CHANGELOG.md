@@ -4,6 +4,10 @@ All notable changes to **ide99** are documented here. Format: [Keep a Changelog]
 
 ## [Unreleased]
 
+## [1.0.9] — 2026-06-05
+
+- **SQL editor renders correctly on Windows/WebView2.** The editor laid out its first lazily-opened tab with a collapsed first line, so the text sat about half a line above the gutter line-numbers and the caret + selection highlight were invisible — a stale initial layout that previously only a window resize corrected. The editor now forces a font re-measure and a layout pass right after it mounts. Diagnosed and confirmed against a real WebView2 instance. (1.0.8's `remeasureFonts()` ran once globally on font-load, before the lazily-mounted editor existed, so it never covered it — which is why that release didn't fix it.)
+
 ## [1.0.8] — 2026-06-03
 
 Hotfix for two regressions found while testing 1.0.7 on Windows (WebView2).

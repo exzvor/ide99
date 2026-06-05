@@ -234,6 +234,34 @@ export function MonacoEditor({ tabId }: MonacoEditorProps): JSX.Element {
     editorRef.current = mountedEditor;
     monacoRef.current = monaco;
 
+    // Fix the WebView2 (Windows) initial-layout glitch. Verified against real
+    // WebView2: a lazily-mounted editor lays out with a collapsed first line and
+    // a ~half-line text/caret offset (the gutter line-numbers and the text don't
+    // line up, and the caret is invisible). The global `remeasureFonts()` on
+    // `document.fonts.ready` (monaco-setup.ts) already fired before this editor
+    // existed, so it never covered it. A forced font re-measure plus a 1px
+    // layout nudge after mount re-renders the lines at the correct positions —
+    // exactly what a real window resize does (the only thing that fixed it).
+    // Harmless on macOS/WebKit, where the first layout is already correct.
+    const fixInitialLayout = () => {
+      try {
+        monaco.editor.remeasureFonts();
+        const node = mountedEditor.getDomNode();
+        if (node && node.clientWidth > 0 && node.clientHeight > 0) {
+          const w = node.clientWidth;
+          const h = node.clientHeight;
+          mountedEditor.layout({ width: w - 1, height: h });
+          mountedEditor.layout({ width: w, height: h });
+        } else {
+          mountedEditor.layout();
+        }
+      } catch {
+        // The tab may have closed (editor disposed) before this ran — ignore.
+      }
+    };
+    requestAnimationFrame(() => requestAnimationFrame(fixInitialLayout));
+    window.setTimeout(fixInitialLayout, 150);
+
     // Belt-and-braces: ensure the theme is applied after the editor mounts.
     monaco.editor.setTheme(readResolvedQuietTheme());
 
